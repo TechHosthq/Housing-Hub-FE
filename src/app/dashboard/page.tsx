@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
 import propertiesData from "@/data/properties.json";
@@ -11,7 +12,9 @@ export default function DashboardPage() {
             <DashboardNavbar />
 
             <div className="max-w-7xl mx-auto px-6 md:px-8 pt-24 pb-20">
-                <DashboardClient allProperties={allProperties} />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <DashboardClient allProperties={allProperties} />
+                </Suspense>
             </div>
 
             <Footer />
