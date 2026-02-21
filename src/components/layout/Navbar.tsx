@@ -48,17 +48,17 @@ export default function Navbar() {
 
                 {/* Desktop Auth Links */}
                 <div className="hidden md:flex items-center gap-10">
-                    <Link href="/login" className="text-[#002D6B] font-bold text-base hover:opacity-80 transition-opacity">
+                    <Link href="/login" className="text-primary-dark font-bold text-base hover:opacity-80 transition-opacity">
                         Login
                     </Link>
-                    <Link href="/register" className="bg-[#002D6B] text-white px-7 py-2.5 rounded-[9px] font-bold text-base shadow-lg hover:bg-[#001D4B] transition-all">
+                    <Link href="/register" className="bg-[#07358B] text-white px-7 py-2.5 rounded-full font-bold text-base shadow-lg hover:bg-primary-dark/90 transition-all">
                         Register
                     </Link>
                 </div>
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="md:hidden text-[#002D6B] p-2"
+                    className="md:hidden text-primary-dark p-2"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                     {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -72,7 +72,7 @@ export default function Navbar() {
                                 key={link.href}
                                 href={link.href}
                                 className={`${pathname === link.href ? "text-[#3b82f6]" : "text-[#1A1A1A]"
-                                    } hover:text-[#003E92] transition-colors`}
+                                    } hover:text-primary transition-colors`}
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 {link.name}
@@ -81,14 +81,14 @@ export default function Navbar() {
                         <div className="flex flex-col gap-4 pt-4 border-t border-gray-100">
                             <Link
                                 href="/login"
-                                className="text-[#002D6B] font-bold text-lg"
+                                className="text-primary-dark font-bold text-lg"
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 Login
                             </Link>
                             <Link
                                 href="/register"
-                                className="bg-[#002D6B] text-white px-6 py-3 rounded-full font-bold text-center text-lg shadow-md"
+                                className="bg-[#07358B] text-white px-6 py-3 rounded-full font-bold text-center text-lg shadow-md"
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 Register

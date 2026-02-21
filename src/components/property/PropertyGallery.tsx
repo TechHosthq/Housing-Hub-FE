@@ -28,13 +28,13 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
                 {/* Navigation Arrows */}
                 <button
                     onClick={prevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-[#002D6B] hover:bg-white transition-all shadow-md"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-primary-dark hover:bg-white transition-all shadow-md"
                 >
                     <ChevronLeft size={18} />
                 </button>
                 <button
                     onClick={nextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-[#002D6B] hover:bg-white transition-all shadow-md"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-primary-dark hover:bg-white transition-all shadow-md"
                 >
                     <ChevronRight size={18} />
                 </button>
@@ -46,7 +46,7 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
                     <button
                         key={idx}
                         onClick={() => setActiveIndex(idx)}
-                        className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all ${activeIndex === idx ? "border-[#002D6B]" : "border-transparent opacity-70 hover:opacity-100"
+                        className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all ${activeIndex === idx ? "border-primary-dark" : "border-transparent opacity-70 hover:opacity-100"
                             }`}
                     >
                         <Image src={img} alt={`Thumbnail ${idx}`} fill className="object-cover" />

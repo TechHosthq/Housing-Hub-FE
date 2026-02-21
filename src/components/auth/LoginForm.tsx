@@ -26,7 +26,7 @@ export default function LoginForm() {
                     <label className="text-[9px] font-semibold text-[#666666]">Email or Phone Number</label>
                     <input
                         type="text"
-                        className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors"
+                        className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
                         placeholder=""
                     />
                 </div>
@@ -36,7 +36,7 @@ export default function LoginForm() {
                     <div className="relative">
                         <input
                             type={showPassword ? "text" : "password"}
-                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors"
+                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
                             placeholder=""
                         />
                         <button
@@ -57,7 +57,7 @@ export default function LoginForm() {
                 <div className="pt-4 space-y-4">
                     <button
                         type="submit"
-                        className="w-full bg-[#002D6B] text-white py-4 rounded-full font-bold text-base hover:bg-[#001D4B] transition-all shadow-lg"
+                        className="w-full bg-primary-dark text-white py-4 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all shadow-lg"
                     >
                         Login
                     </button>

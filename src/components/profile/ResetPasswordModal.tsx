@@ -59,8 +59,8 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                             }}
                             placeholder="Placeholder"
                             className={`w-full px-6 py-4 rounded-full border-2 transition-all text-[15px] font-medium outline-none ${showError
-                                    ? "border-[#FF3B30] bg-[#FFF5F5] text-[#FF3B30] placeholder:text-[#FF3B30]/50"
-                                    : "border-[#F2F2F2] bg-white text-[#1A1A1A] placeholder:text-gray-300 focus:border-[#002D6B]"
+                                ? "border-[#FF3B30] bg-[#FFF5F5] text-[#FF3B30] placeholder:text-[#FF3B30]/50"
+                                : "border-[#F2F2F2] bg-white text-[#1A1A1A] placeholder:text-gray-300 focus:border-primary-dark"
                                 }`}
                         />
                         {showError && (
@@ -74,8 +74,8 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                     <button
                         disabled={!email.trim()}
                         className={`w-full py-5 rounded-full text-[16px] font-black transition-all active:scale-[0.98] shadow-lg ${email.trim()
-                                ? "bg-[#002B7F] text-white hover:bg-[#001D5F]"
-                                : "bg-[#E0E0E0] text-gray-400 cursor-not-allowed"
+                            ? "bg-primary-dark text-white hover:bg-primary-dark/90"
+                            : "bg-[#E0E0E0] text-gray-400 cursor-not-allowed"
                             }`}
                     >
                         Send Reset Link

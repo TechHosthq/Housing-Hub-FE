@@ -16,7 +16,7 @@ export default function FAQPage() {
                     }}
                 />
                 <div className="relative z-10 text-center px-6 mt-12">
-                    <h1 className="text-4xl md:text-[59px] font-bold text-white tracking-tight font-montserrat leading-tight">
+                    <h1 className="text-4xl md:text-[35px] text-white tracking-tight font-montserrat leading-tight" style={{color: "white"}}>
                         Frequently Asked Questions
                     </h1>
                 </div>

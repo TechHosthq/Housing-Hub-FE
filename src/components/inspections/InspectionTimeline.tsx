@@ -23,7 +23,7 @@ export default function InspectionTimeline({ steps }: InspectionTimelineProps) {
                         {/* Line */}
                         {index !== steps.length - 1 && (
                             <div
-                                className={`absolute left-[5px] top-[14px] w-[2px] h-full ${step.isCompleted ? "bg-[#002D6B]" : "bg-[#F2F2F2]"
+                                className={`absolute left-[5px] top-[14px] w-[2px] h-full ${step.isCompleted ? "bg-primary-dark" : "bg-[#F2F2F2]"
                                     }`}
                             />
                         )}
@@ -32,10 +32,10 @@ export default function InspectionTimeline({ steps }: InspectionTimelineProps) {
                         <div className="relative z-10 pt-1.5">
                             <div
                                 className={`w-3 h-3 rounded-full border-2 ${step.isCompleted
-                                        ? "bg-[#002D6B] border-[#002D6B]"
-                                        : step.isCurrent
-                                            ? "bg-white border-[#002D6B]"
-                                            : "bg-white border-[#E5E5E5]"
+                                    ? "bg-primary-dark border-primary-dark"
+                                    : step.isCurrent
+                                        ? "bg-white border-primary-dark"
+                                        : "bg-white border-[#E5E5E5]"
                                     }`}
                             />
                         </div>

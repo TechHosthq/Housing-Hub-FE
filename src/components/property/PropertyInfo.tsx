@@ -65,8 +65,8 @@ export default function PropertyInfo({ property }: PropertyInfoProps) {
                         className="object-cover grayscale opacity-50"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-8 h-8 rounded-full bg-[#002D6B]/20 animate-ping absolute" />
-                        <div className="w-4 h-4 rounded-full bg-[#002D6B] relative shadow-lg ring-4 ring-white" />
+                        <div className="w-8 h-8 rounded-full bg-primary-dark/20 animate-ping absolute" />
+                        <div className="w-4 h-4 rounded-full bg-primary-dark relative shadow-lg ring-4 ring-white" />
                     </div>
                 </div>
             </div>

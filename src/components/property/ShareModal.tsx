@@ -46,13 +46,13 @@ export default function ShareModal({ isOpen, onClose }: ShareModalProps) {
 
                 {/* Options */}
                 <div className="space-y-4">
-                    <button className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-[#002D6B] hover:text-[#002D6B] transition-all">
+                    <button className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all">
                         Copy Link
                     </button>
-                    <button className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-[#002D6B] hover:text-[#002D6B] transition-all">
+                    <button className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all">
                         Share On WhatsApp
                     </button>
-                    <button className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-[#002D6B] hover:text-[#002D6B] transition-all">
+                    <button className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all">
                         Share Via Email
                     </button>
                 </div>

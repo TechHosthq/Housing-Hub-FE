@@ -18,7 +18,7 @@ const FAQItem = ({ question, answer, isOpenByDefault = false }: FAQItemProps) =>
                 className="flex w-full items-center justify-between text-left focus:outline-none group"
                 onClick={() => setIsOpen(!isOpen)}
             >
-                <span className="text-[#1A1A1A] text-xl font-bold font-montserrat tracking-tight">
+                <span className="text-[#1A1A1A] text-xl font-montserrat tracking-tight">
                     {question}
                 </span>
                 {isOpen ? (

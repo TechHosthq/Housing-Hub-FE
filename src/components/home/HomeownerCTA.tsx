@@ -5,11 +5,11 @@ export default function HomeownerCTA() {
         <section className="relative py-22 px-4 overflow-hidden bg-[#e9f3ff] min-h-[280px] flex items-center">
             {/* Background Image positioned to the right */}
             <div
-                className="absolute right-0 bottom-0 w-full md:w-[100%] h-[100%] z-0 pointer-events-none"
+                className="absolute w-full md:w-[100%] h-[100%] z-0 pointer-events-none"
                 style={{
                     backgroundImage: "url('/images/home-owner.svg')",
                     backgroundRepeat: "no-repeat",
-                    backgroundPosition: "right",
+                    backgroundPosition: "center",
                     backgroundSize: "contain"
                 }}
             />
@@ -25,7 +25,7 @@ export default function HomeownerCTA() {
                     <div className="flex flex-col sm:flex-row gap-6 justify-center md:justify-start items-center">
                         <Link
                             href="/list-property"
-                            className="bg-[#002D6B] text-white px-7 py-3.5 rounded-[14px] font-bold text-lg hover:bg-[#001D4B] transition-all shadow-md text-center min-w-[154px]"
+                            className="bg-primary-dark text-white px-7 py-3.5 rounded-[14px] font-bold text-lg hover:bg-primary-dark/90 transition-all shadow-md text-center min-w-[154px]"
                         >
                             List Your Property
                         </Link>

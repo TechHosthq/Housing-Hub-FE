@@ -34,7 +34,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
                 {/* Back Button */}
                 <Link
                     href="/dashboard"
-                    className="flex items-center gap-2 text-[#6BB5FF] hover:text-[#002D6B] transition-colors font-semibold text-[11px] mb-8"
+                    className="flex items-center gap-2 text-[#6BB5FF] hover:text-primary-dark transition-colors font-semibold text-[11px] mb-8"
                 >
                     <ArrowLeft size={16} />
                     Back

@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 
 export default function ListPropertyBanner() {
     return (
-        <div className="bg-[#002D6B] rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-6 mb-12 shadow-sm">
+        <div className="bg-primary-dark rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-6 mb-12 shadow-sm">
             <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
                     <Plus size={20} className="text-white" strokeWidth={3} />

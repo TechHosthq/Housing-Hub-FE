@@ -97,8 +97,8 @@ export default function InspectionsPage() {
                             key={tab.label}
                             onClick={() => setActiveTab(tab.label)}
                             className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all border ${activeTab === tab.label
-                                    ? "bg-[#002D6B] text-white border-[#002D6B]"
-                                    : "bg-[#F2F2F2] text-[#999999] border-[#F2F2F2] hover:bg-white hover:border-[#E5E5E5]"
+                                ? "bg-primary-dark text-white border-primary-dark"
+                                : "bg-[#F2F2F2] text-[#999999] border-[#F2F2F2] hover:bg-white hover:border-primary-dark/30"
                                 }`}
                         >
                             {tab.label} ({tab.count})

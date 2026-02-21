@@ -101,7 +101,7 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
                     placeholder="Search messages..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-11 pr-5 py-3 rounded-full border border-[#F2F2F2] bg-white text-[12px] font-bold text-[#1A1A1A] placeholder:text-gray-300 focus:outline-none focus:border-[#002D6B] transition-all"
+                    className="w-full pl-11 pr-5 py-3 rounded-full border border-[#F2F2F2] bg-white text-[12px] font-bold text-[#1A1A1A] placeholder:text-gray-300 focus:outline-none focus:border-primary-dark transition-all"
                 />
             </div>
 
@@ -111,11 +111,11 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
                         key={msg.id}
                         onClick={() => onThreadSelect(msg.id)}
                         className={`p-4 rounded-2xl flex items-start gap-3 cursor-pointer transition-all group relative border-l-4 ${selectedId === msg.id
-                                ? "bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-[#002B7F]"
-                                : "border-transparent hover:bg-gray-50"
+                            ? "bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-primary-dark"
+                            : "border-transparent hover:bg-gray-50"
                             }`}
                     >
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${msg.isSupport ? "bg-[#E9F3FF] text-[#002D6B]" : "bg-gray-100 text-gray-400"}`}>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${msg.isSupport ? "bg-[#E9F3FF] text-primary-dark" : "bg-gray-100 text-gray-400"}`}>
                             <User size={20} />
                         </div>
 
@@ -134,7 +134,7 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
                         </div>
 
                         {msg.unread > 0 && selectedId !== msg.id && (
-                            <div className="absolute top-1/2 -translate-y-1/2 right-4 w-5 h-5 bg-[#002B7F] rounded-full flex items-center justify-center text-[10px] text-white font-bold">
+                            <div className="absolute top-1/2 -translate-y-1/2 right-4 w-5 h-5 bg-primary-dark rounded-full flex items-center justify-center text-[10px] text-white font-bold">
                                 {msg.unread}
                             </div>
                         )}
@@ -171,8 +171,8 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
                                 >
                                     <div className={`max-w-[70%] space-y-1`}>
                                         <div className={`px-5 py-4 rounded-[12px] text-[13px] leading-relaxed shadow-sm ${msg.isOutgoing
-                                                ? "bg-[#002D6B] text-white"
-                                                : "bg-white border border-[#F2F2F2] text-[#1A1A1A]"
+                                            ? "bg-primary-dark text-white"
+                                            : "bg-white border border-[#F2F2F2] text-[#1A1A1A]"
                                             }`}>
                                             {msg.text}
                                         </div>
@@ -191,11 +191,11 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
                                     placeholder="Type your message..."
                                     value={messageInput}
                                     onChange={(e) => setMessageInput(e.target.value)}
-                                    className="w-full pl-6 pr-16 py-4 rounded-xl border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] placeholder:text-gray-300 focus:outline-none focus:border-[#002D6B] transition-all"
+                                    className="w-full pl-6 pr-16 py-4 rounded-xl border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] placeholder:text-gray-300 focus:outline-none focus:border-primary-dark transition-all"
                                 />
                                 <button
                                     type="submit"
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-lg bg-[#002D6B] flex items-center justify-center text-white hover:bg-[#003d8f] transition-all active:scale-95 shadow-md"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-lg bg-primary-dark flex items-center justify-center text-white hover:bg-primary-dark/90 transition-all active:scale-95 shadow-md"
                                 >
                                     <Send size={18} />
                                 </button>
@@ -204,7 +204,7 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
                     </>
                 ) : (
                     <div className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-white">
-                        <div className="w-16 h-16 bg-[#E9F3FF] rounded-full flex items-center justify-center text-[#002D6B] mb-4">
+                        <div className="w-16 h-16 bg-[#E9F3FF] rounded-full flex items-center justify-center text-primary-dark mb-4">
                             <User size={28} />
                         </div>
                         <h3 className="text-[18px] font-black text-[#1A1A1A] font-montserrat mb-2">

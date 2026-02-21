@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #003E92;
-  --color-primary-dark: #002D6B;
+  --color-primary: #07358B;
+  --color-primary-dark: #052562;
   --color-secondary: #FFCC00;
   --color-muted: #666666;
   --color-border: #EEEEEE;
@@ -10,7 +10,7 @@
 }
 
 html {
-  font-size: 70%;
+  font-size: 73.5%;
 }
 
 :root {

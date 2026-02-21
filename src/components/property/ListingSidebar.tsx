@@ -28,7 +28,7 @@ export default function ListingSidebar({ propertyId }: ListingSidebarProps) {
                 <div className="mt-8">
                     <Link
                         href={propertyId ? `/property/${propertyId}/inspection` : "#"}
-                        className="block w-full text-center bg-[#002D6B] hover:bg-[#001D4B] text-white py-3.5 rounded-full text-[12px] font-bold transition-all shadow-md"
+                        className="block w-full text-center bg-primary-dark hover:bg-primary-dark/90 text-white py-3.5 rounded-full text-[12px] font-bold transition-all shadow-md"
                     >
                         Request Inspection
                     </Link>
