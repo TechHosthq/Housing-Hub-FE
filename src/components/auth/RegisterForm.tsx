@@ -27,7 +27,7 @@ export default function RegisterForm() {
                         <label className="text-[9px] font-semibold text-[#666666]">First Name</label>
                         <input
                             type="text"
-                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors"
+                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
                             placeholder=""
                         />
                     </div>
@@ -35,7 +35,7 @@ export default function RegisterForm() {
                         <label className="text-[9px] font-semibold text-[#666666]">Last Name</label>
                         <input
                             type="text"
-                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors"
+                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
                             placeholder=""
                         />
                     </div>
@@ -45,7 +45,7 @@ export default function RegisterForm() {
                     <label className="text-[9px] font-semibold text-[#666666]">Email Address</label>
                     <input
                         type="email"
-                        className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors"
+                        className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
                         placeholder=""
                     />
                 </div>
@@ -55,7 +55,7 @@ export default function RegisterForm() {
                     <div className="relative">
                         <input
                             type="tel"
-                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors appearance-none"
+                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors appearance-none"
                             placeholder=""
                         />
                         <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
@@ -65,7 +65,7 @@ export default function RegisterForm() {
                 <div className="space-y-1">
                     <label className="text-[9px] font-semibold text-[#666666]">Customer Type</label>
                     <div className="relative">
-                        <select className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors appearance-none bg-white text-gray-400">
+                        <select className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors appearance-none bg-white text-gray-400">
                             <option>Buyer/Renter</option>
                             <option>Homeowner</option>
                         </select>
@@ -78,7 +78,7 @@ export default function RegisterForm() {
                     <div className="relative">
                         <input
                             type={showPassword ? "text" : "password"}
-                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors"
+                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
                             placeholder=""
                         />
                         <button
@@ -98,7 +98,7 @@ export default function RegisterForm() {
                         id="terms"
                         checked={isAgreed}
                         onChange={(e) => setIsAgreed(e.target.checked)}
-                        className="w-6 h-6 rounded-full border-2 border-gray-200 text-[#002D6B] focus:ring-[#002D6B] cursor-pointer accent-[#002D6B]"
+                        className="w-6 h-6 rounded-full border-2 border-gray-200 text-primary-dark focus:ring-primary-dark cursor-pointer accent-primary-dark"
                     />
                     <label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer">
                         I agree to the <Link href="#" className="text-[#3b82f6] hover:underline">Terms of Service</Link> and <Link href="#" className="text-[#3b82f6] hover:underline">Privacy Policy</Link>
@@ -109,7 +109,7 @@ export default function RegisterForm() {
                     <button
                         type="submit"
                         className={`w-full py-4 rounded-full font-bold text-base transition-all ${isAgreed
-                            ? "bg-[#002D6B] text-white hover:bg-[#001D4B] cursor-pointer shadow-lg"
+                            ? "bg-primary-dark text-white hover:bg-primary-dark/90 cursor-pointer shadow-lg"
                             : "bg-[#F2F2F2] text-[#BDBDBD] cursor-not-allowed"}`}
                         disabled={!isAgreed}
                     >

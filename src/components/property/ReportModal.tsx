@@ -77,14 +77,14 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                             key={reason}
                             onClick={() => setSelectedReason(reason)}
                             className={`w-full flex items-center gap-4 px-6 py-4 rounded-[30px] border transition-all ${selectedReason === reason
-                                    ? "border-[#002D6B] bg-white shadow-sm"
-                                    : "border-[#E5E5E5] hover:border-[#002D6B] bg-white"
+                                ? "border-primary-dark bg-white shadow-sm"
+                                : "border-[#E5E5E5] hover:border-primary-dark bg-white"
                                 }`}
                         >
-                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selectedReason === reason ? "border-[#002D6B]" : "border-[#E5E5E5]"
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selectedReason === reason ? "border-primary-dark" : "border-[#E5E5E5]"
                                 }`}>
                                 {selectedReason === reason && (
-                                    <div className="w-2.5 h-2.5 rounded-full bg-[#002D6B]" />
+                                    <div className="w-2.5 h-2.5 rounded-full bg-primary-dark" />
                                 )}
                             </div>
                             <span className={`text-sm font-bold ${selectedReason === reason ? "text-[#1A1A1A]" : "text-[#666666]"
@@ -105,7 +105,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                         onChange={handleNoteChange}
                         placeholder="Provide more information about the issue..."
                         rows={5}
-                        className="w-full px-5 py-4 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 resize-none font-medium"
+                        className="w-full px-5 py-4 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm placeholder:text-gray-300 resize-none font-medium"
                     />
                     <div className="text-right">
                         <span className="text-[10px] text-[#999999] font-bold">{note.length}/500 Characters</span>
@@ -127,8 +127,8 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                     <button
                         disabled={!isSubmitEnabled}
                         className={`flex-1 py-4 rounded-full text-[13px] font-bold text-white transition-all shadow-lg ${isSubmitEnabled
-                                ? "bg-[#FF3B30] hover:bg-[#E0342A] active:scale-[0.98]"
-                                : "bg-[#FF3B30]/50 cursor-not-allowed"
+                            ? "bg-[#FF3B30] hover:bg-[#E0342A] active:scale-[0.98]"
+                            : "bg-[#FF3B30]/50 cursor-not-allowed"
                             }`}
                     >
                         Submit Report

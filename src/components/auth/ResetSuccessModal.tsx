@@ -40,7 +40,7 @@ export default function ResetSuccessModal({ isOpen, onClose }: ResetSuccessModal
             >
                 {/* Success Icon */}
                 <div className="w-16 h-16 rounded-full bg-[#E9F3FF] flex items-center justify-center mb-6">
-                    <Check className="text-[#002D6B] stroke-[3px]" size={32} />
+                    <Check className="text-primary-dark stroke-[3px]" size={32} />
                 </div>
 
                 <h2 className="text-[17px] font-bold text-[#1A1A1A] font-montserrat">

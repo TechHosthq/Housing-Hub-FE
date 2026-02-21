@@ -6,17 +6,25 @@ import Image from "next/image";
 export default function WhyList() {
     const features = [
         {
-            icon: <ShieldCheck className="text-blue-500" size={32} />,
+            icon: (
+                <>
+                    <img src="/verified.svg" alt="Verified" />
+                </>
+            ),
             title: "Verified Buyers",
             description: "All customers go through KYC verification"
         },
         {
-            icon: <CalendarRange className="text-blue-500" size={32} />,
+            icon: (
+                <>
+                    <img src="/manage.svg" alt="Manage" />
+                </>
+            ),
             title: "Manage Inspections",
             description: "Accept or delegate inspection requests easily"
         },
         {
-            icon: <ShieldCheck className="text-blue-500" size={32} />, // Using shield for privacy protected as well
+            icon: <img src="/privacy.svg" alt="Privacy" />, 
             title: "Privacy Protected",
             description: "Book an inspection at your preferred date and time. We coordinate with the clients for you."
         }
@@ -30,12 +38,12 @@ export default function WhyList() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
                     {/* Visual Graphic */}
-                    <div className="relative transform scale-x-[-1] aspect-square max-w-xl mx-auto lg:mx-0 bg-blue-50 rounded-[22px] overflow-hidden p-8">
+                    <div className="relative aspect-square mx-auto lg:mx-0  bg-blue-200 rounded-[22px] overflow-hidden">
                         <Image
-                            src="/images/home-owner.svg"
+                            src="/images/whylist.png"
                             alt="Hand holding house"
                             fill
-                            className="object-contain p-8"
+                            className="object-contain "
                         />
                     </div>
 
@@ -44,7 +52,7 @@ export default function WhyList() {
                     {/* Features Container */}
                     <div className="space-y-6">
                         {features.map((feature, index) => (
-                            <div key={index} className="flex gap-6 p-6 bg-white rounded-[17px] border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <div key={index} className="flex gap-6 p-6 bg-white rounded-[17px] border border-gray-100 shadow-sm hover:border-[#07358B] hover:shadow-md transition-all duration-500 hover:scale-101">
                                 <div className="flex-shrink-0 w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
                                     {feature.icon}
                                 </div>

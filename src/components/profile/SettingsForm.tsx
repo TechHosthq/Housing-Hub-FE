@@ -40,7 +40,7 @@ export default function SettingsForm() {
                         onClick={() => handleItemClick(item)}
                         className={`group relative flex items-center justify-between p-5 rounded-[16px] border transition-all cursor-pointer hover:shadow-md ${item.isDanger
                             ? "border-red-100 bg-red-50/10 hover:bg-red-50/30"
-                            : "border-[#F2F2F2] hover:border-[#002B7F]/30 hover:bg-gray-50/50"
+                            : "border-[#F2F2F2] hover:border-primary-dark/30 hover:bg-gray-50/50"
                             }`}
                     >
                         <span className={`text-[14px] font-bold ${item.isDanger ? "text-[#FF3B30]" : "text-[#1A1A1A]"
@@ -54,7 +54,7 @@ export default function SettingsForm() {
                                     e.stopPropagation();
                                     setIsDarkMode(!isDarkMode);
                                 }}
-                                className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none ${isDarkMode ? "bg-[#002D6B]" : "bg-gray-200"
+                                className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none ${isDarkMode ? "bg-primary-dark" : "bg-gray-200"
                                     }`}
                             >
                                 <div
@@ -65,7 +65,7 @@ export default function SettingsForm() {
                         ) : (
                             <ChevronRight
                                 size={18}
-                                className={item.isDanger ? "text-[#FF3B30]/50" : "text-gray-400 group-hover:text-[#002D6B]"}
+                                className={item.isDanger ? "text-[#FF3B30]/50" : "text-gray-400 group-hover:text-primary-dark"}
                             />
                         )}
                     </div>

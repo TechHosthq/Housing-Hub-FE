@@ -23,11 +23,11 @@ export default function AccountSidebar() {
                             key={item.label}
                             href={item.href}
                             className={`flex items-center gap-4 px-6 py-4 rounded-full transition-all group ${isActive
-                                    ? "bg-[#002D6B] text-white shadow-md"
-                                    : "text-[#666666] hover:bg-gray-50 hover:text-[#002D6B]"
+                                ? "bg-primary-dark text-white shadow-md"
+                                : "text-[#666666] hover:bg-gray-50 hover:text-primary-dark"
                                 }`}
                         >
-                            <item.icon size={20} className={isActive ? "text-white" : "text-gray-400 group-hover:text-[#002D6B]"} />
+                            <item.icon size={20} className={isActive ? "text-white" : "text-gray-400 group-hover:text-primary-dark"} />
                             <span className="text-[14px] font-bold">
                                 {item.label}
                             </span>

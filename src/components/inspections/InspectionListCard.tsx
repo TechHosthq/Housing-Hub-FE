@@ -24,7 +24,7 @@ interface InspectionListCardProps {
 const statusStyles: Record<InspectionStatus, string> = {
     Pending: "bg-[#FFF9E6] text-[#FFCC00] border-[#FFEBB3]",
     Confirmed: "bg-[#E6FFF0] text-[#00CC44] border-[#B3FFCC]",
-    Completed: "bg-[#E9F3FF] text-[#002D6B] border-[#D9E9FF]",
+    Completed: "bg-[#E9F3FF] text-primary-dark border-[#D9E9FF]",
     Cancelled: "bg-[#FFF2F2] text-[#FF3B30] border-[#FFD9D9]"
 };
 
@@ -53,12 +53,12 @@ export default function InspectionListCard({ inspection }: InspectionListCardPro
                                 {inspection.location}
                             </p>
                         </div>
-                        <ChevronRight size={20} className="text-[#002D6B]/30 group-hover:text-[#002D6B] transition-colors" />
+                        <ChevronRight size={20} className="text-primary-dark/30 group-hover:text-primary-dark transition-colors" />
                     </div>
 
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2 text-[#666666]">
-                            <Calendar size={14} className="text-[#002D6B]" />
+                            <Calendar size={14} className="text-primary-dark" />
                             <span className="text-[11px] font-bold">{inspection.date}</span>
                         </div>
                         <div className="flex items-center gap-2 text-[#666666]">

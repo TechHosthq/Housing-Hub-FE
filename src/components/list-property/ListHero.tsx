@@ -9,12 +9,12 @@ export default function ListHero() {
             <div
                 className="absolute inset-0 bg-cover bg-center z-0"
                 style={{
-                    backgroundImage: 'linear-gradient(rgba(0, 45, 107, 0.45), rgba(0, 45, 107, 0.45)), url("/images/hero-bg.png")',
+                    backgroundImage: 'linear-gradient(rgba(7, 53, 139, 0.45), rgba(7, 53, 139, 0.45)), url("/images/hero-bg.png")',
                 }}
             />
 
             <div className="relative z-10 text-center px-6">
-                <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+                <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight" style={{ color: "#fff" }}>
                     List Your Property
                 </h1>
                 <p className="text-white/90 text-xl md:text-2xl mb-12 max-w-2xl mx-auto font-medium">
@@ -22,7 +22,7 @@ export default function ListHero() {
                 </p>
                 <Link
                     href="#get-started"
-                    className="bg-[#002D6B] text-white px-8 py-3 rounded-[11px] font-bold text-lg hover:bg-[#001D4B] transition-all shadow-xl"
+                    className="bg-[#07358B] text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-primary-dark/90 transition-all shadow-xl"
                 >
                     Get Started
                 </Link>

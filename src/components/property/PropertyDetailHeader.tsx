@@ -16,7 +16,7 @@ export default function PropertyDetailHeader() {
                 <div className="flex gap-4 text-[#666666]">
                     <button
                         onClick={() => setIsShareModalOpen(true)}
-                        className="hover:text-[#002D6B] transition-colors"
+                        className="hover:text-primary-dark transition-colors"
                     >
                         <Share2 size={18} />
                     </button>

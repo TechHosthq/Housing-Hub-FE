@@ -54,7 +54,7 @@ export default function SubmitIDForm() {
             {/* Back Button */}
             <Link
                 href="/kyc/personal-info"
-                className="flex items-center gap-2 text-[#6BB5FF] hover:text-[#002D6B] transition-colors font-semibold text-[11px] mb-8"
+                className="flex items-center gap-2 text-[#6BB5FF] hover:text-primary-dark transition-colors font-semibold text-[11px] mb-8"
             >
                 <ArrowLeft size={16} />
                 Back
@@ -116,9 +116,9 @@ export default function SubmitIDForm() {
                     {!uploadedFile ? (
                         <div
                             onClick={() => fileInputRef.current?.click()}
-                            className="border border-dashed border-gray-100 rounded-[22px] bg-white p-12 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-[#002D6B] transition-all"
+                            className="border border-dashed border-gray-100 rounded-[22px] bg-white p-12 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-primary-dark transition-all"
                         >
-                            <div className="w-12 h-12 rounded-full flex items-center justify-center text-gray-400 group-hover:text-[#002D6B] transition-colors">
+                            <div className="w-12 h-12 rounded-full flex items-center justify-center text-gray-400 group-hover:text-primary-dark transition-colors">
                                 <UploadCloud size={24} />
                             </div>
                             <span className="text-xs font-bold text-gray-400 mt-2">Upload Document</span>
@@ -146,8 +146,8 @@ export default function SubmitIDForm() {
                         type="submit"
                         disabled={!isFormValid}
                         className={`w-full py-4 rounded-full font-bold text-base transition-all ${isFormValid
-                                ? "bg-[#002D6B] text-white shadow-lg hover:bg-[#001D4B]"
-                                : "bg-[#022352] text-[#BDBDBD] cursor-not-allowed opacity-80"
+                            ? "bg-primary-dark text-white shadow-lg hover:bg-primary-dark/90"
+                            : "bg-[#022352] text-[#BDBDBD] cursor-not-allowed opacity-80"
                             }`}
                     >
                         Submit

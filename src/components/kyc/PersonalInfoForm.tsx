@@ -48,7 +48,7 @@ export default function PersonalInfoForm() {
             {/* Back Button */}
             <Link
                 href="/dashboard"
-                className="flex items-center gap-2 text-[#6BB5FF] hover:text-[#002D6B] transition-colors font-semibold text-[11px] mb-8"
+                className="flex items-center gap-2 text-[#6BB5FF] hover:text-primary-dark transition-colors font-semibold text-[11px] mb-8"
             >
                 <ArrowLeft size={16} />
                 Back
@@ -120,7 +120,7 @@ export default function PersonalInfoForm() {
                                 onChange={handleInputChange}
                                 className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm"
                             />
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-[#E9F3FF] flex items-center justify-center text-[#002D6B]">
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-[#E9F3FF] flex items-center justify-center text-primary-dark">
                                 <Calendar size={16} />
                             </div>
                         </div>
@@ -218,9 +218,9 @@ export default function PersonalInfoForm() {
                         {!uploadedFile ? (
                             <div
                                 onClick={() => fileInputRef.current?.click()}
-                                className="border border-dashed border-gray-100 rounded-[22px] bg-white p-8 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-[#002D6B] transition-all"
+                                className="border border-dashed border-gray-100 rounded-[22px] bg-white p-8 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-primary-dark transition-all"
                             >
-                                <div className="w-12 h-12 rounded-full flex items-center justify-center text-gray-400 group-hover:text-[#002D6B] transition-colors">
+                                <div className="w-12 h-12 rounded-full flex items-center justify-center text-gray-400 group-hover:text-primary-dark transition-colors">
                                     <UploadCloud size={24} />
                                 </div>
                                 <span className="text-xs font-bold text-gray-400 mt-2">Upload Document</span>
@@ -249,7 +249,7 @@ export default function PersonalInfoForm() {
                             onClick={() => router.push("/kyc/submit-id")}
                             disabled={!isFormValid}
                             className={`w-full py-4 rounded-full font-bold text-base transition-all ${isFormValid
-                                ? "bg-[#002D6B] text-white shadow-lg hover:bg-[#001D4B]"
+                                ? "bg-primary-dark text-white shadow-lg hover:bg-primary-dark/90"
                                 : "bg-[#F2F2F2] text-[#BDBDBD] cursor-not-allowed"
                                 }`}
                         >

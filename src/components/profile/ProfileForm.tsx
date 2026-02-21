@@ -31,7 +31,7 @@ export default function ProfileForm() {
             {/* Top Right Pencil Icon */}
             <button
                 onClick={triggerUpload}
-                className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#E9F3FF] flex items-center justify-center text-[#002D6B] hover:bg-[#002D6B] hover:text-white transition-all shadow-sm"
+                className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#E9F3FF] flex items-center justify-center text-primary-dark hover:bg-primary-dark hover:text-white transition-all shadow-sm"
             >
                 <Pencil size={18} />
             </button>
@@ -91,7 +91,7 @@ export default function ProfileForm() {
                         <input
                             type="text"
                             defaultValue="Priscian"
-                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] placeholder:text-gray-300 focus:outline-none focus:border-[#002D6B] transition-all"
+                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] placeholder:text-gray-300 focus:outline-none focus:border-primary-dark transition-all"
                         />
                     </div>
                     <div className="space-y-2">
@@ -99,7 +99,7 @@ export default function ProfileForm() {
                         <input
                             type="text"
                             defaultValue="Priscian"
-                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] placeholder:text-gray-300 focus:outline-none focus:border-[#002D6B] transition-all"
+                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] placeholder:text-gray-300 focus:outline-none focus:border-primary-dark transition-all"
                         />
                     </div>
                 </div>
@@ -134,7 +134,7 @@ export default function ProfileForm() {
                 <div className="pt-6">
                     <button
                         type="submit"
-                        className="w-full py-4 rounded-full bg-[#002D6B] text-white text-[14px] font-bold hover:bg-[#003d8f] active:scale-[0.98] transition-all shadow-md"
+                        className="w-full py-4 rounded-full bg-primary-dark text-white text-[14px] font-bold hover:bg-primary-dark/90 active:scale-[0.98] transition-all shadow-md"
                     >
                         Save Changes
                     </button>

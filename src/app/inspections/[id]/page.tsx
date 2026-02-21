@@ -187,7 +187,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                 {/* Back Link */}
                 <Link
                     href="/inspections"
-                    className="inline-flex items-center gap-2 text-[#002B7F] font-bold text-sm mb-8 hover:opacity-70 transition-opacity"
+                    className="inline-flex items-center gap-2 text-primary-dark font-bold text-sm mb-8 hover:opacity-70 transition-opacity"
                 >
                     <ArrowLeft size={18} />
                     Back
@@ -270,14 +270,14 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                                             <textarea
                                                 value={comment}
                                                 onChange={(e) => setComment(e.target.value)}
-                                                className="w-full h-32 p-4 rounded-xl border border-[#F2F2F2] bg-white resize-none focus:outline-none focus:border-[#002D6B] text-sm"
+                                                className="w-full h-32 p-4 rounded-xl border border-[#F2F2F2] bg-white resize-none focus:outline-none focus:border-primary-dark text-sm"
                                                 placeholder="Add your comment here..."
                                             />
                                             <button
                                                 onClick={handleSubmitFeedback}
                                                 disabled={!comment.trim()}
                                                 className={`px-10 py-3 rounded-full text-[13px] font-bold transition-all ${comment.trim()
-                                                    ? "bg-[#002B7F] text-white hover:bg-[#003d8f] active:scale-95 shadow-md"
+                                                    ? "bg-primary-dark text-white hover:bg-primary-dark/90 active:scale-95 shadow-md"
                                                     : "bg-gray-100 text-[#999999] cursor-not-allowed"
                                                     }`}
                                             >

@@ -46,7 +46,7 @@ export default function InspectionForm({ property }: InspectionFormProps) {
             />
             <Link
                 href={`/property/${property.id}`}
-                className="flex items-center gap-2 text-[#6BB5FF] hover:text-[#002D6B] transition-colors font-semibold text-[11px] mb-8"
+                className="flex items-center gap-2 text-[#6BB5FF] hover:text-primary-dark transition-colors font-semibold text-[11px] mb-8"
             >
                 <ArrowLeft size={16} />
                 Back
@@ -90,12 +90,12 @@ export default function InspectionForm({ property }: InspectionFormProps) {
                                 onChange={(e) => setNote(e.target.value)}
                                 placeholder="Placeholder"
                                 rows={5}
-                                className="w-full px-5 py-4 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 resize-none font-medium"
+                                className="w-full px-5 py-4 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm placeholder:text-gray-300 resize-none font-medium"
                             ></textarea>
                         </div>
 
                         <div className="pt-6">
-                            <button className="w-full bg-[#002D6B] hover:bg-[#001D4B] text-white py-4 rounded-full text-[14px] font-bold transition-all shadow-lg active:scale-[0.98]">
+                            <button className="w-full bg-primary-dark hover:bg-primary-dark/90 text-white py-4 rounded-full text-[14px] font-bold transition-all shadow-lg active:scale-[0.98]">
                                 Request Inspection
                             </button>
                         </div>

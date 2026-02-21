@@ -36,7 +36,7 @@ export default function SuccessModal({ isOpen, onClose, title, message }: Succes
                 {/* Success Icon */}
                 <div className="w-20 h-20 rounded-full bg-[#E9F3FF] flex items-center justify-center mb-6 relative">
                     <div className="absolute inset-0 rounded-full bg-[#E9F3FF] animate-ping opacity-20" />
-                    <Check size={32} className="text-[#0095FF] relative z-10" strokeWidth={3} />
+                    <Check size={32} className="text-primary-dark relative z-10" strokeWidth={3} />
                 </div>
 
                 <h2 className="text-[20px] font-black text-[#1A1A1A] mb-4 font-montserrat leading-tight">

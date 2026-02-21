@@ -13,7 +13,7 @@ export default function Hero() {
             />
 
             <div className="relative z-10 text-center text-white px-3 max-w-[1008px] mx-auto w-full">
-                <h1 className="text-7xl md:text-6xl font-white mb-4 drop-shadow-xl tracking-tight text-white">
+                <h1 className="text-8xl  font-white mb-4 drop-shadow-xl tracking-tight text-white" style={{ color: "white" }}>
                     Find Homes in Nigeria
                 </h1>
                 <p className="text-xl md:text-2xl mb-16 opacity-100 drop-shadow-lg font-bold max-w-4xl mx-auto tracking-wide">
@@ -23,32 +23,32 @@ export default function Hero() {
                 <div className="bg-white p-2 rounded-full shadow-2xl flex flex-col md:flex-row items-center gap-0 max-w-5xl mx-auto">
                     <div className="flex-1 flex items-center w-full px-6">
                         {/* Location */}
-                        <div className="flex-1 px-4 py-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 rounded-full transition-colors group">
-                            <span className="text-sm font-bold text-gray-700">Location</span>
+                        <div className="flex-1 px-4 py-2 flex items-center justify-center cursor-pointer hover:bg-gray-50 rounded-full transition-colors group">
+                            <span className="text-lg  text-gray-700">Location</span>
                             <ChevronDown size={14} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
                         </div>
 
                         <div className="w-[1px] h-6 bg-gray-200 mx-1.5"></div>
 
                         {/* Property Type */}
-                        <div className="flex-1 px-4 py-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 rounded-full transition-colors group">
-                            <span className="text-sm font-bold text-gray-700">Property Type</span>
+                        <div className="flex-1 px-4 py-2 flex items-center justify-center cursor-pointer hover:bg-gray-50 rounded-full transition-colors group">
+                            <span className="text-lg text-gray-700">Property Type</span>
                             <ChevronDown size={14} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
                         </div>
 
                         <div className="w-[1px] h-6 bg-gray-200 mx-1.5"></div>
 
                         {/* Price Range */}
-                        <div className="flex-1 px-4 py-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 rounded-full transition-colors group">
-                            <span className="text-sm font-bold text-gray-700">Price Range</span>
+                        <div className="flex-1 px-4 py-2 flex items-center justify-center cursor-pointer hover:bg-gray-50 rounded-full transition-colors group">
+                            <span className="text-lg text-gray-700">Price Range</span>
                             <ChevronDown size={14} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
                         </div>
 
                         <div className="w-[1px] h-6 bg-gray-200 mx-1.5"></div>
 
                         {/* Bedrooms */}
-                        <div className="flex-1 px-4 py-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 rounded-full transition-colors group">
-                            <span className="text-sm font-bold text-gray-700">Bedrooms</span>
+                        <div className="flex-1 px-4 py-2 flex items-center justify-center cursor-pointer hover:bg-gray-50 rounded-full transition-colors group">
+                            <span className="text-lg text-gray-700">Bedrooms</span>
                             <ChevronDown size={14} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
                         </div>
                     </div>

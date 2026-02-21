@@ -35,11 +35,11 @@ export default function UserDropdown({ isOpen, onClose, currentRole, onSwitchRol
                         }}
                         className="flex items-center gap-4 px-6 py-3.5 hover:bg-gray-50 transition-colors group border-b border-gray-50 mb-1"
                     >
-                        <div className="w-8 h-8 rounded-full bg-[#E9F3FF] flex items-center justify-center text-[#002D6B] group-hover:bg-[#002D6B] group-hover:text-white transition-all">
+                        <div className="w-8 h-8 rounded-full bg-[#E9F3FF] flex items-center justify-center text-primary-dark group-hover:bg-primary-dark group-hover:text-white transition-all">
                             <RefreshCw size={16} className="group-hover:rotate-180 transition-transform duration-500" />
                         </div>
                         <div className="flex flex-col items-start">
-                            <span className="text-[13px] font-black text-[#1A1A1A] group-hover:text-[#002B7F] transition-colors">
+                            <span className="text-[13px] font-black text-[#1A1A1A] group-hover:text-primary-dark transition-colors">
                                 Switch Account
                             </span>
                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
@@ -55,10 +55,10 @@ export default function UserDropdown({ isOpen, onClose, currentRole, onSwitchRol
                             onClick={onClose}
                             className="flex items-center gap-4 px-6 py-3.5 hover:bg-gray-50 transition-colors group"
                         >
-                            <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:text-[#002D6B] transition-colors">
+                            <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:text-primary-dark transition-colors">
                                 <item.icon size={18} />
                             </div>
-                            <span className="text-[14px] font-bold text-[#1A1A1A] group-hover:text-[#002D6B] transition-colors">
+                            <span className="text-[14px] font-bold text-[#1A1A1A] group-hover:text-primary-dark transition-colors">
                                 {item.label}
                             </span>
                         </Link>
