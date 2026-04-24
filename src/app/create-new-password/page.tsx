@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import CreateNewPasswordForm from "@/components/auth/CreateNewPasswordForm";
+import { Suspense } from "react";
 
 export default function CreateNewPasswordPage() {
     return (
@@ -17,7 +18,9 @@ export default function CreateNewPasswordPage() {
 
                 {/* Right Side - Content */}
                 <div className="w-full md:w-1/2 flex items-center justify-center bg-white">
-                    <CreateNewPasswordForm />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <CreateNewPasswordForm />
+                    </Suspense>
                 </div>
             </div>
         </main>

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 import { UserRoleProvider } from "@/context/UserRoleContext";
+import QueryProvider from "@/providers/QueryProvider";
 
 export default function RootLayout({
   children,
@@ -23,9 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} antialiased font-sans`}>
-        <UserRoleProvider>
-          {children}
-        </UserRoleProvider>
+        <QueryProvider>
+          <UserRoleProvider>
+            {children}
+          </UserRoleProvider>
+        </QueryProvider>
       </body>
     </html>
   );

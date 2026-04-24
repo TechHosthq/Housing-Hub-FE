@@ -1,0 +1,319 @@
+
+> tmp-app@0.1.0 build
+> next build
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 14 errors:
+./src/components/auth/CreateNewPasswordForm.tsx:3:20
+Ecmascript file had an error
+[0m [90m 1 |[39m [36mimport[39m { [33mArrowLeft[39m[33m,[39m [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mLoader2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { useState[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m   |[39m                    [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { useRouter[33m,[39m useSearchParams } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m [33mResetSuccessModal[39m [36mfrom[39m [32m"./ResetSuccessModal"[39m[33m;[39m
+ [90m 6 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m"@/hooks/useAuth"[39m[33m;[39m[0m
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/CreateNewPasswordForm.tsx
+    ./src/app/create-new-password/page.tsx
+
+
+./src/components/auth/CreateNewPasswordForm.tsx:4:10
+Ecmascript file had an error
+[0m [90m 2 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { useState[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { useRouter[33m,[39m useSearchParams } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m [33mResetSuccessModal[39m [36mfrom[39m [32m"./ResetSuccessModal"[39m[33m;[39m
+ [90m 6 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m"@/hooks/useAuth"[39m[33m;[39m
+ [90m 7 |[39m[0m
+
+You're importing a component that needs `useRouter`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/CreateNewPasswordForm.tsx
+    ./src/app/create-new-password/page.tsx
+
+
+./src/components/auth/CreateNewPasswordForm.tsx:4:21
+Ecmascript file had an error
+[0m [90m 2 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { useState[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { useRouter[33m,[39m useSearchParams } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m
+ [90m   |[39m                     [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m [33mResetSuccessModal[39m [36mfrom[39m [32m"./ResetSuccessModal"[39m[33m;[39m
+ [90m 6 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m"@/hooks/useAuth"[39m[33m;[39m
+ [90m 7 |[39m[0m
+
+You're importing a component that needs `useSearchParams`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/CreateNewPasswordForm.tsx
+    ./src/app/create-new-password/page.tsx
+
+
+./src/components/auth/CreateNewPasswordForm.tsx:3:10
+Ecmascript file had an error
+[0m [90m 1 |[39m [36mimport[39m { [33mArrowLeft[39m[33m,[39m [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mLoader2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 2 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { useState[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { useRouter[33m,[39m useSearchParams } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m [33mResetSuccessModal[39m [36mfrom[39m [32m"./ResetSuccessModal"[39m[33m;[39m
+ [90m 6 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m"@/hooks/useAuth"[39m[33m;[39m[0m
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/CreateNewPasswordForm.tsx
+    ./src/app/create-new-password/page.tsx
+
+
+./src/components/auth/LoginForm.tsx:1:20
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { useState[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m   |[39m                    [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mLoader2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m[0m
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/LoginForm.tsx
+    ./src/app/login/page.tsx
+
+
+./src/components/auth/LoginForm.tsx:4:10
+Ecmascript file had an error
+[0m [90m 2 |[39m [36mimport[39m { [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mLoader2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m { useAuth[33m,[39m useGoogleAuth } [36mfrom[39m [32m"@/hooks/useAuth"[39m[33m;[39m
+ [90m 6 |[39m [36mimport[39m { useAuthStore } [36mfrom[39m [32m"@/store/useAuthStore"[39m[33m;[39m
+ [90m 7 |[39m[0m
+
+You're importing a component that needs `useRouter`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/LoginForm.tsx
+    ./src/app/login/page.tsx
+
+
+./src/components/auth/LoginForm.tsx:1:10
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { useState[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mLoader2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m[0m
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/LoginForm.tsx
+    ./src/app/login/page.tsx
+
+
+./src/components/auth/RegisterForm.tsx:1:20
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { useState[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m   |[39m                    [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mChevronDown[39m[33m,[39m [33mLoader2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m[0m
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/RegisterForm.tsx
+    ./src/app/register/page.tsx
+
+
+./src/components/auth/RegisterForm.tsx:4:10
+Ecmascript file had an error
+[0m [90m 2 |[39m [36mimport[39m { [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mChevronDown[39m[33m,[39m [33mLoader2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m { useAuth[33m,[39m useGoogleAuth } [36mfrom[39m [32m"@/hooks/useAuth"[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mRegisterForm[39m() {[0m
+
+You're importing a component that needs `useRouter`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/RegisterForm.tsx
+    ./src/app/register/page.tsx
+
+
+./src/components/auth/RegisterForm.tsx:1:10
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { useState[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mEye[39m[33m,[39m [33mEyeOff[39m[33m,[39m [33mChevronDown[39m[33m,[39m [33mLoader2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m[0m
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/RegisterForm.tsx
+    ./src/app/register/page.tsx
+
+
+./src/components/auth/ResetPasswordForm.tsx:1:10
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mArrowLeft[39m[33m,[39m [33mLoader2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m"@/hooks/useAuth"[39m[33m;[39m[0m
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/ResetPasswordForm.tsx
+    ./src/app/reset-password/page.tsx
+
+
+./src/components/auth/VerifyEmailForm.tsx:1:20
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { useState[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m   |[39m                    [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mArrowLeft[39m[33m,[39m [33mLoader2[39m[33m,[39m [33mCheckCircle2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { useSearchParams } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m[0m
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/VerifyEmailForm.tsx
+    ./src/app/verify-email/page.tsx
+
+
+./src/components/auth/VerifyEmailForm.tsx:4:10
+Ecmascript file had an error
+[0m [90m 2 |[39m [36mimport[39m { [33mArrowLeft[39m[33m,[39m [33mLoader2[39m[33m,[39m [33mCheckCircle2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { useSearchParams } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m { useAuth } [36mfrom[39m [32m"@/hooks/useAuth"[39m[33m;[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mVerifyEmailForm[39m() {[0m
+
+You're importing a component that needs `useSearchParams`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/VerifyEmailForm.tsx
+    ./src/app/verify-email/page.tsx
+
+
+./src/components/auth/VerifyEmailForm.tsx:1:10
+Ecmascript file had an error
+[0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { useState[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[39m { [33mArrowLeft[39m[33m,[39m [33mLoader2[39m[33m,[39m [33mCheckCircle2[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { useSearchParams } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m[0m
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/auth/VerifyEmailForm.tsx
+    ./src/app/verify-email/page.tsx
+
+
+    at <unknown> (./src/components/auth/CreateNewPasswordForm.tsx:3:20)
+    at <unknown> (./src/components/auth/CreateNewPasswordForm.tsx:4:10)
+    at <unknown> (./src/components/auth/CreateNewPasswordForm.tsx:4:21)
+    at <unknown> (./src/components/auth/CreateNewPasswordForm.tsx:3:10)
+    at <unknown> (./src/components/auth/LoginForm.tsx:1:20)
+    at <unknown> (./src/components/auth/LoginForm.tsx:4:10)
+    at <unknown> (./src/components/auth/LoginForm.tsx:1:10)
+    at <unknown> (./src/components/auth/RegisterForm.tsx:1:20)
+    at <unknown> (./src/components/auth/RegisterForm.tsx:4:10)
+    at <unknown> (./src/components/auth/RegisterForm.tsx:1:10)
+    at <unknown> (./src/components/auth/ResetPasswordForm.tsx:1:10)
+    at <unknown> (./src/components/auth/VerifyEmailForm.tsx:1:20)
+    at <unknown> (./src/components/auth/VerifyEmailForm.tsx:4:10)
+    at <unknown> (./src/components/auth/VerifyEmailForm.tsx:1:10)

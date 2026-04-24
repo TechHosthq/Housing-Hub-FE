@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import VerifyEmailForm from "@/components/auth/VerifyEmailForm";
+import { Suspense } from "react";
 
 export default function VerifyEmailPage() {
     return (
@@ -17,7 +18,9 @@ export default function VerifyEmailPage() {
 
                 {/* Right Side - Content */}
                 <div className="w-full md:w-1/2 flex items-center justify-center bg-white">
-                    <VerifyEmailForm />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <VerifyEmailForm />
+                    </Suspense>
                 </div>
             </div>
         </main>

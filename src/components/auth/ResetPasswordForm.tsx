@@ -1,15 +1,17 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function ResetPasswordForm() {
-    const router = useRouter();
+    const { forgotPassword, isSendingForgotEmail, forgotPasswordSuccess } = useAuth();
+    const [email, setEmail] = useState("");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        router.push("/create-new-password");
+        forgotPassword({ email });
     };
 
     return (
@@ -28,28 +30,43 @@ export default function ResetPasswordForm() {
                     Reset Password
                 </h1>
 
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                    <div className="space-y-1">
-                        <label className="text-[9px] font-semibold text-[#666666]">Email Address</label>
-                        <input
-                            type="email"
-                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
-                            placeholder=""
-                        />
-                        <p className="text-[11px] text-gray-400 mt-2 leading-relaxed">
-                            Enter your email address and we'll send you a link to reset your password.
-                        </p>
+                {forgotPasswordSuccess ? (
+                    <div className="text-center space-y-4">
+                        <div className="p-4 bg-green-50 text-green-700 rounded-2xl text-sm">
+                            Reset link has been sent to your email address.
+                        </div>
+                        <Link href="/login" className="text-[#3b82f6] hover:underline text-xs font-semibold">
+                            Back to Login
+                        </Link>
                     </div>
+                ) : (
+                    <form className="space-y-4" onSubmit={handleSubmit}>
+                        <div className="space-y-1">
+                            <label className="text-[9px] font-semibold text-[#666666]">Email Address</label>
+                            <input
+                                type="email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
+                                placeholder=""
+                            />
+                            <p className="text-[11px] text-gray-400 mt-2 leading-relaxed">
+                                Enter your email address and we'll send you a link to reset your password.
+                            </p>
+                        </div>
 
-                    <div className="pt-6">
-                        <button
-                            type="submit"
-                            className="w-full bg-primary-dark text-white py-4 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all shadow-lg"
-                        >
-                            Send Reset Link
-                        </button>
-                    </div>
-                </form>
+                        <div className="pt-6">
+                            <button
+                                type="submit"
+                                disabled={isSendingForgotEmail}
+                                className="w-full bg-primary-dark text-white py-4 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all shadow-lg flex items-center justify-center disabled:opacity-70"
+                            >
+                                {isSendingForgotEmail ? <Loader2 className="animate-spin mr-2" size={20} /> : "Send Reset Link"}
+                            </button>
+                        </div>
+                    </form>
+                )}
             </div>
         </div>
     );

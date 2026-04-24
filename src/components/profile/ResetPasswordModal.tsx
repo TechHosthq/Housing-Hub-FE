@@ -1,7 +1,6 @@
-"use client";
-
-import { X } from "lucide-react";
+import { X, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ResetPasswordModalProps {
     isOpen: boolean;
@@ -9,17 +8,43 @@ interface ResetPasswordModalProps {
 }
 
 export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordModalProps) {
-    const [email, setEmail] = useState("");
-    const [isTouched, setIsTouched] = useState(false);
+    const { changePassword, isChangingPassword } = useAuth();
+    const [formData, setFormData] = useState({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+    });
+    const [showPasswords, setShowPasswords] = useState({
+        current: false,
+        new: false,
+        confirm: false,
+    });
+    const [error, setError] = useState("");
 
     if (!isOpen) return null;
 
-    const validateEmail = (email: string) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    };
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setError("");
 
-    const isValid = validateEmail(email);
-    const showError = isTouched && !isValid && email.length > 0;
+        if (formData.newPassword !== formData.confirmPassword) {
+            setError("Passwords do not match");
+            return;
+        }
+
+        changePassword({
+            currentPassword: formData.currentPassword,
+            newPassword: formData.newPassword
+        }, {
+            onSuccess: (response) => {
+                if (response.isSuccessful) {
+                    onClose();
+                } else {
+                    setError(response.message || "Failed to change password");
+                }
+            }
+        });
+    };
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -35,7 +60,7 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                     {/* Header */}
                     <div className="flex items-center justify-between mb-10">
                         <h2 className="text-[32px] font-black text-[#1A1A1A] font-montserrat tracking-tight">
-                            Reset Password
+                            Change Password
                         </h2>
                         <button
                             onClick={onClose}
@@ -45,41 +70,88 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                         </button>
                     </div>
 
-                    {/* Email Input */}
-                    <div className="mb-12">
-                        <label className="block text-[14px] font-bold text-[#666666] mb-3">
-                            Email Address
-                        </label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                                setIsTouched(true);
-                            }}
-                            placeholder="Placeholder"
-                            className={`w-full px-6 py-4 rounded-full border-2 transition-all text-[15px] font-medium outline-none ${showError
-                                ? "border-[#FF3B30] bg-[#FFF5F5] text-[#FF3B30] placeholder:text-[#FF3B30]/50"
-                                : "border-[#F2F2F2] bg-white text-[#1A1A1A] placeholder:text-gray-300 focus:border-primary-dark"
-                                }`}
-                        />
-                        {showError && (
-                            <p className="text-[12px] font-bold text-[#FF3B30] mt-2 ml-4">
-                                Invalid Email
-                            </p>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {error && (
+                            <div className="p-3 text-xs text-red-500 bg-red-50 rounded-lg text-center">
+                                {error}
+                            </div>
                         )}
-                    </div>
 
-                    {/* Action Button */}
-                    <button
-                        disabled={!email.trim()}
-                        className={`w-full py-5 rounded-full text-[16px] font-black transition-all active:scale-[0.98] shadow-lg ${email.trim()
-                            ? "bg-primary-dark text-white hover:bg-primary-dark/90"
-                            : "bg-[#E0E0E0] text-gray-400 cursor-not-allowed"
-                            }`}
-                    >
-                        Send Reset Link
-                    </button>
+                        <div>
+                            <label className="block text-[14px] font-bold text-[#666666] mb-3">
+                                Current Password
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type={showPasswords.current ? "text" : "password"}
+                                    required
+                                    value={formData.currentPassword}
+                                    onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
+                                    className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] bg-white text-[#1A1A1A] transition-all focus:border-primary-dark outline-none"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
+                                    className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400"
+                                >
+                                    {showPasswords.current ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-[14px] font-bold text-[#666666] mb-3">
+                                New Password
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type={showPasswords.new ? "text" : "password"}
+                                    required
+                                    minLength={8}
+                                    value={formData.newPassword}
+                                    onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
+                                    className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] bg-white text-[#1A1A1A] transition-all focus:border-primary-dark outline-none"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
+                                    className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400"
+                                >
+                                    {showPasswords.new ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-[14px] font-bold text-[#666666] mb-3">
+                                Confirm New Password
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type={showPasswords.confirm ? "text" : "password"}
+                                    required
+                                    value={formData.confirmPassword}
+                                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                                    className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] bg-white text-[#1A1A1A] transition-all focus:border-primary-dark outline-none"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
+                                    className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400"
+                                >
+                                    {showPasswords.confirm ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isChangingPassword}
+                            className="w-full py-5 rounded-full bg-primary-dark text-white text-[16px] font-black transition-all hover:bg-primary-dark/90 active:scale-[0.98] shadow-lg flex items-center justify-center disabled:opacity-70"
+                        >
+                            {isChangingPassword ? <Loader2 className="animate-spin mr-2" size={24} /> : "Update Password"}
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

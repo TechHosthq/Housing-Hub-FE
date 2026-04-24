@@ -8,9 +8,9 @@ import MessageList from "@/components/profile/MessageList";
 
 export default function MessagesPage() {
     const [isChatting, setIsChatting] = useState(false);
-    const [selectedThreadId, setSelectedThreadId] = useState<number | null>(null);
+    const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
 
-    const handleThreadSelect = (id: number) => {
+    const handleThreadSelect = (id: string) => {
         setSelectedThreadId(id);
         setIsChatting(true);
     };

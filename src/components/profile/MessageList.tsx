@@ -1,95 +1,62 @@
 "use client";
 
-import { Search, User, Send } from "lucide-react";
-import { useState } from "react";
-
-const MOCK_MESSAGES = [
-    {
-        id: 1,
-        sender: "Spacehub Support",
-        preview: "Last message preview...",
-        time: "2 hours ago",
-        unread: 1,
-        isSupport: true,
-        conversations: [
-            {
-                id: 1,
-                text: "Thank you for joining SpaceHub. Here's everything you need to know to get started with finding your dream property. Our platform makes it easy to search, book inspections, and connect with verified property owners.",
-                time: "10:34 am",
-                isOutgoing: false
-            },
-            {
-                id: 2,
-                text: "Hi! Is this still available?",
-                time: "10:34 am",
-                isOutgoing: true
-            }
-        ]
-    },
-    {
-        id: 2,
-        sender: "Property Owner",
-        preview: "Last message preview...",
-        time: "1 day ago",
-        unread: 0,
-        isSupport: false,
-        conversations: [
-            {
-                id: 1,
-                text: "Hello, regarding the inspection tomorrow...",
-                time: "09:00 am",
-                isOutgoing: false
-            }
-        ]
-    },
-    {
-        id: 3,
-        sender: "Property Owner",
-        preview: "Last message preview...",
-        time: "1 day ago",
-        unread: 0,
-        isSupport: false,
-        conversations: []
-    },
-    {
-        id: 4,
-        sender: "Property Owner",
-        preview: "Last message preview...",
-        time: "1 day ago",
-        unread: 0,
-        isSupport: false,
-        conversations: []
-    }
-];
+import { Search, User, Send, Loader2 } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { useChat } from "@/hooks/useChat";
+import { useAuthStore } from "@/store/useAuthStore";
+import { formatDistanceToNow } from "date-fns";
 
 interface MessageListProps {
     viewMode: "list" | "chat";
-    selectedId: number | null;
-    onThreadSelect: (id: number) => void;
+    selectedId: string | null;
+    onThreadSelect: (id: string) => void;
 }
 
 export default function MessageList({ viewMode, selectedId, onThreadSelect }: MessageListProps) {
+    const { useConversations, useMessages, sendMessage, markAsRead } = useChat();
+    const currentUser = useAuthStore((state) => state.user);
     const [searchQuery, setSearchQuery] = useState("");
     const [messageInput, setMessageInput] = useState("");
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    const filteredMessages = MOCK_MESSAGES.filter(msg =>
-        msg.sender.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        msg.preview.toLowerCase().includes(searchQuery.toLowerCase())
+    const { data: convResponse, isLoading: isLoadingConvs } = useConversations();
+    const { data: msgResponse, isLoading: isLoadingMsgs } = useMessages(selectedId);
+
+    const conversations = convResponse?.data || [];
+    const messages = msgResponse?.data?.items || [];
+
+    useEffect(() => {
+        if (selectedId) {
+            markAsRead(selectedId);
+        }
+    }, [selectedId, markAsRead]);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    const filteredConversations = conversations.filter(conv =>
+        conv.participantName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        conv.lastMessage?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const activeChat = MOCK_MESSAGES.find(m => m.id === selectedId);
+    const activeChat = conversations.find(c => c.id === selectedId);
 
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!messageInput.trim()) return;
+        if (!messageInput.trim() || !activeChat) return;
+
+        sendMessage({
+            recipientId: activeChat.participantId,
+            content: messageInput
+        });
         setMessageInput("");
     };
 
-    // --- SHARED COMPONENTS ---
     const ThreadList = () => (
-        <div className={`bg-white rounded-[22px] border border-[#F2F2F2] p-6 shadow-sm h-fit ${viewMode === 'chat' ? 'w-[340px]' : 'flex-1'}`}>
+        <div className={`bg-white rounded-[22px] border border-[#F2F2F2] p-6 shadow-sm h-fit min-h-[500px] ${viewMode === 'chat' ? 'w-[340px] hidden md:block' : 'flex-1'}`}>
             <h2 className="text-[18px] font-black text-[#1A1A1A] font-montserrat mb-6 ml-2">
-                Message
+                Messages
             </h2>
 
             <div className="relative mb-6">
@@ -105,51 +72,59 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
                 />
             </div>
 
-            <div className="flex flex-col gap-1">
-                {filteredMessages.map((msg) => (
-                    <div
-                        key={msg.id}
-                        onClick={() => onThreadSelect(msg.id)}
-                        className={`p-4 rounded-2xl flex items-start gap-3 cursor-pointer transition-all group relative border-l-4 ${selectedId === msg.id
-                            ? "bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-primary-dark"
-                            : "border-transparent hover:bg-gray-50"
-                            }`}
-                    >
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${msg.isSupport ? "bg-[#E9F3FF] text-primary-dark" : "bg-gray-100 text-gray-400"}`}>
-                            <User size={20} />
-                        </div>
+            {isLoadingConvs ? (
+                <div className="flex justify-center py-10">
+                    <Loader2 className="animate-spin text-primary-dark" />
+                </div>
+            ) : (
+                <div className="flex flex-col gap-1">
+                    {filteredConversations.length === 0 ? (
+                        <p className="text-center text-gray-400 text-xs py-10">No conversations found</p>
+                    ) : (
+                        filteredConversations.map((conv) => (
+                            <div
+                                key={conv.id}
+                                onClick={() => onThreadSelect(conv.id)}
+                                className={`p-4 rounded-2xl flex items-start gap-3 cursor-pointer transition-all group relative border-l-4 ${selectedId === conv.id
+                                    ? "bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-primary-dark"
+                                    : "border-transparent hover:bg-gray-50"
+                                    }`}
+                            >
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-gray-100 text-gray-400`}>
+                                    <User size={20} />
+                                </div>
 
-                        <div className="flex-1 min-w-0">
-                            <div className="flex justify-between items-start mb-0.5">
-                                <h3 className="text-[13px] font-black text-[#1A1A1A] truncate pr-2">
-                                    {msg.sender}
-                                </h3>
-                                <span className="text-[10px] font-bold text-gray-400 shrink-0">
-                                    {msg.time}
-                                </span>
-                            </div>
-                            <p className="text-[11px] font-bold text-[#666666] truncate">
-                                {msg.preview}
-                            </p>
-                        </div>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex justify-between items-start mb-0.5">
+                                        <h3 className="text-[13px] font-black text-[#1A1A1A] truncate pr-2">
+                                            {conv.participantName || "Unknown User"}
+                                        </h3>
+                                        <span className="text-[10px] font-bold text-gray-400 shrink-0">
+                                            {conv.lastMessageAt ? formatDistanceToNow(new Date(conv.lastMessageAt), { addSuffix: true }) : ""}
+                                        </span>
+                                    </div>
+                                    <p className="text-[11px] font-bold text-[#666666] truncate">
+                                        {conv.lastMessage}
+                                    </p>
+                                </div>
 
-                        {msg.unread > 0 && selectedId !== msg.id && (
-                            <div className="absolute top-1/2 -translate-y-1/2 right-4 w-5 h-5 bg-primary-dark rounded-full flex items-center justify-center text-[10px] text-white font-bold">
-                                {msg.unread}
+                                {conv.unreadCount > 0 && selectedId !== conv.id && (
+                                    <div className="absolute top-1/2 -translate-y-1/2 right-4 w-5 h-5 bg-primary-dark rounded-full flex items-center justify-center text-[10px] text-white font-bold">
+                                        {conv.unreadCount}
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
-                ))}
-            </div>
+                        ))
+                    )}
+                </div>
+            )}
         </div>
     );
 
-    // --- LIST MODE RENDER ---
     if (viewMode === "list") {
         return <ThreadList />;
     }
 
-    // --- CHAT MODE RENDER (SPLIT VIEW) ---
     return (
         <div className="flex-1 flex gap-6 items-start h-[700px]">
             <ThreadList />
@@ -159,29 +134,41 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
                     <>
                         <div className="px-8 py-5 border-b border-[#F2F2F2] flex items-center justify-between bg-white shrink-0">
                             <h2 className="text-[16px] font-black text-[#1A1A1A] font-montserrat">
-                                {activeChat.sender}
+                                {activeChat.participantName || "Unknown User"}
                             </h2>
                         </div>
 
                         <div className="flex-1 overflow-y-auto p-8 space-y-6 bg-white">
-                            {activeChat.conversations.map((msg) => (
-                                <div
-                                    key={msg.id}
-                                    className={`flex ${msg.isOutgoing ? "justify-end" : "justify-start"}`}
-                                >
-                                    <div className={`max-w-[70%] space-y-1`}>
-                                        <div className={`px-5 py-4 rounded-[12px] text-[13px] leading-relaxed shadow-sm ${msg.isOutgoing
-                                            ? "bg-primary-dark text-white"
-                                            : "bg-white border border-[#F2F2F2] text-[#1A1A1A]"
-                                            }`}>
-                                            {msg.text}
-                                        </div>
-                                        <div className={`flex items-center gap-1 text-[10px] font-bold text-gray-400 ${msg.isOutgoing ? "justify-end" : "justify-start"}`}>
-                                            <span>{msg.time} .</span>
-                                        </div>
-                                    </div>
+                            {isLoadingMsgs ? (
+                                <div className="flex justify-center py-20">
+                                    <Loader2 className="animate-spin text-primary-dark" />
                                 </div>
-                            ))}
+                            ) : (
+                                <>
+                                    {[...messages].reverse().map((msg) => {
+                                        const isOutgoing = msg.senderId === currentUser?.id;
+                                        return (
+                                            <div
+                                                key={msg.id}
+                                                className={`flex ${isOutgoing ? "justify-end" : "justify-start"}`}
+                                            >
+                                                <div className={`max-w-[70%] space-y-1`}>
+                                                    <div className={`px-5 py-4 rounded-[12px] text-[13px] leading-relaxed shadow-sm ${isOutgoing
+                                                        ? "bg-primary-dark text-white"
+                                                        : "bg-white border border-[#F2F2F2] text-[#1A1A1A]"
+                                                        }`}>
+                                                        {msg.content}
+                                                    </div>
+                                                    <div className={`flex items-center gap-1 text-[10px] font-bold text-gray-400 ${isOutgoing ? "justify-end" : "justify-start"}`}>
+                                                        <span>{formatDistanceToNow(new Date(msg.dateCreated), { addSuffix: true })}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                    <div ref={messagesEndRef} />
+                                </>
+                            )}
                         </div>
 
                         <div className="p-8 bg-white border-t border-[#F2F2F2] shrink-0">
@@ -195,7 +182,8 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
                                 />
                                 <button
                                     type="submit"
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-lg bg-primary-dark flex items-center justify-center text-white hover:bg-primary-dark/90 transition-all active:scale-95 shadow-md"
+                                    disabled={!messageInput.trim()}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-lg bg-primary-dark flex items-center justify-center text-white hover:bg-primary-dark/90 transition-all active:scale-95 shadow-md disabled:opacity-50"
                                 >
                                     <Send size={18} />
                                 </button>

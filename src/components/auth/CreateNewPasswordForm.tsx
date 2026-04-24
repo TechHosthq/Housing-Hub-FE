@@ -1,25 +1,57 @@
 "use client";
 
-import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import ResetSuccessModal from "./ResetSuccessModal";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function CreateNewPasswordForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const { resetPassword, isResettingPassword, resetPasswordSuccess } = useAuth();
+    
+    const email = searchParams.get("email");
+    const token = searchParams.get("token");
+
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [formData, setFormData] = useState({
+        newPassword: "",
+        confirmPassword: "",
+    });
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        if (resetPasswordSuccess) {
+            setShowModal(true);
+            setTimeout(() => {
+                router.push("/login");
+            }, 3000);
+        }
+    }, [resetPasswordSuccess, router]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setShowModal(true);
+        setError("");
 
-        // Redirect to home after 3 seconds
-        setTimeout(() => {
-            router.push("/");
-        }, 3000);
+        if (formData.newPassword !== formData.confirmPassword) {
+            setError("Passwords do not match");
+            return;
+        }
+
+        if (!email || !token) {
+            setError("Invalid or expired reset link");
+            return;
+        }
+
+        resetPassword({
+            email,
+            token,
+            newPassword: formData.newPassword
+        });
     };
 
     return (
@@ -39,11 +71,21 @@ export default function CreateNewPasswordForm() {
                 </h1>
 
                 <form className="space-y-6" onSubmit={handleSubmit}>
+                    {error && (
+                        <div className="p-3 text-xs text-red-500 bg-red-50 rounded-lg text-center">
+                            {error}
+                        </div>
+                    )}
+
                     <div className="space-y-1">
                         <label className="text-[9px] font-semibold text-[#666666]">New Password</label>
                         <div className="relative">
                             <input
                                 type={showPassword ? "text" : "password"}
+                                required
+                                minLength={8}
+                                value={formData.newPassword}
+                                onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
                                 className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
                             />
                             <button
@@ -64,6 +106,9 @@ export default function CreateNewPasswordForm() {
                         <div className="relative">
                             <input
                                 type={showConfirmPassword ? "text" : "password"}
+                                required
+                                value={formData.confirmPassword}
+                                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                                 className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
                             />
                             <button
@@ -79,9 +124,10 @@ export default function CreateNewPasswordForm() {
                     <div className="pt-4">
                         <button
                             type="submit"
-                            className="w-full bg-primary-dark text-white py-4 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all shadow-lg"
+                            disabled={isResettingPassword}
+                            className="w-full bg-primary-dark text-white py-4 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all shadow-lg flex items-center justify-center disabled:opacity-70"
                         >
-                            Reset Password
+                            {isResettingPassword ? <Loader2 className="animate-spin mr-2" size={20} /> : "Reset Password"}
                         </button>
                     </div>
                 </form>
