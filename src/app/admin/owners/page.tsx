@@ -5,6 +5,7 @@ import { Search, MoreVertical, CheckCircle2, AlertCircle, Ban, User } from "luci
 import Link from "next/link";
 import UserActionModal from "@/components/admin/UserActionModal";
 import SuccessModal from "@/components/admin/SuccessModal";
+import ClientPagination from "@/components/admin/ClientPagination";
 
 interface Owner {
     id: string;
@@ -68,6 +69,8 @@ export default function AdminOwnersPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [activeTab, setActiveTab] = useState("All");
     const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [pageSize, setPageSize] = useState(20);
     const [modalConfig, setModalConfig] = useState<{
         isOpen: boolean;
         type: 'block' | 'unblock';
@@ -104,6 +107,11 @@ export default function AdminOwnersPage() {
             (activeTab === "Blocked" && owner.status === "Blocked");
         return matchesSearch && matchesTab;
     });
+
+    const totalCount = filteredOwners.length;
+    const totalPages = Math.ceil(totalCount / pageSize) || 1;
+    const startIndex = (pageNumber - 1) * pageSize;
+    const paginatedOwners = filteredOwners.slice(startIndex, startIndex + pageSize);
 
     const handleUserAction = (reason: string) => {
         if (!modalConfig.userId) return;
@@ -178,7 +186,7 @@ export default function AdminOwnersPage() {
 
             {/* Owner List */}
             <div className="flex flex-col gap-4 w-full">
-                {filteredOwners.map((owner) => (
+                {paginatedOwners.map((owner) => (
                     <div key={owner.id} className="bg-white border border-gray-100 rounded-[20px] p-6 shadow-sm hover:shadow-md transition-all group relative">
                         <div className="flex items-center gap-5">
                             {/* Avatar */}
@@ -259,6 +267,18 @@ export default function AdminOwnersPage() {
                     <div className="py-20 text-center text-gray-400 font-bold">
                         No owners found matching your criteria.
                     </div>
+                )}
+
+                {totalCount > 0 && (
+                    <ClientPagination
+                        currentPage={pageNumber}
+                        setCurrentPage={setPageNumber}
+                        pageSize={pageSize}
+                        setPageSize={setPageSize}
+                        totalCount={totalCount}
+                        totalPages={totalPages}
+                        startIndex={startIndex}
+                    />
                 )}
             </div>
         </div>

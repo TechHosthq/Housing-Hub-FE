@@ -1,17 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Search, MoreVertical, CheckCircle2, AlertCircle, Ban, User as UserIcon, ChevronRight, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { Search, MoreVertical, CheckCircle2, AlertCircle, User as UserIcon, Loader2 } from "lucide-react";
 import Link from "next/link";
 import UserActionModal from "@/components/admin/UserActionModal";
 import SuccessModal from "@/components/admin/SuccessModal";
+import ClientPagination from "@/components/admin/ClientPagination";
 import { useCustomer } from "@/hooks/useCustomer";
 import { format } from "date-fns";
 
 export default function AdminCustomersPage() {
-    const { useAllCustomers, verifyKyc } = useCustomer();
     const [pageNumber, setPageNumber] = useState(1);
-    const { data: customersResponse, isLoading } = useAllCustomers(pageNumber);
+    const [pageSize, setPageSize] = useState(20);
+    const { useAllCustomers } = useCustomer();
+    const { data: customersResponse, isLoading } = useAllCustomers(pageNumber, pageSize);
     
     const [searchQuery, setSearchQuery] = useState("");
     const [activeTab, setActiveTab] = useState("All");
@@ -37,12 +39,13 @@ export default function AdminCustomersPage() {
     });
 
     const customers = customersResponse?.data?.items || [];
+    const totalCount = customersResponse?.data?.totalCount || 0;
+    const totalPages = customersResponse?.data?.totalPages || 1;
     
     const counts = {
-        All: customersResponse?.data?.totalCount || 0,
+        All: totalCount,
         "Pending KYC": customers.filter(c => !c.isKycVerified && c.kycSubmittedAt).length,
         Verified: customers.filter(c => c.isKycVerified).length,
-        // Blocked: ... (Need API support for blocking)
     };
 
     const filteredCustomers = customers.filter(customer => {
@@ -61,7 +64,6 @@ export default function AdminCustomersPage() {
 
     const handleUserAction = (reason: string) => {
         if (!modalConfig.userId) return;
-        // In a real app, call a block/unblock API
         setModalConfig(prev => ({ ...prev, isOpen: false }));
         setSuccessModal({
             isOpen: true,
@@ -180,6 +182,15 @@ export default function AdminCustomersPage() {
                         </div>
                     );
                 })}
+
+                <ClientPagination
+                    currentPage={pageNumber}
+                    setCurrentPage={setPageNumber}
+                    pageSize={pageSize}
+                    setPageSize={setPageSize}
+                    totalCount={totalCount}
+                    totalPages={totalPages}
+                />
 
                 {!isLoading && filteredCustomers.length === 0 && (
                     <div className="py-20 text-center text-gray-400 font-bold">
