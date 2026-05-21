@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import DatePicker from "../property/DatePicker";
 import TimePicker from "../property/TimePicker";
+import { formatTimeTo24h } from "@/utils/dateUtils";
 
 interface SuggestRescheduleModalProps {
     isOpen: boolean;
@@ -95,7 +96,7 @@ export default function SuggestRescheduleModal({
                         Cancel
                     </button>
                     <button
-                        onClick={() => onSuggest({ date, time, note })}
+                        onClick={() => onSuggest({ date, time: formatTimeTo24h(time), note })}
                         className="flex-1 py-4 rounded-full bg-[#002B7F] text-[16px] font-bold text-white font-montserrat hover:bg-[#001D54] transition-all shadow-md active:scale-[0.98]"
                     >
                         Suggest

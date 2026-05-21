@@ -1,6 +1,11 @@
-import { Bed, Bath, Wifi, Car, Zap, MapPin } from "lucide-react";
+"use client";
+
+import { Bed, Bath, Wifi, Car, Zap, MapPin, ChevronDown, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { useProperty } from "@/hooks/useProperty";
 
 interface PropertyInfoProps {
+    propertyId: string;
     property: {
         title: string;
         price: string;
@@ -11,16 +16,30 @@ interface PropertyInfoProps {
     };
 }
 
-export default function PropertyInfo({ property }: PropertyInfoProps) {
+export default function PropertyInfo({ propertyId, property }: PropertyInfoProps) {
+    const { usePropertyAddress } = useProperty();
+    const { data: addressResponse, isLoading } = usePropertyAddress(propertyId);
+    
+    const apiAddress = addressResponse?.isSuccessful ? addressResponse.data : null;
+    const hasValidAddress = apiAddress && apiAddress.place && apiAddress.city;
+
     return (
         <div className="space-y-8">
             <div className="flex justify-between items-start">
                 <div>
-                    <h1 className="text-[20px] font-black text-[#1A1A1A] font-montserrat">{property.title}</h1>
-                    <p className="text-[11px] text-[#999999] mt-1 flex items-center gap-1">
+                    <h1 className="text-[20px] font-black text-[#1A1A1A] font-montserrat">{property.title || "Untitled Property"}</h1>
+                    <div className="text-[11px] text-[#999999] mt-1 flex items-center gap-1">
                         <MapPin size={12} />
-                        {property.location}
-                    </p>
+                        {isLoading ? (
+                            <Loader2 size={10} className="animate-spin" />
+                        ) : (
+                            hasValidAddress ? (
+                                <span>{apiAddress.place}, {apiAddress.city}, {apiAddress.state}</span>
+                            ) : (
+                                <span>{property.location || "Lagos, Nigeria"}</span>
+                            )
+                        )}
+                    </div>
                 </div>
                 <div className="text-right">
                     <span className="text-[20px] font-black text-[#0095FF] font-montserrat">{property.price}/yr</span>
@@ -51,6 +70,31 @@ export default function PropertyInfo({ property }: PropertyInfoProps) {
                 </p>
             </div>
 
+            {/* Address Breakdown */}
+            {!isLoading && apiAddress && (
+                <div className="space-y-3 bg-gray-50/50 p-6 rounded-[22px] border border-gray-100">
+                    <h3 className="text-[14px] font-black text-[#1A1A1A] font-montserrat">Address Breakdown</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Place</p>
+                            <p className="text-[13px] font-bold text-[#1A1A1A]">{apiAddress.place || "N/A"}</p>
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">City</p>
+                            <p className="text-[13px] font-bold text-[#1A1A1A]">{apiAddress.city || "N/A"}</p>
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">State</p>
+                            <p className="text-[13px] font-bold text-[#1A1A1A]">{apiAddress.state || "N/A"}</p>
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Postal Code</p>
+                            <p className="text-[13px] font-bold text-[#1A1A1A]">{apiAddress.postalCode || "N/A"}</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Map Placeholder */}
             <div className="space-y-3">
                 <div className="flex justify-between items-center">
@@ -73,6 +117,3 @@ export default function PropertyInfo({ property }: PropertyInfoProps) {
         </div>
     );
 }
-
-import { ChevronDown } from "lucide-react";
-import Image from "next/image";

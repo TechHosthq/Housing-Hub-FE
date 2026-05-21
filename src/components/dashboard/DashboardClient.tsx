@@ -3,49 +3,50 @@
 import KYCBanner from "./KYCBanner";
 import DashboardSearch from "./DashboardSearch";
 import PropertyCard from "@/components/home/PropertyCard";
-import DashboardSearchIcon from "@/components/icons/DashboardSearchIcon"; // I'll create this to clean up the page component
+import DashboardSearchIcon from "@/components/icons/DashboardSearchIcon";
 import OwnerDashboard from "@/components/dashboard/OwnerDashboard";
 import { useUserRole } from "@/context/UserRoleContext";
 import { useSearchParams } from "next/navigation";
+import { useProperty } from "@/hooks/useProperty";
+import { Loader2 } from "lucide-react";
 
 export default function DashboardClient({ allProperties }: { allProperties: any[] }) {
     const { role } = useUserRole();
     const searchParams = useSearchParams();
+    const { useTrendingProperties, useNewProperties, useAllProperties } = useProperty();
 
     const kycStatus = searchParams.get("kyc");
     const searchQuery = searchParams.get("q") || "";
     const isKycSubmitted = kycStatus === "submitted";
 
-    // Search logic (migrated from page.tsx)
-    const filteredProperties = searchQuery
-        ? allProperties.filter(property => {
-            const query = searchQuery.toLowerCase();
-            const titleMatch = property.title.toLowerCase().includes(query);
-            const locationMatch = property.location.toLowerCase().includes(query);
-            const bedMatch = query.includes('bed') && query.match(/\d+/)?.some(num => property.bedrooms === parseInt(num));
-            const bathMatch = query.includes('bath') && query.match(/\d+/)?.some(num => property.bathrooms === parseInt(num));
-            const numericMatch = !isNaN(parseInt(query)) && (property.bedrooms === parseInt(query) || property.bathrooms === parseInt(query));
-            return titleMatch || locationMatch || bedMatch || bathMatch || (query.length === 1 && numericMatch);
-        })
-        : [];
+    // Real API Hooks
+    const { data: trendingResponse, isLoading: isLoadingTrending } = useTrendingProperties(3);
+    const { data: newResponse, isLoading: isLoadingNew } = useNewProperties(6);
+    const { data: searchResponse, isLoading: isLoadingSearch } = useAllProperties({ search: searchQuery });
 
-    const nearMeProperties = allProperties.filter(p => p.tag === "Near Me");
-    const trendingProperties = allProperties.filter(p => p.tag === "Trending").slice(0, 3);
-    const newProperties = allProperties.filter(p => !p.tag || p.tag === "New" || p.tag === "Trending").slice(0, 6);
+    const trendingProperties = trendingResponse?.data || [];
+    const newProperties = newResponse?.data || [];
+    const searchResults = searchResponse?.data?.items || [];
 
     if (role === "Owner" && !searchQuery) {
         return <OwnerDashboard />;
     }
 
+    const isLoading = isLoadingTrending || isLoadingNew || (searchQuery && isLoadingSearch);
+
     return (
         <>
-            {/* KYC Notification - Hidden if submitted */}
+            {/* KYC Notification */}
             {!isKycSubmitted && !searchQuery && <KYCBanner />}
 
             {/* Search & Filter */}
             <DashboardSearch />
 
-            {searchQuery ? (
+            {isLoading ? (
+                <div className="py-20 flex justify-center items-center">
+                    <Loader2 className="animate-spin text-primary-dark w-12 h-12" />
+                </div>
+            ) : searchQuery ? (
                 /* Search Results View */
                 <section className="w-full">
                     <div className="mb-8">
@@ -53,9 +54,9 @@ export default function DashboardClient({ allProperties }: { allProperties: any[
                             Showing result for <span className="text-[#0095FF] font-black">"{searchQuery}"</span>
                         </h2>
                     </div>
-                    {filteredProperties.length > 0 ? (
+                    {searchResults.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                            {filteredProperties.map((property) => (
+                            {searchResults.map((property) => (
                                 <PropertyCard key={property.id} property={property} />
                             ))}
                         </div>
@@ -75,7 +76,7 @@ export default function DashboardClient({ allProperties }: { allProperties: any[
                     <section className="mb-14 w-full">
                         <h2 className="text-2xl font-black text-[#1A1A1A] mb-8 font-montserrat">New Properties</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                            {newProperties.map((property) => (
+                            {(newProperties.length > 0 ? newProperties : allProperties.slice(0, 6)).map((property) => (
                                 <PropertyCard key={property.id} property={property} />
                             ))}
                         </div>
@@ -85,23 +86,11 @@ export default function DashboardClient({ allProperties }: { allProperties: any[
                     <section className="mb-14 w-full">
                         <h2 className="text-2xl font-black text-[#1A1A1A] mb-8 font-montserrat">Trending Properties</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                            {trendingProperties.map((property) => (
+                            {(trendingProperties.length > 0 ? trendingProperties : allProperties.slice(0, 3)).map((property) => (
                                 <PropertyCard key={property.id} property={property} />
                             ))}
                         </div>
                     </section>
-
-                    {/* Properties Near Me Section - Only if KYC submitted */}
-                    {isKycSubmitted && (
-                        <section className="w-full">
-                            <h2 className="text-2xl font-black text-[#1A1A1A] mb-8 font-montserrat">Properties Near Me</h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                                {nearMeProperties.map((property) => (
-                                    <PropertyCard key={property.id} property={property} />
-                                ))}
-                            </div>
-                        </section>
-                    )}
                 </>
             )}
         </>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
@@ -8,6 +8,9 @@ import DatePicker from "./DatePicker";
 import TimePicker from "./TimePicker";
 import SuccessModal from "../common/SuccessModal";
 import { useRouter } from "next/navigation";
+import { useInspection } from "@/hooks/useInspection";
+import { useAuthStore } from "@/store/useAuthStore";
+import { formatTimeTo24h } from "@/utils/dateUtils";
 
 interface InspectionFormProps {
     property: {
@@ -21,19 +24,37 @@ interface InspectionFormProps {
 
 export default function InspectionForm({ property }: InspectionFormProps) {
     const router = useRouter();
-    const [date, setDate] = useState("08/17/2025");
+    const currentUser = useAuthStore((state) => state.user);
+    const { createInspection, isCreatingInspection } = useInspection();
+    
+    const [date, setDate] = useState("2025-08-17");
     const [time, setTime] = useState("");
     const [note, setNote] = useState("");
     const [showModal, setShowModal] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setShowModal(true);
+        if (!currentUser?.id) {
+            router.push(`/login?redirect=/property/${property.id}/inspection`);
+            return;
+        }
 
-        // Mock submission and redirect
-        setTimeout(() => {
-            router.push(`/property/${property.id}`);
-        }, 3000);
+        createInspection({
+            propertyId: property.id,
+            scheduledDate: date, 
+            scheduledTime: formatTimeTo24h(time),
+            note: note || null,
+            authenticatedUserId: currentUser.id
+        }, {
+            onSuccess: (response) => {
+                if (response.isSuccessful) {
+                    setShowModal(true);
+                    setTimeout(() => {
+                        router.push(`/property/${property.id}`);
+                    }, 3000);
+                }
+            }
+        });
     };
 
     return (
@@ -95,7 +116,11 @@ export default function InspectionForm({ property }: InspectionFormProps) {
                         </div>
 
                         <div className="pt-6">
-                            <button className="w-full bg-primary-dark hover:bg-primary-dark/90 text-white py-4 rounded-full text-[14px] font-bold transition-all shadow-lg active:scale-[0.98]">
+                            <button 
+                                disabled={isCreatingInspection}
+                                className="w-full bg-primary-dark hover:bg-primary-dark/90 text-white py-4 rounded-full text-[14px] font-bold transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
+                            >
+                                {isCreatingInspection && <Loader2 className="animate-spin" size={18} />}
                                 Request Inspection
                             </button>
                         </div>
@@ -108,7 +133,7 @@ export default function InspectionForm({ property }: InspectionFormProps) {
                         <h3 className="text-[14px] font-black text-[#1A1A1A] font-montserrat mb-6">Listing Information</h3>
                         <div className="space-y-4">
                             <div className="flex justify-between items-center">
-                                <span className="text-[11px] text-[#666666]">Select Date</span>
+                                <span className="text-[11px] text-[#666666]">Property ID</span>
                                 <span className="text-[11px] font-bold text-[#333333]">SPH-12024</span>
                             </div>
                             <div className="flex justify-between items-center">

@@ -2,13 +2,18 @@
 
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useUserRole } from "@/context/UserRoleContext";
 import DeleteAccountModal from "./DeleteAccountModal";
 import ResetPasswordModal from "./ResetPasswordModal";
 
 export default function SettingsForm() {
+    const router = useRouter();
+    const { role } = useUserRole();
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+    const [isOwnerModalOpen, setIsOwnerModalOpen] = useState(false);
 
     const settingsItems = [
         { label: "Reset Password", type: "button", id: "reset-password" },
@@ -24,6 +29,14 @@ export default function SettingsForm() {
             setIsDeleteModalOpen(true);
         } else if (item.id === "reset-password") {
             setIsResetModalOpen(true);
+        } else if (item.href === "/switch-account") {
+            if (role === "Owner") {
+                setIsOwnerModalOpen(true);
+            } else {
+                router.push("/kyc");
+            }
+        } else if (item.type === "link" && item.href) {
+            router.push(item.href);
         }
     };
 
@@ -81,6 +94,23 @@ export default function SettingsForm() {
                 isOpen={isResetModalOpen}
                 onClose={() => setIsResetModalOpen(false)}
             />
+
+            {/* Already Owner Modal */}
+            {isOwnerModalOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsOwnerModalOpen(false)} />
+                    <div className="relative w-full max-w-[400px] bg-white rounded-[32px] p-8 shadow-2xl animate-in fade-in zoom-in duration-300 text-center">
+                        <h3 className="text-[20px] font-black text-[#1A1A1A] mb-4 font-montserrat">You are already an Owner</h3>
+                        <p className="text-[14px] text-gray-500 mb-8 font-medium">Your account already has the Owner role. You don't need to switch accounts or verify KYC again.</p>
+                        <button
+                            onClick={() => setIsOwnerModalOpen(false)}
+                            className="w-full py-4 rounded-full bg-[#002D6B] text-white font-bold hover:bg-[#001D4B] transition-colors"
+                        >
+                            Got it
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

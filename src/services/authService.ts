@@ -52,10 +52,9 @@ const authService = {
         return response.data;
     },
 
-    getGoogleLoginUrl: async (returnUrl: string = ''): Promise<{ url: string }> => {
-        // Based on the curl provided, it seems it might be a direct redirect or return a URL
-        // If it's a GET request that returns a URL:
-        const response = await apiClient.get(`/api/v1/Auth/google-login?returnUrl=${returnUrl}`);
+    getGoogleLoginUrl: async (): Promise<{ url: string }> => {
+        const returnUrl = `${window.location.origin}/auth/google-callback`;
+        const response = await apiClient.get(`/api/v1/Auth/google-login?returnUrl=${encodeURIComponent(returnUrl)}`);
         return response.data;
     },
 

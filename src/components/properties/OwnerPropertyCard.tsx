@@ -2,31 +2,24 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { MoreVertical, MapPin, Eye, Clock } from "lucide-react";
+import { MoreVertical, MapPin, Eye, Clock, Loader2 } from "lucide-react";
 import DeleteListingModal from "./DeleteListingModal";
 import PropertyDeletedModal from "./PropertyDeletedModal";
+import { PropertyDetail } from "@/types/property";
+import { useProperty } from "@/hooks/useProperty";
+import Link from "next/link";
 
 interface OwnerPropertyCardProps {
-    title: string;
-    price: string;
-    location: string;
-    image: string;
-    views: number;
-    requests: number;
+    property: PropertyDetail;
 }
 
-export default function OwnerPropertyCard({
-    title,
-    price,
-    location,
-    image,
-    views,
-    requests
-}: OwnerPropertyCardProps) {
+export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeletedSuccessOpen, setIsDeletedSuccessOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    const { deleteProperty, isDeleting } = useProperty();
 
     // Click outside to close
     useEffect(() => {
@@ -39,10 +32,26 @@ export default function OwnerPropertyCard({
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const handleDelete = () => {
+        deleteProperty(property.id, {
+            onSuccess: () => {
+                setIsDeleteModalOpen(false);
+                setIsDeletedSuccessOpen(true);
+            }
+        });
+    };
+
+    const title = property.title || "Property Title";
+    const price = property.price.toLocaleString();
+    const location = property.propertyAddress?.city || "Lagos";
+    const image = property.files?.[0]?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
+    const views = property.viewCount || 0;
+    const requests = 0; // Requests would come from inspection API if needed
+
     return (
-        <div className="bg-white rounded-[24px] border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow group relative">
+        <div className="bg-white rounded-[24px] border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow group relative flex flex-col h-full">
             {/* Image Container */}
-            <div className="relative h-64 w-full">
+            <div className="relative h-64 w-full flex-shrink-0">
                 <Image
                     src={image}
                     alt={title}
@@ -68,18 +77,19 @@ export default function OwnerPropertyCard({
                             <button className="w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] hover:bg-gray-50 transition-colors">
                                 Edit
                             </button>
-                            <button className="w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] hover:bg-gray-50 transition-colors">
+                            <Link href={`/inspections`} className="block w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] hover:bg-gray-50 transition-colors">
                                 Inspection Details
-                            </button>
+                            </Link>
                             <div className="h-px bg-gray-50 my-1" />
                             <button
                                 onClick={() => {
                                     setIsMenuOpen(false);
                                     setIsDeleteModalOpen(true);
                                 }}
-                                className="w-full text-left px-6 py-3 text-[14px] font-black text-[#FF4D4D] hover:bg-red-50 transition-colors"
+                                disabled={isDeleting}
+                                className="w-full text-left px-6 py-3 text-[14px] font-black text-[#FF4D4D] hover:bg-red-50 transition-colors flex items-center gap-2"
                             >
-                                Delete Listing
+                                {isDeleting ? <Loader2 size={14} className="animate-spin" /> : "Delete Listing"}
                             </button>
                         </div>
                     )}
@@ -87,7 +97,7 @@ export default function OwnerPropertyCard({
             </div>
 
             {/* Content */}
-            <div className="p-5 space-y-3">
+            <div className="p-5 space-y-3 flex flex-col flex-1">
                 <div className="flex justify-between items-start gap-4">
                     <h3 className="text-[16px] font-black text-[#1A1A1A] font-montserrat line-clamp-1">
                         {title}
@@ -102,7 +112,7 @@ export default function OwnerPropertyCard({
                     <span className="text-[14px] font-bold">{location}</span>
                 </div>
 
-                <div className="pt-4 border-t border-gray-100 flex items-center gap-3">
+                <div className="pt-4 mt-auto border-t border-gray-100 flex items-center gap-3">
                     {/* Views Stats */}
                     <div className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-full">
                         <Eye size={16} className="text-[#1A1A1A]" />
@@ -121,10 +131,7 @@ export default function OwnerPropertyCard({
             <DeleteListingModal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
-                onConfirm={() => {
-                    setIsDeleteModalOpen(false);
-                    setIsDeletedSuccessOpen(true);
-                }}
+                onConfirm={handleDelete}
             />
 
             <PropertyDeletedModal

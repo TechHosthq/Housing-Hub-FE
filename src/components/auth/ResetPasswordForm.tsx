@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
+import { useToastStore } from "@/store/useToastStore";
 
 export default function ResetPasswordForm() {
-    const { forgotPassword, isSendingForgotEmail, forgotPasswordSuccess } = useAuth();
+    const { forgotPassword, isSendingForgotEmail, forgotPasswordSuccess, forgotPasswordMessage } = useAuth();
+    const showSuccess = useToastStore((state) => state.showSuccess);
     const [email, setEmail] = useState("");
+
+    // Fire success toast with the server's actual message
+    useEffect(() => {
+        if (forgotPasswordSuccess && forgotPasswordMessage) {
+            showSuccess(forgotPasswordMessage);
+        }
+    }, [forgotPasswordSuccess, forgotPasswordMessage, showSuccess]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

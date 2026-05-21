@@ -6,9 +6,10 @@ import HomeownerCTA from "@/components/home/HomeownerCTA";
 import Footer from "@/components/layout/Footer";
 import { propertyService } from "@/services/propertyService";
 
-export default function Home() {
-  const properties = propertyService.getProperties();
+import TrendingGrid from "@/components/home/TrendingGrid";
+import NearbyGrid from "@/components/home/NearbyGrid";
 
+export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
@@ -17,17 +18,11 @@ export default function Home() {
         <Hero />
 
         <div id="trending" className="scroll-mt-20">
-          <PropertyGrid
-            title="Trending Properties"
-            properties={properties}
-          />
+          <TrendingGrid />
         </div>
 
-        <div id="nearby" className="py-10 scroll-mt-20">
-          <PropertyGrid
-            title="Properties near you"
-            properties={properties}
-          />
+        <div id="nearby" className="scroll-mt-20">
+          <NearbyGrid />
         </div>
 
         <HowItWorks />
@@ -39,3 +34,4 @@ export default function Home() {
     </main>
   );
 }
+

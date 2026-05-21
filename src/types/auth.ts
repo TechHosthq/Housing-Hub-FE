@@ -18,6 +18,16 @@ export interface ApiResponse<T> {
     }[] | null;
 }
 
+export interface PaginatedResponse<T> {
+    items: T[];
+    totalCount: number;
+    pageNumber: number;
+    pageSize: number;
+    totalPages: number;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+}
+
 export interface AuthData extends User {
     token: string | null;
 }

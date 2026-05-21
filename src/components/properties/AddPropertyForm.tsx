@@ -1,23 +1,71 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ChevronLeft, ChevronDown, Upload, X } from "lucide-react";
+import { ChevronLeft, ChevronDown, Upload, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import PropertyPublishedModal from "./PropertyPublishedModal";
+import { useProperty } from "@/hooks/useProperty";
+import { PropertyType, AvailabilityStatus, PropertyLeaseType } from "@/types/property";
+import { useAuth } from "@/hooks/useAuth";
+import { useCustomer } from "@/hooks/useCustomer";
+import { useRouter } from "next/navigation";
 
 const PROPERTY_TYPES = ["House", "Apartment", "Guesthouse", "Flat", "Duplex"];
 const FEATURES = ["Wifi", "Car Pack", "Security Camera", "Swimming Pool", "Gym", "Generator", "Balcony"];
 
+const FEATURES_MAP: Record<string, number> = {
+    "Wifi": 1,
+    "Car Pack": 2,
+    "Security Camera": 4,
+    "Swimming Pool": 8,
+    "Gym": 16,
+    "Generator": 32,
+    "Balcony": 64
+};
+
 export default function AddPropertyForm() {
     // Navigation State
     const [step, setStep] = useState(1);
+    const router = useRouter();
+    const { user } = useAuth();
+    const { createProperty, isCreating } = useProperty();
+    const { useGetCustomer, verifyKyc, isVerifyingKyc } = useCustomer();
+    
+    // KYC Verification Check
+    const { data: customerResponse, isLoading: isLoadingCustomer } = useGetCustomer(user?.id || null);
+    const isKycVerified = customerResponse?.data?.isKycVerified;
+
+    const [showKycModal, setShowKycModal] = useState(false);
+
+    useEffect(() => {
+        if (!isLoadingCustomer && customerResponse?.data && !isKycVerified) {
+            setShowKycModal(true);
+        } else if (isKycVerified) {
+            setShowKycModal(false);
+        }
+    }, [isLoadingCustomer, isKycVerified, customerResponse]);
+
+    const handleInstantVerifyKyc = () => {
+        if (!user?.id) return;
+        verifyKyc(
+            { id: user.id, approve: true },
+            {
+                onSuccess: () => {
+                    setShowKycModal(false);
+                },
+                onError: (error: any) => {
+                    alert(error?.response?.data?.message || "Failed to auto-verify KYC.");
+                }
+            }
+        );
+    };
 
     // Step 1 State
-    const [propertyType, setPropertyType] = useState("");
+    const [propertyType, setPropertyType] = useState<PropertyType>(PropertyType.House);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [availability, setAvailability] = useState("Available");
+    const [availability, setAvailability] = useState<AvailabilityStatus>(AvailabilityStatus.Available);
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("Ikeja");
     const [state, setState] = useState("Lagos");
@@ -29,24 +77,32 @@ export default function AddPropertyForm() {
     const [previews, setPreviews] = useState<string[]>([]);
 
     // Step 2 State
-    const [listingType, setListingType] = useState<"Sale" | "Rent">("Rent");
-    const [price, setPrice] = useState("350,000");
-    const [firstName, setFirstName] = useState("Priscilia");
-    const [lastName, setLastName] = useState("Ighodaro");
-    const [phone, setPhone] = useState("+234 000000000000");
-    const [email, setEmail] = useState("fhbdshlhijjj@gmail.com");
+    const [listingType, setListingType] = useState<PropertyLeaseType>(PropertyLeaseType.Rent);
+    const [price, setPrice] = useState("350000");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [email, setEmail] = useState("");
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    // Sync names from auth if available
+    useEffect(() => {
+        if (user) {
+            setFirstName(user.firstName || "");
+            setLastName(user.lastName || "");
+            setEmail(user.email || "");
+            setPhone(user.phoneNumber || "");
+        }
+    }, [user]);
+
     // Validation
     const isStep1Valid =
-        propertyType !== "" &&
         title.trim() !== "" &&
         description.trim() !== "" &&
         address.trim() !== "" &&
         city !== "" &&
         state !== "" &&
-        selectedFeatures.length > 0 &&
         images.length > 0;
 
     const isStep2Valid =
@@ -84,21 +140,55 @@ export default function AddPropertyForm() {
         });
     };
 
+    const handlePublish = async () => {
+        if (!user) {
+            alert("You must be logged in to publish a property.");
+            return;
+        }
+
+        const featuresValue = selectedFeatures.reduce((acc, feature) => acc | FEATURES_MAP[feature], 0);
+
+        createProperty({
+            title,
+            description,
+            propertyType,
+            price: parseFloat(price.replace(/,/g, '')),
+            availability,
+            propertyLeaseType: listingType,
+            features: featuresValue,
+            contactPersonName: `${firstName} ${lastName}`,
+            contactPersonEmail: email,
+            contactPersonPhoneNumber: phone,
+            ownerId: user.id,
+            place: address,
+            city,
+            state,
+            country: "Nigeria",
+            postalCode: "100001",
+            files: images
+        }, {
+            onSuccess: () => {
+                setIsPublishedModalOpen(true);
+            },
+            onError: (error: any) => {
+                alert(error?.response?.data?.message || "Failed to publish property. Please check your inputs.");
+            }
+        });
+    };
+
     const renderStep1 = () => (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-12">
-            {/* Left Column */}
             <div className="space-y-10">
-                {/* Property Type */}
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Property Type
                     </label>
                     <div className="flex flex-wrap gap-3">
-                        {PROPERTY_TYPES.map((type) => (
+                        {PROPERTY_TYPES.map((type, idx) => (
                             <button
                                 key={type}
-                                onClick={() => setPropertyType(type)}
-                                className={`px-8 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${propertyType === type
+                                onClick={() => setPropertyType(idx as PropertyType)}
+                                className={`px-8 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${propertyType === idx
                                     ? "border-[#0095FF] text-[#0095FF] bg-white"
                                     : "border-gray-100 text-gray-400 hover:border-gray-200"
                                     }`}
@@ -109,7 +199,6 @@ export default function AddPropertyForm() {
                     </div>
                 </div>
 
-                {/* Property Title */}
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Property Title<span className="text-red-500">*</span>
@@ -123,7 +212,6 @@ export default function AddPropertyForm() {
                     />
                 </div>
 
-                {/* Description */}
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Description<span className="text-red-500">*</span>
@@ -140,7 +228,6 @@ export default function AddPropertyForm() {
                     </div>
                 </div>
 
-                {/* Availability Status */}
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Availability Status<span className="text-red-500">*</span>
@@ -148,21 +235,19 @@ export default function AddPropertyForm() {
                     <div className="relative">
                         <select
                             value={availability}
-                            onChange={(e) => setAvailability(e.target.value)}
+                            onChange={(e) => setAvailability(parseInt(e.target.value) as AvailabilityStatus)}
                             className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] appearance-none bg-white cursor-pointer"
                         >
-                            <option value="Available">Available</option>
-                            <option value="Occupied">Occupied</option>
-                            <option value="Sold">Sold</option>
+                            <option value={AvailabilityStatus.Available}>Available</option>
+                            <option value={AvailabilityStatus.Occupied}>Occupied</option>
+                            <option value={AvailabilityStatus.Sold}>Sold</option>
                         </select>
                         <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
                     </div>
                 </div>
             </div>
 
-            {/* Right Column */}
             <div className="space-y-10">
-                {/* Address */}
                 <div className="space-y-4">
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Address<span className="text-red-500"> *</span>
@@ -202,7 +287,6 @@ export default function AddPropertyForm() {
                     </div>
                 </div>
 
-                {/* Features */}
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Features
@@ -223,7 +307,6 @@ export default function AddPropertyForm() {
                     </div>
                 </div>
 
-                {/* Pictures */}
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Pictures (Multiple)<span className="text-red-500">*</span>
@@ -250,39 +333,26 @@ export default function AddPropertyForm() {
                         className="hidden"
                     />
 
-                    {/* Image Previews */}
                     <div className="flex flex-wrap gap-4 mt-6">
                         {previews.map((preview, index) => (
                             <div key={index} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 group">
-                                <Image
-                                    src={preview}
-                                    alt={`Preview ${index}`}
-                                    fill
-                                    className="object-cover"
-                                />
+                                <Image src={preview} alt={`Preview ${index}`} fill className="object-cover" />
                                 <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        removeImage(index);
-                                    }}
+                                    onClick={(e) => { e.stopPropagation(); removeImage(index); }}
                                     className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                                 >
                                     <X size={14} strokeWidth={3} />
                                 </button>
                             </div>
                         ))}
-                        {[...Array(Math.max(0, 6 - previews.length))].map((_, i) => (
-                            <div key={`placeholder-${i}`} className="w-20 h-20 rounded-xl border border-gray-50 bg-gray-50/30" />
-                        ))}
                     </div>
                 </div>
 
-                {/* Continue Button */}
                 <button
                     onClick={() => setStep(2)}
                     disabled={!isStep1Valid}
                     className={`w-full py-5 rounded-[20px] font-black text-[18px] font-montserrat transition-all mt-10 shadow-lg ${isStep1Valid
-                        ? "bg-[#002B7F] text-white hover:bg-[#001D4B] transform active:scale-[0.98]"
+                        ? "bg-[#002B7F] text-white hover:bg-[#001D4B]"
                         : "bg-gray-200 text-gray-400 cursor-not-allowed"
                         }`}
                 >
@@ -295,15 +365,14 @@ export default function AddPropertyForm() {
     const renderStep2 = () => (
         <div className="max-w-4xl">
             <div className="space-y-10">
-                {/* Listing Type */}
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Listing Type<span className="text-red-500">*</span>
                     </label>
                     <div className="flex gap-4">
                         <button
-                            onClick={() => setListingType("Sale")}
-                            className={`px-12 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${listingType === "Sale"
+                            onClick={() => setListingType(PropertyLeaseType.Sale)}
+                            className={`px-12 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${listingType === PropertyLeaseType.Sale
                                 ? "border-[#0095FF] text-[#0095FF] bg-white"
                                 : "border-gray-100 text-gray-400 hover:border-gray-200"
                                 }`}
@@ -311,8 +380,8 @@ export default function AddPropertyForm() {
                             Sale
                         </button>
                         <button
-                            onClick={() => setListingType("Rent")}
-                            className={`px-12 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${listingType === "Rent"
+                            onClick={() => setListingType(PropertyLeaseType.Rent)}
+                            className={`px-12 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${listingType === PropertyLeaseType.Rent
                                 ? "border-[#0095FF] text-[#0095FF] bg-white"
                                 : "border-gray-100 text-gray-400 hover:border-gray-200"
                                 }`}
@@ -322,26 +391,22 @@ export default function AddPropertyForm() {
                     </div>
                 </div>
 
-                {/* Price */}
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Price (Per Year)<span className="text-red-500">*</span>
                     </label>
                     <div className="relative max-w-xs">
-                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#1A1A1A] font-bold">
-                            ₦
-                        </div>
+                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#1A1A1A] font-bold">₦</div>
                         <input
                             type="text"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
                             placeholder="350,000"
-                            className="w-full pl-12 pr-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300"
+                            className="w-full pl-12 pr-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A]"
                         />
                     </div>
                 </div>
 
-                {/* Contact Name */}
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Contact Name<span className="text-red-500">*</span>
@@ -352,19 +417,18 @@ export default function AddPropertyForm() {
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                             placeholder="First Name"
-                            className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300"
+                            className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A]"
                         />
                         <input
                             type="text"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
                             placeholder="Last Name"
-                            className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300"
+                            className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A]"
                         />
                     </div>
                 </div>
 
-                {/* Phone Number */}
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
                         Phone Number<span className="text-red-500">*</span>
@@ -374,31 +438,16 @@ export default function AddPropertyForm() {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+234 000000000000"
-                        className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300"
+                        className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A]"
                     />
                 </div>
 
-                {/* Email Address */}
-                <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
-                        Email Address (Optional)
-                    </label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="email@example.com"
-                        className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300"
-                    />
-                </div>
-
-                {/* Continue to Step 3 */}
                 <div className="flex justify-end pt-4">
                     <button
                         onClick={() => setStep(3)}
                         disabled={!isStep2Valid}
                         className={`w-full md:w-96 py-5 rounded-[20px] font-black text-[18px] font-montserrat transition-all shadow-lg ${isStep2Valid
-                            ? "bg-[#002B7F] text-white hover:bg-[#001D4B] transform active:scale-[0.98]"
+                            ? "bg-[#002B7F] text-white hover:bg-[#001D4B]"
                             : "bg-gray-200 text-gray-400 cursor-not-allowed"
                             }`}
                     >
@@ -412,14 +461,12 @@ export default function AddPropertyForm() {
     const renderStep3 = () => (
         <div className="space-y-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Left Column - Property Details */}
                 <div className="bg-white border border-gray-100 rounded-[20px] p-10 shadow-sm">
                     <h2 className="text-[24px] font-black text-[#1A1A1A] mb-8">Property Details</h2>
-
                     <div className="space-y-6">
                         <div className="flex justify-between items-start gap-4">
                             <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Property Type</span>
-                            <span className="text-[14px] font-bold text-[#1A1A1A]">{propertyType}</span>
+                            <span className="text-[14px] font-bold text-[#1A1A1A]">{PROPERTY_TYPES[propertyType]}</span>
                         </div>
                         <div className="flex justify-between items-start gap-4">
                             <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Property Title</span>
@@ -427,103 +474,52 @@ export default function AddPropertyForm() {
                         </div>
                         <div className="space-y-3">
                             <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest block">Description</span>
-                            <p className="text-[13px] font-bold text-[#1A1A1A] leading-relaxed">
-                                {description}
-                            </p>
-                        </div>
-                        <div className="flex justify-between items-start gap-4">
-                            <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Status</span>
-                            <span className="text-[14px] font-bold text-[#1A1A1A]">{availability}</span>
+                            <p className="text-[13px] font-bold text-[#1A1A1A] leading-relaxed">{description}</p>
                         </div>
                         <div className="flex justify-between items-start gap-4">
                             <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Address</span>
                             <span className="text-[14px] font-bold text-[#1A1A1A] text-right">{address}, {city}, {state}</span>
                         </div>
-                        <div className="flex justify-between items-start gap-4">
-                            <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Features</span>
-                            <span className="text-[14px] font-bold text-[#1A1A1A] text-right">{selectedFeatures.join(", ")}</span>
-                        </div>
-
-                        <div className="space-y-4 pt-4">
-                            <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest block">Pictures</span>
-                            <div className="flex flex-wrap gap-2">
-                                {previews.map((preview, index) => (
-                                    <div key={index} className="w-14 h-14 rounded-lg overflow-hidden border border-gray-50 flex-shrink-0">
-                                        <Image src={preview} alt="Preview" width={56} height={56} className="object-cover w-full h-full" />
-                                    </div>
-                                ))}
-                                {[...Array(Math.max(0, 8 - previews.length))].map((_, i) => (
-                                    <div key={i} className="w-14 h-14 rounded-lg bg-gray-50 border border-gray-50 flex-shrink-0" />
-                                ))}
-                            </div>
-                        </div>
                     </div>
                 </div>
 
-                {/* Right Column - Pricing & Contact */}
                 <div className="space-y-8">
-                    {/* Pricing Card */}
                     <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm">
-                        <h2 className="text-[24px] font-black text-[#1A1A1A] mb-8">Pricing</h2>
+                        <h2 className="text-[24px] font-black text-[#1A1A1A] mb-8">Pricing & Contact</h2>
                         <div className="space-y-6">
                             <div className="flex justify-between items-center">
-                                <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Listing Type</span>
-                                <span className="text-[14px] font-bold text-[#1A1A1A]">{listingType}</span>
+                                <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Price</span>
+                                <span className="text-[14px] font-black text-[#1A1A1A]">₦ {parseFloat(price).toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Price (Per Year)</span>
-                                <span className="text-[14px] font-black text-[#1A1A1A]">₦ {price}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Contact Card */}
-                    <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm">
-                        <h2 className="text-[24px] font-black text-[#1A1A1A] mb-8">Contact</h2>
-                        <div className="space-y-6">
-                            <div className="flex justify-between items-center">
-                                <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Contact Name</span>
+                                <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Contact</span>
                                 <span className="text-[14px] font-bold text-[#1A1A1A]">{firstName} {lastName}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Phone Number</span>
-                                <span className="text-[14px] font-bold text-[#1A1A1A]">{phone}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Email Address</span>
-                                <span className="text-[14px] font-bold text-[#1A1A1A] lowercase">{email || "N/A"}</span>
                             </div>
                         </div>
                     </div>
 
                     <div className="pt-8 text-center space-y-6">
-                        <p className="text-[12px] font-bold text-gray-400">
-                            By clicking Publish, your property will be submitted for review.
-                        </p>
+                        <p className="text-[12px] font-bold text-gray-400">By clicking Publish, your property will be submitted for review.</p>
                         <button
-                            onClick={() => setIsPublishedModalOpen(true)}
-                            className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg transform active:scale-[0.98]"
+                            onClick={handlePublish}
+                            disabled={isCreating}
+                            className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2"
                         >
-                            Publish Property
+                            {isCreating ? <Loader2 className="animate-spin" /> : "Publish Property"}
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Success Modal */}
             <PropertyPublishedModal
                 isOpen={isPublishedModalOpen}
-                onClose={() => {
-                    setIsPublishedModalOpen(false);
-                    window.location.href = "/properties";
-                }}
+                onClose={() => { setIsPublishedModalOpen(false); window.location.href = "/properties"; }}
             />
         </div>
     );
 
     return (
         <div className="w-full">
-            {/* Back Button */}
             <button
                 onClick={() => {
                     if (step === 1) window.location.href = "/properties";
@@ -541,6 +537,63 @@ export default function AddPropertyForm() {
             </h1>
 
             {step === 1 ? renderStep1() : step === 2 ? renderStep2() : renderStep3()}
+
+            {showKycModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md transition-all animate-in fade-in duration-300">
+                    <div className="bg-white rounded-[24px] max-w-md w-full p-8 shadow-2xl border border-gray-100 flex flex-col items-center text-center animate-in zoom-in-95 duration-200">
+                        {/* Shield Warning Icon */}
+                        <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mb-6">
+                            <svg className="w-8 h-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+
+                        <h2 className="text-[22px] font-black text-[#1A1A1A] font-montserrat mb-3">
+                            KYC Verification Required
+                        </h2>
+                        
+                        <p className="text-gray-500 text-sm font-medium leading-relaxed mb-8">
+                            To ensure platform security and trust, house owners must verify their identity before publishing property listings.
+                        </p>
+
+                        <div className="flex flex-col gap-3 w-full">
+                            {/* Action 1: Complete KYC */}
+                            <Link
+                                href="/kyc/personal-info"
+                                className="w-full py-4 rounded-xl bg-[#002B7F] hover:bg-[#001D4B] text-white font-bold text-sm transition-all text-center"
+                            >
+                                Complete KYC Verification
+                            </Link>
+
+                            {/* Action 2: Dev mode instant bypass */}
+                            <button
+                                onClick={handleInstantVerifyKyc}
+                                disabled={isVerifyingKyc}
+                                className="w-full py-4 rounded-xl border border-emerald-500 text-emerald-600 bg-emerald-50/50 hover:bg-emerald-50 font-bold text-sm transition-all flex items-center justify-center gap-2"
+                            >
+                                {isVerifyingKyc ? (
+                                    <Loader2 className="animate-spin w-4 h-4" />
+                                ) : (
+                                    <>
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Auto-Verify KYC (Dev Mode Bypass)
+                                    </>
+                                )}
+                            </button>
+
+                            {/* Action 3: Go back to Dashboard */}
+                            <button
+                                onClick={() => router.push("/dashboard")}
+                                className="w-full py-3.5 rounded-xl font-bold text-sm text-gray-400 hover:text-gray-600 transition-all text-center mt-2"
+                            >
+                                Cancel & Back to Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -15,6 +15,8 @@ export const metadata: Metadata = {
 
 import { UserRoleProvider } from "@/context/UserRoleContext";
 import QueryProvider from "@/providers/QueryProvider";
+import { ToastProvider } from "@/providers/ToastProvider";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 
 export default function RootLayout({
   children,
@@ -26,7 +28,11 @@ export default function RootLayout({
       <body className={`${montserrat.className} antialiased font-sans`}>
         <QueryProvider>
           <UserRoleProvider>
-            {children}
+            <ToastProvider>
+              <AuthGuard>
+                {children}
+              </AuthGuard>
+            </ToastProvider>
           </UserRoleProvider>
         </QueryProvider>
       </body>

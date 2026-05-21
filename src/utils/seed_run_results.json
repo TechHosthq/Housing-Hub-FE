@@ -1,0 +1,74 @@
+{
+  "admins": [
+    {
+      "email": "admin_seed_1779282087093@realestacy.com",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZjczYzcwYy1mOTZmLTQ3ZWMtYTg0Ni1kMjc1NTk2ZDAyMTUiLCJlbWFpbCI6ImFkbWluX3NlZWRfMTc3OTI4MjA4NzA5M0ByZWFsZXN0YWN5LmNvbSIsImdpdmVuX25hbWUiOiJTZWVkQWRtaW4iLCJmYW1pbHlfbmFtZSI6IkJvdCIsInJvbGUiOiJBZG1pbiIsImF1ZCI6IkhvdXNpbmdIdWIuQWRtaW4iLCJpc3MiOiJIb3VzaW5nSHViLkFkbWluLkFQSSIsImV4cCI6MTc3OTMxMDg5MSwiaWF0IjoxNzc5MjgyMDkxLCJuYmYiOjE3NzkyODIwOTF9.zMcGCpA-uQKsHpTK7S3QTjze3PeHVuLNOA9JkkNnCTY"
+    }
+  ],
+  "owners": [],
+  "customers": [
+    {
+      "email": "customer_1_1779282108875@realestacy.com",
+      "id": "31e9f0f3-7c93-40fa-bfcb-95313930f114"
+    },
+    {
+      "email": "customer_2_1779282110729@realestacy.com",
+      "id": "122e47b6-2fbd-482f-abfb-996cd3e269ad"
+    },
+    {
+      "email": "customer_3_1779282112413@realestacy.com",
+      "id": "5b92eb62-5f6a-49ad-abfe-946af7925121"
+    },
+    {
+      "email": "customer_4_1779282114130@realestacy.com",
+      "id": "e24f4d0d-8cf5-42d7-8eb0-95949b7eca5c"
+    },
+    {
+      "email": "customer_5_1779282117708@realestacy.com",
+      "id": "2c341ce1-9c55-4a89-b6be-90bf31cbce7f"
+    }
+  ],
+  "properties": [],
+  "errors": [
+    "Owner 1 email verification warning: \"Request failed with status code 404\"",
+    "Owner 1 login failed: Please verify your email before logging in.",
+    "Owner 2 email verification warning: \"Request failed with status code 404\"",
+    "Owner 2 login failed: Please verify your email before logging in.",
+    "Owner 3 email verification warning: \"Request failed with status code 404\"",
+    "Owner 3 login failed: Please verify your email before logging in.",
+    "Customer 1 email verify warning: Request failed with status code 404",
+    "Customer 2 email verify warning: Request failed with status code 404",
+    "Customer 3 email verify warning: Request failed with status code 404",
+    "Customer 4 email verify warning: Request failed with status code 404",
+    "Customer 5 email verify warning: Request failed with status code 404"
+  ],
+  "logs": [
+    "===== Starting Full Seed =====",
+    "Creating admin: admin_seed_1779282087093@realestacy.com...",
+    "Admin created: {\"message\":\"Admin created\"}",
+    "Logging in admin: admin_seed_1779282087093@realestacy.com...",
+    "Admin login success. Token acquired.",
+    "Registering owner 1: owner_1_1779282091714@realestacy.com...",
+    "Owner 1 registered. Verifying email via Admin API...",
+    "Registering owner 2: owner_2_1779282098434@realestacy.com...",
+    "Owner 2 registered. Verifying email via Admin API...",
+    "Registering owner 3: owner_3_1779282102120@realestacy.com...",
+    "Owner 3 registered. Verifying email via Admin API...",
+    "Registering customer 1: customer_1_1779282108875@realestacy.com...",
+    "Customer 1 registered & verified.",
+    "Registering customer 2: customer_2_1779282110729@realestacy.com...",
+    "Customer 2 registered & verified.",
+    "Registering customer 3: customer_3_1779282112413@realestacy.com...",
+    "Customer 3 registered & verified.",
+    "Registering customer 4: customer_4_1779282114130@realestacy.com...",
+    "Customer 4 registered & verified.",
+    "Registering customer 5: customer_5_1779282117708@realestacy.com...",
+    "Customer 5 registered & verified.",
+    "===== Seed Complete =====",
+    "Admins:     1",
+    "Owners:     0",
+    "Properties: 0",
+    "Customers:  5",
+    "Errors:     11"
+  ]
+}

@@ -1,37 +1,70 @@
+"use client";
+
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
 import PropertyGallery from "@/components/property/PropertyGallery";
 import PropertyInfo from "@/components/property/PropertyInfo";
 import ListingSidebar from "@/components/property/ListingSidebar";
 import PropertyDetailHeader from "@/components/property/PropertyDetailHeader";
-import propertiesData from "@/data/properties.json";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useProperty } from "@/hooks/useProperty";
+import { use } from "react";
 
-export default async function PropertyDetailPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
-    const property = propertiesData.properties.find(p => p.id === id);
+export default function PropertyDetailPage() {
+    const params = useParams();
+    const id = params.id as string;
+    const { useGetProperty } = useProperty();
+    const { data: propertyResponse, isLoading } = useGetProperty(id);
 
-    if (!property) {
-        notFound();
+    if (isLoading) {
+        return (
+            <main className="min-h-screen bg-white">
+                <DashboardNavbar />
+                <div className="flex items-center justify-center min-h-[60vh]">
+                    <Loader2 className="animate-spin text-primary-dark w-12 h-12" />
+                </div>
+                <Footer />
+            </main>
+        );
     }
 
-    // Demo images for gallery
-    const images = [
-        property.image,
-        "https://images.unsplash.com/photo-1600607687940-4e2a09697d6b?auto=format&fit=crop&q=80&w=2070",
-        "https://images.unsplash.com/photo-1600566753190-17f0bb2a6c3e?auto=format&fit=crop&q=80&w=2070",
-        "https://images.unsplash.com/photo-1600121848594-d86cc4f595e5?auto=format&fit=crop&q=80&w=2070",
-        "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&q=80&w=2070"
-    ];
+    const property = propertyResponse?.data;
+
+    if (!property) {
+        return (
+            <main className="min-h-screen bg-white">
+                <DashboardNavbar />
+                <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+                    <h1 className="text-2xl font-bold">Property Not Found</h1>
+                    <Link href="/dashboard" className="text-[#0095FF] font-bold">Return to Dashboard</Link>
+                </div>
+                <Footer />
+            </main>
+        );
+    }
+
+    // Map API files to gallery images
+    const images = property.files?.length > 0 
+        ? property.files.map(f => f.fileUrl).filter(Boolean) as string[]
+        : ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070"];
+
+    // Map PropertyDetail to PropertyInfo expected format
+    const displayProperty = {
+        title: property.title || "Untitled Property",
+        price: property.price ? `₦ ${property.price.toLocaleString()}` : "Price upon request",
+        location: property.propertyAddress?.city || "Lagos",
+        bedrooms: 4, // API doesn't have these specific counts yet
+        bathrooms: 3,
+        description: property.description || ""
+    };
 
     return (
         <main className="min-h-screen bg-white">
             <DashboardNavbar />
 
             <div className="max-w-7xl mx-auto px-6 pt-24 pb-20">
-                {/* Back Button */}
                 <Link
                     href="/dashboard"
                     className="flex items-center gap-2 text-[#6BB5FF] hover:text-primary-dark transition-colors font-semibold text-[11px] mb-8"
@@ -47,7 +80,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
 
                         <div className="space-y-10">
                             <PropertyGallery images={images} />
-                            <PropertyInfo property={property} />
+                            <PropertyInfo propertyId={property.id} property={displayProperty} />
                         </div>
                     </div>
 

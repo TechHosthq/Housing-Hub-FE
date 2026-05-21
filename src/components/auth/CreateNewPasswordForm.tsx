@@ -12,9 +12,11 @@ export default function CreateNewPasswordForm() {
     const searchParams = useSearchParams();
     const { resetPassword, isResettingPassword, resetPasswordSuccess } = useAuth();
     
-    const email = searchParams.get("email");
-    const token = searchParams.get("token");
+    const emailFromUrl = searchParams.get("email");
+    const tokenFromUrl = searchParams.get("token");
 
+    const [email, setEmail] = useState("");
+    const [token, setToken] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -23,6 +25,12 @@ export default function CreateNewPasswordForm() {
         confirmPassword: "",
     });
     const [error, setError] = useState("");
+
+    // Populate from URL query params once available
+    useEffect(() => {
+        if (emailFromUrl) setEmail(emailFromUrl);
+        if (tokenFromUrl) setToken(tokenFromUrl);
+    }, [emailFromUrl, tokenFromUrl]);
 
     useEffect(() => {
         if (resetPasswordSuccess) {
@@ -42,8 +50,13 @@ export default function CreateNewPasswordForm() {
             return;
         }
 
-        if (!email || !token) {
-            setError("Invalid or expired reset link");
+        if (!email) {
+            setError("Email address is required");
+            return;
+        }
+
+        if (!token) {
+            setError("Reset token is required");
             return;
         }
 
@@ -53,6 +66,8 @@ export default function CreateNewPasswordForm() {
             newPassword: formData.newPassword
         });
     };
+
+    const hasUrlParams = !!emailFromUrl && !!tokenFromUrl;
 
     return (
         <div className="w-full max-w-[350px] px-4 py-8 relative">
@@ -66,14 +81,51 @@ export default function CreateNewPasswordForm() {
             </Link>
 
             <div className="mt-16 space-y-6">
-                <h1 className="text-[17px] font-bold text-[#1A1A1A] font-montserrat text-center">
-                    Create New Password
-                </h1>
+                <div className="text-center space-y-2">
+                    <h1 className="text-[17px] font-bold text-[#1A1A1A] font-montserrat">
+                        Create New Password
+                    </h1>
+                    {!hasUrlParams && (
+                        <p className="text-[10px] text-gray-400">
+                            Please paste the Email and Reset Token from your email link.
+                        </p>
+                    )}
+                </div>
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-4" onSubmit={handleSubmit}>
                     {error && (
                         <div className="p-3 text-xs text-red-500 bg-red-50 rounded-lg text-center">
                             {error}
+                        </div>
+                    )}
+
+                    {/* Manual Email Input if not in URL */}
+                    {!emailFromUrl && (
+                        <div className="space-y-1">
+                            <label className="text-[9px] font-semibold text-[#666666]">Email Address</label>
+                            <input
+                                type="email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm"
+                                placeholder="Enter your email"
+                            />
+                        </div>
+                    )}
+
+                    {/* Manual Token Input if not in URL */}
+                    {!tokenFromUrl && (
+                        <div className="space-y-1">
+                            <label className="text-[9px] font-semibold text-[#666666]">Reset Token</label>
+                            <input
+                                type="text"
+                                required
+                                value={token}
+                                onChange={(e) => setToken(e.target.value)}
+                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm font-mono"
+                                placeholder="Paste your reset token"
+                            />
                         </div>
                     )}
 
@@ -86,7 +138,7 @@ export default function CreateNewPasswordForm() {
                                 minLength={8}
                                 value={formData.newPassword}
                                 onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
+                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm"
                             />
                             <button
                                 type="button"
@@ -109,7 +161,7 @@ export default function CreateNewPasswordForm() {
                                 required
                                 value={formData.confirmPassword}
                                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
+                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm"
                             />
                             <button
                                 type="button"
@@ -123,11 +175,11 @@ export default function CreateNewPasswordForm() {
 
                     <div className="pt-4">
                         <button
-                            type="submit"
-                            disabled={isResettingPassword}
-                            className="w-full bg-primary-dark text-white py-4 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all shadow-lg flex items-center justify-center disabled:opacity-70"
+                             type="submit"
+                             disabled={isResettingPassword}
+                             className="w-full bg-primary-dark text-white py-4 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all shadow-lg flex items-center justify-center disabled:opacity-70"
                         >
-                            {isResettingPassword ? <Loader2 className="animate-spin mr-2" size={20} /> : "Reset Password"}
+                             {isResettingPassword ? <Loader2 className="animate-spin mr-2" size={20} /> : "Reset Password"}
                         </button>
                     </div>
                 </form>

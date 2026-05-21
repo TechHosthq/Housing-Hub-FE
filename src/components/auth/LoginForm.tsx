@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth, useGoogleAuth } from "@/hooks/useAuth";
 import { useAuthStore } from "@/store/useAuthStore";
+import { resolveApiError } from "@/utils/errorResolver";
 
 export default function LoginForm() {
     const router = useRouter();
@@ -25,15 +26,20 @@ export default function LoginForm() {
         }
     }, [isAuthenticated, router]);
 
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         login(formData);
     };
 
     const handleGoogleLogin = async () => {
-        const result = await getGoogleLoginUrl();
-        if (result.data?.url) {
-            window.location.href = result.data.url;
+        try {
+            const result = await getGoogleLoginUrl();
+            if (result?.url) {
+                window.location.href = result.url;
+            }
+        } catch {
+            // Error toast is already shown by useGoogleAuth onError
         }
     };
 
@@ -46,7 +52,18 @@ export default function LoginForm() {
             <form className="space-y-4" onSubmit={handleSubmit}>
                 {loginError && (
                     <div className="p-3 text-xs text-red-500 bg-red-50 rounded-lg text-center">
-                        {(loginError as any)?.response?.data?.message || "Login failed. Please check your credentials."}
+                        {(() => {
+                            // Handle both: raw response rejection (isSuccessful:false) and HTTP error
+                            const err = loginError as any;
+                            const messages = resolveApiError(
+                                err?.data ? { response: err } : err
+                            );
+                            return messages.length === 1 ? messages[0] : (
+                                <ul className="list-none m-0 p-0 space-y-0.5">
+                                    {messages.map((m: string, i: number) => <li key={i}>{m}</li>)}
+                                </ul>
+                            );
+                        })()}
                     </div>
                 )}
 

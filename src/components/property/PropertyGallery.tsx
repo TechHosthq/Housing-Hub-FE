@@ -22,6 +22,8 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
                     src={images[activeIndex]}
                     alt="Property"
                     fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 800px"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
@@ -49,7 +51,7 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
                         className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all ${activeIndex === idx ? "border-primary-dark" : "border-transparent opacity-70 hover:opacity-100"
                             }`}
                     >
-                        <Image src={img} alt={`Thumbnail ${idx}`} fill className="object-cover" />
+                        <Image src={img} alt={`Thumbnail ${idx}`} fill sizes="160px" className="object-cover" />
                     </button>
                 ))}
             </div>

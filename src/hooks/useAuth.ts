@@ -1,6 +1,8 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import authService from '@/services/authService';
 import { useAuthStore } from '@/store/useAuthStore';
+import { useToastStore } from '@/store/useToastStore';
+import { resolveApiError } from '@/utils/errorResolver';
 import { 
     LoginRequest, 
     RegisterRequest, 
@@ -49,6 +51,8 @@ export const useAuth = () => {
     };
 
     return {
+        user: useAuthStore((state) => state.user),
+        isAuthenticated: useAuthStore((state) => state.isAuthenticated),
         login: loginMutation.mutate,
         isLoggingIn: loginMutation.isPending,
         loginError: loginMutation.error,
@@ -64,6 +68,7 @@ export const useAuth = () => {
         forgotPassword: forgotPasswordMutation.mutate,
         isSendingForgotEmail: forgotPasswordMutation.isPending,
         forgotPasswordSuccess: forgotPasswordMutation.isSuccess,
+        forgotPasswordMessage: forgotPasswordMutation.data?.message ?? null,
 
         resetPassword: resetPasswordMutation.mutate,
         isResettingPassword: resetPasswordMutation.isPending,
@@ -78,6 +83,7 @@ export const useAuth = () => {
 
 export const useGoogleAuth = () => {
     const setAuth = useAuthStore((state) => state.setAuth);
+    const showError = useToastStore((state) => state.showError);
 
     const googleAuthMutation = useMutation({
         mutationFn: (idToken: string) => authService.googleAuth({ idToken }),
@@ -89,15 +95,21 @@ export const useGoogleAuth = () => {
         },
     });
 
-    const getGoogleLoginUrlQuery = useQuery({
-        queryKey: ['google-login-url'],
-        queryFn: () => authService.getGoogleLoginUrl(),
-        enabled: false, // Manual trigger
+    // Use mutation (not query) so we get proper error state on user-triggered fetches
+    const getGoogleLoginUrlMutation = useMutation({
+        mutationFn: () => authService.getGoogleLoginUrl(),
+        onError: (error: any) => {
+            // GET errors bypass the apiClient interceptor toast — handle explicitly
+            const messages = resolveApiError(
+                error?.data ? { response: error } : error
+            );
+            showError(messages);
+        },
     });
 
     return {
         googleAuth: googleAuthMutation.mutate,
-        isGoogleAuthing: googleAuthMutation.isPending,
-        getGoogleLoginUrl: getGoogleLoginUrlQuery.refetch,
+        isGoogleAuthing: googleAuthMutation.isPending || getGoogleLoginUrlMutation.isPending,
+        getGoogleLoginUrl: getGoogleLoginUrlMutation.mutateAsync,
     };
 };

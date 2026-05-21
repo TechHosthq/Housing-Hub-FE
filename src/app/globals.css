@@ -31,3 +31,28 @@ h5,
 h6 {
   @apply font-bold text-slate-900;
 }
+@keyframes slide-in-from-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-toast-in {
+  animation: slide-in-from-right 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom spacing for Privacy Page Layout */
+.privacy-layout-spacing {
+  gap: 2.5rem; /* Mobile spacing */
+}
+
+@media (min-width: 768px) {
+  .privacy-layout-spacing {
+    gap: 4.5rem; /* Desktop spacing */
+  }
+}
