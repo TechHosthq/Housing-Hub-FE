@@ -8,7 +8,7 @@
             "bedrooms": 3,
             "bathrooms": 2,
             "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070",
-            "tag": "Trending"
+            "tag": "New"
         },
         {
             "id": "2",
@@ -18,7 +18,7 @@
             "bedrooms": 3,
             "bathrooms": 2,
             "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2070",
-            "tag": "Trending"
+            "tag": "Recommended"
         },
         {
             "id": "3",
@@ -28,7 +28,7 @@
             "bedrooms": 3,
             "bathrooms": 2,
             "image": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&q=80&w=2070",
-            "tag": "Trending"
+            "tag": "New"
         },
         {
             "id": "4",
@@ -38,7 +38,7 @@
             "bedrooms": 3,
             "bathrooms": 2,
             "image": "https://images.unsplash.com/photo-1592595893347-11119bc41c11?auto=format&fit=crop&q=80&w=2070",
-            "tag": "Trending"
+            "tag": "Recommended"
         },
         {
             "id": "5",
@@ -48,7 +48,7 @@
             "bedrooms": 3,
             "bathrooms": 2,
             "image": "https://images.unsplash.com/photo-1580587767303-93693f77a062?auto=format&fit=crop&q=80&w=2070",
-            "tag": "Trending"
+            "tag": "New"
         },
         {
             "id": "6",
@@ -58,7 +58,7 @@
             "bedrooms": 3,
             "bathrooms": 2,
             "image": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&q=80&w=2070",
-            "tag": "Trending"
+            "tag": "Recommended"
         },
         {
             "id": "7",

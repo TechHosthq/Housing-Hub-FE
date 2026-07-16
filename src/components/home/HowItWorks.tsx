@@ -27,7 +27,7 @@ export default function HowItWorks() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     {/* Visual Graphic */}
-                    <div className="relative w-full aspect-square max-w-xxl mx-auto lg:mx-0">
+                    <div className="relative w-full aspect-square max-w-[500px] mx-auto lg:mx-0">
                         <img
                             src="/images/how-it-works.png"
                             alt="How Housing Hub Works Graphic"
@@ -36,14 +36,14 @@ export default function HowItWorks() {
                     </div>
 
                     {/* Steps Container */}
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                         {steps.map((step, index) => (
-                            <div key={index} className="flex gap-6 p-6 bg-white rounded-[17px] border border-gray-100 shadow-sm hover:border-[#07358B] hover:shadow-md transition-shadow duration-300">
+                            <div key={index} className="flex gap-6 p-6 bg-white rounded-[17px] border border-gray-100 shadow-sm hover:border-[#07358B] hover:bg-[#f0f6ff] transition-all duration-300">
                                 <div className="flex-shrink-0 w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#3b82f6] font-bold text-2xl border border-blue-100">
                                     {index + 1}
                                 </div>
                                 <div className="flex flex-col justify-center">
-                                    <h3 className="font-bold text-[#1A1A1A] mb-1.5 text-xl tracking-tight">{step.title}</h3>
+                                    <h3 className="font-semibold text-[#1A1A1A] mb-1.5 text-xl tracking-tight">{step.title}</h3>
                                     <p className="text-gray-500 font-medium text-base leading-relaxed">{step.description}</p>
                                 </div>
                             </div>

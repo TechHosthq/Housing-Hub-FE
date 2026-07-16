@@ -31,6 +31,11 @@ h5,
 h6 {
   @apply font-bold text-slate-900;
 }
+
+button,
+a {
+  box-shadow: none !important;
+}
 @keyframes slide-in-from-right {
   0% {
     transform: translateX(100%);

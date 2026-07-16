@@ -116,10 +116,9 @@ export default function RegisterForm() {
                             required
                             value={formData.phoneNumber}
                             onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors appearance-none"
+                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
                             placeholder=""
                         />
-                        <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
                     </div>
                 </div>
 
@@ -133,6 +132,7 @@ export default function RegisterForm() {
                         >
                             <option value={1}>Buyer/Renter</option>
                             <option value={2}>Homeowner</option>
+                            <option value={3}>Agent</option>
                         </select>
                         <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
                     </div>
@@ -179,7 +179,7 @@ export default function RegisterForm() {
                         type="submit"
                         disabled={!isAgreed || isRegistering}
                         className={`w-full py-4 rounded-full font-bold text-base transition-all flex items-center justify-center ${isAgreed && !isRegistering
-                            ? "bg-primary-dark text-white hover:bg-primary-dark/90 cursor-pointer shadow-lg"
+                            ? "bg-primary-dark text-white hover:bg-primary-dark/90 cursor-pointer"
                             : "bg-[#F2F2F2] text-[#BDBDBD] cursor-not-allowed"}`}
                     >
                         {isRegistering ? <Loader2 className="animate-spin mr-2" size={20} /> : "Register"}
@@ -189,7 +189,7 @@ export default function RegisterForm() {
                         type="button"
                         onClick={handleGoogleLogin}
                         disabled={isGoogleAuthing}
-                        className="w-full flex items-center justify-center gap-3 border border-[#6BB5FF] text-[#6BB5FF] py-4 rounded-full font-bold text-base hover:bg-blue-50 transition-all disabled:opacity-70"
+                        className="w-full flex items-center justify-center gap-3 border border-[#6BB5FF] text-[#6BB5FF] py-4 rounded-full font-normal text-base hover:bg-blue-50 transition-all disabled:opacity-70"
                     >
                         {isGoogleAuthing ? (
                             <Loader2 className="animate-spin" size={20} />

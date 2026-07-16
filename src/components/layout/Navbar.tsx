@@ -21,7 +21,7 @@ export default function Navbar() {
     const { role: roleLabel } = useUserRole();
 
     const navLinks = [
-        { name: "Browse Homes", href: "/dashboard" },
+        { name: "Browse Homes", href: "/properties" },
         { name: "List Properties", href: "/list-properties" },
         { name: "FAQ", href: "/faq" },
     ];
@@ -135,7 +135,7 @@ export default function Navbar() {
                             <Link href="/login" className="text-primary-dark font-bold text-base hover:opacity-80 transition-opacity">
                                 Login
                             </Link>
-                            <Link href="/register" className="bg-[#07358B] text-white px-7 py-2.5 rounded-full font-bold text-base shadow-lg hover:bg-primary-dark/90 transition-all">
+                            <Link href="/register" className="bg-[#07358B] text-white px-7 py-2.5 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all">
                                 Register
                             </Link>
                         </>
@@ -211,7 +211,7 @@ export default function Navbar() {
                                     </Link>
                                     <Link
                                         href="/register"
-                                        className="bg-[#07358B] text-white px-6 py-3 rounded-full font-bold text-center text-lg shadow-md"
+                                        className="bg-[#07358B] text-white px-6 py-3 rounded-full font-bold text-center text-lg"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
                                         Register

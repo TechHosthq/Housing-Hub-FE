@@ -66,12 +66,9 @@ export default function Hero() {
                 className={`px-4 py-3 flex items-center justify-between cursor-pointer rounded-full transition-all group ${activeDropdown === key ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
                 onClick={() => toggleDropdown(key)}
             >
-                <div className="flex flex-col items-start min-w-0">
-                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{label}</span>
-                    <span className="text-[15px] font-bold text-[#1A1A1A] truncate w-full text-left">
-                        {filters[key] || "Select"}
-                    </span>
-                </div>
+                <span className={`text-[15px] truncate w-full text-left ${filters[key] ? 'font-semibold text-[#1A1A1A]' : 'font-medium text-gray-500'}`}>
+                    {filters[key] || label}
+                </span>
                 <ChevronDown size={16} className={`text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2 ${activeDropdown === key ? 'rotate-180 text-[#002D6B]' : 'group-hover:text-gray-600'}`} />
             </div>
 
@@ -101,7 +98,7 @@ export default function Hero() {
     );
 
     return (
-        <section className="relative min-h-[560px] md:h-[560px] flex items-center justify-center pt-20 pb-8 md:pb-0">
+        <section className="relative min-h-[480px] md:h-[500px] flex items-center justify-center pt-16 pb-6 md:pb-0">
             <div
                 className="absolute inset-0 bg-cover bg-center z-0"
                 style={{
@@ -110,10 +107,10 @@ export default function Hero() {
             />
 
             <div className="relative z-10 text-center text-white px-4 max-w-[1008px] mx-auto w-full">
-                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[80px] font-black mb-4 md:mb-6 drop-shadow-2xl tracking-tight text-white leading-tight">
+                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[80px] font-bold mb-3 md:mb-5 drop-shadow-2xl tracking-tight text-white leading-tight">
                     Find Homes in Nigeria
                 </h1>
-                <p className="text-base md:text-2xl mb-6 md:mb-12 opacity-90 drop-shadow-lg font-medium max-w-3xl mx-auto tracking-wide">
+                <p className="text-base md:text-2xl mb-5 md:mb-10 opacity-90 drop-shadow-lg font-medium max-w-3xl mx-auto tracking-wide">
                     Browse trusted listings, book inspections, and move in faster
                 </p>
 
@@ -134,12 +131,9 @@ export default function Hero() {
                                         className={`px-3 py-3 flex items-center justify-between cursor-pointer transition-all ${activeDropdown === key ? 'bg-gray-50' : 'hover:bg-gray-50'}`}
                                         onClick={() => toggleDropdown(key)}
                                     >
-                                        <div className="flex flex-col items-start min-w-0">
-                                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">{labels[key]}</span>
-                                            <span className="text-[13px] font-bold text-[#1A1A1A] truncate w-full text-left">
-                                                {filters[key] || 'Select'}
-                                            </span>
-                                        </div>
+                                        <span className={`text-[13px] truncate w-full text-left ${filters[key] ? 'font-semibold text-[#1A1A1A]' : 'font-medium text-gray-500'}`}>
+                                            {filters[key] || labels[key]}
+                                        </span>
                                         <ChevronDown size={14} className={`text-gray-400 transition-transform duration-300 flex-shrink-0 ml-1 ${activeDropdown === key ? 'rotate-180 text-[#002D6B]' : ''}`} />
                                     </div>
                                     {activeDropdown === key && (
@@ -182,7 +176,7 @@ export default function Hero() {
                         <button
                             onClick={handleSearch}
                             disabled={isSearching}
-                            className="bg-[#002D6B] hover:bg-[#001D4B] text-white px-8 py-4 rounded-full flex items-center justify-center gap-2 transition-all min-w-[140px] m-1 shadow-lg disabled:opacity-80 active:scale-95 flex-shrink-0"
+                            className="bg-[#002D6B] hover:bg-[#001D4B] text-white px-8 py-4 rounded-full flex items-center justify-center gap-2 transition-all min-w-[140px] m-1 disabled:opacity-80 active:scale-95 flex-shrink-0"
                         >
                             {isSearching ? (
                                 <>
@@ -202,7 +196,7 @@ export default function Hero() {
                     <button
                         onClick={handleSearch}
                         disabled={isSearching}
-                        className="md:hidden bg-[#002D6B] hover:bg-[#001D4B] text-white px-8 py-4 rounded-full flex items-center justify-center gap-2 transition-all shadow-lg disabled:opacity-80 active:scale-95 w-full"
+                        className="md:hidden bg-[#002D6B] hover:bg-[#001D4B] text-white px-8 py-4 rounded-full flex items-center justify-center gap-2 transition-all disabled:opacity-80 active:scale-95 w-full"
                     >
                         {isSearching ? (
                             <>

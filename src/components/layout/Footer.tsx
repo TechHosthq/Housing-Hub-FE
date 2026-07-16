@@ -7,7 +7,7 @@ export default function Footer() {
         <footer className="bg-[#07358B] text-white pt-24 pb-16 px-8">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-20 mb-16">
                 <div className="space-y-6">
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-3">
                     <Link href="/" className="flex items-center">
                         <Image
                             src="/images/footerlogo.png"
@@ -17,7 +17,7 @@ export default function Footer() {
                             className="w-auto h-12 object-contain"
                             />
                     </Link>
-                    <h4 className="font-bold text-3xl" style={{color:"#EDCC27"}}>Housing Hub</h4>
+                    <h4 className="font-bold text-3xl" style={{color:"#EDCC27"}}>Housing hub</h4>
                     </div>
                     <p className="text-white/80 text-base font-medium max-w-[196px]">
                         Find Verified Properties And Book Inspections With Ease.

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { useInView } from "react-intersection-observer";
+import { useState } from "react";
 import PropertyCard from "./PropertyCard";
 import { useProperty } from "@/hooks/useProperty";
 import { Loader2 } from "lucide-react";
@@ -22,27 +21,17 @@ const SkeletonCard = () => (
     </div>
 );
 
+const ITEMS_PER_PAGE = 6;
+
 export default function TrendingGrid() {
+    const [currentPage, setCurrentPage] = useState(1);
     const { useInfiniteTrendingProperties } = useProperty();
-    const { ref, inView } = useInView({
-        threshold: 0,
-        rootMargin: "200px",
-    });
 
     const {
         data,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
         isLoading,
         isError
-    } = useInfiniteTrendingProperties(20);
-
-    useEffect(() => {
-        if (inView && hasNextPage && !isFetchingNextPage) {
-            fetchNextPage();
-        }
-    }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+    } = useInfiniteTrendingProperties(60);
 
     if (isLoading) {
         return (
@@ -61,7 +50,7 @@ export default function TrendingGrid() {
                 <p className="text-red-500 font-bold text-xl">Failed to load trending properties.</p>
                 <button 
                     onClick={() => window.location.reload()} 
-                    className="mt-4 px-6 py-2 bg-[#002B7F] text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all"
+                    className="mt-4 px-6 py-2 bg-[#002B7F] text-white rounded-full font-bold hover:bg-[#001D4B] transition-all"
                 >
                     Retry
                 </button>
@@ -69,7 +58,10 @@ export default function TrendingGrid() {
         );
     }
 
-    const properties = data?.pages.flatMap(page => page.data) || [];
+    const allProperties = data?.pages.flatMap(page => page.data) || [];
+    const totalPages = Math.ceil(allProperties.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const properties = allProperties.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
     return (
         <section className="py-20 px-6 md:px-8 max-w-7xl mx-auto">
@@ -81,25 +73,27 @@ export default function TrendingGrid() {
                 ))}
             </div>
 
-            {/* Intersection Observer Target */}
-            <div ref={ref} className="h-40 flex items-center justify-center mt-10">
-                {isFetchingNextPage ? (
-                    <div className="flex flex-col items-center gap-3">
-                        <Loader2 className="animate-spin text-[#0095FF]" size={32} />
-                        <span className="font-bold text-gray-400">Loading more amazing properties...</span>
-                    </div>
-                ) : hasNextPage ? (
-                    <div className="h-1" /> // Spacer to trigger intersection
-                ) : properties.length > 0 ? (
-                    <div className="text-center py-10 opacity-50">
-                        <p className="text-gray-400 font-bold text-lg italic">That's all for now! Check back later for more.</p>
-                    </div>
-                ) : null}
-            </div>
-
-            {properties.length === 0 && !isLoading && (
+            {allProperties.length === 0 && !isLoading && (
                 <div className="text-center py-20 bg-gray-50 rounded-[40px] border-2 border-dashed border-gray-200">
                     <p className="text-gray-400 text-xl font-medium">No trending properties found at the moment.</p>
+                </div>
+            )}
+
+            {totalPages > 1 && (
+                <div className="mt-12 flex items-center justify-center gap-2">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${
+                                currentPage === page
+                                    ? "bg-[#002D6B] text-white"
+                                    : "bg-white text-gray-600 border border-gray-200 hover:border-[#002D6B] hover:text-[#002D6B]"
+                            }`}
+                        >
+                            {page}
+                        </button>
+                    ))}
                 </div>
             )}
         </section>
