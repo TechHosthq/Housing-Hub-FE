@@ -6,9 +6,10 @@ import { resolveApiError } from '@/utils/errorResolver';
 import { 
     LoginRequest, 
     RegisterRequest, 
-    ForgotPasswordRequest, 
-    ResetPasswordRequest, 
+    ForgotPasswordRequest,
+    ResetPasswordRequest,
     VerifyEmailRequest,
+    ResendOtpRequest,
     ChangePasswordRequest
 } from '@/types/auth';
 
@@ -32,6 +33,10 @@ export const useAuth = () => {
 
     const verifyEmailMutation = useMutation({
         mutationFn: (data: VerifyEmailRequest) => authService.verifyEmail(data),
+    });
+
+    const resendOtpMutation = useMutation({
+        mutationFn: (data: ResendOtpRequest) => authService.resendOtp(data),
     });
 
     const forgotPasswordMutation = useMutation({
@@ -64,6 +69,11 @@ export const useAuth = () => {
 
         verifyEmail: verifyEmailMutation.mutate,
         isVerifyingEmail: verifyEmailMutation.isPending,
+
+        resendOtp: resendOtpMutation.mutate,
+        isResendingOtp: resendOtpMutation.isPending,
+        resendOtpSuccess: resendOtpMutation.isSuccess,
+        resendOtpMessage: resendOtpMutation.data?.message ?? null,
 
         forgotPassword: forgotPasswordMutation.mutate,
         isSendingForgotEmail: forgotPasswordMutation.isPending,

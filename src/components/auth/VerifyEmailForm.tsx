@@ -1,18 +1,18 @@
 "use client";
 
-"use client";
-
 import { useState, useEffect } from "react";
 import { ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { useToastStore } from "@/store/useToastStore";
 
 export default function VerifyEmailForm() {
     const searchParams = useSearchParams();
-    const { verifyEmail, isVerifyingEmail } = useAuth();
+    const { verifyEmail, isVerifyingEmail, resendOtp, isResendingOtp, resendOtpSuccess, resendOtpMessage } = useAuth();
+    const showSuccess = useToastStore((state) => state.showSuccess);
     const [isVerified, setIsVerified] = useState(false);
-    
+
     const email = searchParams.get("email");
     const token = searchParams.get("token");
 
@@ -23,6 +23,18 @@ export default function VerifyEmailForm() {
             });
         }
     }, [email, token, verifyEmail]);
+
+    // Fire success toast with the server's actual message
+    useEffect(() => {
+        if (resendOtpSuccess && resendOtpMessage) {
+            showSuccess(resendOtpMessage);
+        }
+    }, [resendOtpSuccess, resendOtpMessage, showSuccess]);
+
+    const handleResend = () => {
+        if (!email) return;
+        resendOtp({ email });
+    };
 
     return (
         <div className="w-full max-w-[350px] px-4 py-8 relative">
@@ -70,8 +82,11 @@ export default function VerifyEmailForm() {
                             ) : (
                                 <button
                                     type="button"
-                                    className="w-full bg-[#07358B] text-white py-4 rounded-full font-bold text-base hover:bg-[#052562] transition-all shadow-lg"
+                                    onClick={handleResend}
+                                    disabled={!email || isResendingOtp}
+                                    className="w-full bg-[#07358B] text-white py-4 rounded-full font-bold text-base hover:bg-[#052562] transition-all shadow-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
                                 >
+                                    {isResendingOtp && <Loader2 className="animate-spin" size={16} />}
                                     Resend Link
                                 </button>
                             )}

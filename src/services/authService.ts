@@ -4,9 +4,11 @@ import {
     LoginResponse, 
     RegisterRequest, 
     RegisterResponse, 
-    VerifyEmailRequest, 
+    VerifyEmailRequest,
     VerifyEmailResponse,
-    ForgotPasswordRequest, 
+    ResendOtpRequest,
+    ResendOtpResponse,
+    ForgotPasswordRequest,
     ForgotPasswordResponse,
     ResetPasswordRequest, 
     ResetPasswordResponse,
@@ -29,6 +31,11 @@ const authService = {
 
     verifyEmail: async (data: VerifyEmailRequest): Promise<VerifyEmailResponse> => {
         const response = await apiClient.post('/api/v1/Auth/verify-email', data);
+        return response.data;
+    },
+
+    resendOtp: async (data: ResendOtpRequest): Promise<ResendOtpResponse> => {
+        const response = await apiClient.post('/api/v1/Auth/resend-otp', data);
         return response.data;
     },
 

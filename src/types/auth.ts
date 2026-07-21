@@ -69,6 +69,12 @@ export interface VerifyEmailRequest {
 
 export type VerifyEmailResponse = ApiResponse<boolean>;
 
+export interface ResendOtpRequest {
+    email: string | null;
+}
+
+export type ResendOtpResponse = ApiResponse<boolean>;
+
 export interface ForgotPasswordRequest {
     email: string | null;
 }
