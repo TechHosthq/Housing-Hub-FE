@@ -4,7 +4,13 @@ import { resolveApiError } from '@/utils/errorResolver';
 import { useAuthStore } from '@/store/useAuthStore';
 
 const isProxyEnabled = typeof window !== 'undefined' && process.env.NEXT_PUBLIC_ENABLE_PROXY === 'true';
-const API_BASE_URL = 'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com/dev';
+
+/**
+ * Absolute API origin. Exported for flows that must bypass the /api/proxy rewrite —
+ * e.g. OAuth redirects the browser has to follow itself.
+ */
+export const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL || 'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com/dev';
 
 const baseURL = isProxyEnabled ? '/api/proxy' : API_BASE_URL;
 if (typeof window === 'undefined') {

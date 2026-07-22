@@ -3,43 +3,65 @@
 import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
-import authService from '@/services/authService';
 import { Loader2 } from 'lucide-react';
 
+/**
+ * Landing page for the optional server-side Google flow.
+ *
+ * The backend (GET /api/v1/Auth/google-callback) completes the OAuth exchange and
+ * redirects here with either `?token=<jwt>` or `?error=<code>`.
+ *
+ * The primary sign-in path is the ID-token flow on the login/register forms, which
+ * never reaches this page.
+ */
 function CallbackHandler() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const setAuth = useAuthStore((state) => state.setAuth);
 
     useEffect(() => {
-        const handleCallback = async () => {
-            const code = searchParams.get('code');
-            if (code) {
-                try {
-                    const response = await authService.handleGoogleCallback(code);
-                    if (response.isSuccessful && response.data.token) {
-                        const { token, ...user } = response.data;
-                        setAuth(user, token);
-                        router.push('/dashboard');
-                    } else {
-                        router.push('/login?error=google_login_failed');
-                    }
-                } catch (error) {
-                    console.error('Google login failed:', error);
-                    router.push('/login?error=google_login_failed');
-                }
-            } else {
-                router.push('/login');
-            }
-        };
+        const token = searchParams.get('token');
+        const error = searchParams.get('error');
 
-        handleCallback();
+        if (error) {
+            router.replace(`/login?error=${encodeURIComponent(error)}`);
+            return;
+        }
+
+        if (!token) {
+            router.replace('/login');
+            return;
+        }
+
+        try {
+            // The JWT payload carries the customer claims we need for the store.
+            const payload = JSON.parse(
+                atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))
+            );
+
+            setAuth(
+                {
+                    id: payload.sub ?? payload.nameid ?? '',
+                    firstName: payload.given_name ?? null,
+                    lastName: payload.family_name ?? null,
+                    email: payload.email ?? null,
+                    phoneNumber: payload.phone_number ?? null,
+                    customerType: Number(payload.customer_type ?? 0),
+                    dateCreated: new Date().toISOString(),
+                },
+                token
+            );
+
+            router.replace('/dashboard');
+        } catch {
+            router.replace('/login?error=google_token_invalid');
+        }
     }, [searchParams, router, setAuth]);
 
     return (
         <div className="text-center space-y-4">
             <Loader2 className="w-12 h-12 animate-spin text-primary-dark mx-auto" />
-            <p className="text-lg font-medium text-gray-700">Completing login...</p>
+            <p className="text-lg font-medium text-gray-700">Completing sign-in...</p>
         </div>
     );
 }

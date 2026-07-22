@@ -1,8 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import authService from '@/services/authService';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useToastStore } from '@/store/useToastStore';
-import { resolveApiError } from '@/utils/errorResolver';
 import { 
     LoginRequest, 
     RegisterRequest, 
@@ -91,35 +89,32 @@ export const useAuth = () => {
     };
 };
 
+/**
+ * Google sign-in / sign-up.
+ *
+ * Uses the ID-token flow: the browser obtains a Google ID token via Google
+ * Identity Services and we exchange it at POST /api/v1/Auth/google for our JWT.
+ * Sign-in and sign-up are the same call — the backend creates the customer on
+ * first use.
+ */
 export const useGoogleAuth = () => {
     const setAuth = useAuthStore((state) => state.setAuth);
-    const showError = useToastStore((state) => state.showError);
 
     const googleAuthMutation = useMutation({
         mutationFn: (idToken: string) => authService.googleAuth({ idToken }),
         onSuccess: (response) => {
-            if (response.isSuccessful && response.data.token) {
+            if (response.isSuccessful && response.data?.token) {
                 const { token, ...user } = response.data;
                 setAuth(user, token);
             }
         },
-    });
-
-    // Use mutation (not query) so we get proper error state on user-triggered fetches
-    const getGoogleLoginUrlMutation = useMutation({
-        mutationFn: () => authService.getGoogleLoginUrl(),
-        onError: (error: any) => {
-            // GET errors bypass the apiClient interceptor toast — handle explicitly
-            const messages = resolveApiError(
-                error?.data ? { response: error } : error
-            );
-            showError(messages);
-        },
+        // Failures (HTTP errors and isSuccessful:false) are surfaced by the
+        // apiClient response interceptor, which already shows a toast for POSTs.
     });
 
     return {
-        googleAuth: googleAuthMutation.mutate,
-        isGoogleAuthing: googleAuthMutation.isPending || getGoogleLoginUrlMutation.isPending,
-        getGoogleLoginUrl: getGoogleLoginUrlMutation.mutateAsync,
+        signInWithGoogle: googleAuthMutation.mutate,
+        isGoogleAuthing: googleAuthMutation.isPending,
+        googleAuthError: googleAuthMutation.error,
     };
 };
