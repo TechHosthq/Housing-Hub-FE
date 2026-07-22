@@ -21,7 +21,9 @@ export default function Navbar() {
     const { role: roleLabel } = useUserRole();
 
     const navLinks = [
-        { name: "Browse Homes", href: "/properties" },
+        // The public listings live on the homepage; /properties is the owner's
+        // private "my listings" page and requires auth.
+        { name: "Browse Homes", href: "/" },
         { name: "List Properties", href: "/list-properties" },
         { name: "FAQ", href: "/faq" },
     ];
@@ -132,10 +134,22 @@ export default function Navbar() {
                         </div>
                     ) : (
                         <>
-                            <Link href="/login" className="text-primary-dark font-bold text-base hover:opacity-80 transition-opacity">
+                            {/* The filled CTA follows the page you're NOT on, so the
+                                current screen isn't advertised back at you. */}
+                            <Link
+                                href="/login"
+                                className={pathname === "/login"
+                                    ? "bg-[#07358B] text-white px-7 py-2.5 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all"
+                                    : "text-primary-dark font-bold text-base hover:opacity-80 transition-opacity"}
+                            >
                                 Login
                             </Link>
-                            <Link href="/register" className="bg-[#07358B] text-white px-7 py-2.5 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all">
+                            <Link
+                                href="/register"
+                                className={pathname === "/login"
+                                    ? "text-primary-dark font-bold text-base hover:opacity-80 transition-opacity"
+                                    : "bg-[#07358B] text-white px-7 py-2.5 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all"}
+                            >
                                 Register
                             </Link>
                         </>
