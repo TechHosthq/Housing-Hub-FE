@@ -3,8 +3,24 @@ import { useToastStore } from '@/store/useToastStore';
 import { resolveApiError } from '@/utils/errorResolver';
 import { useAuthStore } from '@/store/useAuthStore';
 
+declare module 'axios' {
+    export interface AxiosRequestConfig {
+        /**
+         * Opt out of the global error toast when the caller renders the failure
+         * inline instead (e.g. auth forms that need actionable, contextual copy).
+         */
+        skipErrorToast?: boolean;
+    }
+}
+
 const isProxyEnabled = typeof window !== 'undefined' && process.env.NEXT_PUBLIC_ENABLE_PROXY === 'true';
-const API_BASE_URL = 'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com/dev';
+
+/**
+ * Absolute API origin. Exported for flows that must bypass the /api/proxy rewrite —
+ * e.g. OAuth redirects the browser has to follow itself.
+ */
+export const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL || 'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com/dev';
 
 const baseURL = isProxyEnabled ? '/api/proxy' : API_BASE_URL;
 if (typeof window === 'undefined') {
@@ -41,13 +57,18 @@ apiClient.interceptors.request.use(
     }
 );
 
+const shouldToast = (config: { method?: string; skipErrorToast?: boolean } | undefined) => {
+    if (config?.skipErrorToast) return false;
+    const method = config?.method?.toUpperCase() || '';
+    return ['POST', 'PUT', 'DELETE'].includes(method);
+};
+
 // Add a response interceptor to handle errors globally
 apiClient.interceptors.response.use(
     (response) => {
         // Handle logical failures from APIs that return 200 OK with isSuccessful: false
         if (response.data && response.data.isSuccessful === false) {
-            const method = response.config?.method?.toUpperCase() || '';
-            if (['POST', 'PUT', 'DELETE'].includes(method)) {
+            if (shouldToast(response.config)) {
                 // We wrap the response in an object that resolveApiError expects
                 const errorMessages = resolveApiError({ response });
                 useToastStore.getState().showError(errorMessages);
@@ -65,8 +86,7 @@ apiClient.interceptors.response.use(
         }
 
         // Display toast for POST, PUT, DELETE errors
-        const method = error.config?.method?.toUpperCase() || '';
-        if (['POST', 'PUT', 'DELETE'].includes(method)) {
+        if (shouldToast(error.config)) {
             const errorMessages = resolveApiError(error);
             useToastStore.getState().showError(errorMessages);
         }

@@ -16,6 +16,19 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Environment variables
+
+Create a `.env.local` (git-ignored). These must also be set in the hosting provider
+(e.g. Netlify) or the corresponding feature silently degrades.
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_API_BASE_URL` | yes | Absolute API origin. Also used by OAuth redirects that bypass the `/api/proxy` rewrite. |
+| `NEXT_PUBLIC_ENABLE_PROXY` | no | `true` routes API calls through the Next.js `/api/proxy` rewrite. |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | yes (for Google sign-in) | Google OAuth **client ID** — a public value. Must match `Google:ClientId` in the backend `appsettings.json`. Without it the Google button renders as "not configured". |
+
+The Google **client secret** is backend-only and must never appear here.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

@@ -1,8 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import authService from '@/services/authService';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useToastStore } from '@/store/useToastStore';
-import { resolveApiError } from '@/utils/errorResolver';
 import { 
     LoginRequest, 
     RegisterRequest, 
@@ -10,7 +8,8 @@ import {
     ResetPasswordRequest,
     VerifyEmailRequest,
     ResendOtpRequest,
-    ChangePasswordRequest
+    ChangePasswordRequest,
+    CustomerType
 } from '@/types/auth';
 
 export const useAuth = () => {
@@ -91,35 +90,57 @@ export const useAuth = () => {
     };
 };
 
+/**
+ * Google sign-in / sign-up.
+ *
+ * Uses the ID-token flow: the browser obtains a Google ID token via Google
+ * Identity Services and we exchange it at POST /api/v1/Auth/google for our JWT.
+ * Sign-in and sign-up are the same call — the backend creates the customer on
+ * first use.
+ */
 export const useGoogleAuth = () => {
     const setAuth = useAuthStore((state) => state.setAuth);
-    const showError = useToastStore((state) => state.showError);
 
     const googleAuthMutation = useMutation({
         mutationFn: (idToken: string) => authService.googleAuth({ idToken }),
         onSuccess: (response) => {
-            if (response.isSuccessful && response.data.token) {
+            if (response.isSuccessful && response.data?.token) {
+                const { token, ...user } = response.data;
+                setAuth(user, token);
+            }
+        },
+        // Failures (HTTP errors and isSuccessful:false) are surfaced by the
+        // apiClient response interceptor, which already shows a toast for POSTs.
+    });
+
+    return {
+        signInWithGoogle: googleAuthMutation.mutate,
+        isGoogleAuthing: googleAuthMutation.isPending,
+        googleAuthError: googleAuthMutation.error,
+    };
+};
+
+/**
+ * One-time onboarding step: assigns the account type for Google accounts, which are
+ * created as CustomerType.Unset. The backend returns a new JWT carrying the updated
+ * customer_type claim, so we must replace the stored token — otherwise the new role
+ * won't be honoured by the API.
+ */
+export const useAccountType = () => {
+    const setAuth = useAuthStore((state) => state.setAuth);
+
+    const setAccountTypeMutation = useMutation({
+        mutationFn: (customerType: CustomerType) => authService.setAccountType(customerType),
+        onSuccess: (response) => {
+            if (response.isSuccessful && response.data?.token) {
                 const { token, ...user } = response.data;
                 setAuth(user, token);
             }
         },
     });
 
-    // Use mutation (not query) so we get proper error state on user-triggered fetches
-    const getGoogleLoginUrlMutation = useMutation({
-        mutationFn: () => authService.getGoogleLoginUrl(),
-        onError: (error: any) => {
-            // GET errors bypass the apiClient interceptor toast — handle explicitly
-            const messages = resolveApiError(
-                error?.data ? { response: error } : error
-            );
-            showError(messages);
-        },
-    });
-
     return {
-        googleAuth: googleAuthMutation.mutate,
-        isGoogleAuthing: googleAuthMutation.isPending || getGoogleLoginUrlMutation.isPending,
-        getGoogleLoginUrl: getGoogleLoginUrlMutation.mutateAsync,
+        setAccountType: setAccountTypeMutation.mutateAsync,
+        isSettingAccountType: setAccountTypeMutation.isPending,
     };
 };

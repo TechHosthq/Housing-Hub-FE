@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import apiClient, { API_BASE_URL } from './apiClient';
 import { 
     LoginRequest, 
     LoginResponse, 
@@ -15,7 +15,8 @@ import {
     ChangePasswordRequest,
     ChangePasswordResponse,
     GoogleAuthRequest,
-    GoogleAuthResponse
+    GoogleAuthResponse,
+    CustomerType
 } from '@/types/auth';
 
 const authService = {
@@ -54,20 +55,37 @@ const authService = {
         return response.data;
     },
 
+    /**
+     * Exchanges a Google ID token (from Google Identity Services) for a Housing Hub JWT.
+     * Handles both sign-in and sign-up — the backend creates the customer on first use.
+     */
     googleAuth: async (data: GoogleAuthRequest): Promise<GoogleAuthResponse> => {
-        const response = await apiClient.post('/api/v1/Auth/google', data);
+        // Rendered inline by the auth forms, so suppress the generic toast.
+        const response = await apiClient.post('/api/v1/Auth/google', data, { skipErrorToast: true });
         return response.data;
     },
 
-    getGoogleLoginUrl: async (): Promise<{ url: string }> => {
+    /**
+     * One-time onboarding step for Google accounts (which start as CustomerType.Unset).
+     * Returns a fresh JWT — the customer_type claim drives authorization, so the old
+     * token must be replaced or the new role won't take effect.
+     */
+    setAccountType: async (customerType: CustomerType): Promise<LoginResponse> => {
+        const response = await apiClient.put('/api/v1/Auth/account-type', { customerType });
+        return response.data;
+    },
+
+    /**
+     * Absolute URL for the optional server-side (redirect) Google flow.
+     *
+     * NOTE: this must be a full-page navigation (window.location.href) — it returns a
+     * 302 to Google's consent screen and cannot be fetched with XHR/axios. It also
+     * bypasses the Next.js /api/proxy rewrite on purpose, since the browser itself
+     * must follow the redirect chain.
+     */
+    buildGoogleLoginUrl: (): string => {
         const returnUrl = `${window.location.origin}/auth/google-callback`;
-        const response = await apiClient.get(`/api/v1/Auth/google-login?returnUrl=${encodeURIComponent(returnUrl)}`);
-        return response.data;
-    },
-
-    handleGoogleCallback: async (code: string): Promise<GoogleAuthResponse> => {
-        const response = await apiClient.get(`/api/v1/Auth/google-callback?code=${code}`);
-        return response.data;
+        return `${API_BASE_URL}/api/v1/Auth/google-login?returnUrl=${encodeURIComponent(returnUrl)}`;
     }
 };
 

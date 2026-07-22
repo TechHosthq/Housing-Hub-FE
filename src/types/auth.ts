@@ -1,3 +1,16 @@
+/**
+ * Mirrors HousingHub.Model.Enums.CustomerType on the backend — keep in sync.
+ * `Unset` is assigned to accounts created via Google before the user has chosen
+ * how they intend to use Housing Hub; it carries no permissions.
+ */
+export enum CustomerType {
+    Unset = 0,
+    HouseOwner = 1,
+    Agent = 2,
+    Customer = 4,
+    Admin = 8,
+}
+
 export interface User {
     id: string;
     firstName: string | null;
