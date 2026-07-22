@@ -4,7 +4,12 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 
-// Routes that don't require authentication
+// Routes that don't require authentication.
+// Anonymous visitors can browse listings to get a feel for the marketplace; anything
+// tied to an account (profile, inspections, messages, owner listings) stays private.
+//
+// NOTE: '/properties' is the OWNER's "my listings" page and must stay private —
+// browsing happens on '/' and '/property/[id]'.
 const PUBLIC_ROUTES = [
     '/',
     '/login',
@@ -13,11 +18,13 @@ const PUBLIC_ROUTES = [
     '/reset-password',
     '/create-new-password',
     '/verify-email',
-    '/properties',
+    '/list-properties',
     '/faq',
+    '/privacy',
 ];
 
-// Patterns for dynamic public routes (e.g., /property/123)
+// Patterns for dynamic public routes (e.g., /property/123).
+// Deliberately excludes /property/[id]/inspection — booking requires an account.
 const PUBLIC_ROUTE_PATTERNS = [
     /^\/property\/[^/]+$/,
     /^\/api\/seed.*$/,

@@ -1,6 +1,7 @@
 "use client";
 
-import DashboardNavbar from "@/components/layout/DashboardNavbar";
+// Public route: Navbar adapts to signed-in vs signed-out, DashboardNavbar assumes a user.
+import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PropertyGallery from "@/components/property/PropertyGallery";
 import PropertyInfo from "@/components/property/PropertyInfo";
@@ -21,7 +22,7 @@ export default function PropertyDetailPage() {
     if (isLoading) {
         return (
             <main className="min-h-screen bg-white">
-                <DashboardNavbar />
+                <Navbar />
                 <div className="flex items-center justify-center min-h-[60vh]">
                     <Loader2 className="animate-spin text-primary-dark w-12 h-12" />
                 </div>
@@ -35,7 +36,7 @@ export default function PropertyDetailPage() {
     if (!property) {
         return (
             <main className="min-h-screen bg-white">
-                <DashboardNavbar />
+                <Navbar />
                 <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
                     <h1 className="text-2xl font-bold">Property Not Found</h1>
                     <Link href="/dashboard" className="text-[#0095FF] font-bold">Return to Dashboard</Link>
@@ -62,7 +63,7 @@ export default function PropertyDetailPage() {
 
     return (
         <main className="min-h-screen bg-white">
-            <DashboardNavbar />
+            <Navbar />
 
             <div className="max-w-7xl mx-auto px-6 pt-24 pb-20">
                 <Link

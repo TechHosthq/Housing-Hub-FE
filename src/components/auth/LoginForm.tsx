@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth, useGoogleAuth } from "@/hooks/useAuth";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { postAuthRoute } from "@/utils/authRouting";
@@ -13,6 +13,7 @@ import { resolveApiError } from "@/utils/errorResolver";
 
 export default function LoginForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { login, isLoggingIn, loginError } = useAuth();
     const { signInWithGoogle, isGoogleAuthing, googleAuthError } = useGoogleAuth();
     const googleError = resolveGoogleAuthError(googleAuthError);
@@ -25,12 +26,13 @@ export default function LoginForm() {
         password: "",
     });
 
-    // Google accounts land on the one-time "How will you use Housing Hub?" step first.
+    // Google accounts land on the one-time "How will you use Housing Hub?" step first;
+    // otherwise honour ?redirect= so users return to what they were trying to do.
     useEffect(() => {
         if (isAuthenticated) {
-            router.push(postAuthRoute(user?.customerType));
+            router.push(postAuthRoute(user?.customerType, searchParams.get("redirect")));
         }
-    }, [isAuthenticated, user?.customerType, router]);
+    }, [isAuthenticated, user?.customerType, searchParams, router]);
 
 
     const handleSubmit = (e: React.FormEvent) => {

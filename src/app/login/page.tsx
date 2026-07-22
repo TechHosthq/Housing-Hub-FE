@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Navbar from "@/components/layout/Navbar";
 import LoginForm from "@/components/auth/LoginForm";
 
@@ -17,7 +18,10 @@ export default function LoginPage() {
 
                 {/* Right Side - Login Form */}
                 <div className="w-full md:w-1/2 flex items-center justify-center bg-white">
-                    <LoginForm />
+                    {/* LoginForm reads ?redirect= via useSearchParams */}
+                    <Suspense fallback={null}>
+                        <LoginForm />
+                    </Suspense>
                 </div>
             </div>
         </main>
