@@ -60,7 +60,8 @@ const authService = {
      * Handles both sign-in and sign-up — the backend creates the customer on first use.
      */
     googleAuth: async (data: GoogleAuthRequest): Promise<GoogleAuthResponse> => {
-        const response = await apiClient.post('/api/v1/Auth/google', data);
+        // Rendered inline by the auth forms, so suppress the generic toast.
+        const response = await apiClient.post('/api/v1/Auth/google', data, { skipErrorToast: true });
         return response.data;
     },
 

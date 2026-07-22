@@ -9,11 +9,13 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { resolveApiError } from "@/utils/errorResolver";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { postAuthRoute } from "@/utils/authRouting";
+import { resolveGoogleAuthError } from "@/utils/googleAuthError";
 
 export default function RegisterForm() {
     const router = useRouter();
     const { register, isRegistering, registerError, registerSuccess } = useAuth();
-    const { signInWithGoogle, isGoogleAuthing } = useGoogleAuth();
+    const { signInWithGoogle, isGoogleAuthing, googleAuthError } = useGoogleAuth();
+    const googleError = resolveGoogleAuthError(googleAuthError);
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const user = useAuthStore((state) => state.user);
 
@@ -187,6 +189,20 @@ export default function RegisterForm() {
                     >
                         {isRegistering ? <Loader2 className="animate-spin mr-2" size={20} /> : "Register"}
                     </button>
+
+                    {googleError && (
+                        <div className="p-3 text-xs text-red-500 bg-red-50 rounded-lg text-center">
+                            {googleError.message}
+                            {googleError.suggestPasswordLogin && (
+                                <>
+                                    {" "}
+                                    <Link href="/login" className="underline font-semibold">
+                                        Go to login
+                                    </Link>
+                                </>
+                            )}
+                        </div>
+                    )}
 
                     <GoogleSignInButton
                         onCredential={signInWithGoogle}

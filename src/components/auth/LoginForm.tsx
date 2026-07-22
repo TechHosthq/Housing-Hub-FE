@@ -7,13 +7,15 @@ import { useRouter } from "next/navigation";
 import { useAuth, useGoogleAuth } from "@/hooks/useAuth";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { postAuthRoute } from "@/utils/authRouting";
+import { resolveGoogleAuthError } from "@/utils/googleAuthError";
 import { useAuthStore } from "@/store/useAuthStore";
 import { resolveApiError } from "@/utils/errorResolver";
 
 export default function LoginForm() {
     const router = useRouter();
     const { login, isLoggingIn, loginError } = useAuth();
-    const { signInWithGoogle, isGoogleAuthing } = useGoogleAuth();
+    const { signInWithGoogle, isGoogleAuthing, googleAuthError } = useGoogleAuth();
+    const googleError = resolveGoogleAuthError(googleAuthError);
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const user = useAuthStore((state) => state.user);
 
@@ -109,6 +111,12 @@ export default function LoginForm() {
                     >
                         {isLoggingIn ? <Loader2 className="animate-spin mr-2" size={20} /> : "Login"}
                     </button>
+
+                    {googleError && (
+                        <div className="p-3 text-xs text-red-500 bg-red-50 rounded-lg text-center">
+                            {googleError.message}
+                        </div>
+                    )}
 
                     <GoogleSignInButton
                         onCredential={signInWithGoogle}
