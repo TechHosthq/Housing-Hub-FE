@@ -14,7 +14,7 @@ export default function DashboardNavbar() {
     const pathname = usePathname();
     const router = useRouter();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const { role, toggleRole } = useUserRole();
+    const { role } = useUserRole();
     const currentUser = useAuthStore((state) => state.user);
     
     const { useUnreadCount } = useNotification();
@@ -109,8 +109,6 @@ export default function DashboardNavbar() {
                         <UserDropdown
                             isOpen={isDropdownOpen}
                             onClose={() => setIsDropdownOpen(false)}
-                            currentRole={role}
-                            onSwitchRole={toggleRole}
                         />
                     </div>
                 </div>
