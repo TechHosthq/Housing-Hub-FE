@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
+import { useHasHydrated } from '@/hooks/useHasHydrated';
 
 // Routes that don't require authentication.
 // Anonymous visitors can browse listings to get a feel for the marketplace; anything
@@ -30,30 +31,41 @@ const PUBLIC_ROUTE_PATTERNS = [
     /^\/api\/seed.*$/,
 ];
 
+const Spinner = () => (
+    <div className="fixed inset-0 flex items-center justify-center bg-white z-[9999]">
+        <div className="w-12 h-12 border-4 border-primary-dark border-t-transparent rounded-full animate-spin"></div>
+    </div>
+);
+
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-    const { isAuthenticated } = useAuthStore();
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const hasHydrated = useHasHydrated();
     const router = useRouter();
     const pathname = usePathname();
-    const [isChecking, setIsChecking] = useState(true);
+
+    const isPublicRoute = useMemo(
+        () =>
+            PUBLIC_ROUTES.includes(pathname) ||
+            PUBLIC_ROUTE_PATTERNS.some((pattern) => pattern.test(pathname)),
+        [pathname]
+    );
 
     useEffect(() => {
-        const isPublicRoute = PUBLIC_ROUTES.includes(pathname) || 
-                             PUBLIC_ROUTE_PATTERNS.some(pattern => pattern.test(pathname));
+        // Wait for the persisted token to be restored before deciding. Without this
+        // the store is still empty on first render, so refreshing any protected page
+        // bounced a signed-in user to /login.
+        if (!hasHydrated) return;
 
         if (!isPublicRoute && !isAuthenticated) {
-            router.push('/login');
-        } else {
-            setIsChecking(false);
+            // Send them back where they were headed once they sign in.
+            router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
         }
-    }, [isAuthenticated, pathname, router]);
+    }, [hasHydrated, isPublicRoute, isAuthenticated, pathname, router]);
 
-    if (isChecking) {
-        return (
-            <div className="fixed inset-0 flex items-center justify-center bg-white z-[9999]">
-                <div className="w-12 h-12 border-4 border-primary-dark border-t-transparent rounded-full animate-spin"></div>
-            </div>
-        );
-    }
+    if (!hasHydrated) return <Spinner />;
+
+    // Redirect is in flight — don't flash protected content.
+    if (!isPublicRoute && !isAuthenticated) return <Spinner />;
 
     return <>{children}</>;
 }
