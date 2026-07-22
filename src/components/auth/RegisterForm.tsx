@@ -139,6 +139,7 @@ export default function RegisterForm() {
                             <option value={CustomerType.Customer}>Buyer/Renter</option>
                             <option value={CustomerType.HouseOwner}>Homeowner</option>
                             <option value={CustomerType.Agent}>Agent</option>
+                            <option value={CustomerType.Developer}>Property Developer</option>
                         </select>
                         <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
                     </div>

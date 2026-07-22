@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useAuthStore } from "@/store/useAuthStore";
 import SuccessModal from "@/components/common/SuccessModal";
+import EmailVerificationBanner from "./EmailVerificationBanner";
 
 export default function ProfileForm() {
     const currentUser = useAuthStore((state) => state.user);
@@ -143,6 +144,12 @@ export default function ProfileForm() {
                 title="Address Saved!"
                 message="Your address information has been updated successfully."
             />
+            {/* Lets users who skipped the sign-up OTP verify their email later */}
+            <EmailVerificationBanner
+                emailVerified={customerResponse?.data?.emailVerified}
+                isLoading={isLoadingCustomer}
+            />
+
             {/* Profile Info Card */}
             <div className="bg-white rounded-[22px] border border-[#F2F2F2] p-8 shadow-sm relative pt-12">
                 <button

@@ -9,6 +9,8 @@ export enum CustomerType {
     Agent = 2,
     Customer = 4,
     Admin = 8,
+    /** Same property-management capabilities as HouseOwner/Agent. */
+    Developer = 16,
 }
 
 export interface User {
