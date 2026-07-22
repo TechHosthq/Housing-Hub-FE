@@ -16,6 +16,9 @@ export default function VerifyEmailForm() {
     const email = searchParams.get("email");
     const token = searchParams.get("token");
 
+    const RESEND_COOLDOWN_SECONDS = 5 * 60;
+    const [resendCooldown, setResendCooldown] = useState(RESEND_COOLDOWN_SECONDS);
+
     useEffect(() => {
         if (email && token) {
             verifyEmail({ email, token }, {
@@ -23,6 +26,22 @@ export default function VerifyEmailForm() {
             });
         }
     }, [email, token, verifyEmail]);
+
+    useEffect(() => {
+        if (resendCooldown <= 0) return;
+
+        const interval = setInterval(() => {
+            setResendCooldown((prev) => Math.max(prev - 1, 0));
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [resendCooldown]);
+
+    const formatCooldown = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes}:${secs.toString().padStart(2, "0")}`;
+    };
 
     // Fire success toast with the server's actual message
     useEffect(() => {
@@ -32,8 +51,10 @@ export default function VerifyEmailForm() {
     }, [resendOtpSuccess, resendOtpMessage, showSuccess]);
 
     const handleResend = () => {
-        if (!email) return;
-        resendOtp({ email });
+        if (!email || resendCooldown > 0) return;
+        resendOtp({ email }, {
+            onSuccess: () => setResendCooldown(RESEND_COOLDOWN_SECONDS)
+        });
     };
 
     return (
@@ -83,11 +104,13 @@ export default function VerifyEmailForm() {
                                 <button
                                     type="button"
                                     onClick={handleResend}
-                                    disabled={!email || isResendingOtp}
+                                    disabled={!email || isResendingOtp || resendCooldown > 0}
                                     className="w-full bg-[#07358B] text-white py-4 rounded-full font-bold text-base hover:bg-[#052562] transition-all shadow-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
                                 >
                                     {isResendingOtp && <Loader2 className="animate-spin" size={16} />}
-                                    Resend Link
+                                    {resendCooldown > 0
+                                        ? `Resend Link in ${formatCooldown(resendCooldown)}`
+                                        : "Resend Link"}
                                 </button>
                             )}
 

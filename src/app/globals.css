@@ -51,6 +51,27 @@ a {
   animation: slide-in-from-right 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/*
+ * Tailwind v4's preflight sets `cursor: default` on buttons, so every button in
+ * the app lost its pointer. Restore it for interactive controls, and keep a
+ * not-allowed cursor on disabled ones.
+ */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary,
+label[for],
+select:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"][aria-disabled="true"],
+select:disabled,
+input:disabled,
+textarea:disabled {
+  cursor: not-allowed;
+}
+
 /* Custom spacing for Privacy Page Layout */
 .privacy-layout-spacing {
   gap: 2.5rem; /* Mobile spacing */

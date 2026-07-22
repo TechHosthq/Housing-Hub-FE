@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Home, Search, Building2, Loader2 } from "lucide-react";
+import { Home, Search, Building2, Building, Loader2 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useAccountType } from "@/hooks/useAuth";
@@ -28,6 +28,12 @@ const OPTIONS = [
         title: "I'm an agent",
         description: "Manage listings and inspections on behalf of property owners.",
         icon: Building2,
+    },
+    {
+        value: CustomerType.Developer,
+        title: "I'm a property developer",
+        description: "List developments at scale and manage inspection requests across projects.",
+        icon: Building,
     },
 ];
 
