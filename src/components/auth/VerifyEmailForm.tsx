@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useToastStore } from "@/store/useToastStore";
+import { useResendCooldown } from "@/hooks/useResendCooldown";
 
 export default function VerifyEmailForm() {
     const searchParams = useSearchParams();
@@ -16,8 +17,8 @@ export default function VerifyEmailForm() {
     const email = searchParams.get("email");
     const token = searchParams.get("token");
 
-    const RESEND_COOLDOWN_SECONDS = 5 * 60;
-    const [resendCooldown, setResendCooldown] = useState(RESEND_COOLDOWN_SECONDS);
+    // The server owns the real throttle; this just mirrors it in the UI.
+    const { isCoolingDown, formatted, startCooldown } = useResendCooldown(email);
 
     useEffect(() => {
         if (email && token) {
@@ -27,22 +28,6 @@ export default function VerifyEmailForm() {
         }
     }, [email, token, verifyEmail]);
 
-    useEffect(() => {
-        if (resendCooldown <= 0) return;
-
-        const interval = setInterval(() => {
-            setResendCooldown((prev) => Math.max(prev - 1, 0));
-        }, 1000);
-
-        return () => clearInterval(interval);
-    }, [resendCooldown]);
-
-    const formatCooldown = (seconds: number) => {
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${minutes}:${secs.toString().padStart(2, "0")}`;
-    };
-
     // Fire success toast with the server's actual message
     useEffect(() => {
         if (resendOtpSuccess && resendOtpMessage) {
@@ -51,9 +36,15 @@ export default function VerifyEmailForm() {
     }, [resendOtpSuccess, resendOtpMessage, showSuccess]);
 
     const handleResend = () => {
-        if (!email || resendCooldown > 0) return;
+        if (!email || isCoolingDown) return;
         resendOtp({ email }, {
-            onSuccess: () => setResendCooldown(RESEND_COOLDOWN_SECONDS)
+            // The server returns the seconds remaining both when it sends and when
+            // it refuses, so seed the countdown from the response either way.
+            onSuccess: (response) => startCooldown(response.data),
+            onError: (error: unknown) => {
+                const remaining = (error as { data?: { data?: number } })?.data?.data;
+                if (typeof remaining === "number") startCooldown(remaining);
+            }
         });
     };
 
@@ -104,13 +95,11 @@ export default function VerifyEmailForm() {
                                 <button
                                     type="button"
                                     onClick={handleResend}
-                                    disabled={!email || isResendingOtp || resendCooldown > 0}
+                                    disabled={!email || isResendingOtp || isCoolingDown}
                                     className="w-full bg-[#07358B] text-white py-4 rounded-full font-bold text-base hover:bg-[#052562] transition-all shadow-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
                                 >
                                     {isResendingOtp && <Loader2 className="animate-spin" size={16} />}
-                                    {resendCooldown > 0
-                                        ? `Resend Link in ${formatCooldown(resendCooldown)}`
-                                        : "Resend Link"}
+                                    {isCoolingDown ? `Resend Link in ${formatted}` : "Resend Link"}
                                 </button>
                             )}
 

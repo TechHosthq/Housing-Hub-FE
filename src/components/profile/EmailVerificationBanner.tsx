@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MailWarning, CheckCircle2, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useResendCooldown } from "@/hooks/useResendCooldown";
 
 interface EmailVerificationBannerProps {
     /** From GET /api/v1/Customer/{id}. Undefined while loading. */
@@ -18,6 +19,7 @@ interface EmailVerificationBannerProps {
 export default function EmailVerificationBanner({ emailVerified, isLoading }: EmailVerificationBannerProps) {
     const user = useAuthStore((state) => state.user);
     const { resendOtp, isResendingOtp } = useAuth();
+    const { isCoolingDown, formatted, startCooldown } = useResendCooldown(user?.email);
     const [sent, setSent] = useState(false);
     const [error, setError] = useState("");
 
@@ -34,13 +36,19 @@ export default function EmailVerificationBanner({ emailVerified, isLoading }: Em
             { email: user.email },
             {
                 onSuccess: (response) => {
+                    startCooldown(response.data);
                     if (response.isSuccessful) {
                         setSent(true);
                     } else {
                         setError(response.message || "Couldn't send the email. Please try again.");
                     }
                 },
-                onError: () => setError("Couldn't send the email. Please try again."),
+                onError: (err: unknown) => {
+                    // The server returns the seconds remaining when it throttles.
+                    const remaining = (err as { data?: { data?: number; message?: string } })?.data;
+                    if (typeof remaining?.data === "number") startCooldown(remaining.data);
+                    setError(remaining?.message || "Couldn't send the email. Please try again.");
+                },
             }
         );
     };
@@ -71,11 +79,11 @@ export default function EmailVerificationBanner({ emailVerified, isLoading }: Em
             <button
                 type="button"
                 onClick={handleResend}
-                disabled={isResendingOtp}
+                disabled={isResendingOtp || isCoolingDown}
                 className="flex-shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-primary-dark text-white text-[12px] font-bold hover:bg-primary-dark/90 transition-all disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
             >
                 {isResendingOtp && <Loader2 className="animate-spin" size={14} />}
-                Resend verification email
+                {isCoolingDown ? `Resend in ${formatted}` : "Resend verification email"}
             </button>
         </div>
     );

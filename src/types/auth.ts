@@ -88,7 +88,12 @@ export interface ResendOtpRequest {
     email: string | null;
 }
 
-export type ResendOtpResponse = ApiResponse<boolean>;
+/**
+ * `data` is the number of seconds until another resend is allowed — returned on
+ * success (the full cooldown) and on rejection (the time still remaining), so the
+ * client can render an accurate countdown instead of assuming one.
+ */
+export type ResendOtpResponse = ApiResponse<number>;
 
 export interface ForgotPasswordRequest {
     email: string | null;
