@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth, useGoogleAuth } from "@/hooks/useAuth";
 import GoogleSignInButton from "./GoogleSignInButton";
+import { postAuthRoute } from "@/utils/authRouting";
 import { useAuthStore } from "@/store/useAuthStore";
 import { resolveApiError } from "@/utils/errorResolver";
 
@@ -14,6 +15,7 @@ export default function LoginForm() {
     const { login, isLoggingIn, loginError } = useAuth();
     const { signInWithGoogle, isGoogleAuthing } = useGoogleAuth();
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const user = useAuthStore((state) => state.user);
 
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
@@ -21,11 +23,12 @@ export default function LoginForm() {
         password: "",
     });
 
+    // Google accounts land on the one-time "How will you use Housing Hub?" step first.
     useEffect(() => {
         if (isAuthenticated) {
-            router.push("/dashboard");
+            router.push(postAuthRoute(user?.customerType));
         }
-    }, [isAuthenticated, router]);
+    }, [isAuthenticated, user?.customerType, router]);
 
 
     const handleSubmit = (e: React.FormEvent) => {

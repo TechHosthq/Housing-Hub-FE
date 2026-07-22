@@ -4,6 +4,7 @@ import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Loader2 } from 'lucide-react';
+import { postAuthRoute } from '@/utils/authRouting';
 
 /**
  * Landing page for the optional server-side Google flow.
@@ -39,6 +40,8 @@ function CallbackHandler() {
                 atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))
             );
 
+            const customerType = Number(payload.customer_type ?? 0);
+
             setAuth(
                 {
                     id: payload.sub ?? payload.nameid ?? '',
@@ -46,13 +49,13 @@ function CallbackHandler() {
                     lastName: payload.family_name ?? null,
                     email: payload.email ?? null,
                     phoneNumber: payload.phone_number ?? null,
-                    customerType: Number(payload.customer_type ?? 0),
+                    customerType,
                     dateCreated: new Date().toISOString(),
                 },
                 token
             );
 
-            router.replace('/dashboard');
+            router.replace(postAuthRoute(customerType));
         } catch {
             router.replace('/login?error=google_token_invalid');
         }

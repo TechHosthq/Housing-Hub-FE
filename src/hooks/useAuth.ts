@@ -8,7 +8,8 @@ import {
     ResetPasswordRequest,
     VerifyEmailRequest,
     ResendOtpRequest,
-    ChangePasswordRequest
+    ChangePasswordRequest,
+    CustomerType
 } from '@/types/auth';
 
 export const useAuth = () => {
@@ -116,5 +117,30 @@ export const useGoogleAuth = () => {
         signInWithGoogle: googleAuthMutation.mutate,
         isGoogleAuthing: googleAuthMutation.isPending,
         googleAuthError: googleAuthMutation.error,
+    };
+};
+
+/**
+ * One-time onboarding step: assigns the account type for Google accounts, which are
+ * created as CustomerType.Unset. The backend returns a new JWT carrying the updated
+ * customer_type claim, so we must replace the stored token — otherwise the new role
+ * won't be honoured by the API.
+ */
+export const useAccountType = () => {
+    const setAuth = useAuthStore((state) => state.setAuth);
+
+    const setAccountTypeMutation = useMutation({
+        mutationFn: (customerType: CustomerType) => authService.setAccountType(customerType),
+        onSuccess: (response) => {
+            if (response.isSuccessful && response.data?.token) {
+                const { token, ...user } = response.data;
+                setAuth(user, token);
+            }
+        },
+    });
+
+    return {
+        setAccountType: setAccountTypeMutation.mutateAsync,
+        isSettingAccountType: setAccountTypeMutation.isPending,
     };
 };

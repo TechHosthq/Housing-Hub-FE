@@ -15,7 +15,8 @@ import {
     ChangePasswordRequest,
     ChangePasswordResponse,
     GoogleAuthRequest,
-    GoogleAuthResponse
+    GoogleAuthResponse,
+    CustomerType
 } from '@/types/auth';
 
 const authService = {
@@ -60,6 +61,16 @@ const authService = {
      */
     googleAuth: async (data: GoogleAuthRequest): Promise<GoogleAuthResponse> => {
         const response = await apiClient.post('/api/v1/Auth/google', data);
+        return response.data;
+    },
+
+    /**
+     * One-time onboarding step for Google accounts (which start as CustomerType.Unset).
+     * Returns a fresh JWT — the customer_type claim drives authorization, so the old
+     * token must be replaced or the new role won't take effect.
+     */
+    setAccountType: async (customerType: CustomerType): Promise<LoginResponse> => {
+        const response = await apiClient.put('/api/v1/Auth/account-type', { customerType });
         return response.data;
     },
 

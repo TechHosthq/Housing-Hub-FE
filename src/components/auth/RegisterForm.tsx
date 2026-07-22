@@ -8,12 +8,14 @@ import { useAuth, useGoogleAuth } from "@/hooks/useAuth";
 import { useAuthStore } from "@/store/useAuthStore";
 import { resolveApiError } from "@/utils/errorResolver";
 import GoogleSignInButton from "./GoogleSignInButton";
+import { postAuthRoute } from "@/utils/authRouting";
 
 export default function RegisterForm() {
     const router = useRouter();
     const { register, isRegistering, registerError, registerSuccess } = useAuth();
     const { signInWithGoogle, isGoogleAuthing } = useGoogleAuth();
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const user = useAuthStore((state) => state.user);
 
     const [showPassword, setShowPassword] = useState(false);
     const [isAgreed, setIsAgreed] = useState(false);
@@ -39,13 +41,14 @@ export default function RegisterForm() {
         register(formData);
     };
 
-    // Google sign-up returns a verified account and a JWT immediately, so there's
-    // no OTP step — go straight to the dashboard once the token is stored.
+    // Google sign-up returns a verified account and a JWT immediately, so there's no
+    // OTP step — but the account type is still Unset, so send them to the one-time
+    // "How will you use Housing Hub?" step before the dashboard.
     useEffect(() => {
         if (isAuthenticated) {
-            router.push("/dashboard");
+            router.push(postAuthRoute(user?.customerType));
         }
-    }, [isAuthenticated, router]);
+    }, [isAuthenticated, user?.customerType, router]);
 
     return (
         <div className="w-full max-w-[350px] px-4 py-8">
