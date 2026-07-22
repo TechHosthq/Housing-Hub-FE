@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth, useGoogleAuth } from "@/hooks/useAuth";
 import { useAuthStore } from "@/store/useAuthStore";
+import { CustomerType } from "@/types/auth";
 import { resolveApiError } from "@/utils/errorResolver";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { postAuthRoute } from "@/utils/authRouting";
@@ -26,7 +27,7 @@ export default function RegisterForm() {
         lastName: "",
         email: "",
         phoneNumber: "",
-        customerType: 1, // 1 for Buyer/Renter, 2 for Homeowner
+        customerType: CustomerType.Customer as number,
         password: "",
     });
 
@@ -135,9 +136,9 @@ export default function RegisterForm() {
                             onChange={(e) => setFormData({ ...formData, customerType: parseInt(e.target.value) })}
                             className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors appearance-none bg-white text-gray-600"
                         >
-                            <option value={1}>Buyer/Renter</option>
-                            <option value={2}>Homeowner</option>
-                            <option value={3}>Agent</option>
+                            <option value={CustomerType.Customer}>Buyer/Renter</option>
+                            <option value={CustomerType.HouseOwner}>Homeowner</option>
+                            <option value={CustomerType.Agent}>Agent</option>
                         </select>
                         <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
                     </div>
