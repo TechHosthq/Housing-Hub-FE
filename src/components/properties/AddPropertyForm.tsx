@@ -30,7 +30,7 @@ export default function AddPropertyForm() {
     const router = useRouter();
     const { user } = useAuth();
     const { createProperty, isCreating } = useProperty();
-    const { useGetCustomer, verifyKyc, isVerifyingKyc } = useCustomer();
+    const { useGetCustomer } = useCustomer();
     
     // KYC Verification Check
     const { data: customerResponse, isLoading: isLoadingCustomer } = useGetCustomer(user?.id || null);
@@ -45,21 +45,6 @@ export default function AddPropertyForm() {
             setShowKycModal(false);
         }
     }, [isLoadingCustomer, isKycVerified, customerResponse]);
-
-    const handleInstantVerifyKyc = () => {
-        if (!user?.id) return;
-        verifyKyc(
-            { id: user.id, approve: true },
-            {
-                onSuccess: () => {
-                    setShowKycModal(false);
-                },
-                onError: (error: any) => {
-                    alert(error?.response?.data?.message || "Failed to auto-verify KYC.");
-                }
-            }
-        );
-    };
 
     // Step 1 State
     const [propertyType, setPropertyType] = useState<PropertyType>(PropertyType.House);
@@ -565,25 +550,7 @@ export default function AddPropertyForm() {
                                 Complete KYC Verification
                             </Link>
 
-                            {/* Action 2: Dev mode instant bypass */}
-                            <button
-                                onClick={handleInstantVerifyKyc}
-                                disabled={isVerifyingKyc}
-                                className="w-full py-4 rounded-xl border border-emerald-500 text-emerald-600 bg-emerald-50/50 hover:bg-emerald-50 font-bold text-sm transition-all flex items-center justify-center gap-2"
-                            >
-                                {isVerifyingKyc ? (
-                                    <Loader2 className="animate-spin w-4 h-4" />
-                                ) : (
-                                    <>
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Auto-Verify KYC (Dev Mode Bypass)
-                                    </>
-                                )}
-                            </button>
-
-                            {/* Action 3: Go back to Dashboard */}
+                            {/* Action 2: Go back to Dashboard */}
                             <button
                                 onClick={() => router.push("/dashboard")}
                                 className="w-full py-3.5 rounded-xl font-bold text-sm text-gray-400 hover:text-gray-600 transition-all text-center mt-2"
