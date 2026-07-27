@@ -19,7 +19,7 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
     const [isDeletedSuccessOpen, setIsDeletedSuccessOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    const { deleteProperty, isDeleting } = useProperty();
+    const { deleteProperty, isDeleting, setPublished, isSettingPublished } = useProperty();
 
     // Click outside to close
     useEffect(() => {
@@ -59,6 +59,13 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
 
+                {/* Draft / published badge */}
+                {!property.isPublished && (
+                    <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#1A1A1A]/80 backdrop-blur-sm text-white text-[11px] font-black uppercase tracking-wide">
+                        Draft
+                    </div>
+                )}
+
                 {/* Menu Trigger */}
                 <div className="absolute top-4 right-4" ref={menuRef}>
                     <button
@@ -80,6 +87,16 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                             <Link href={`/inspections`} className="block w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] hover:bg-gray-50 transition-colors">
                                 Inspection Details
                             </Link>
+                            <button
+                                onClick={() => {
+                                    setIsMenuOpen(false);
+                                    setPublished({ id: property.id, publish: !property.isPublished });
+                                }}
+                                disabled={isSettingPublished}
+                                className="w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] hover:bg-gray-50 transition-colors flex items-center gap-2"
+                            >
+                                {isSettingPublished ? <Loader2 size={14} className="animate-spin" /> : (property.isPublished ? "Unpublish" : "Publish")}
+                            </button>
                             <div className="h-px bg-gray-50 my-1" />
                             <button
                                 onClick={() => {
