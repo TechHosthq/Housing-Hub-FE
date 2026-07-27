@@ -52,6 +52,19 @@ const customerService = {
         return response.data;
     },
 
+    // Returns the stored image URL (ApiResponse<string>).
+    uploadProfilePhoto: async (file: File): Promise<ApiResponse<string | null>> => {
+        const formData = new FormData();
+        formData.append('File', file);
+        const response = await apiClient.post('/api/v1/Customer/profile/photo', formData);
+        return response.data;
+    },
+
+    removeProfilePhoto: async (): Promise<ApiResponse<string | null>> => {
+        const response = await apiClient.delete('/api/v1/Customer/profile/photo');
+        return response.data;
+    },
+
     deleteCustomer: async (id: string): Promise<ApiResponse<boolean>> => {
         const response = await apiClient.delete(`/api/v1/Customer/${id}`);
         return response.data;
