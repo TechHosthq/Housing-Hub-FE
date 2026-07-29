@@ -60,6 +60,8 @@ export interface PropertyDetail {
     latitude: number | null;
     longitude: number | null;
     viewCount: number;
+    isPublished: boolean;
+    publishedAt: string | null;
     files: PropertyFile[];
     propertyAddress?: PropertyAddress;
 }
@@ -89,6 +91,8 @@ export interface CreatePropertyRequest {
     country: string;
     postalCode: string;
     files: File[];
+    /** true = publish immediately, false = save as draft. Defaults to publish. */
+    publish?: boolean;
 }
 
 export interface UpdatePropertyRequest {

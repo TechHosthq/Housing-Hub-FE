@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import customerService from '@/services/customerService';
 import { UpdateProfileRequest, SubmitKycRequest, AddressRequest, CreateCustomerRequest } from '@/types/customer';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export const useCustomer = () => {
     const queryClient = useQueryClient();
@@ -53,6 +54,22 @@ export const useCustomer = () => {
         }
     });
 
+    const currentUserId = useAuthStore.getState().user?.id;
+
+    const uploadPhotoMutation = useMutation({
+        mutationFn: (file: File) => customerService.uploadProfilePhoto(file),
+        onSuccess: () => {
+            if (currentUserId) queryClient.invalidateQueries({ queryKey: ['customer', currentUserId] });
+        }
+    });
+
+    const removePhotoMutation = useMutation({
+        mutationFn: () => customerService.removeProfilePhoto(),
+        onSuccess: () => {
+            if (currentUserId) queryClient.invalidateQueries({ queryKey: ['customer', currentUserId] });
+        }
+    });
+
     // Address Hooks
     const useMyAddress = () => useQuery({
         queryKey: ['my-address'],
@@ -79,6 +96,10 @@ export const useCustomer = () => {
         isUploadingDocument: uploadDocumentMutation.isPending,
         verifyKyc: verifyKycMutation.mutate,
         isVerifyingKyc: verifyKycMutation.isPending,
+        uploadProfilePhoto: uploadPhotoMutation.mutateAsync,
+        isUploadingPhoto: uploadPhotoMutation.isPending,
+        removeProfilePhoto: removePhotoMutation.mutateAsync,
+        isRemovingPhoto: removePhotoMutation.isPending,
         // Address exports
         useMyAddress,
         updateAddress: updateAddressMutation.mutate,

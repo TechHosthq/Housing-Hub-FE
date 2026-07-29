@@ -12,10 +12,12 @@ export default function KYCBanner() {
     // Fetch the latest customer data to check KYC status
     const { data: customerResponse, isLoading } = useGetCustomer(user?.id || null);
 
-    const isKycVerified = customerResponse?.data?.isKycVerified;
+    const customer = customerResponse?.data;
 
-    // Do not show the banner while loading or if KYC is already verified
-    if (isLoading || isKycVerified) {
+    // Only prompt when there's actually something to do. Hide while loading, once
+    // verified, and while a submission is under review — otherwise the dashboard
+    // told users to "Complete KYC" even though the profile showed it done/pending.
+    if (isLoading || customer?.isKycVerified || customer?.kycSubmittedAt) {
         return null;
     }
 

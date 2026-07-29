@@ -125,7 +125,8 @@ export default function AddPropertyForm() {
         });
     };
 
-    const handlePublish = async () => {
+    // publish=false saves the listing as a draft the owner can publish later (item 21).
+    const handlePublish = async (publish: boolean = true) => {
         if (!user) {
             alert("You must be logged in to publish a property.");
             return;
@@ -150,13 +151,18 @@ export default function AddPropertyForm() {
             state,
             country: "Nigeria",
             postalCode: "100001",
-            files: images
+            files: images,
+            publish
         }, {
             onSuccess: () => {
-                setIsPublishedModalOpen(true);
+                if (publish) {
+                    setIsPublishedModalOpen(true);
+                } else {
+                    router.push("/properties");
+                }
             },
             onError: (error: any) => {
-                alert(error?.response?.data?.message || "Failed to publish property. Please check your inputs.");
+                alert(error?.response?.data?.message || "Failed to save property. Please check your inputs.");
             }
         });
     };
@@ -483,14 +489,21 @@ export default function AddPropertyForm() {
                         </div>
                     </div>
 
-                    <div className="pt-8 text-center space-y-6">
-                        <p className="text-[12px] font-bold text-gray-400">By clicking Publish, your property will be submitted for review.</p>
+                    <div className="pt-8 text-center space-y-4">
+                        <p className="text-[12px] font-bold text-gray-400">Publish to list it for renters and buyers now, or save as a draft to publish later.</p>
                         <button
-                            onClick={handlePublish}
+                            onClick={() => handlePublish(true)}
                             disabled={isCreating}
-                            className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2"
+                            className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
                         >
                             {isCreating ? <Loader2 className="animate-spin" /> : "Publish Property"}
+                        </button>
+                        <button
+                            onClick={() => handlePublish(false)}
+                            disabled={isCreating}
+                            className="w-full py-4 rounded-[20px] border-2 border-[#002B7F] text-[#002B7F] font-bold text-[15px] font-montserrat hover:bg-[#002B7F]/5 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                        >
+                            Save as Draft
                         </button>
                     </div>
                 </div>

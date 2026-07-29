@@ -1,8 +1,7 @@
 "use client";
 
-import { Pencil, Camera, Trash2, User as UserIcon, Loader2, MapPin } from "lucide-react";
+import { User as UserIcon, Loader2, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useAuthStore } from "@/store/useAuthStore";
 import SuccessModal from "@/components/common/SuccessModal";
@@ -10,13 +9,17 @@ import EmailVerificationBanner from "./EmailVerificationBanner";
 
 export default function ProfileForm() {
     const currentUser = useAuthStore((state) => state.user);
-    const { 
-        useGetCustomer, 
-        updateProfile, 
+    const {
+        useGetCustomer,
+        updateProfile,
         isUpdatingProfile,
         useMyAddress,
         updateAddress,
-        isUpdatingAddress
+        isUpdatingAddress,
+        uploadProfilePhoto,
+        isUploadingPhoto,
+        removeProfilePhoto,
+        isRemovingPhoto
     } = useCustomer();
     
     const { data: customerResponse, isLoading: isLoadingCustomer } = useGetCustomer(currentUser?.id || null);
@@ -47,6 +50,8 @@ export default function ProfileForm() {
     useEffect(() => {
         if (customerResponse?.data) {
             const customer = customerResponse.data;
+            // Load the persisted photo so it survives navigation/refresh.
+            setProfileImg(customer.profileImageUrl || null);
             setFormData({
                 firstName: customer.firstName || "",
                 lastName: customer.lastName || "",
@@ -73,14 +78,40 @@ export default function ProfileForm() {
         }
     }, [addressResponse]);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [photoError, setPhotoError] = useState("");
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setProfileImg(reader.result as string);
-            };
-            reader.readAsDataURL(file);
+        if (!file) return;
+
+        // Basic client-side guardrails before we upload.
+        if (!file.type.startsWith("image/")) {
+            setPhotoError("Please choose an image file.");
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            setPhotoError("Image must be 5MB or smaller.");
+            return;
+        }
+        setPhotoError("");
+
+        // Show the local preview immediately, then persist to the server.
+        const previous = profileImg;
+        setProfileImg(URL.createObjectURL(file));
+        try {
+            const response = await uploadProfilePhoto(file);
+            if (response.isSuccessful) {
+                setProfileImg(response.data || null);
+            } else {
+                setProfileImg(previous);
+                setPhotoError(response.message || "Couldn't upload the picture. Please try again.");
+            }
+        } catch {
+            setProfileImg(previous);
+            setPhotoError("Couldn't upload the picture. Please try again.");
+        } finally {
+            // Allow re-selecting the same file.
+            e.target.value = "";
         }
     };
 
@@ -88,8 +119,21 @@ export default function ProfileForm() {
         document.getElementById("profile-upload")?.click();
     };
 
-    const handleRemoveImg = () => {
+    const handleRemoveImg = async () => {
+        if (!profileImg) return;
+        const previous = profileImg;
         setProfileImg(null);
+        setPhotoError("");
+        try {
+            const response = await removeProfilePhoto();
+            if (!response.isSuccessful) {
+                setProfileImg(previous);
+                setPhotoError(response.message || "Couldn't remove the picture. Please try again.");
+            }
+        } catch {
+            setProfileImg(previous);
+            setPhotoError("Couldn't remove the picture. Please try again.");
+        }
     };
 
     const handleProfileSubmit = (e: React.FormEvent) => {
@@ -152,13 +196,8 @@ export default function ProfileForm() {
 
             {/* Profile Info Card */}
             <div className="bg-white rounded-[22px] border border-[#F2F2F2] p-8 shadow-sm relative pt-12">
-                <button
-                    onClick={triggerUpload}
-                    className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#E9F3FF] flex items-center justify-center text-primary-dark hover:bg-primary-dark hover:text-white transition-all shadow-sm"
-                >
-                    <Pencil size={18} />
-                </button>
-
+                {/* The fields below are directly editable, so no separate edit toggle is needed.
+                    Picture changes use the explicit "Change Picture" button. */}
                 <div className="flex justify-between items-start mb-10">
                     <h2 className="text-[20px] font-black text-[#1A1A1A] font-montserrat">
                         Profile Information
@@ -173,37 +212,52 @@ export default function ProfileForm() {
                     onChange={handleFileChange}
                 />
 
-                <div className="flex items-center gap-10 mb-10">
+                <div className="flex items-center gap-10 mb-2">
                     <div className="relative group">
                         <div className="w-24 h-24 rounded-full bg-[#E9F3FF] border border-[#F2F2F2] overflow-hidden flex items-center justify-center relative">
                             {profileImg ? (
-                                <Image
+                                // Plain img: the source is either a blob: preview or an S3
+                                // URL, neither of which next/image handles without extra config.
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
                                     src={profileImg}
                                     alt="Profile"
-                                    fill
-                                    className="object-cover"
+                                    className="absolute inset-0 w-full h-full object-cover"
                                 />
                             ) : (
                                 <UserIcon size={40} className="text-gray-300" />
+                            )}
+                            {(isUploadingPhoto || isRemovingPhoto) && (
+                                <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+                                    <Loader2 className="animate-spin text-primary-dark" size={22} />
+                                </div>
                             )}
                         </div>
                     </div>
 
                     <div className="flex gap-4">
                         <button
+                            type="button"
                             onClick={triggerUpload}
-                            className="px-6 py-2.5 rounded-full border border-[#0095FF] text-[#0095FF] text-[12px] font-bold hover:bg-[#0095FF]/5 transition-all"
+                            disabled={isUploadingPhoto || isRemovingPhoto}
+                            className="px-6 py-2.5 rounded-full border border-[#0095FF] text-[#0095FF] text-[12px] font-bold hover:bg-[#0095FF]/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Change Picture
+                            {profileImg ? "Change Picture" : "Upload Picture"}
                         </button>
                         <button
+                            type="button"
                             onClick={handleRemoveImg}
-                            className="px-6 py-2.5 rounded-full border border-red-100 text-[#FF3B30] text-[12px] font-bold hover:bg-red-50 transition-all"
+                            disabled={!profileImg || isUploadingPhoto || isRemovingPhoto}
+                            className="px-6 py-2.5 rounded-full border border-red-100 text-[#FF3B30] text-[12px] font-bold hover:bg-red-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Remove Picture
                         </button>
                     </div>
                 </div>
+                {photoError && (
+                    <p className="text-[12px] text-red-500 font-semibold mb-8">{photoError}</p>
+                )}
+                {!photoError && <div className="mb-8" />}
 
                 <form onSubmit={handleProfileSubmit} className="space-y-6">
                     <div className="grid grid-cols-2 gap-6">

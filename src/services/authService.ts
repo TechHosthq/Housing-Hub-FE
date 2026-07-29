@@ -20,13 +20,15 @@ import {
 } from '@/types/auth';
 
 const authService = {
+    // skipErrorToast: the login/register forms render the error inline, so the global
+    // toast would be a duplicate (item 22 — a toast AND a red banner for one failure).
     register: async (data: RegisterRequest): Promise<RegisterResponse> => {
-        const response = await apiClient.post('/api/v1/Auth/register', data);
+        const response = await apiClient.post('/api/v1/Auth/register', data, { skipErrorToast: true });
         return response.data;
     },
 
     login: async (data: LoginRequest): Promise<LoginResponse> => {
-        const response = await apiClient.post('/api/v1/Auth/login', data);
+        const response = await apiClient.post('/api/v1/Auth/login', data, { skipErrorToast: true });
         return response.data;
     },
 

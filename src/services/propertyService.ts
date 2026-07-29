@@ -59,7 +59,20 @@ export const propertyService = {
             formData.append('Files', file);
         });
 
+        // true = publish now, false = save as draft (item 21). Defaults to publish.
+        formData.append('Publish', String(data.publish ?? true));
+
         const response = await apiClient.post<PropertyResponse>('/api/v1/Property', formData);
+        return response.data;
+    },
+
+    publishProperty: async (id: string): Promise<ApiResponse<boolean>> => {
+        const response = await apiClient.put<ApiResponse<boolean>>(`/api/v1/Property/${id}/publish`);
+        return response.data;
+    },
+
+    unpublishProperty: async (id: string): Promise<ApiResponse<boolean>> => {
+        const response = await apiClient.put<ApiResponse<boolean>>(`/api/v1/Property/${id}/unpublish`);
         return response.data;
     },
 
