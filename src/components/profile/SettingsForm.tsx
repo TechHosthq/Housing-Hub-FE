@@ -4,13 +4,15 @@ import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserRole } from "@/context/UserRoleContext";
+import { useThemeStore } from "@/store/useThemeStore";
 import DeleteAccountModal from "./DeleteAccountModal";
 import ResetPasswordModal from "./ResetPasswordModal";
 
 export default function SettingsForm() {
     const router = useRouter();
     const { role } = useUserRole();
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const isDarkMode = useThemeStore((state) => state.isDarkMode);
+    const toggleDarkMode = useThemeStore((state) => state.toggleDarkMode);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
@@ -36,8 +38,8 @@ export default function SettingsForm() {
     };
 
     return (
-        <div className="flex-1 bg-white rounded-[22px] border border-[#F2F2F2] p-8 shadow-sm h-fit">
-            <h2 className="text-[20px] font-black text-[#1A1A1A] font-montserrat mb-8">
+        <div className="flex-1 bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8 shadow-sm h-fit">
+            <h2 className="text-[20px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-8">
                 Settings
             </h2>
 
@@ -47,11 +49,11 @@ export default function SettingsForm() {
                         key={item.label}
                         onClick={() => handleItemClick(item)}
                         className={`group relative flex items-center justify-between p-5 rounded-[16px] border transition-all cursor-pointer hover:shadow-md ${item.isDanger
-                            ? "border-red-100 bg-red-50/10 hover:bg-red-50/30"
-                            : "border-[#F2F2F2] hover:border-primary-dark/30 hover:bg-gray-50/50"
+                            ? "border-red-100 dark:border-red-900/50 bg-red-50/10 dark:bg-red-900/10 hover:bg-red-50/30 dark:hover:bg-red-900/20"
+                            : "border-[#F2F2F2] dark:border-gray-800 hover:border-primary-dark/30 hover:bg-gray-50/50 dark:hover:bg-gray-800/50"
                             }`}
                     >
-                        <span className={`text-[14px] font-bold ${item.isDanger ? "text-[#FF3B30]" : "text-[#1A1A1A]"
+                        <span className={`text-[14px] font-bold ${item.isDanger ? "text-[#FF3B30]" : "text-[#1A1A1A] dark:text-gray-100"
                             }`}>
                             {item.label}
                         </span>
@@ -60,9 +62,9 @@ export default function SettingsForm() {
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    setIsDarkMode(!isDarkMode);
+                                    toggleDarkMode();
                                 }}
-                                className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none ${isDarkMode ? "bg-primary-dark" : "bg-gray-200"
+                                className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none ${isDarkMode ? "bg-primary-dark" : "bg-gray-200 dark:bg-gray-700"
                                     }`}
                             >
                                 <div
@@ -73,7 +75,7 @@ export default function SettingsForm() {
                         ) : (
                             <ChevronRight
                                 size={18}
-                                className={item.isDanger ? "text-[#FF3B30]/50" : "text-gray-400 group-hover:text-primary-dark"}
+                                className={item.isDanger ? "text-[#FF3B30]/50" : "text-gray-400 dark:text-gray-500 group-hover:text-primary-dark"}
                             />
                         )}
                     </div>
