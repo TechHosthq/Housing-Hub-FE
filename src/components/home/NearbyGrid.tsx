@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropertyCard from "./PropertyCard";
 import { useProperty } from "@/hooks/useProperty";
-import { Loader2, Navigation } from "lucide-react";
+import { Loader2, MapPin, Navigation } from "lucide-react";
 
 const SkeletonCard = () => (
     <div className="bg-white rounded-[22px] overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full animate-pulse">
@@ -21,23 +21,44 @@ const SkeletonCard = () => (
     </div>
 );
 
+// Lekki, Lagos fallback for when geolocation is denied/unavailable.
+const DEFAULT_LAT = 6.4698;
+const DEFAULT_LNG = 3.5852;
+
+type GeoStatus = "pending" | "granted" | "denied" | "unsupported";
+
 export default function NearbyGrid() {
     const { useNearbyProperties } = useProperty();
     const [count, setCount] = useState(20);
-    
-    // Default to Lagos coordinates (Lekki)
-    const lat = 6.4698;
-    const lng = 3.5852;
+    const [coords, setCoords] = useState({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
+    const [geoStatus, setGeoStatus] = useState<GeoStatus>("pending");
 
-    const { data: response, isLoading, isFetching, isError } = useNearbyProperties(lat, lng, 10, count);
+    useEffect(() => {
+        if (!navigator.geolocation) {
+            setGeoStatus("unsupported");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setCoords({ lat: position.coords.latitude, lng: position.coords.longitude });
+                setGeoStatus("granted");
+            },
+            () => setGeoStatus("denied"),
+            { timeout: 8000, maximumAge: 300000 }
+        );
+    }, []);
+
+    const { data: response, isLoading, isFetching, isError } = useNearbyProperties(coords.lat, coords.lng, 10, count);
 
     const properties = response?.data || [];
+    const showLoading = geoStatus === "pending" || isLoading;
 
     const handleLoadMore = () => {
         setCount(prev => prev + 20);
     };
 
-    if (isLoading) {
+    if (showLoading) {
         return (
             <section className="py-20 px-6 md:px-8 max-w-7xl mx-auto">
                 <div className="flex items-center justify-between mb-12">
@@ -60,11 +81,15 @@ export default function NearbyGrid() {
             <div className="flex items-center justify-between mb-12">
                 <h2 className="text-3xl font-extrabold text-[#1A1A1A] tracking-tight">Properties near you</h2>
                 <div className="flex items-center gap-2 text-[#0095FF] font-bold text-sm bg-[#0095FF]/5 px-5 py-2.5 rounded-full border border-[#0095FF]/10">
-                    <Navigation size={16} fill="currentColor" />
-                    <span>Lekki, Lagos</span>
+                    {geoStatus === "granted" ? (
+                        <Navigation size={16} fill="currentColor" />
+                    ) : (
+                        <MapPin size={16} />
+                    )}
+                    <span>{geoStatus === "granted" ? "Your location" : "Lekki, Lagos"}</span>
                 </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {properties.map((property) => (
                     <PropertyCard key={property.id} property={property} />
