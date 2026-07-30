@@ -65,15 +65,15 @@ export default function AssignStaffModal({
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-[32px] w-full max-w-[550px] p-8 overflow-visible shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[550px] p-8 overflow-visible shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-[28px] font-bold text-[#1A1A1A] font-montserrat">
+                    <h2 className="text-[28px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Assign to Staff
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-[#1A1A1A] hover:opacity-70 transition-opacity"
+                        className="text-[#1A1A1A] dark:text-gray-100 hover:opacity-70 transition-opacity"
                     >
                         <X size={24} />
                     </button>
@@ -86,16 +86,16 @@ export default function AssignStaffModal({
 
                 {/* Dropdown Section */}
                 <div className="mb-10" ref={dropdownRef}>
-                    <label className="block text-[12px] font-bold text-[#1A1A1A] uppercase tracking-wider mb-2">
+                    <label className="block text-[12px] font-bold text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-2">
                         SELECT STAFF MEMBER
                     </label>
                     <div className="relative">
                         <button
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                            className={`w-full flex items-center justify-between px-5 py-4 rounded-[12px] border transition-all text-left ${isDropdownOpen ? "border-[#0095FF] ring-2 ring-[#0095FF]/10" : "border-[#E5E5E5] hover:border-[#CCCCCC]"
+                            className={`w-full flex items-center justify-between px-5 py-4 rounded-[12px] border transition-all text-left ${isDropdownOpen ? "border-[#0095FF] ring-2 ring-[#0095FF]/10" : "border-[#E5E5E5] dark:border-gray-800 hover:border-[#CCCCCC]"
                                 }`}
                         >
-                            <span className={`text-[15px] font-medium ${selectedStaff ? "text-[#1A1A1A]" : "text-[#A3A3A3]"}`}>
+                            <span className={`text-[15px] font-medium ${selectedStaff ? "text-[#1A1A1A] dark:text-gray-100" : "text-[#A3A3A3]"}`}>
                                 {selectedStaff ? selectedStaff.name : "Choose a staff member"}
                             </span>
                             {isDropdownOpen ? (
@@ -107,7 +107,7 @@ export default function AssignStaffModal({
 
                         {/* Dropdown Menu */}
                         {isDropdownOpen && (
-                            <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-[16px] shadow-2xl border border-[#F2F2F2] overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 duration-200">
+                            <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 rounded-[16px] shadow-2xl border border-[#F2F2F2] dark:border-gray-800 overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 duration-200">
                                 {STAFF_MEMBERS.map((staff) => (
                                     <button
                                         key={staff.id}
@@ -117,7 +117,7 @@ export default function AssignStaffModal({
                                         }}
                                         className="w-full flex items-center justify-between px-5 py-4 hover:bg-[#F8F8F8] transition-colors text-left group"
                                     >
-                                        <span className={`text-[15px] font-medium ${selectedStaff?.id === staff.id ? "text-[#0095FF]" : "text-[#1A1A1A]"}`}>
+                                        <span className={`text-[15px] font-medium ${selectedStaff?.id === staff.id ? "text-[#0095FF]" : "text-[#1A1A1A] dark:text-gray-100"}`}>
                                             {staff.name}
                                         </span>
                                         {!staff.isAvailable && staff.id !== "none" && (

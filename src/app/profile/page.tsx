@@ -49,24 +49,24 @@ export default function MyAccountPage() {
             <DashboardNavbar />
 
             <div className="max-w-7xl mx-auto px-6 pt-32 pb-20">
-                <h1 className="text-[28px] font-black text-[#1A1A1A] font-montserrat mb-8">
+                <h1 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-8">
                     My Account
                 </h1>
 
                 {/* KYC status — reflects the real account state */}
                 {!isLoading && (
-                    <div className="bg-white rounded-[16px] border border-[#E9F3FF] p-6 mb-10 flex items-center justify-between shadow-sm relative overflow-hidden transition-all duration-500">
+                    <div className="bg-white dark:bg-gray-900 rounded-[16px] border border-[#E9F3FF] p-6 mb-10 flex items-center justify-between shadow-sm relative overflow-hidden transition-all duration-500">
                         <div className="relative z-10 flex items-center gap-4">
                             <div className="flex flex-col">
                                 <div className="flex items-center gap-2 mb-1">
-                                    <h2 className="text-[18px] font-black font-montserrat text-[#1A1A1A]">
+                                    <h2 className="text-[18px] font-black font-montserrat text-[#1A1A1A] dark:text-gray-100">
                                         {banner.title}
                                     </h2>
                                     <div className={`w-5 h-5 ${banner.iconBg} rounded-full flex items-center justify-center text-white`}>
                                         {banner.icon}
                                     </div>
                                 </div>
-                                <p className="text-[12px] text-[#666666] font-medium">{banner.body}</p>
+                                <p className="text-[12px] text-[#666666] dark:text-gray-400 font-medium">{banner.body}</p>
                             </div>
                         </div>
 

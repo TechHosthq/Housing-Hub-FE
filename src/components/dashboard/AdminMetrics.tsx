@@ -11,13 +11,13 @@ interface MetricCardProps {
 function MetricCard({ label, value, icon: Icon }: MetricCardProps) {
     return (
         <div className="bg-[#E9F3FF] border border-[#0095FF]/30 rounded-[12px] p-6 flex flex-col gap-2 relative overflow-hidden h-[110px] justify-center">
-            <h3 className="text-[28px] font-black text-[#1A1A1A] font-montserrat tracking-tight leading-none mb-1">
+            <h3 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight leading-none mb-1">
                 {value}
             </h3>
-            <p className="text-[14px] font-medium text-gray-500">
+            <p className="text-[14px] font-medium text-gray-500 dark:text-gray-500">
                 {label}
             </p>
-            <div className="absolute right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#0095FF] shadow-sm">
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-gray-900 flex items-center justify-center text-[#0095FF] shadow-sm">
                 <Icon size={20} strokeWidth={1.5} />
             </div>
         </div>

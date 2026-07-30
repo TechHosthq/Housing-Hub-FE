@@ -36,15 +36,15 @@ export default function SuggestRescheduleModal({
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-[32px] w-full max-w-[550px] p-8 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[550px] p-8 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-[24px] font-bold text-[#1A1A1A] font-montserrat">
+                    <h2 className="text-[24px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Suggest Reschedule
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-[#1A1A1A] hover:opacity-70 transition-opacity"
+                        className="text-[#1A1A1A] dark:text-gray-100 hover:opacity-70 transition-opacity"
                     >
                         <X size={24} />
                     </button>
@@ -59,7 +59,7 @@ export default function SuggestRescheduleModal({
                 <div className="space-y-6 mb-10">
                     {/* Date Input */}
                     <div>
-                        <label className="block text-[12px] font-black text-[#1A1A1A] font-montserrat mb-3 uppercase tracking-wider">
+                        <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3 uppercase tracking-wider">
                             Select Date
                         </label>
                         <DatePicker value={date} onChange={setDate} />
@@ -67,7 +67,7 @@ export default function SuggestRescheduleModal({
 
                     {/* Time Input */}
                     <div>
-                        <label className="block text-[12px] font-black text-[#1A1A1A] font-montserrat mb-3 uppercase tracking-wider">
+                        <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3 uppercase tracking-wider">
                             Select Time
                         </label>
                         <TimePicker value={time} onChange={setTime} />
@@ -75,13 +75,13 @@ export default function SuggestRescheduleModal({
 
                     {/* Note Input */}
                     <div>
-                        <label className="block text-[12px] font-black text-[#1A1A1A] font-montserrat mb-3 uppercase tracking-wider">
+                        <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3 uppercase tracking-wider">
                             Additional Note (Optional)
                         </label>
                         <textarea
                             value={note}
                             onChange={(e) => setNote(e.target.value)}
-                            className="w-full h-32 px-5 py-4 rounded-xl border border-gray-200 text-[15px] font-medium text-[#666666] focus:outline-none focus:border-[#0095FF] resize-none"
+                            className="w-full h-32 px-5 py-4 rounded-xl border border-gray-200 dark:border-gray-800 text-[15px] font-medium text-[#666666] dark:text-gray-400 focus:outline-none focus:border-[#0095FF] resize-none"
                             placeholder="Book an inspection at your preferred date and time. We coordinate with the homeowner for you."
                         />
                     </div>

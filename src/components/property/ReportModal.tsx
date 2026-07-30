@@ -51,20 +51,20 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
             />
 
             {/* Modal Content */}
-            <div className={`relative bg-white rounded-[28px] p-8 w-full max-w-[440px] shadow-2xl transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
+            <div className={`relative bg-white dark:bg-gray-900 rounded-[28px] p-8 w-full max-w-[440px] max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
                 {/* Header */}
                 <div className="flex justify-between items-start mb-6">
                     <div>
-                        <h2 className="text-[24px] font-black text-[#1A1A1A] font-montserrat">
+                        <h2 className="text-[24px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                             Report Property
                         </h2>
-                        <p className="text-[11px] text-[#666666] mt-2 leading-relaxed">
+                        <p className="text-[11px] text-[#666666] dark:text-gray-400 mt-2 leading-relaxed">
                             Help us maintain quality. Your report will be reviewed by our team. False reports may result in account restrictions.
                         </p>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-1 hover:bg-gray-100 rounded-full transition-colors text-[#1A1A1A]"
+                        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-[#1A1A1A] dark:text-gray-100"
                     >
                         <X size={24} />
                     </button>
@@ -77,17 +77,17 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                             key={reason}
                             onClick={() => setSelectedReason(reason)}
                             className={`w-full flex items-center gap-4 px-6 py-4 rounded-[30px] border transition-all ${selectedReason === reason
-                                ? "border-primary-dark bg-white shadow-sm"
-                                : "border-[#E5E5E5] hover:border-primary-dark bg-white"
+                                ? "border-primary-dark bg-white dark:bg-gray-900 shadow-sm"
+                                : "border-[#E5E5E5] dark:border-gray-800 hover:border-primary-dark bg-white dark:bg-gray-900"
                                 }`}
                         >
-                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selectedReason === reason ? "border-primary-dark" : "border-[#E5E5E5]"
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selectedReason === reason ? "border-primary-dark" : "border-[#E5E5E5] dark:border-gray-800"
                                 }`}>
                                 {selectedReason === reason && (
                                     <div className="w-2.5 h-2.5 rounded-full bg-primary-dark" />
                                 )}
                             </div>
-                            <span className={`text-sm font-bold ${selectedReason === reason ? "text-[#1A1A1A]" : "text-[#666666]"
+                            <span className={`text-sm font-bold ${selectedReason === reason ? "text-[#1A1A1A] dark:text-gray-100" : "text-[#666666] dark:text-gray-400"
                                 }`}>
                                 {reason}
                             </span>
@@ -97,7 +97,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
 
                 {/* Additional Note */}
                 <div className="space-y-2 mb-4">
-                    <label className="text-[9px] font-bold text-[#1A1A1A] uppercase tracking-wider block">
+                    <label className="text-[9px] font-bold text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider block">
                         ADDITIONAL NOTE (OPTIONAL)
                     </label>
                     <textarea
@@ -105,14 +105,14 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                         onChange={handleNoteChange}
                         placeholder="Provide more information about the issue..."
                         rows={5}
-                        className="w-full px-5 py-4 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm placeholder:text-gray-300 resize-none font-medium"
+                        className="w-full px-5 py-4 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-primary-dark transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600 resize-none font-medium"
                     />
                     <div className="text-right">
-                        <span className="text-[10px] text-[#999999] font-bold">{note.length}/500 Characters</span>
+                        <span className="text-[10px] text-[#999999] dark:text-gray-500 font-bold">{note.length}/500 Characters</span>
                     </div>
                 </div>
 
-                <p className="text-[10px] text-[#666666] mb-8 leading-relaxed">
+                <p className="text-[10px] text-[#666666] dark:text-gray-400 mb-8 leading-relaxed">
                     Report will be submitted with your account information, timestamp, and the details provided above.
                 </p>
 
@@ -120,7 +120,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                 <div className="flex gap-4">
                     <button
                         onClick={onClose}
-                        className="flex-1 py-4 rounded-full border border-[#E5E5E5] text-[13px] font-bold text-[#999999] hover:bg-gray-50 transition-all"
+                        className="flex-1 py-4 rounded-full border border-[#E5E5E5] dark:border-gray-800 text-[13px] font-bold text-[#999999] dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all"
                     >
                         Cancel
                     </button>

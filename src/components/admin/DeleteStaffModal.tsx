@@ -18,12 +18,12 @@ export default function DeleteStaffModal({ isOpen, onClose, onDelete }: DeleteSt
             />
 
             {/* Modal */}
-            <div className="relative bg-white w-full max-w-[500px] rounded-[32px] p-10 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col items-center text-center gap-6">
-                <h2 className="text-[32px] font-bold text-[#1A1A1A] font-montserrat tracking-tight">
+            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[500px] rounded-[32px] p-10 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col items-center text-center gap-6">
+                <h2 className="text-[32px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight">
                     Delete this Staff?
                 </h2>
 
-                <p className="text-[16px] text-gray-500 font-medium font-montserrat">
+                <p className="text-[16px] text-gray-500 dark:text-gray-500 font-medium font-montserrat">
                     This action cannot be undone.
                 </p>
 

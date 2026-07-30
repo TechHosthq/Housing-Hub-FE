@@ -82,11 +82,11 @@ export default function CreateNewPasswordForm() {
 
             <div className="mt-16 space-y-6">
                 <div className="text-center space-y-2">
-                    <h1 className="text-[17px] font-bold text-[#1A1A1A] font-montserrat">
+                    <h1 className="text-[17px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Create New Password
                     </h1>
                     {!hasUrlParams && (
-                        <p className="text-[10px] text-gray-400">
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500">
                             Please paste the Email and Reset Token from your email link.
                         </p>
                     )}
@@ -94,7 +94,7 @@ export default function CreateNewPasswordForm() {
 
                 <form className="space-y-4" onSubmit={handleSubmit}>
                     {error && (
-                        <div className="p-3 text-xs text-red-500 bg-red-50 rounded-lg text-center">
+                        <div className="p-3 text-xs text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg text-center">
                             {error}
                         </div>
                     )}
@@ -102,13 +102,13 @@ export default function CreateNewPasswordForm() {
                     {/* Manual Email Input if not in URL */}
                     {!emailFromUrl && (
                         <div className="space-y-1">
-                            <label className="text-[9px] font-semibold text-[#666666]">Email Address</label>
+                            <label className="text-[9px] font-semibold text-[#666666] dark:text-gray-400">Email Address</label>
                             <input
                                 type="email"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm"
+                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-primary-dark transition-colors text-sm"
                                 placeholder="Enter your email"
                             />
                         </div>
@@ -117,20 +117,20 @@ export default function CreateNewPasswordForm() {
                     {/* Manual Token Input if not in URL */}
                     {!tokenFromUrl && (
                         <div className="space-y-1">
-                            <label className="text-[9px] font-semibold text-[#666666]">Reset Token</label>
+                            <label className="text-[9px] font-semibold text-[#666666] dark:text-gray-400">Reset Token</label>
                             <input
                                 type="text"
                                 required
                                 value={token}
                                 onChange={(e) => setToken(e.target.value)}
-                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm font-mono"
+                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-primary-dark transition-colors text-sm font-mono"
                                 placeholder="Paste your reset token"
                             />
                         </div>
                     )}
 
                     <div className="space-y-1">
-                        <label className="text-[9px] font-semibold text-[#666666]">New Password</label>
+                        <label className="text-[9px] font-semibold text-[#666666] dark:text-gray-400">New Password</label>
                         <div className="relative">
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -138,7 +138,7 @@ export default function CreateNewPasswordForm() {
                                 minLength={8}
                                 value={formData.newPassword}
                                 onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm"
+                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-primary-dark transition-colors text-sm"
                             />
                             <button
                                 type="button"
@@ -148,20 +148,20 @@ export default function CreateNewPasswordForm() {
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
                         </div>
-                        <p className="text-[9px] text-gray-400 mt-1">
+                        <p className="text-[9px] text-gray-400 dark:text-gray-500 mt-1">
                             Must be at least 8 characters long and include a mix of letters and numbers
                         </p>
                     </div>
 
                     <div className="space-y-1">
-                        <label className="text-[9px] font-semibold text-[#666666]">Confirm Password</label>
+                        <label className="text-[9px] font-semibold text-[#666666] dark:text-gray-400">Confirm Password</label>
                         <div className="relative">
                             <input
                                 type={showConfirmPassword ? "text" : "password"}
                                 required
                                 value={formData.confirmPassword}
                                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm"
+                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-primary-dark transition-colors text-sm"
                             />
                             <button
                                 type="button"

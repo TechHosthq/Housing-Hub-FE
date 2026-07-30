@@ -21,8 +21,8 @@ const Toast: React.FC<ToastProps> = ({ id, message, type }) => {
   };
 
   const bgColors = {
-    success: 'bg-green-50/80 border-green-200',
-    error: 'bg-red-50/80 border-red-200',
+    success: 'bg-green-50/80 dark:bg-green-900/20 border-green-200',
+    error: 'bg-red-50/80 dark:bg-red-900/20 border-red-200',
     info: 'bg-blue-50/80 border-blue-200',
     warning: 'bg-amber-50/80 border-amber-200',
   };
@@ -40,20 +40,20 @@ const Toast: React.FC<ToastProps> = ({ id, message, type }) => {
         {Array.isArray(message) ? (
           <ul className="space-y-1 list-none p-0 m-0">
             {message.map((msg, index) => (
-              <li key={index} className="text-sm font-semibold text-gray-900 leading-tight">
+              <li key={index} className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight">
                 {msg}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-sm font-semibold text-gray-900">{message}</p>
+          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{message}</p>
         )}
       </div>
       <button
         onClick={() => removeToast(id)}
         className="flex-shrink-0 p-1 hover:bg-black/5 rounded-full transition-colors"
       >
-        <X className="w-4 h-4 text-gray-500" />
+        <X className="w-4 h-4 text-gray-500 dark:text-gray-500" />
       </button>
     </div>
   );

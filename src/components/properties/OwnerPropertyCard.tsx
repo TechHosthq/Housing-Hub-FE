@@ -49,7 +49,7 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
     const requests = 0; // Requests would come from inspection API if needed
 
     return (
-        <div className="bg-white rounded-[24px] border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow group relative flex flex-col h-full">
+        <div className="bg-white dark:bg-gray-900 rounded-[24px] border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-md transition-shadow group relative flex flex-col h-full">
             {/* Image Container */}
             <div className="relative h-64 w-full flex-shrink-0">
                 <Image
@@ -72,7 +72,7 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${isMenuOpen
                             ? "bg-[#0095FF] text-white"
-                            : "bg-white/90 backdrop-blur-sm text-[#1A1A1A] hover:bg-white"
+                            : "bg-white/90 backdrop-blur-sm text-[#1A1A1A] dark:text-gray-100 hover:bg-white"
                             } shadow-sm`}
                     >
                         <MoreVertical size={20} />
@@ -80,11 +80,11 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
 
                     {/* Dropdown Menu */}
                     {isMenuOpen && (
-                        <div className="absolute top-12 right-0 w-[180px] bg-white rounded-2xl shadow-xl border border-gray-50 py-2 z-50 animate-in fade-in zoom-in duration-200">
-                            <button className="w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] hover:bg-gray-50 transition-colors">
+                        <div className="absolute top-12 right-0 w-[180px] bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-50 py-2 z-50 animate-in fade-in zoom-in duration-200">
+                            <button className="w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 Edit
                             </button>
-                            <Link href={`/inspections`} className="block w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] hover:bg-gray-50 transition-colors">
+                            <Link href={`/inspections`} className="block w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 Inspection Details
                             </Link>
                             <button
@@ -93,11 +93,11 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                                     setPublished({ id: property.id, publish: !property.isPublished });
                                 }}
                                 disabled={isSettingPublished}
-                                className="w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] hover:bg-gray-50 transition-colors flex items-center gap-2"
+                                className="w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors flex items-center gap-2"
                             >
                                 {isSettingPublished ? <Loader2 size={14} className="animate-spin" /> : (property.isPublished ? "Unpublish" : "Publish")}
                             </button>
-                            <div className="h-px bg-gray-50 my-1" />
+                            <div className="h-px bg-gray-50 dark:bg-gray-800/50 my-1" />
                             <button
                                 onClick={() => {
                                     setIsMenuOpen(false);
@@ -116,7 +116,7 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
             {/* Content */}
             <div className="p-5 space-y-3 flex flex-col flex-1">
                 <div className="flex justify-between items-start gap-4">
-                    <h3 className="text-[16px] font-black text-[#1A1A1A] font-montserrat line-clamp-1">
+                    <h3 className="text-[16px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat line-clamp-1">
                         {title}
                     </h3>
                     <div className="text-[16px] font-black text-[#002B7F] font-montserrat whitespace-nowrap">
@@ -124,22 +124,22 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-gray-500 pb-1">
-                    <MapPin size={16} className="text-gray-400" />
+                <div className="flex items-center gap-2 text-gray-500 dark:text-gray-500 pb-1">
+                    <MapPin size={16} className="text-gray-400 dark:text-gray-500" />
                     <span className="text-[14px] font-bold">{location}</span>
                 </div>
 
-                <div className="pt-4 mt-auto border-t border-gray-100 flex items-center gap-3">
+                <div className="pt-4 mt-auto border-t border-gray-100 dark:border-gray-800 flex items-center gap-3">
                     {/* Views Stats */}
-                    <div className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-full">
-                        <Eye size={16} className="text-[#1A1A1A]" />
-                        <span className="text-[12px] font-bold text-[#1A1A1A]">{views} views</span>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-full">
+                        <Eye size={16} className="text-[#1A1A1A] dark:text-gray-100" />
+                        <span className="text-[12px] font-bold text-[#1A1A1A] dark:text-gray-100">{views} views</span>
                     </div>
 
                     {/* Requests Stats */}
-                    <div className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-full">
-                        <Clock size={16} className="text-[#1A1A1A]" />
-                        <span className="text-[12px] font-bold text-[#1A1A1A]">{requests} requests</span>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-full">
+                        <Clock size={16} className="text-[#1A1A1A] dark:text-gray-100" />
+                        <span className="text-[12px] font-bold text-[#1A1A1A] dark:text-gray-100">{requests} requests</span>
                     </div>
                 </div>
             </div>

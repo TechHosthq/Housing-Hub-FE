@@ -5,15 +5,19 @@ import { useState } from "react";
 import ShareModal from "./ShareModal";
 import ReportModal from "./ReportModal";
 
-export default function PropertyDetailHeader() {
+interface PropertyDetailHeaderProps {
+    propertyTitle: string;
+}
+
+export default function PropertyDetailHeader({ propertyTitle }: PropertyDetailHeaderProps) {
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
     return (
         <>
             <header className="flex justify-between items-center mb-10">
-                <h2 className="text-[17px] font-black text-[#1A1A1A] font-montserrat">Property Details</h2>
-                <div className="flex gap-4 text-[#666666]">
+                <h2 className="text-[17px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">Property Details</h2>
+                <div className="flex gap-4 text-[#666666] dark:text-gray-400">
                     <button
                         onClick={() => setIsShareModalOpen(true)}
                         className="hover:text-primary-dark transition-colors"
@@ -32,6 +36,7 @@ export default function PropertyDetailHeader() {
             <ShareModal
                 isOpen={isShareModalOpen}
                 onClose={() => setIsShareModalOpen(false)}
+                propertyTitle={propertyTitle}
             />
 
             <ReportModal

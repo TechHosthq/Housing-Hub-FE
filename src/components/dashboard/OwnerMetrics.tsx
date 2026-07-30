@@ -20,13 +20,13 @@ function MetricCard({ label, value, icon: Icon, href }: MetricCardProps) {
     return (
         <Link 
             href={href} 
-            className="flex-1 bg-white border border-[#0095FF]/20 rounded-[16px] p-6 flex items-center justify-between shadow-sm hover:shadow-md hover:border-[#0095FF]/50 transition-all group cursor-pointer"
+            className="flex-1 bg-white dark:bg-gray-900 border border-[#0095FF]/20 rounded-[16px] p-6 flex items-center justify-between shadow-sm hover:shadow-md hover:border-[#0095FF]/50 transition-all group cursor-pointer"
         >
             <div className="flex flex-col gap-1">
-                <span className="text-[28px] font-black text-[#1A1A1A] font-montserrat">
+                <span className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                     {value}
                 </span>
-                <span className="text-[14px] font-bold text-gray-400">
+                <span className="text-[14px] font-bold text-gray-400 dark:text-gray-500">
                     {label}
                 </span>
             </div>
@@ -101,7 +101,7 @@ export default function OwnerMetrics() {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                 {[...Array(4)].map((_, i) => (
-                    <div key={i} className="h-[100px] bg-gray-50 animate-pulse rounded-[16px] flex items-center justify-center">
+                    <div key={i} className="h-[100px] bg-gray-50 dark:bg-gray-800/50 animate-pulse rounded-[16px] flex items-center justify-center">
                         <Loader2 className="animate-spin text-gray-200" />
                     </div>
                 ))}

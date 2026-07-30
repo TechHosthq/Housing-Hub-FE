@@ -71,7 +71,7 @@ function CallbackHandler() {
 
 export default function GoogleCallbackPage() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
             <Suspense fallback={
                 <div className="text-center space-y-4">
                     <Loader2 className="w-12 h-12 animate-spin text-primary-dark mx-auto" />

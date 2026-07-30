@@ -11,7 +11,7 @@ export default function SettingsPage() {
             <DashboardNavbar />
 
             <div className="max-w-7xl mx-auto px-6 pt-32 pb-20">
-                <h1 className="text-[28px] font-black text-[#1A1A1A] font-montserrat mb-8">
+                <h1 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-8">
                     My Account
                 </h1>
 

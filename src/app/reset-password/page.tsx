@@ -3,7 +3,7 @@ import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 
 export default function ResetPasswordPage() {
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <Navbar />
 
             <div className="flex min-h-screen pt-16">
@@ -16,7 +16,7 @@ export default function ResetPasswordPage() {
                 />
 
                 {/* Right Side - Content */}
-                <div className="w-full md:w-1/2 flex items-center justify-center bg-white">
+                <div className="w-full md:w-1/2 flex items-center justify-center bg-white dark:bg-gray-900">
                     <ResetPasswordForm />
                 </div>
             </div>

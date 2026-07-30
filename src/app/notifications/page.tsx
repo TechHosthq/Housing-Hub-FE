@@ -20,12 +20,12 @@ const notificationIcons: Record<number, any> = {
 
 const iconColors: Record<number, string> = {
     [NotificationType.InspectionRequested]: "bg-blue-100 text-blue-600",
-    [NotificationType.InspectionConfirmed]: "bg-green-100 text-green-600",
-    [NotificationType.InspectionDeclined]: "bg-red-100 text-red-600",
+    [NotificationType.InspectionConfirmed]: "bg-green-100 text-green-600 dark:text-green-400",
+    [NotificationType.InspectionDeclined]: "bg-red-100 text-red-600 dark:text-red-400",
     [NotificationType.InspectionRescheduled]: "bg-orange-100 text-orange-600",
     [NotificationType.InspectionCompleted]: "bg-purple-100 text-purple-600",
-    [NotificationType.KYCApproved]: "bg-green-100 text-green-600",
-    [NotificationType.KYCRejected]: "bg-red-100 text-red-600",
+    [NotificationType.KYCApproved]: "bg-green-100 text-green-600 dark:text-green-400",
+    [NotificationType.KYCRejected]: "bg-red-100 text-red-600 dark:text-red-400",
 };
 
 export default function NotificationsPage() {
@@ -48,16 +48,16 @@ export default function NotificationsPage() {
     };
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <DashboardNavbar />
 
             <div className="max-w-4xl mx-auto px-6 pt-32 pb-20">
                 <div className="flex items-center justify-between mb-10">
                     <div>
-                        <h1 className="text-[28px] font-black text-[#1A1A1A] font-montserrat mb-2">
+                        <h1 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-2">
                             Notifications
                         </h1>
-                        <p className="text-gray-400 font-bold">Stay updated with your activities</p>
+                        <p className="text-gray-400 dark:text-gray-500 font-bold">Stay updated with your activities</p>
                     </div>
                     <button 
                         onClick={handleMarkAll}
@@ -83,23 +83,23 @@ export default function NotificationsPage() {
                                         onClick={() => !notification.isRead && handleRead(notification.id)}
                                         className={`p-6 rounded-[22px] border transition-all cursor-pointer flex items-start gap-5 ${
                                             notification.isRead 
-                                            ? "bg-white border-[#F2F2F2]" 
+                                            ? "bg-white dark:bg-gray-900 border-[#F2F2F2] dark:border-gray-800" 
                                             : "bg-[#F2F7FF] border-[#D9E9FF] shadow-sm"
                                         }`}
                                     >
-                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${iconColors[notification.type] || "bg-gray-100 text-gray-500"}`}>
+                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${iconColors[notification.type] || "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-500"}`}>
                                             <Icon size={20} />
                                         </div>
                                         <div className="flex-1">
                                             <div className="flex justify-between items-start mb-1">
-                                                <h3 className="text-[15px] font-black text-[#1A1A1A] font-montserrat">
+                                                <h3 className="text-[15px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                                                     {notification.title || "Notification"}
                                                 </h3>
-                                                <span className="text-[10px] text-gray-400 font-bold">
+                                                <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold">
                                                     {format(new Date(notification.dateCreated), "MMM dd, hh:mm a")}
                                                 </span>
                                             </div>
-                                            <p className="text-[13px] text-gray-600 font-medium leading-relaxed">
+                                            <p className="text-[13px] text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
                                                 {notification.message}
                                             </p>
                                         </div>
@@ -112,10 +112,10 @@ export default function NotificationsPage() {
 
                             {notifications.length === 0 && (
                                 <div className="py-20 text-center flex flex-col items-center gap-4">
-                                    <div className="w-20 h-20 rounded-full bg-gray-50 flex items-center justify-center text-gray-300">
+                                    <div className="w-20 h-20 rounded-full bg-gray-50 dark:bg-gray-800/50 flex items-center justify-center text-gray-300">
                                         <Bell size={40} />
                                     </div>
-                                    <p className="text-gray-400 font-bold">No notifications yet.</p>
+                                    <p className="text-gray-400 dark:text-gray-500 font-bold">No notifications yet.</p>
                                 </div>
                             )}
                         </>

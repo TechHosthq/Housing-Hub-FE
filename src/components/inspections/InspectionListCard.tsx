@@ -33,7 +33,7 @@ export default function InspectionListCard({ inspection }: InspectionListCardPro
     
     return (
         <Link href={`/inspections/${inspection.id || ''}`} className="block w-full">
-            <div className="bg-white rounded-[22px] border border-[#F2F2F2] p-4 flex items-center gap-6 group hover:shadow-md transition-all cursor-pointer">
+            <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-4 flex items-center gap-6 group hover:shadow-md transition-all cursor-pointer">
                 {/* Property Image */}
                 <div className="relative w-28 h-28 rounded-2xl overflow-hidden flex-shrink-0">
                     <Image
@@ -48,10 +48,10 @@ export default function InspectionListCard({ inspection }: InspectionListCardPro
                 <div className="flex-1 flex flex-col gap-3">
                     <div className="flex justify-between items-start">
                         <div>
-                            <h3 className="text-[17px] font-black text-[#1A1A1A] font-montserrat mb-1">
+                            <h3 className="text-[17px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-1">
                                 {inspection.propertyName || "Property Inspection"}
                             </h3>
-                            <p className="text-[11px] text-[#666666] font-bold">
+                            <p className="text-[11px] text-[#666666] dark:text-gray-400 font-bold">
                                 Latitude: {inspection.latitude}, Longitude: {inspection.longitude}
                             </p>
                         </div>
@@ -59,13 +59,13 @@ export default function InspectionListCard({ inspection }: InspectionListCardPro
                     </div>
 
                     <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-2 text-[#666666]">
+                        <div className="flex items-center gap-2 text-[#666666] dark:text-gray-400">
                             <Calendar size={14} className="text-primary-dark" />
                             <span className="text-[11px] font-bold">
                                 {inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "MMM dd, yyyy") : "N/A"}
                             </span>
                         </div>
-                        <div className="flex items-center gap-2 text-[#666666]">
+                        <div className="flex items-center gap-2 text-[#666666] dark:text-gray-400">
                             <Clock size={14} className="text-[#002D6B]" />
                             <span className="text-[11px] font-bold">{inspection.scheduledTime}</span>
                         </div>
@@ -73,7 +73,7 @@ export default function InspectionListCard({ inspection }: InspectionListCardPro
 
                     <div className="flex items-center justify-between gap-4">
                         <div className="flex-1 bg-[#F7F7F7] rounded-full px-4 py-2 flex items-center gap-2">
-                            <span className="text-[9px] text-[#999999] font-bold whitespace-nowrap">
+                            <span className="text-[9px] text-[#999999] dark:text-gray-500 font-bold whitespace-nowrap">
                                 Requested on {inspection.dateCreated ? format(new Date(inspection.dateCreated), "MMM dd, yyyy") : "N/A"} • ID: {(inspection.id || '').slice(0, 8).toUpperCase()}
                             </span>
                         </div>

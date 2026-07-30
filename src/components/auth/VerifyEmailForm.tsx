@@ -60,14 +60,14 @@ export default function VerifyEmailForm() {
             </Link>
 
             <div className="text-center space-y-6 mt-20">
-                <p className="text-[17px] mb-0 font-bold text-[#1A1A1A] font-montserrat">
+                <p className="text-[17px] mb-0 font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                     {isVerified ? "Verification Successful!" : "Verify Your Email"}
                 </p>
 
                 {isVerified ? (
                     <div className="flex flex-col items-center space-y-4">
                         <CheckCircle2 size={48} className="text-green-500" />
-                        <p className="text-[11px] text-gray-600 leading-relaxed max-w-[280px] mx-auto">
+                        <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed max-w-[280px] mx-auto">
                             Your email has been successfully verified. You can now log in to your account.
                         </p>
                         <Link
@@ -79,7 +79,7 @@ export default function VerifyEmailForm() {
                     </div>
                 ) : (
                     <>
-                        <p className="text-[11px] text-gray-600 leading-relaxed max-w-[280px] mx-auto">
+                        <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed max-w-[280px] mx-auto">
                             {email && token 
                                 ? "Verifying your email, please wait..." 
                                 : "We've sent a verification link to your email address. Please click the link to verify your account."

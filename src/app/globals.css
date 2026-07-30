@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Class-based dark mode (toggled via the theme store) instead of Tailwind
+   v4's default prefers-color-scheme-only variant. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #07358B;
   --color-primary-dark: #052562;
@@ -18,6 +22,11 @@ html {
   --foreground: #1A1A1A;
 }
 
+.dark {
+  --background: #0A0A0A;
+  --foreground: #F2F2F2;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
@@ -29,7 +38,7 @@ h3,
 h4,
 h5,
 h6 {
-  @apply font-bold text-slate-900;
+  @apply font-bold text-slate-900 dark:text-slate-100;
 }
 
 button,

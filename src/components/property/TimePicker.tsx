@@ -26,12 +26,12 @@ export default function TimePicker({ value, onChange }: TimePickerProps) {
         <div className="relative w-full">
             <div className="space-y-1">
                 <div className="relative group">
-                    <div className="absolute -top-2 left-4 px-1 bg-white text-[12px] font-black text-[#0095FF] font-montserrat z-10 uppercase tracking-wider">Time</div>
+                    <div className="absolute -top-2 left-4 px-1 bg-white dark:bg-gray-900 text-[12px] font-black text-[#0095FF] font-montserrat z-10 uppercase tracking-wider">Time</div>
                     <div
                         onClick={togglePicker}
-                        className="w-full px-5 py-4 rounded-xl border-[1.5px] border-[#0095FF] flex items-center justify-between cursor-pointer bg-white"
+                        className="w-full px-5 py-4 rounded-xl border-[1.5px] border-[#0095FF] flex items-center justify-between cursor-pointer bg-white dark:bg-gray-900"
                     >
-                        <span className="text-[15px] font-bold text-[#1A1A1A]">{value || "--:-- --"}</span>
+                        <span className="text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100">{value || "--:-- --"}</span>
                         <Clock size={18} className="text-[#0095FF]" />
                     </div>
                 </div>
@@ -44,38 +44,38 @@ export default function TimePicker({ value, onChange }: TimePickerProps) {
                             <select
                                 value={hour}
                                 onChange={(e) => setHour(e.target.value)}
-                                className="appearance-none bg-white border border-[#E5E5E5] rounded-lg px-3 py-1.5 text-[11px] font-bold text-[#1A1A1A] pr-8 focus:outline-none"
+                                className="appearance-none bg-white dark:bg-gray-900 border border-[#E5E5E5] dark:border-gray-800 rounded-lg px-3 py-1.5 text-[11px] font-bold text-[#1A1A1A] dark:text-gray-100 pr-8 focus:outline-none"
                             >
                                 {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0')).map(h => (
                                     <option key={h} value={h}>{h}</option>
                                 ))}
                             </select>
-                            <ChevronDown size={10} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#666666] pointer-events-none" />
+                            <ChevronDown size={10} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#666666] dark:text-gray-400 pointer-events-none" />
                         </div>
-                        <span className="font-bold text-[#1A1A1A]">:</span>
+                        <span className="font-bold text-[#1A1A1A] dark:text-gray-100">:</span>
                         <div className="relative">
                             <select
                                 value={minute}
                                 onChange={(e) => setMinute(e.target.value)}
-                                className="appearance-none bg-white border border-[#E5E5E5] rounded-lg px-3 py-1.5 text-[11px] font-bold text-[#1A1A1A] pr-8 focus:outline-none"
+                                className="appearance-none bg-white dark:bg-gray-900 border border-[#E5E5E5] dark:border-gray-800 rounded-lg px-3 py-1.5 text-[11px] font-bold text-[#1A1A1A] dark:text-gray-100 pr-8 focus:outline-none"
                             >
                                 {["00", "15", "30", "45"].map(m => (
                                     <option key={m} value={m}>{m}</option>
                                 ))}
                             </select>
-                            <ChevronDown size={10} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#666666] pointer-events-none" />
+                            <ChevronDown size={10} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#666666] dark:text-gray-400 pointer-events-none" />
                         </div>
-                        <span className="font-bold text-[#1A1A1A]">:</span>
+                        <span className="font-bold text-[#1A1A1A] dark:text-gray-100">:</span>
                         <div className="relative">
                             <select
                                 value={period}
                                 onChange={(e) => setPeriod(e.target.value)}
-                                className="appearance-none bg-white border border-[#E5E5E5] rounded-lg px-3 py-1.5 text-[11px] font-bold text-[#1A1A1A] pr-8 focus:outline-none"
+                                className="appearance-none bg-white dark:bg-gray-900 border border-[#E5E5E5] dark:border-gray-800 rounded-lg px-3 py-1.5 text-[11px] font-bold text-[#1A1A1A] dark:text-gray-100 pr-8 focus:outline-none"
                             >
                                 <option value="AM">AM</option>
                                 <option value="PM">PM</option>
                             </select>
-                            <ChevronDown size={10} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#666666] pointer-events-none" />
+                            <ChevronDown size={10} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#666666] dark:text-gray-400 pointer-events-none" />
                         </div>
                     </div>
 

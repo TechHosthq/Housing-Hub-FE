@@ -35,7 +35,7 @@ export default function ResetSuccessModal({ isOpen, onClose }: ResetSuccessModal
 
             {/* Modal Content */}
             <div
-                className={`relative bg-white rounded-[32px] w-full max-w-[320px] p-10 flex flex-col items-center text-center shadow-2xl transition-transform duration-300 ${isOpen ? "scale-100" : "scale-95"
+                className={`relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[320px] p-10 flex flex-col items-center text-center shadow-2xl transition-transform duration-300 ${isOpen ? "scale-100" : "scale-95"
                     }`}
             >
                 {/* Success Icon */}
@@ -43,7 +43,7 @@ export default function ResetSuccessModal({ isOpen, onClose }: ResetSuccessModal
                     <Check className="text-primary-dark stroke-[3px]" size={32} />
                 </div>
 
-                <h2 className="text-[17px] font-bold text-[#1A1A1A] font-montserrat">
+                <h2 className="text-[17px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                     Password Reset Successful!
                 </h2>
             </div>

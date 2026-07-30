@@ -96,19 +96,19 @@ export default function SubmitIDForm() {
                 Back
             </Link>
 
-            <h1 className="text-[17px] font-black text-[#1A1A1A] font-montserrat mb-14">
+            <h1 className="text-[17px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-14">
                 Submit ID Information
             </h1>
 
             <form onSubmit={handleSubmit} className="w-full max-w-[450px] space-y-8">
                 {error && (
-                    <div className="px-4 py-3 text-[13px] text-red-600 bg-red-50 border border-red-100 rounded-2xl text-center font-semibold">
+                    <div className="px-4 py-3 text-[13px] text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 rounded-2xl text-center font-semibold">
                         {error}
                     </div>
                 )}
                 
                 <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider">
+                    <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider">
                         Document Number<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -117,12 +117,12 @@ export default function SubmitIDForm() {
                         value={formData.docNumber}
                         onChange={handleInputChange}
                         placeholder="Enter your document number"
-                        className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300"
+                        className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                     />
                 </div>
 
                 <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider">
+                    <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider">
                         Choose Document Type<span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
@@ -130,19 +130,19 @@ export default function SubmitIDForm() {
                             name="docType"
                             value={formData.docType}
                             onChange={handleInputChange}
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm appearance-none bg-white"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm appearance-none bg-white dark:bg-gray-900"
                         >
                             <option value="1">National Identity Number (NIN)</option>
                             <option value="2">Government Issued ID Card</option>
                             <option value="3">International Passport</option>
                             <option value="4">Driver's License</option>
                         </select>
-                        <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                        <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" size={16} />
                     </div>
                 </div>
 
                 <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider">
+                    <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider">
                         Upload Document<span className="text-red-500">*</span>
                     </label>
 
@@ -154,26 +154,26 @@ export default function SubmitIDForm() {
                     />
 
                     {isUploadingDocument ? (
-                        <div className="border border-dashed border-gray-100 rounded-[22px] bg-white p-12 flex flex-col items-center justify-center">
+                        <div className="border border-dashed border-gray-100 dark:border-gray-800 rounded-[22px] bg-white dark:bg-gray-900 p-12 flex flex-col items-center justify-center">
                             <Loader2 className="animate-spin text-primary-dark" size={24} />
-                            <span className="text-xs font-bold text-gray-400 mt-2">Uploading...</span>
+                            <span className="text-xs font-bold text-gray-400 dark:text-gray-500 mt-2">Uploading...</span>
                         </div>
                     ) : !uploadedFileName ? (
                         <div
                             onClick={() => fileInputRef.current?.click()}
-                            className="border border-dashed border-gray-100 rounded-[22px] bg-white p-12 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-primary-dark transition-all"
+                            className="border border-dashed border-gray-100 dark:border-gray-800 rounded-[22px] bg-white dark:bg-gray-900 p-12 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-primary-dark transition-all"
                         >
-                            <div className="w-12 h-12 rounded-full flex items-center justify-center text-gray-400 group-hover:text-primary-dark transition-colors">
+                            <div className="w-12 h-12 rounded-full flex items-center justify-center text-gray-400 dark:text-gray-500 group-hover:text-primary-dark transition-colors">
                                 <UploadCloud size={24} />
                             </div>
-                            <span className="text-xs font-bold text-gray-400 mt-2">Upload Document</span>
+                            <span className="text-xs font-bold text-gray-400 dark:text-gray-500 mt-2">Upload Document</span>
                             <p className="text-[10px] text-gray-300 mt-1">PDF, JPG or PNG, max 8MB</p>
                         </div>
                     ) : (
                         <div className="bg-[#E9F3FF] rounded-[15px] p-6 flex items-center justify-between border border-[#E9F3FF]">
                             <div className="flex flex-col">
-                                <span className="text-[11px] font-bold text-[#1A1A1A]">{uploadedFileName}</span>
-                                <span className="text-[9px] text-[#666666] mt-0.5">Uploaded successfully</span>
+                                <span className="text-[11px] font-bold text-[#1A1A1A] dark:text-gray-100">{uploadedFileName}</span>
+                                <span className="text-[9px] text-[#666666] dark:text-gray-400 mt-0.5">Uploaded successfully</span>
                             </div>
                             <button
                                 type="button"

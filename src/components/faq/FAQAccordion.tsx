@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useFaqs } from "@/hooks/useFaq";
+import { FaqItem } from "@/types/faq";
 
 interface FAQItemProps {
     question: string;
@@ -32,46 +34,69 @@ const FAQItem = ({ question, answer, isOpenByDefault = false }: FAQItemProps) =>
                     }`}
             >
                 <p className="text-[#4A5568] text-base leading-relaxed">
-                    <span className="font-bold text-[#1A1A1A]">Yes.</span> {answer}
+                    {answer}
                 </p>
             </div>
         </div>
     );
 };
 
+const groupByCategory = (items: FaqItem[]) => {
+    const order: string[] = [];
+    const grouped = new Map<string, FaqItem[]>();
+
+    for (const item of items) {
+        if (!grouped.has(item.category)) {
+            grouped.set(item.category, []);
+            order.push(item.category);
+        }
+        grouped.get(item.category)!.push(item);
+    }
+
+    return order.map((category) => ({ category, items: grouped.get(category)! }));
+};
+
+const FAQSkeleton = () => (
+    <div className="space-y-4">
+        {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-16 bg-gray-100 rounded-2xl animate-pulse" />
+        ))}
+    </div>
+);
+
 export default function FAQAccordion() {
-    const faqs = [
-        {
-            question: "How Do I Verify My Property?",
-            answer: "You won't be charged if you cancel before the trial ends.",
-            isOpenByDefault: true,
-        },
-        {
-            question: "Can I Cancel During The Trial?",
-            answer: "You won't be charged if you cancel before the trial ends.",
-        },
-        {
-            question: "Can I Cancel During The Trial?",
-            answer: "You won't be charged if you cancel before the trial ends.",
-        },
-        {
-            question: "Can I Cancel During The Trial?",
-            answer: "You won't be charged if you cancel before the trial ends.",
-        },
-    ];
+    const { data, isLoading, isError } = useFaqs();
+    const categories = groupByCategory(data?.data ?? []);
 
     return (
         <div className="max-w-[798px] mx-auto px-4 py-14 bg-white">
-            <div className="space-y-4">
-                {faqs.map((faq, index) => (
-                    <FAQItem
-                        key={index}
-                        question={faq.question}
-                        answer={faq.answer}
-                        isOpenByDefault={faq.isOpenByDefault}
-                    />
-                ))}
-            </div>
+            {isLoading ? (
+                <FAQSkeleton />
+            ) : isError || categories.length === 0 ? (
+                <p className="text-[#4A5568] text-base text-center">
+                    Unable to load FAQs right now — please try again later.
+                </p>
+            ) : (
+                <div className="space-y-10">
+                    {categories.map(({ category, items }, categoryIndex) => (
+                        <div key={category}>
+                            <h2 className="text-[#1A1A1A] text-2xl font-bold font-montserrat mb-2">
+                                {category}
+                            </h2>
+                            <div className="space-y-4">
+                                {items.map((item, itemIndex) => (
+                                    <FAQItem
+                                        key={item.id}
+                                        question={item.question}
+                                        answer={item.answer}
+                                        isOpenByDefault={categoryIndex === 0 && itemIndex === 0}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

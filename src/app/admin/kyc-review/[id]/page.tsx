@@ -55,7 +55,7 @@ export default function KYCReviewPage() {
     const customer = customerResponse?.data;
 
     if (!customer) {
-        return <div className="text-center py-20 text-gray-500 font-bold">Customer not found.</div>;
+        return <div className="text-center py-20 text-gray-500 dark:text-gray-500 font-bold">Customer not found.</div>;
     }
 
     return (
@@ -74,16 +74,16 @@ export default function KYCReviewPage() {
                 Back
             </button>
 
-            <h1 className="text-[28px] font-bold text-[#1A1A1A] font-montserrat">KYC Review</h1>
+            <h1 className="text-[28px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">KYC Review</h1>
 
-            <div className="bg-white border border-gray-100 rounded-[20px] p-6 shadow-sm">
+            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-6 shadow-sm">
                 <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 rounded-full bg-[#F2F7FF] flex items-center justify-center text-gray-400">
+                    <div className="w-14 h-14 rounded-full bg-[#F2F7FF] flex items-center justify-center text-gray-400 dark:text-gray-500">
                         <UserIcon size={28} strokeWidth={1.5} />
                     </div>
                     <div className="flex flex-col gap-1">
-                        <h2 className="text-[18px] font-bold text-[#1A1A1A]">{customer.firstName} {customer.lastName}</h2>
-                        <div className="flex items-center gap-2 text-[14px] text-gray-400 font-medium">
+                        <h2 className="text-[18px] font-bold text-[#1A1A1A] dark:text-gray-100">{customer.firstName} {customer.lastName}</h2>
+                        <div className="flex items-center gap-2 text-[14px] text-gray-400 dark:text-gray-500 font-medium">
                             <span>{customer.email}</span>
                             <span className="w-1 h-1 bg-gray-300 rounded-full" />
                             <span>Submitted: {customer.kycSubmittedAt ? format(new Date(customer.kycSubmittedAt), "MMM dd, yyyy") : "N/A"}</span>
@@ -92,55 +92,55 @@ export default function KYCReviewPage() {
                 </div>
             </div>
 
-            <div className="bg-white border border-gray-100 rounded-[24px] p-8 shadow-sm flex flex-col gap-8">
-                <h3 className="text-[20px] font-bold text-[#1A1A1A] font-montserrat">Personal Info</h3>
+            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[24px] p-8 shadow-sm flex flex-col gap-8">
+                <h3 className="text-[20px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Personal Info</h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col gap-2">
-                            <label className="text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider">First Name</label>
-                            <input type="text" readOnly value={customer.firstName || ""} className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-[15px] font-medium text-[#1A1A1A] outline-none" />
+                            <label className="text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider">First Name</label>
+                            <input type="text" readOnly value={customer.firstName || ""} className="w-full px-4 py-3.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 rounded-xl text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 outline-none" />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider">Last Name</label>
-                            <input type="text" readOnly value={customer.lastName || ""} className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-[15px] font-medium text-[#1A1A1A] outline-none" />
+                            <label className="text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider">Last Name</label>
+                            <input type="text" readOnly value={customer.lastName || ""} className="w-full px-4 py-3.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 rounded-xl text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 outline-none" />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider">Date of Birth</label>
-                            <input type="text" readOnly value={customer.dateOfBirth ? format(new Date(customer.dateOfBirth), "MM/dd/yyyy") : ""} className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-[15px] font-medium text-[#1A1A1A] outline-none" />
+                            <label className="text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider">Date of Birth</label>
+                            <input type="text" readOnly value={customer.dateOfBirth ? format(new Date(customer.dateOfBirth), "MM/dd/yyyy") : ""} className="w-full px-4 py-3.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 rounded-xl text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 outline-none" />
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col gap-2">
-                            <label className="text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider">Job Title</label>
-                            <input type="text" readOnly value={customer.jobTitle || "N/A"} className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-[15px] font-medium text-[#1A1A1A] outline-none" />
+                            <label className="text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider">Job Title</label>
+                            <input type="text" readOnly value={customer.jobTitle || "N/A"} className="w-full px-4 py-3.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 rounded-xl text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 outline-none" />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider">Company</label>
-                            <input type="text" readOnly value={customer.companyName || "N/A"} className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-[15px] font-medium text-[#1A1A1A] outline-none" />
+                            <label className="text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider">Company</label>
+                            <input type="text" readOnly value={customer.companyName || "N/A"} className="w-full px-4 py-3.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 rounded-xl text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 outline-none" />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider">Industry</label>
-                            <input type="text" readOnly value={customer.industry || "N/A"} className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-[15px] font-medium text-[#1A1A1A] outline-none" />
+                            <label className="text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider">Industry</label>
+                            <input type="text" readOnly value={customer.industry || "N/A"} className="w-full px-4 py-3.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 rounded-xl text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 outline-none" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-white border border-gray-100 rounded-[24px] p-8 shadow-sm flex flex-col gap-8">
-                <h3 className="text-[20px] font-bold text-[#1A1A1A] font-montserrat">ID Information</h3>
+            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[24px] p-8 shadow-sm flex flex-col gap-8">
+                <h3 className="text-[20px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">ID Information</h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col gap-2">
-                            <label className="text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider">Document Number</label>
-                            <input type="text" readOnly value={customer.nationalIdNumber || "N/A"} className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-[15px] font-medium text-[#1A1A1A] outline-none" />
+                            <label className="text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider">Document Number</label>
+                            <input type="text" readOnly value={customer.nationalIdNumber || "N/A"} className="w-full px-4 py-3.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 rounded-xl text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 outline-none" />
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider">Uploaded Document</label>
+                        <label className="text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider">Uploaded Document</label>
                         {customer.idDocumentUrl ? (
                             <a 
                                 href={customer.idDocumentUrl} 
@@ -149,17 +149,17 @@ export default function KYCReviewPage() {
                                 className="p-4 bg-[#E9F3FF] border border-[#0095FF]/20 rounded-xl flex items-center justify-between hover:bg-[#D9EAFF] transition-colors"
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-[#0095FF]">
+                                    <div className="w-10 h-10 rounded-lg bg-white dark:bg-gray-900 flex items-center justify-center text-[#0095FF]">
                                         <FileText size={20} />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-[14px] font-bold text-[#1A1A1A]">View ID Document</span>
-                                        <span className="text-[12px] text-gray-500 font-medium">Click to open</span>
+                                        <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">View ID Document</span>
+                                        <span className="text-[12px] text-gray-500 dark:text-gray-500 font-medium">Click to open</span>
                                     </div>
                                 </div>
                             </a>
                         ) : (
-                            <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-400 text-sm italic">
+                            <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 rounded-xl text-gray-400 dark:text-gray-500 text-sm italic">
                                 No document uploaded
                             </div>
                         )}
@@ -187,7 +187,7 @@ export default function KYCReviewPage() {
                         </button>
                     </>
                 ) : (
-                    <div className={`w-full py-4 rounded-xl font-bold text-[16px] flex items-center justify-center gap-2 transition-all ${status === "Verified" ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"
+                    <div className={`w-full py-4 rounded-xl font-bold text-[16px] flex items-center justify-center gap-2 transition-all ${status === "Verified" ? "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400" : "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400"
                         }`}>
                         {status === "Verified" ? (
                             <>

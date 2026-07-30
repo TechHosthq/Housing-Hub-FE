@@ -27,7 +27,7 @@ export default function PropertyPublishedModal({ isOpen, onClose }: PropertyPubl
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-[24px] w-full max-w-[500px] p-12 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-[24px] w-full max-w-[500px] p-12 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
                 <div className="flex flex-col items-center text-center">
                     {/* Success Icon */}
                     <div className="w-24 h-24 rounded-full bg-[#E5F4FF] flex items-center justify-center mb-10 relative">
@@ -36,11 +36,11 @@ export default function PropertyPublishedModal({ isOpen, onClose }: PropertyPubl
                     </div>
 
                     {/* Content */}
-                    <h2 className="text-[32px] font-black text-[#1A1A1A] font-montserrat mb-6">
+                    <h2 className="text-[32px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-6">
                         Property Published
                     </h2>
 
-                    <p className="text-[16px] font-bold text-gray-400 leading-relaxed max-w-[380px] mb-4">
+                    <p className="text-[16px] font-bold text-gray-400 dark:text-gray-500 leading-relaxed max-w-[380px] mb-4">
                         Your property has been submitted and will be verified against your KYC.
                         Once approved by our admin team, it will go live. If rejected, you'll
                         receive feedback and can update it.

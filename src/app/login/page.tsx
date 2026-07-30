@@ -4,7 +4,7 @@ import LoginForm from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <Navbar />
 
             <div className="flex min-h-screen pt-16">
@@ -17,7 +17,7 @@ export default function LoginPage() {
                 />
 
                 {/* Right Side - Login Form */}
-                <div className="w-full md:w-1/2 flex items-center justify-center bg-white">
+                <div className="w-full md:w-1/2 flex items-center justify-center bg-white dark:bg-gray-900">
                     {/* LoginForm reads ?redirect= via useSearchParams */}
                     <Suspense fallback={null}>
                         <LoginForm />

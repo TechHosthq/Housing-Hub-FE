@@ -146,7 +146,7 @@ export default function AdminSettingsPage() {
     return (
         <div className="flex flex-col gap-8 pb-12">
             <div className="flex items-center justify-between">
-                <h1 className="text-[28px] font-bold text-[#1A1A1A] font-montserrat tracking-tight leading-none text-left">
+                <h1 className="text-[28px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight leading-none text-left">
                     Account Settings
                 </h1>
                 {activeTab === "users" && (
@@ -171,7 +171,7 @@ export default function AdminSettingsPage() {
 
             <div className="flex flex-col lg:flex-row gap-8">
                 {/* Sidebar */}
-                <div className="w-full lg:w-[300px] bg-white border border-gray-100 rounded-[24px] p-4 h-fit shadow-sm text-left">
+                <div className="w-full lg:w-[300px] bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[24px] p-4 h-fit shadow-sm text-left">
                     <div className="flex flex-col gap-2">
                         {SIDEBAR_ITEMS.map((item) => {
                             const Icon = item.icon;
@@ -183,14 +183,14 @@ export default function AdminSettingsPage() {
                                     onClick={() => setActiveTab(item.id)}
                                     className={`flex items-center gap-4 px-6 py-4 rounded-[16px] transition-all duration-300 group font-montserrat ${isActive
                                         ? "bg-[#002B7F] text-white shadow-md shadow-blue-900/10"
-                                        : "text-[#1A1A1A] hover:bg-gray-50"
+                                        : "text-[#1A1A1A] dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50"
                                         }`}
                                 >
                                     <Icon
                                         size={20}
-                                        className={isActive ? "text-white" : "text-[#1A1A1A] group-hover:text-[#002B7F]"}
+                                        className={isActive ? "text-white" : "text-[#1A1A1A] dark:text-gray-100 group-hover:text-[#002B7F]"}
                                     />
-                                    <span className={`text-[15px] font-bold ${isActive ? "text-white" : "text-[#1A1A1A]"}`}>
+                                    <span className={`text-[15px] font-bold ${isActive ? "text-white" : "text-[#1A1A1A] dark:text-gray-100"}`}>
                                         {item.label}
                                     </span>
                                 </button>
@@ -200,59 +200,59 @@ export default function AdminSettingsPage() {
                 </div>
 
                 {/* Content Area */}
-                <div className="flex-1 bg-white border border-gray-100 rounded-[24px] p-10 shadow-sm h-fit">
+                <div className="flex-1 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[24px] p-10 shadow-sm h-fit">
                     {activeTab === "profile" && (
                         <div className="flex flex-col gap-8">
-                            <h2 className="text-[22px] font-bold text-[#1A1A1A] font-montserrat tracking-tight text-left">
+                            <h2 className="text-[22px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight text-left">
                                 Profile Information
                             </h2>
 
                             <form onSubmit={handleSaveProfile} className="flex flex-col gap-6 text-left">
                                 <div className="flex flex-col gap-3">
-                                    <label className="text-[14px] font-medium text-gray-400 font-montserrat">
+                                    <label className="text-[14px] font-medium text-gray-400 dark:text-gray-500 font-montserrat">
                                         Full Name
                                     </label>
                                     <input
                                         type="text"
                                         defaultValue="Admin User"
                                         placeholder="Enter full name"
-                                        className="w-full px-6 py-4 bg-white border border-gray-100 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all placeholder:text-gray-200 font-montserrat"
+                                        className="w-full px-6 py-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all placeholder:text-gray-200 font-montserrat"
                                     />
                                 </div>
 
                                 <div className="flex flex-col gap-3">
-                                    <label className="text-[14px] font-medium text-gray-400 font-montserrat">
+                                    <label className="text-[14px] font-medium text-gray-400 dark:text-gray-500 font-montserrat">
                                         Email Address
                                     </label>
                                     <input
                                         type="email"
                                         defaultValue="admin@househub.com"
                                         placeholder="Enter email address"
-                                        className="w-full px-6 py-4 bg-white border border-gray-100 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all placeholder:text-gray-200 font-montserrat"
+                                        className="w-full px-6 py-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all placeholder:text-gray-200 font-montserrat"
                                     />
                                 </div>
 
                                 <div className="flex flex-col gap-3">
-                                    <label className="text-[14px] font-medium text-gray-400 font-montserrat">
+                                    <label className="text-[14px] font-medium text-gray-400 dark:text-gray-500 font-montserrat">
                                         Phone Number
                                     </label>
                                     <input
                                         type="text"
                                         defaultValue="+234 801 234 5678"
                                         placeholder="Enter phone number"
-                                        className="w-full px-6 py-4 bg-white border border-gray-100 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all placeholder:text-gray-200 font-montserrat"
+                                        className="w-full px-6 py-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all placeholder:text-gray-200 font-montserrat"
                                     />
                                 </div>
 
                                 <div className="flex flex-col gap-3">
-                                    <label className="text-[14px] font-medium text-gray-400 font-montserrat">
+                                    <label className="text-[14px] font-medium text-gray-400 dark:text-gray-500 font-montserrat">
                                         Role
                                     </label>
                                     <input
                                         type="text"
                                         defaultValue="Super Admin"
                                         placeholder="Enter role"
-                                        className="w-full px-6 py-4 bg-white border border-gray-100 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all placeholder:text-gray-200 font-montserrat"
+                                        className="w-full px-6 py-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all placeholder:text-gray-200 font-montserrat"
                                     />
                                 </div>
 
@@ -268,37 +268,37 @@ export default function AdminSettingsPage() {
 
                     {activeTab === "users" && (
                         <div className="flex flex-col gap-8">
-                            <h2 className="text-[22px] font-bold text-[#1A1A1A] font-montserrat tracking-tight text-left">
+                            <h2 className="text-[22px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight text-left">
                                 User Management
                             </h2>
 
                             <div className="overflow-x-auto">
                                 <table className="w-full">
                                     <thead>
-                                        <tr className="border-b border-gray-100">
-                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] font-montserrat">Name</th>
-                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] font-montserrat">Email</th>
-                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] font-montserrat">Role</th>
-                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] font-montserrat">Status</th>
-                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] font-montserrat">Action</th>
+                                        <tr className="border-b border-gray-100 dark:border-gray-800">
+                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Name</th>
+                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Email</th>
+                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Role</th>
+                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Status</th>
+                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-50">
                                         {users.map((user) => (
-                                            <tr key={user.id} className="group hover:bg-gray-50/50 transition-all">
-                                                <td className="py-5 text-[14px] font-medium text-[#1A1A1A] font-montserrat">
+                                            <tr key={user.id} className="group hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-all">
+                                                <td className="py-5 text-[14px] font-medium text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                                                     {user.firstName} {user.lastName || ""}
                                                 </td>
-                                                <td className="py-5 text-[14px] font-medium text-gray-500 font-montserrat">
+                                                <td className="py-5 text-[14px] font-medium text-gray-500 dark:text-gray-500 font-montserrat">
                                                     {user.email}
                                                 </td>
-                                                <td className="py-5 text-[14px] font-medium text-gray-500 font-montserrat">
+                                                <td className="py-5 text-[14px] font-medium text-gray-500 dark:text-gray-500 font-montserrat">
                                                     {user.role}
                                                 </td>
                                                 <td className="py-5">
                                                     <span className={`px-3 py-1 rounded-full text-[12px] font-bold font-montserrat ${user.status === "Active"
-                                                        ? "bg-green-50 text-green-500"
-                                                        : "bg-red-50 text-red-500"
+                                                        ? "bg-green-50 dark:bg-green-900/20 text-green-500"
+                                                        : "bg-red-50 dark:bg-red-900/20 text-red-500"
                                                         }`}>
                                                         {user.status}
                                                     </span>
@@ -335,37 +335,37 @@ export default function AdminSettingsPage() {
 
                     {activeTab === "staff" && (
                         <div className="flex flex-col gap-8">
-                            <h2 className="text-[22px] font-bold text-[#1A1A1A] font-montserrat tracking-tight text-left">
+                            <h2 className="text-[22px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight text-left">
                                 Staff Management
                             </h2>
 
                             <div className="overflow-x-auto">
                                 <table className="w-full">
                                     <thead>
-                                        <tr className="border-b border-gray-100">
-                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] font-montserrat">Name</th>
-                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] font-montserrat">Email</th>
-                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] font-montserrat">Role</th>
-                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] font-montserrat">Status</th>
-                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] font-montserrat">Action</th>
+                                        <tr className="border-b border-gray-100 dark:border-gray-800">
+                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Name</th>
+                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Email</th>
+                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Role</th>
+                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Status</th>
+                                            <th className="text-left py-4 text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-50">
                                         {staff.map((member) => (
-                                            <tr key={member.id} className="group hover:bg-gray-50/50 transition-all">
-                                                <td className="py-5 text-[14px] font-medium text-[#1A1A1A] font-montserrat">
+                                            <tr key={member.id} className="group hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-all">
+                                                <td className="py-5 text-[14px] font-medium text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                                                     {member.firstName} {member.lastName}
                                                 </td>
-                                                <td className="py-5 text-[14px] font-medium text-gray-500 font-montserrat">
+                                                <td className="py-5 text-[14px] font-medium text-gray-500 dark:text-gray-500 font-montserrat">
                                                     {member.email}
                                                 </td>
-                                                <td className="py-5 text-[14px] font-medium text-gray-500 font-montserrat">
+                                                <td className="py-5 text-[14px] font-medium text-gray-500 dark:text-gray-500 font-montserrat">
                                                     {member.role}
                                                 </td>
                                                 <td className="py-5">
                                                     <span className={`px-3 py-1 rounded-full text-[12px] font-bold font-montserrat ${member.status === "Active"
-                                                        ? "bg-green-50 text-green-500"
-                                                        : "bg-red-50 text-red-500"
+                                                        ? "bg-green-50 dark:bg-green-900/20 text-green-500"
+                                                        : "bg-red-50 dark:bg-red-900/20 text-red-500"
                                                         }`}>
                                                         {member.status}
                                                     </span>
@@ -402,20 +402,20 @@ export default function AdminSettingsPage() {
 
                     {activeTab === "security" && (
                         <div className="flex flex-col gap-10">
-                            <h2 className="text-[22px] font-bold text-[#1A1A1A] font-montserrat tracking-tight text-left">
+                            <h2 className="text-[22px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight text-left">
                                 Change Password
                             </h2>
 
                             <form onSubmit={handleUpdatePassword} className="flex flex-col gap-6 text-left max-w-full">
                                 <div className="flex flex-col gap-3">
-                                    <label className="text-[14px] font-medium text-gray-400 font-montserrat">
+                                    <label className="text-[14px] font-medium text-gray-400 dark:text-gray-500 font-montserrat">
                                         Current Password
                                     </label>
                                     <div className="relative">
                                         <input
                                             type={showCurrentPassword ? "text" : "password"}
                                             defaultValue="**********"
-                                            className="w-full px-6 py-4 bg-white border border-gray-100 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all font-montserrat"
+                                            className="w-full px-6 py-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all font-montserrat"
                                         />
                                         <button
                                             type="button"
@@ -428,14 +428,14 @@ export default function AdminSettingsPage() {
                                 </div>
 
                                 <div className="flex flex-col gap-3">
-                                    <label className="text-[14px] font-medium text-gray-400 font-montserrat">
+                                    <label className="text-[14px] font-medium text-gray-400 dark:text-gray-500 font-montserrat">
                                         New Password
                                     </label>
                                     <div className="relative">
                                         <input
                                             type={showNewPassword ? "text" : "password"}
                                             placeholder="Enter new password"
-                                            className="w-full px-6 py-4 bg-white border border-gray-100 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all font-montserrat"
+                                            className="w-full px-6 py-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all font-montserrat"
                                         />
                                         <button
                                             type="button"
@@ -451,14 +451,14 @@ export default function AdminSettingsPage() {
                                 </div>
 
                                 <div className="flex flex-col gap-3">
-                                    <label className="text-[14px] font-medium text-gray-400 font-montserrat">
+                                    <label className="text-[14px] font-medium text-gray-400 dark:text-gray-500 font-montserrat">
                                         Confirm New Password
                                     </label>
                                     <div className="relative">
                                         <input
                                             type={showConfirmPassword ? "text" : "password"}
                                             placeholder="Confirm new password"
-                                            className="w-full px-6 py-4 bg-white border border-gray-100 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all font-montserrat"
+                                            className="w-full px-6 py-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[14px] text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all font-montserrat"
                                         />
                                         <button
                                             type="button"
@@ -487,56 +487,56 @@ export default function AdminSettingsPage() {
 
                     {activeTab === "preferences" && (
                         <div className="flex flex-col gap-10">
-                            <h2 className="text-[22px] font-bold text-[#1A1A1A] font-montserrat tracking-tight text-left">
+                            <h2 className="text-[22px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight text-left">
                                 Notification Preferences
                             </h2>
 
-                            <div className="flex flex-col border border-gray-100 rounded-[24px] divide-y divide-gray-100">
+                            <div className="flex flex-col border border-gray-100 dark:border-gray-800 rounded-[24px] divide-y divide-gray-100">
                                 <div className="flex items-center justify-between p-8">
-                                    <span className="text-[16px] font-bold text-[#1A1A1A] font-montserrat">
+                                    <span className="text-[16px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                                         All Assigned
                                     </span>
                                     <button
                                         onClick={() => togglePreference("allAssigned")}
-                                        className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${preferences.allAssigned ? "bg-[#002B7F]" : "bg-gray-200"}`}
+                                        className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${preferences.allAssigned ? "bg-[#002B7F]" : "bg-gray-200 dark:bg-gray-700"}`}
                                     >
-                                        <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-transform duration-300 ${preferences.allAssigned ? "translate-x-7" : ""}`} />
+                                        <div className={`absolute top-1 left-1 w-5 h-5 bg-white dark:bg-gray-900 rounded-full transition-transform duration-300 ${preferences.allAssigned ? "translate-x-7" : ""}`} />
                                     </button>
                                 </div>
 
                                 <div className="flex items-center justify-between p-8">
-                                    <span className="text-[16px] font-bold text-[#1A1A1A] font-montserrat">
+                                    <span className="text-[16px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                                         Activity
                                     </span>
                                     <button
                                         onClick={() => togglePreference("activity")}
-                                        className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${preferences.activity ? "bg-[#002B7F]" : "bg-gray-200"}`}
+                                        className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${preferences.activity ? "bg-[#002B7F]" : "bg-gray-200 dark:bg-gray-700"}`}
                                     >
-                                        <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-transform duration-300 ${preferences.activity ? "translate-x-7" : ""}`} />
+                                        <div className={`absolute top-1 left-1 w-5 h-5 bg-white dark:bg-gray-900 rounded-full transition-transform duration-300 ${preferences.activity ? "translate-x-7" : ""}`} />
                                     </button>
                                 </div>
 
                                 <div className="flex items-center justify-between p-8">
-                                    <span className="text-[16px] font-bold text-[#1A1A1A] font-montserrat">
+                                    <span className="text-[16px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                                         KYC Tasks
                                     </span>
                                     <button
                                         onClick={() => togglePreference("kycTasks")}
-                                        className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${preferences.kycTasks ? "bg-[#002B7F]" : "bg-gray-200"}`}
+                                        className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${preferences.kycTasks ? "bg-[#002B7F]" : "bg-gray-200 dark:bg-gray-700"}`}
                                     >
-                                        <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-transform duration-300 ${preferences.kycTasks ? "translate-x-7" : ""}`} />
+                                        <div className={`absolute top-1 left-1 w-5 h-5 bg-white dark:bg-gray-900 rounded-full transition-transform duration-300 ${preferences.kycTasks ? "translate-x-7" : ""}`} />
                                     </button>
                                 </div>
 
                                 <div className="flex items-center justify-between p-8">
-                                    <span className="text-[16px] font-bold text-[#1A1A1A] font-montserrat">
+                                    <span className="text-[16px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                                         Listings
                                     </span>
                                     <button
                                         onClick={() => togglePreference("listings")}
-                                        className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${preferences.listings ? "bg-[#002B7F]" : "bg-gray-200"}`}
+                                        className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${preferences.listings ? "bg-[#002B7F]" : "bg-gray-200 dark:bg-gray-700"}`}
                                     >
-                                        <div className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-transform duration-300 ${preferences.listings ? "translate-x-7" : ""}`} />
+                                        <div className={`absolute top-1 left-1 w-5 h-5 bg-white dark:bg-gray-900 rounded-full transition-transform duration-300 ${preferences.listings ? "translate-x-7" : ""}`} />
                                     </button>
                                 </div>
                             </div>
@@ -544,7 +544,7 @@ export default function AdminSettingsPage() {
                     )}
 
                     {activeTab !== "profile" && activeTab !== "users" && activeTab !== "staff" && activeTab !== "security" && activeTab !== "preferences" && (
-                        <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+                        <div className="flex flex-col items-center justify-center py-20 text-gray-400 dark:text-gray-500">
                             <p className="text-[16px] font-medium italic font-montserrat">
                                 Content for {SIDEBAR_ITEMS.find(i => i.id === activeTab)?.label} will be implemented soon.
                             </p>

@@ -168,7 +168,7 @@ export default function ProfileForm() {
 
     if (isLoadingCustomer || isLoadingAddress) {
         return (
-            <div className="flex-1 bg-white rounded-[22px] border border-[#F2F2F2] p-8 shadow-sm flex items-center justify-center min-h-[400px]">
+            <div className="flex-1 bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8 shadow-sm flex items-center justify-center min-h-[400px]">
                 <Loader2 className="animate-spin text-primary-dark w-10 h-10" />
             </div>
         );
@@ -195,11 +195,11 @@ export default function ProfileForm() {
             />
 
             {/* Profile Info Card */}
-            <div className="bg-white rounded-[22px] border border-[#F2F2F2] p-8 shadow-sm relative pt-12">
+            <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8 shadow-sm relative pt-12">
                 {/* The fields below are directly editable, so no separate edit toggle is needed.
                     Picture changes use the explicit "Change Picture" button. */}
                 <div className="flex justify-between items-start mb-10">
-                    <h2 className="text-[20px] font-black text-[#1A1A1A] font-montserrat">
+                    <h2 className="text-[20px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Profile Information
                     </h2>
                 </div>
@@ -214,7 +214,7 @@ export default function ProfileForm() {
 
                 <div className="flex items-center gap-10 mb-2">
                     <div className="relative group">
-                        <div className="w-24 h-24 rounded-full bg-[#E9F3FF] border border-[#F2F2F2] overflow-hidden flex items-center justify-center relative">
+                        <div className="w-24 h-24 rounded-full bg-[#E9F3FF] border border-[#F2F2F2] dark:border-gray-800 overflow-hidden flex items-center justify-center relative">
                             {profileImg ? (
                                 // Plain img: the source is either a blob: preview or an S3
                                 // URL, neither of which next/image handles without extra config.
@@ -262,73 +262,73 @@ export default function ProfileForm() {
                 <form onSubmit={handleProfileSubmit} className="space-y-6">
                     <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-[11px] font-bold text-[#666666] ml-2">First Name</label>
+                            <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">First Name</label>
                             <input
                                 type="text"
                                 value={formData.firstName}
                                 onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[11px] font-bold text-[#666666] ml-2">Last Name</label>
+                            <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">Last Name</label>
                             <input
                                 type="text"
                                 value={formData.lastName}
                                 onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                             />
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-[11px] font-bold text-[#666666] ml-2">Email Address</label>
+                        <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">Email Address</label>
                         <input
                             type="email"
                             value={formData.email}
                             readOnly
-                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-gray-50 text-[13px] font-bold text-[#999999] cursor-not-allowed"
+                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 text-[13px] font-bold text-[#999999] dark:text-gray-500 cursor-not-allowed"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-[11px] font-bold text-[#666666] ml-2">Phone Number</label>
+                        <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">Phone Number</label>
                         <input
                             type="tel"
                             value={formData.phoneNumber}
                             onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-[11px] font-bold text-[#666666] ml-2">Job Title</label>
+                            <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">Job Title</label>
                             <input
                                 type="text"
                                 value={formData.jobTitle}
                                 onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
-                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[11px] font-bold text-[#666666] ml-2">Industry</label>
+                            <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">Industry</label>
                             <input
                                 type="text"
                                 value={formData.industry}
                                 onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                             />
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-[11px] font-bold text-[#666666] ml-2">Date of Birth</label>
+                        <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">Date of Birth</label>
                         <input
                             type="date"
                             value={formData.dateOfBirth}
                             onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                         />
                     </div>
 
@@ -346,69 +346,69 @@ export default function ProfileForm() {
             </div>
 
             {/* Address Info Card */}
-            <div className="bg-white rounded-[22px] border border-[#F2F2F2] p-8 shadow-sm">
+            <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8 shadow-sm">
                 <div className="flex items-center gap-3 mb-10">
                     <div className="w-10 h-10 rounded-full bg-[#E9F3FF] flex items-center justify-center text-primary-dark">
                         <MapPin size={20} />
                     </div>
-                    <h2 className="text-[20px] font-black text-[#1A1A1A] font-montserrat">
+                    <h2 className="text-[20px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Address Information
                     </h2>
                 </div>
 
                 <form onSubmit={handleAddressSubmit} className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-[11px] font-bold text-[#666666] ml-2">Street Address</label>
+                        <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">Street Address</label>
                         <input
                             type="text"
                             value={addressData.street}
                             onChange={(e) => setAddressData({ ...addressData, street: e.target.value })}
                             placeholder="e.g. 123 Luxury Lane"
-                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                            className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-[11px] font-bold text-[#666666] ml-2">City</label>
+                            <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">City</label>
                             <input
                                 type="text"
                                 value={addressData.city}
                                 onChange={(e) => setAddressData({ ...addressData, city: e.target.value })}
                                 placeholder="e.g. Ikeja"
-                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[11px] font-bold text-[#666666] ml-2">State</label>
+                            <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">State</label>
                             <input
                                 type="text"
                                 value={addressData.state}
                                 onChange={(e) => setAddressData({ ...addressData, state: e.target.value })}
                                 placeholder="e.g. Lagos"
-                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                             />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-[11px] font-bold text-[#666666] ml-2">Postal Code</label>
+                            <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">Postal Code</label>
                             <input
                                 type="text"
                                 value={addressData.postalCode}
                                 onChange={(e) => setAddressData({ ...addressData, postalCode: e.target.value })}
                                 placeholder="e.g. 100001"
-                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[11px] font-bold text-[#666666] ml-2">Country</label>
+                            <label className="text-[11px] font-bold text-[#666666] dark:text-gray-400 ml-2">Country</label>
                             <input
                                 type="text"
                                 value={addressData.country}
                                 onChange={(e) => setAddressData({ ...addressData, country: e.target.value })}
-                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] bg-white text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-primary-dark transition-all"
+                                className="w-full px-6 py-4 rounded-full border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-primary-dark transition-all"
                             />
                         </div>
                     </div>

@@ -33,15 +33,15 @@ export default function InspectionDetailsPage() {
                 Back
             </button>
 
-            <h1 className="text-[28px] font-bold text-[#1A1A1A] font-montserrat tracking-tight">
+            <h1 className="text-[28px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight">
                 Inspection Details
             </h1>
 
             {/* Header Card */}
-            <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-8 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
                 <div className="flex items-center gap-6">
                     {/* Thumbnail */}
-                    <div className="w-[120px] h-[120px] rounded-[16px] bg-gray-100 relative overflow-hidden flex-shrink-0">
+                    <div className="w-[120px] h-[120px] rounded-[16px] bg-gray-100 dark:bg-gray-800 relative overflow-hidden flex-shrink-0">
                         <Image
                             src={inspection.image}
                             alt={inspection.title}
@@ -53,32 +53,32 @@ export default function InspectionDetailsPage() {
                     {/* Info */}
                     <div className="flex flex-col gap-2">
                         <div className="flex items-center gap-3">
-                            <h2 className="text-[24px] font-black text-[#1A1A1A] font-montserrat tracking-tight leading-none">
+                            <h2 className="text-[24px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight leading-none">
                                 {inspection.title}
                             </h2>
                             <span className="bg-[#FFF9E9] text-[#FFA800] text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
                                 {inspection.status}
                             </span>
                         </div>
-                        <p className="text-[17px] font-medium text-[#999999] mb-1">
+                        <p className="text-[17px] font-medium text-[#999999] dark:text-gray-500 mb-1">
                             {inspection.location}
                         </p>
-                        <p className="text-[16px] font-bold text-[#1A1A1A]">
-                            Renter: <span className="text-[#999999] font-medium">{inspection.renter}</span>
+                        <p className="text-[16px] font-bold text-[#1A1A1A] dark:text-gray-100">
+                            Renter: <span className="text-[#999999] dark:text-gray-500 font-medium">{inspection.renter}</span>
                         </p>
                     </div>
                 </div>
 
                 {/* Assigned Staff */}
                 <div className="flex flex-col gap-3 w-full lg:w-auto">
-                    <span className="text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider">
+                    <span className="text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider">
                         Assigned Staff
                     </span>
                     <div className="flex items-center gap-3 px-6 py-3.5 bg-[#F2F7FF] rounded-xl min-w-[280px]">
-                        <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-gray-400">
+                        <div className="w-6 h-6 rounded-full bg-white dark:bg-gray-900 flex items-center justify-center text-gray-400 dark:text-gray-500">
                             <User size={14} strokeWidth={2.5} />
                         </div>
-                        <span className="text-[15px] font-medium text-[#1A1A1A]">
+                        <span className="text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100">
                             {inspection.assignedStaff}
                         </span>
                     </div>
@@ -88,31 +88,31 @@ export default function InspectionDetailsPage() {
             {/* Info Cards Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Date Card */}
-                <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm flex items-center gap-6">
+                <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-8 shadow-sm flex items-center gap-6">
                     <div className="w-[60px] h-[60px] rounded-full bg-[#F2F7FF] flex items-center justify-center text-[#0095FF] shadow-sm">
                         <Calendar size={28} />
                     </div>
                     <div className="flex flex-col gap-1">
-                        <span className="text-[18px] font-bold text-[#1A1A1A]">Date</span>
-                        <span className="text-[16px] font-medium text-gray-400">{inspection.date}</span>
+                        <span className="text-[18px] font-bold text-[#1A1A1A] dark:text-gray-100">Date</span>
+                        <span className="text-[16px] font-medium text-gray-400 dark:text-gray-500">{inspection.date}</span>
                     </div>
                 </div>
 
                 {/* Time Card */}
-                <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm flex items-center gap-6">
+                <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-8 shadow-sm flex items-center gap-6">
                     <div className="w-[60px] h-[60px] rounded-full bg-[#F2F7FF] flex items-center justify-center text-[#0095FF] shadow-sm">
                         <Clock size={28} />
                     </div>
                     <div className="flex flex-col gap-1">
-                        <span className="text-[18px] font-bold text-[#1A1A1A]">Time</span>
-                        <span className="text-[16px] font-medium text-gray-400">{inspection.time}</span>
+                        <span className="text-[18px] font-bold text-[#1A1A1A] dark:text-gray-100">Time</span>
+                        <span className="text-[16px] font-medium text-gray-400 dark:text-gray-500">{inspection.time}</span>
                     </div>
                 </div>
             </div>
 
             {/* Confirm Assignment Section */}
-            <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm flex flex-col gap-8 mt-4">
-                <h3 className="text-[20px] font-bold text-[#1A1A1A]">
+            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-8 shadow-sm flex flex-col gap-8 mt-4">
+                <h3 className="text-[20px] font-bold text-[#1A1A1A] dark:text-gray-100">
                     Confirm Assignment
                 </h3>
 

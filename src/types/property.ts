@@ -123,6 +123,11 @@ export interface PropertyQueryParams {
     pageSize?: number;
     search?: string;
     features?: number;
+    propertyType?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    city?: string;
+    state?: string;
 }
 
 export type PropertyResponse = ApiResponse<PropertyDetail>;

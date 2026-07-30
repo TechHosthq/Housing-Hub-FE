@@ -101,16 +101,16 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                     />
 
                     {/* Modal Content */}
-                    <div className="relative w-full max-w-[480px] bg-white rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+                    <div className="relative w-full max-w-[480px] bg-white dark:bg-gray-900 rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
                         <div className="p-8">
                             {/* Header */}
                             <div className="flex items-center justify-between mb-10">
-                                <h2 className="text-[28px] font-black text-[#1A1A1A] font-montserrat tracking-tight">
+                                <h2 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight">
                                     Change Password
                                 </h2>
                                 <button
                                     onClick={handleClose}
-                                    className="w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors"
+                                    className="w-10 h-10 rounded-full flex items-center justify-center text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                                 >
                                     <X size={24} />
                                 </button>
@@ -119,14 +119,14 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 {/* Error banner */}
                                 {error && (
-                                    <div className="px-4 py-3 text-[13px] text-red-600 bg-red-50 border border-red-100 rounded-2xl text-center font-semibold">
+                                    <div className="px-4 py-3 text-[13px] text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 rounded-2xl text-center font-semibold">
                                         {error}
                                     </div>
                                 )}
 
                                 {/* Current Password */}
                                 <div>
-                                    <label className="block text-[11px] font-bold text-[#666666] uppercase tracking-wider mb-3">
+                                    <label className="block text-[11px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider mb-3">
                                         Current Password
                                     </label>
                                     <div className="relative">
@@ -136,12 +136,12 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                                             value={formData.currentPassword}
                                             onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
                                             placeholder="Enter current password"
-                                            className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] bg-white text-[#1A1A1A] text-[14px] font-semibold transition-all focus:border-[#002D6B] outline-none placeholder:text-gray-300"
+                                            className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[#1A1A1A] dark:text-gray-100 text-[14px] font-semibold transition-all focus:border-[#002D6B] outline-none placeholder:text-gray-300 dark:placeholder:text-gray-600"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => toggleShow("current")}
-                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600"
                                         >
                                             {showPasswords.current ? <EyeOff size={20} /> : <Eye size={20} />}
                                         </button>
@@ -150,7 +150,7 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
 
                                 {/* New Password */}
                                 <div>
-                                    <label className="block text-[11px] font-bold text-[#666666] uppercase tracking-wider mb-3">
+                                    <label className="block text-[11px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider mb-3">
                                         New Password
                                     </label>
                                     <div className="relative">
@@ -161,12 +161,12 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                                             value={formData.newPassword}
                                             onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
                                             placeholder="At least 8 characters"
-                                            className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] bg-white text-[#1A1A1A] text-[14px] font-semibold transition-all focus:border-[#002D6B] outline-none placeholder:text-gray-300"
+                                            className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[#1A1A1A] dark:text-gray-100 text-[14px] font-semibold transition-all focus:border-[#002D6B] outline-none placeholder:text-gray-300 dark:placeholder:text-gray-600"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => toggleShow("new")}
-                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600"
                                         >
                                             {showPasswords.new ? <EyeOff size={20} /> : <Eye size={20} />}
                                         </button>
@@ -175,7 +175,7 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
 
                                 {/* Confirm Password */}
                                 <div>
-                                    <label className="block text-[11px] font-bold text-[#666666] uppercase tracking-wider mb-3">
+                                    <label className="block text-[11px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider mb-3">
                                         Confirm New Password
                                     </label>
                                     <div className="relative">
@@ -185,16 +185,16 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                                             value={formData.confirmPassword}
                                             onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                                             placeholder="Re-enter new password"
-                                            className={`w-full px-6 py-4 rounded-full border-2 bg-white text-[#1A1A1A] text-[14px] font-semibold transition-all outline-none placeholder:text-gray-300 ${
+                                            className={`w-full px-6 py-4 rounded-full border-2 bg-white dark:bg-gray-900 text-[#1A1A1A] dark:text-gray-100 text-[14px] font-semibold transition-all outline-none placeholder:text-gray-300 dark:placeholder:text-gray-600 ${
                                                 formData.confirmPassword && formData.confirmPassword !== formData.newPassword
                                                     ? "border-red-300 focus:border-red-400"
-                                                    : "border-[#F2F2F2] focus:border-[#002D6B]"
+                                                    : "border-[#F2F2F2] dark:border-gray-800 focus:border-[#002D6B]"
                                             }`}
                                         />
                                         <button
                                             type="button"
                                             onClick={() => toggleShow("confirm")}
-                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                            className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600"
                                         >
                                             {showPasswords.confirm ? <EyeOff size={20} /> : <Eye size={20} />}
                                         </button>

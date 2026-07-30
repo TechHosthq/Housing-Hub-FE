@@ -35,11 +35,11 @@ export default function DashboardSearch() {
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={handleKeyPress}
                     placeholder="Search... (e.g., house, WiFi, Lekki)"
-                    className="w-full h-14 pl-16 pr-6 rounded-full border border-gray-300 bg-white focus:outline-none focus:border-[#07358B] focus:ring-4 focus:ring-[#07358B]/5 transition-all text-sm placeholder:text-gray-300 "
+                    className="w-full h-14 pl-16 pr-6 rounded-full border border-gray-300 bg-white dark:bg-gray-900 focus:outline-none focus:border-[#07358B] focus:ring-4 focus:ring-[#07358B]/5 transition-all text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600 "
                 />
             </div>
 
-            <button className="h-14 px-8 rounded-full border border-[#0095FF] bg-white flex items-center gap-3 text-[#0095FF] hover:border-primary-dark hover:text-primary-dark transition-all shadow-sm group">
+            <button className="h-14 px-8 rounded-full border border-[#0095FF] bg-white dark:bg-gray-900 flex items-center gap-3 text-[#0095FF] hover:border-primary-dark hover:text-primary-dark transition-all shadow-sm group">
                 < ListFilter  size={18} className="translate-y-[1px]" />
                 <span className="font-bold text-sm">Filters</span>
             </button>

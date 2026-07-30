@@ -31,9 +31,9 @@ export default function WhyList() {
     ];
 
     return (
-        <section className="py-24 px-8 bg-white">
+        <section className="py-24 px-8 bg-white dark:bg-gray-900">
             <div className="max-w-7xl mx-auto">
-                <h2 className="text-4xl font-bold text-[#1A1A1A] mb-20 text-center tracking-tight">Why List on House Hub?</h2>
+                <h2 className="text-4xl font-bold text-[#1A1A1A] dark:text-gray-100 mb-20 text-center tracking-tight">Why List on House Hub?</h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -52,13 +52,13 @@ export default function WhyList() {
                     {/* Features Container */}
                     <div className="space-y-6">
                         {features.map((feature, index) => (
-                            <div key={index} className="flex gap-6 p-6 bg-white rounded-[17px] border border-gray-100 shadow-sm hover:border-[#07358B] hover:shadow-md transition-all duration-500 hover:scale-101">
+                            <div key={index} className="flex gap-6 p-6 bg-white dark:bg-gray-900 rounded-[17px] border border-gray-100 dark:border-gray-800 shadow-sm hover:border-[#07358B] hover:shadow-md transition-all duration-500 hover:scale-101">
                                 <div className="flex-shrink-0 w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
                                     {feature.icon}
                                 </div>
                                 <div className="flex flex-col justify-center">
-                                    <h3 className="font-bold text-[#1A1A1A] mb-1.5 text-xl tracking-tight">{feature.title}</h3>
-                                    <p className="text-gray-500 font-medium text-base leading-relaxed">{feature.description}</p>
+                                    <h3 className="font-bold text-[#1A1A1A] dark:text-gray-100 mb-1.5 text-xl tracking-tight">{feature.title}</h3>
+                                    <p className="text-gray-500 dark:text-gray-500 font-medium text-base leading-relaxed">{feature.description}</p>
                                 </div>
                             </div>
                         ))}

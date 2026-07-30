@@ -73,13 +73,13 @@ export default function PropertyInformationPage() {
                 Back
             </button>
 
-            <h1 className="text-[28px] font-bold text-[#1A1A1A] font-montserrat tracking-tight">
+            <h1 className="text-[28px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight">
                 Property Information
             </h1>
 
             {/* Header Card */}
-            <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm flex flex-col sm:flex-row items-center gap-6">
-                <div className="w-[120px] h-[120px] rounded-[16px] bg-gray-100 relative overflow-hidden flex-shrink-0">
+            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-8 shadow-sm flex flex-col sm:flex-row items-center gap-6">
+                <div className="w-[120px] h-[120px] rounded-[16px] bg-gray-100 dark:bg-gray-800 relative overflow-hidden flex-shrink-0">
                     <Image
                         src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070"
                         alt={property.title}
@@ -89,70 +89,70 @@ export default function PropertyInformationPage() {
                 </div>
                 <div className="flex flex-col gap-2 flex-1">
                     <div className="flex items-center gap-3">
-                        <h2 className="text-[24px] font-black text-[#1A1A1A] font-montserrat tracking-tight leading-none">
+                        <h2 className="text-[24px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight leading-none">
                             {property.title}
                         </h2>
                         <span className={`text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider ${currentStatus === "Posted"
                             ? "bg-[#FFF9E9] text-[#FFA800]"
-                            : "bg-green-50 text-green-500"
+                            : "bg-green-50 dark:bg-green-900/20 text-green-500"
                             }`}>
                             {currentStatus}
                         </span>
                     </div>
-                    <p className="text-[17px] font-medium text-[#999999] mb-1">
+                    <p className="text-[17px] font-medium text-[#999999] dark:text-gray-500 mb-1">
                         {property.location}
                     </p>
                     <div className="flex items-center gap-4 text-[15px]">
-                        <span className="font-bold text-[#1A1A1A]">
-                            Owner: <span className="text-[#999999] font-medium">{property.owner}</span>
+                        <span className="font-bold text-[#1A1A1A] dark:text-gray-100">
+                            Owner: <span className="text-[#999999] dark:text-gray-500 font-medium">{property.owner}</span>
                         </span>
                         <span className="font-bold text-[#0095FF]">
-                            Posted: <span className="text-[#999999] font-medium">{property.postedDate}</span>
+                            Posted: <span className="text-[#999999] dark:text-gray-500 font-medium">{property.postedDate}</span>
                         </span>
                     </div>
                 </div>
             </div>
 
             {/* Property Details */}
-            <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm flex flex-col gap-6">
-                <h3 className="text-[20px] font-bold text-[#1A1A1A] font-montserrat">
+            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-8 shadow-sm flex flex-col gap-6">
+                <h3 className="text-[20px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                     Property Details
                 </h3>
 
                 <div className="flex flex-col gap-5">
                     <div className="flex justify-between items-start pb-4 border-b border-gray-50">
                         <span className="text-[12px] font-black text-[#B3B3B3] uppercase tracking-wider">Property Type</span>
-                        <span className="text-[14px] font-bold text-[#1A1A1A]">{property.details.type}</span>
+                        <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{property.details.type}</span>
                     </div>
                     <div className="flex justify-between items-start pb-4 border-b border-gray-50">
                         <span className="text-[12px] font-black text-[#B3B3B3] uppercase tracking-wider">Property Title</span>
-                        <span className="text-[14px] font-bold text-[#1A1A1A]">{property.details.title}</span>
+                        <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{property.details.title}</span>
                     </div>
                     <div className="flex flex-col gap-3 pb-4 border-b border-gray-50 text-justify">
                         <span className="text-[12px] font-black text-[#B3B3B3] uppercase tracking-wider">Description</span>
-                        <p className="text-[14px] font-bold text-[#1A1A1A] leading-relaxed">
+                        <p className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 leading-relaxed">
                             {property.details.description}
                         </p>
                     </div>
                     <div className="flex justify-between items-start pb-4 border-b border-gray-50">
                         <span className="text-[12px] font-black text-[#B3B3B3] uppercase tracking-wider">Status</span>
-                        <span className="text-[14px] font-bold text-[#1A1A1A]">{property.details.status}</span>
+                        <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{property.details.status}</span>
                     </div>
                     <div className="flex justify-between items-start pb-4 border-b border-gray-50">
                         <span className="text-[12px] font-black text-[#B3B3B3] uppercase tracking-wider">Address</span>
-                        <span className="text-[14px] font-bold text-[#1A1A1A]">{property.details.address}</span>
+                        <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{property.details.address}</span>
                     </div>
                     <div className="flex justify-between items-start pb-4 border-b border-gray-50">
                         <span className="text-[12px] font-black text-[#B3B3B3] uppercase tracking-wider">Features</span>
-                        <span className="text-[14px] font-bold text-[#1A1A1A]">{property.details.features}</span>
+                        <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{property.details.features}</span>
                     </div>
                 </div>
             </div>
 
             {/* Recent Inspections */}
-            <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm flex flex-col gap-6">
+            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-8 shadow-sm flex flex-col gap-6">
                 <div className="flex justify-between items-center">
-                    <h3 className="text-[20px] font-bold text-[#1A1A1A] font-montserrat">
+                    <h3 className="text-[20px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Recent Inspections
                     </h3>
                     <Link href="/admin/inspections" className="text-[#0095FF] text-[13px] font-bold flex items-center gap-1">
@@ -170,17 +170,17 @@ export default function PropertyInformationPage() {
                             <Link 
                                 href={`/inspections/${inspection.id}`}
                                 key={inspection.id} 
-                                className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all"
+                                className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#0095FF]">
+                                    <div className="w-10 h-10 rounded-full bg-white dark:bg-gray-900 flex items-center justify-center text-[#0095FF]">
                                         <Calendar size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-[14px] font-bold text-[#1A1A1A]">
+                                        <p className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">
                                             {inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "MMM dd, yyyy") : "N/A"}
                                         </p>
-                                        <p className="text-[12px] text-gray-400 font-medium">{inspection.scheduledTime}</p>
+                                        <p className="text-[12px] text-gray-400 dark:text-gray-500 font-medium">{inspection.scheduledTime}</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
@@ -191,25 +191,25 @@ export default function PropertyInformationPage() {
                             </Link>
                         ))}
                         {inspections.length === 0 && (
-                            <p className="text-center py-6 text-gray-400 font-medium">No inspections requested for this property yet.</p>
+                            <p className="text-center py-6 text-gray-400 dark:text-gray-500 font-medium">No inspections requested for this property yet.</p>
                         )}
                     </div>
                 )}
             </div>
 
             {/* Pricing & Contact ... (truncated for brevity but I'll include them) */}
-            <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm flex flex-col gap-6">
-                <h3 className="text-[20px] font-bold text-[#1A1A1A] font-montserrat">
+            <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-8 shadow-sm flex flex-col gap-6">
+                <h3 className="text-[20px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                     Pricing
                 </h3>
                 <div className="flex flex-col gap-5">
                     <div className="flex justify-between items-start pb-4 border-b border-gray-50">
                         <span className="text-[12px] font-black text-[#B3B3B3] uppercase tracking-wider">Listing Type</span>
-                        <span className="text-[14px] font-bold text-[#1A1A1A]">{property.pricing.listingType}</span>
+                        <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{property.pricing.listingType}</span>
                     </div>
                     <div className="flex justify-between items-start">
                         <span className="text-[12px] font-black text-[#B3B3B3] uppercase tracking-wider">Price (Per Year)</span>
-                        <span className="text-[14px] font-bold text-[#1A1A1A]">{property.pricing.price}</span>
+                        <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{property.pricing.price}</span>
                     </div>
                 </div>
             </div>

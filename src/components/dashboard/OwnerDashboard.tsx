@@ -10,7 +10,7 @@ export default function OwnerDashboard() {
             <KYCBanner />
 
             <div className="mt-12">
-                <h2 className="text-[32px] font-black text-[#1A1A1A] font-montserrat mb-10">
+                <h2 className="text-[32px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-10">
                     Your Overview
                 </h2>
 

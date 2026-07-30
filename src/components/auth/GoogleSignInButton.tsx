@@ -120,7 +120,7 @@ export default function GoogleSignInButton({ onCredential, isLoading }: GoogleSi
 
     if (message) {
         return (
-            <div className="w-full py-3 text-center text-[11px] text-gray-400 border border-[#E5E5E5] rounded-full">
+            <div className="w-full py-3 text-center text-[11px] text-gray-400 dark:text-gray-500 border border-[#E5E5E5] dark:border-gray-800 rounded-full">
                 {message}
             </div>
         );
@@ -132,8 +132,8 @@ export default function GoogleSignInButton({ onCredential, isLoading }: GoogleSi
             <div ref={hostRef} className={isLoading ? "pointer-events-none opacity-60" : ""} />
 
             {(!ready || isLoading) && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white/70 rounded-full">
-                    <Loader2 className="animate-spin text-gray-400" size={20} />
+                <div className="absolute inset-0 flex items-center justify-center bg-white/70 dark:bg-gray-900/70 rounded-full">
+                    <Loader2 className="animate-spin text-gray-400 dark:text-gray-500" size={20} />
                 </div>
             )}
         </div>

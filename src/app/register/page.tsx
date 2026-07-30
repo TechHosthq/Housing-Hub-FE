@@ -3,7 +3,7 @@ import RegisterForm from "@/components/auth/RegisterForm";
 
 export default function RegisterPage() {
     return (
-        <main className="min-h-screen flex flex-col bg-white">
+        <main className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
             <Navbar />
 
             <div className="flex-1 flex flex-col md:flex-row pt-16">
@@ -18,7 +18,7 @@ export default function RegisterPage() {
                 </div>
 
                 {/* Right Side: Form */}
-                <div className="w-full md:w-1/2 min-h-full flex items-center justify-center bg-white py-12">
+                <div className="w-full md:w-1/2 min-h-full flex items-center justify-center bg-white dark:bg-gray-900 py-12">
                     <RegisterForm />
                 </div>
             </div>
