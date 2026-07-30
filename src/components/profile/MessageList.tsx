@@ -4,6 +4,7 @@ import { Search, User, Send, Loader2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useChat } from "@/hooks/useChat";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useChatConnection } from "@/providers/SignalRProvider";
 import { formatDistanceToNow } from "date-fns";
 
 interface MessageListProps {
@@ -15,9 +16,20 @@ interface MessageListProps {
 export default function MessageList({ viewMode, selectedId, onThreadSelect }: MessageListProps) {
     const { useConversations, useMessages, sendMessage, markAsRead } = useChat();
     const currentUser = useAuthStore((state) => state.user);
+    const chatConnection = useChatConnection();
     const [searchQuery, setSearchQuery] = useState("");
     const [messageInput, setMessageInput] = useState("");
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Join the open conversation's SignalR group so NewMessageInConversation reaches us.
+    useEffect(() => {
+        if (!chatConnection || !selectedId) return;
+
+        chatConnection.invoke("JoinConversation", selectedId).catch(() => {});
+        return () => {
+            chatConnection.invoke("LeaveConversation", selectedId).catch(() => {});
+        };
+    }, [chatConnection, selectedId]);
 
     const { data: convResponse, isLoading: isLoadingConvs } = useConversations();
     const { data: msgResponse, isLoading: isLoadingMsgs } = useMessages(selectedId);

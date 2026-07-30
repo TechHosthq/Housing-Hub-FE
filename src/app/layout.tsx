@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 import { UserRoleProvider } from "@/context/UserRoleContext";
 import QueryProvider from "@/providers/QueryProvider";
 import ThemeProvider from "@/providers/ThemeProvider";
+import SignalRProvider from "@/providers/SignalRProvider";
 import { ToastProvider } from "@/providers/ToastProvider";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 
@@ -37,13 +38,15 @@ export default function RootLayout({
       <body className={`${montserrat.className} antialiased font-sans`}>
         <ThemeProvider>
           <QueryProvider>
-            <UserRoleProvider>
-              <ToastProvider>
-                <AuthGuard>
-                  {children}
-                </AuthGuard>
-              </ToastProvider>
-            </UserRoleProvider>
+            <SignalRProvider>
+              <UserRoleProvider>
+                <ToastProvider>
+                  <AuthGuard>
+                    {children}
+                  </AuthGuard>
+                </ToastProvider>
+              </UserRoleProvider>
+            </SignalRProvider>
           </QueryProvider>
         </ThemeProvider>
       </body>
