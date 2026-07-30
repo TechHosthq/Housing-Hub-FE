@@ -31,6 +31,10 @@ const FEATURES_MAP: Record<string, number> = {
     "Balcony": 64
 };
 
+// Matches the backend's ValidateFile allowlist exactly (PropertyCommandService).
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+const ALLOWED_FILE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".mp4", ".mov", ".avi", ".mkv", ".webm"];
+
 export default function AddPropertyForm() {
     // Navigation State
     const [step, setStep] = useState(1);
@@ -67,6 +71,7 @@ export default function AddPropertyForm() {
     const [isPublishedModalOpen, setIsPublishedModalOpen] = useState(false);
     const [images, setImages] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
+    const [imageError, setImageError] = useState("");
 
     // Step 2 State
     const [listingType, setListingType] = useState<PropertyLeaseType>(PropertyLeaseType.Rent);
@@ -112,15 +117,38 @@ export default function AddPropertyForm() {
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
         if (files.length + images.length > 10) {
-            alert("Maximum 10 images allowed");
+            setImageError("Maximum 10 files allowed.");
+            e.target.value = "";
             return;
         }
 
-        const newImages = [...images, ...files];
+        const validFiles: File[] = [];
+        let error = "";
+        for (const file of files) {
+            const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+            if (!ALLOWED_FILE_EXTENSIONS.includes(ext)) {
+                error = `${file.name}: unsupported file type. Use JPG, PNG, GIF, WEBP, or BMP images (or MP4, MOV, AVI, MKV, WEBM videos).`;
+                continue;
+            }
+            if (file.size > MAX_FILE_SIZE_BYTES) {
+                error = `${file.name}: file is larger than 10MB.`;
+                continue;
+            }
+            validFiles.push(file);
+        }
+        setImageError(error);
+
+        if (validFiles.length === 0) {
+            e.target.value = "";
+            return;
+        }
+
+        const newImages = [...images, ...validFiles];
         setImages(newImages);
 
-        const newPreviews = files.map(file => URL.createObjectURL(file));
+        const newPreviews = validFiles.map(file => URL.createObjectURL(file));
         setPreviews(prev => [...prev, ...newPreviews]);
+        e.target.value = "";
     };
 
     const removeImage = (index: number) => {
@@ -314,7 +342,7 @@ export default function AddPropertyForm() {
                         </div>
                         <span className="text-[16px] font-bold text-gray-400 dark:text-gray-500">Upload Images</span>
                         <p className="text-[11px] font-bold text-gray-300 mt-2 uppercase tracking-wide">
-                            JPG or PNG, max 8MB (up to 10 images)
+                            JPG, PNG, GIF, WEBP or BMP, max 10MB (up to 10 images)
                         </p>
                     </div>
                     <input
@@ -325,6 +353,9 @@ export default function AddPropertyForm() {
                         accept="image/*"
                         className="hidden"
                     />
+                    {imageError && (
+                        <p className="text-[12px] text-red-500 font-semibold mt-3">{imageError}</p>
+                    )}
 
                     <div className="flex flex-wrap gap-4 mt-6">
                         {previews.map((preview, index) => (
