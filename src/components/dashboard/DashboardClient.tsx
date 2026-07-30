@@ -17,27 +17,40 @@ export default function DashboardClient({ allProperties }: { allProperties: any[
 
     const kycStatus = searchParams.get("kyc");
     const searchQuery = searchParams.get("q") || "";
+    const propertyType = searchParams.get("propertyType") || undefined;
+    const minPrice = searchParams.get("minPrice");
+    const maxPrice = searchParams.get("maxPrice");
+    const city = searchParams.get("city") || undefined;
+    const state = searchParams.get("state") || undefined;
     const isKycSubmitted = kycStatus === "submitted";
+    const hasFilters = Boolean(searchQuery || propertyType || minPrice || maxPrice || city || state);
 
     // Real API Hooks
     const { data: trendingResponse, isLoading: isLoadingTrending } = useTrendingProperties(3);
     const { data: newResponse, isLoading: isLoadingNew } = useNewProperties(6);
-    const { data: searchResponse, isLoading: isLoadingSearch } = useAllProperties({ search: searchQuery });
+    const { data: searchResponse, isLoading: isLoadingSearch } = useAllProperties({
+        search: searchQuery,
+        propertyType,
+        minPrice: minPrice ? Number(minPrice) : undefined,
+        maxPrice: maxPrice ? Number(maxPrice) : undefined,
+        city,
+        state,
+    });
 
     const trendingProperties = trendingResponse?.data || [];
     const newProperties = newResponse?.data || [];
     const searchResults = searchResponse?.data?.items || [];
 
-    if (role === "Owner" && !searchQuery) {
+    if (role === "Owner" && !hasFilters) {
         return <OwnerDashboard />;
     }
 
-    const isLoading = isLoadingTrending || isLoadingNew || (searchQuery && isLoadingSearch);
+    const isLoading = isLoadingTrending || isLoadingNew || (hasFilters && isLoadingSearch);
 
     return (
         <>
             {/* KYC Notification */}
-            {!isKycSubmitted && !searchQuery && <KYCBanner />}
+            {!isKycSubmitted && !hasFilters && <KYCBanner />}
 
             {/* Search & Filter */}
             <DashboardSearch />
@@ -46,12 +59,16 @@ export default function DashboardClient({ allProperties }: { allProperties: any[
                 <div className="py-20 flex justify-center items-center">
                     <Loader2 className="animate-spin text-primary-dark w-12 h-12" />
                 </div>
-            ) : searchQuery ? (
+            ) : hasFilters ? (
                 /* Search Results View */
                 <section className="w-full">
                     <div className="mb-8">
                         <h2 className="text-[20px] font-medium text-[#1A1A1A] font-montserrat">
-                            Showing result for <span className="text-[#0095FF] font-black">"{searchQuery}"</span>
+                            {searchQuery ? (
+                                <>Showing result for <span className="text-[#0095FF] font-black">"{searchQuery}"</span></>
+                            ) : (
+                                "Showing filtered results"
+                            )}
                         </h2>
                     </div>
                     {searchResults.length > 0 ? (

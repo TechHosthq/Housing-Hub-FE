@@ -1,14 +1,30 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Search, ChevronDown, Loader2 } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const FILTER_OPTIONS = {
     location: ["Lagos", "Abuja", "Port Harcourt", "Ibadan", "Enugu"],
     propertyType: ["House", "Apartment", "Guesthouse", "Flat", "Duplex"],
     priceRange: ["₦1M - ₦5M", "₦5M - ₦20M", "₦20M - ₦50M", "₦50M+"],
-    bedrooms: ["1", "2", "3", "4", "5+"],
+};
+
+// State vs. city distinction matches how the backend's address filter works
+// (PropertyAddress.City / .State, each matched with a case-insensitive contains).
+const LOCATION_PARAM: Record<string, { state?: string; city?: string }> = {
+    "Lagos": { state: "Lagos" },
+    "Abuja": { state: "Abuja" },
+    "Port Harcourt": { city: "Port Harcourt" },
+    "Ibadan": { city: "Ibadan" },
+    "Enugu": { city: "Enugu" },
+};
+
+const PRICE_RANGE_PARAM: Record<string, { minPrice?: number; maxPrice?: number }> = {
+    "₦1M - ₦5M": { minPrice: 1_000_000, maxPrice: 5_000_000 },
+    "₦5M - ₦20M": { minPrice: 5_000_000, maxPrice: 20_000_000 },
+    "₦20M - ₦50M": { minPrice: 20_000_000, maxPrice: 50_000_000 },
+    "₦50M+": { minPrice: 50_000_000 },
 };
 
 export default function Hero() {
@@ -18,9 +34,7 @@ export default function Hero() {
         location: "",
         propertyType: "",
         priceRange: "",
-        bedrooms: "",
     });
-    const [isSearching, setIsSearching] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // Close dropdown when clicking outside
@@ -38,26 +52,28 @@ export default function Hero() {
         setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
     };
 
-    const handleSelect = (dropdown: keyof typeof FILTER_OPTIONS, value: string) => {
-        setFilters(prev => ({ ...prev, [dropdown]: value }));
-        setActiveDropdown(null);
+    const navigateWithFilters = (updated: typeof filters) => {
+        const params = new URLSearchParams();
+
+        if (updated.propertyType) params.set('propertyType', updated.propertyType);
+
+        const price = updated.priceRange ? PRICE_RANGE_PARAM[updated.priceRange] : undefined;
+        if (price?.minPrice) params.set('minPrice', String(price.minPrice));
+        if (price?.maxPrice) params.set('maxPrice', String(price.maxPrice));
+
+        const location = updated.location ? LOCATION_PARAM[updated.location] : undefined;
+        if (location?.state) params.set('state', location.state);
+        if (location?.city) params.set('city', location.city);
+
+        const query = params.toString();
+        router.push(query ? `/dashboard?${query}` : '/dashboard');
     };
 
-    const handleSearch = async () => {
-        setIsSearching(true);
-        // Mock API Call delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Build search query
-        const queryParams = new URLSearchParams();
-        if (filters.location) queryParams.append('location', filters.location);
-        if (filters.propertyType) queryParams.append('type', filters.propertyType);
-        if (filters.priceRange) queryParams.append('price', filters.priceRange);
-        if (filters.bedrooms) queryParams.append('beds', filters.bedrooms);
-        
-        setIsSearching(false);
-        // Redirect to a search results page (even if it doesn't fully exist yet, it's standard)
-        router.push(`/search?${queryParams.toString()}`);
+    const handleSelect = (dropdown: keyof typeof FILTER_OPTIONS, value: string) => {
+        const updated = { ...filters, [dropdown]: value };
+        setFilters(updated);
+        setActiveDropdown(null);
+        navigateWithFilters(updated);
     };
 
     const renderDropdown = (key: keyof typeof FILTER_OPTIONS, label: string) => (
@@ -116,17 +132,16 @@ export default function Hero() {
 
                 {/* Search Card */}
                 <div className="bg-white shadow-2xl max-w-5xl mx-auto relative rounded-3xl md:rounded-full p-3 md:p-2.5 overflow-visible">
-                    {/* Mobile: 2-column grid of filters */}
-                    <div className="grid grid-cols-2 md:hidden gap-0 divide-x divide-y divide-gray-100 rounded-2xl border border-gray-100 mb-3">
-                        {(['location', 'propertyType', 'priceRange', 'bedrooms'] as const).map((key, i) => {
+                    {/* Mobile: 3-row list of filters */}
+                    <div className="flex flex-col md:hidden divide-y divide-gray-100 rounded-2xl border border-gray-100 mb-3">
+                        {(['location', 'propertyType', 'priceRange'] as const).map((key) => {
                             const labels: Record<string, string> = {
                                 location: 'Location',
                                 propertyType: 'Property Type',
                                 priceRange: 'Price Range',
-                                bedrooms: 'Bedrooms',
                             };
                             return (
-                                <div key={key} className={`relative ${i >= 2 ? 'border-t border-gray-100' : ''}`} ref={activeDropdown === key ? dropdownRef : null}>
+                                <div key={key} className="relative" ref={activeDropdown === key ? dropdownRef : null}>
                                     <div
                                         className={`px-3 py-3 flex items-center justify-between cursor-pointer transition-all ${activeDropdown === key ? 'bg-gray-50' : 'hover:bg-gray-50'}`}
                                         onClick={() => toggleDropdown(key)}
@@ -162,7 +177,7 @@ export default function Hero() {
                         })}
                     </div>
 
-                    {/* Desktop: all in one flex row (filters + button inline) */}
+                    {/* Desktop: filters fill the pill, no separate search button — selecting a filter navigates immediately */}
                     <div className="hidden md:flex flex-row items-center w-full">
                         <div className="flex flex-1 items-center min-w-0">
                             {renderDropdown('location', 'Location')}
@@ -170,46 +185,11 @@ export default function Hero() {
                             {renderDropdown('propertyType', 'Property Type')}
                             <div className="w-[1px] h-10 bg-gray-200 mx-1 flex-shrink-0"></div>
                             {renderDropdown('priceRange', 'Price Range')}
-                            <div className="w-[1px] h-10 bg-gray-200 mx-1 flex-shrink-0"></div>
-                            {renderDropdown('bedrooms', 'Bedrooms')}
                         </div>
-                        <button
-                            onClick={handleSearch}
-                            disabled={isSearching}
-                            className="bg-[#002D6B] hover:bg-[#001D4B] text-white px-8 py-4 rounded-full flex items-center justify-center gap-2 transition-all min-w-[140px] m-1 disabled:opacity-80 active:scale-95 flex-shrink-0"
-                        >
-                            {isSearching ? (
-                                <>
-                                    <Loader2 size={18} className="animate-spin" />
-                                    <span className="font-bold text-[16px]">Searching...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Search size={18} className="stroke-[3px]" />
-                                    <span className="font-bold text-[16px] tracking-tight">Search</span>
-                                </>
-                            )}
-                        </button>
+                        <div className="bg-[#002D6B] text-white px-6 py-4 rounded-full flex items-center justify-center gap-2 m-1 flex-shrink-0">
+                            <Search size={18} className="stroke-[3px]" />
+                        </div>
                     </div>
-
-                    {/* Mobile-only: full-width search button */}
-                    <button
-                        onClick={handleSearch}
-                        disabled={isSearching}
-                        className="md:hidden bg-[#002D6B] hover:bg-[#001D4B] text-white px-8 py-4 rounded-full flex items-center justify-center gap-2 transition-all disabled:opacity-80 active:scale-95 w-full"
-                    >
-                        {isSearching ? (
-                            <>
-                                <Loader2 size={18} className="animate-spin" />
-                                <span className="font-bold text-[16px]">Searching...</span>
-                            </>
-                        ) : (
-                            <>
-                                <Search size={18} className="stroke-[3px]" />
-                                <span className="font-bold text-[16px] tracking-tight">Search</span>
-                            </>
-                        )}
-                    </button>
                 </div>
             </div>
         </section>
