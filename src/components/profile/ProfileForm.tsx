@@ -1,6 +1,6 @@
 "use client";
 
-import { User as UserIcon, Loader2, MapPin } from "lucide-react";
+import { User as UserIcon, Loader2, MapPin, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -28,6 +28,7 @@ export default function ProfileForm() {
     const [profileImg, setProfileImg] = useState<string | null>(null);
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [showAddressModal, setShowAddressModal] = useState(false);
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -188,6 +189,27 @@ export default function ProfileForm() {
                 title="Address Saved!"
                 message="Your address information has been updated successfully."
             />
+            {isPreviewOpen && profileImg && (
+                <div
+                    className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+                    onClick={() => setIsPreviewOpen(false)}
+                >
+                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+                    <button
+                        onClick={() => setIsPreviewOpen(false)}
+                        className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
+                    >
+                        <X size={24} />
+                    </button>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={profileImg}
+                        alt="Profile preview"
+                        className="relative max-w-[90vw] max-h-[85vh] rounded-2xl object-contain shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                </div>
+            )}
             {/* Lets users who skipped the sign-up OTP verify their email later */}
             <EmailVerificationBanner
                 emailVerified={customerResponse?.data?.emailVerified}
@@ -214,7 +236,10 @@ export default function ProfileForm() {
 
                 <div className="flex items-center gap-10 mb-2">
                     <div className="relative group">
-                        <div className="w-24 h-24 rounded-full bg-[#E9F3FF] border border-[#F2F2F2] dark:border-gray-800 overflow-hidden flex items-center justify-center relative">
+                        <div
+                            onClick={() => profileImg && setIsPreviewOpen(true)}
+                            className={`w-24 h-24 rounded-full bg-[#E9F3FF] border border-[#F2F2F2] dark:border-gray-800 overflow-hidden flex items-center justify-center relative ${profileImg ? "cursor-pointer" : ""}`}
+                        >
                             {profileImg ? (
                                 // Plain img: the source is either a blob: preview or an S3
                                 // URL, neither of which next/image handles without extra config.
