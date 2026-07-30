@@ -12,6 +12,13 @@ import { useCustomer } from "@/hooks/useCustomer";
 import { useRouter } from "next/navigation";
 
 const PROPERTY_TYPES = ["House", "Apartment", "Guesthouse", "Flat", "Duplex"];
+const NIGERIAN_STATES = [
+    "Abia", "Abuja", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa",
+    "Benue", "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu",
+    "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara",
+    "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers",
+    "Sokoto", "Taraba", "Yobe", "Zamfara",
+];
 const FEATURES = ["Wifi", "Car Pack", "Security Camera", "Swimming Pool", "Gym", "Generator", "Balcony"];
 
 const FEATURES_MAP: Record<string, number> = {
@@ -52,7 +59,7 @@ export default function AddPropertyForm() {
     const [description, setDescription] = useState("");
     const [availability, setAvailability] = useState<AvailabilityStatus>(AvailabilityStatus.Available);
     const [address, setAddress] = useState("");
-    const [city, setCity] = useState("Ikeja");
+    const [city, setCity] = useState("");
     const [state, setState] = useState("Lagos");
     const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
@@ -251,27 +258,22 @@ export default function AddPropertyForm() {
                         className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300 mb-4"
                     />
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="relative">
-                            <select
-                                value={city}
-                                onChange={(e) => setCity(e.target.value)}
-                                className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] appearance-none bg-white cursor-pointer"
-                            >
-                                <option value="Ikeja">Ikeja</option>
-                                <option value="Lekki">Lekki</option>
-                                <option value="Victoria Island">Victoria Island</option>
-                            </select>
-                            <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
-                        </div>
+                        <input
+                            type="text"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            placeholder="City e.g. Ikeja"
+                            className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300"
+                        />
                         <div className="relative">
                             <select
                                 value={state}
                                 onChange={(e) => setState(e.target.value)}
                                 className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] appearance-none bg-white cursor-pointer"
                             >
-                                <option value="Lagos">Lagos</option>
-                                <option value="Abuja">Abuja</option>
-                                <option value="Ogun">Ogun</option>
+                                {NIGERIAN_STATES.map((option) => (
+                                    <option key={option} value={option}>{option}</option>
+                                ))}
                             </select>
                             <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
                         </div>
