@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import PropertyPublishedModal from "./PropertyPublishedModal";
 import { useProperty } from "@/hooks/useProperty";
-import { PropertyType, AvailabilityStatus, PropertyLeaseType } from "@/types/property";
+import { PropertyType, AvailabilityStatus, PropertyLeaseType, PropertyFile } from "@/types/property";
 import { useAuth } from "@/hooks/useAuth";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useRouter } from "next/navigation";
@@ -35,13 +35,31 @@ const FEATURES_MAP: Record<string, number> = {
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 const ALLOWED_FILE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".mp4", ".mov", ".avi", ".mkv", ".webm"];
 
-export default function AddPropertyForm() {
+interface AddPropertyFormProps {
+    editPropertyId?: string;
+}
+
+export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps = {}) {
+    const isEditMode = !!editPropertyId;
+
     // Navigation State
     const [step, setStep] = useState(1);
     const router = useRouter();
     const { user } = useAuth();
-    const { createProperty, isCreating } = useProperty();
+    const {
+        createProperty, isCreating,
+        updateProperty, isUpdating,
+        useGetProperty, usePropertyAddress,
+        uploadFiles,
+    } = useProperty();
     const { useGetCustomer } = useCustomer();
+
+    // Edit mode: load the existing property + address to prefill the form.
+    const { data: existingPropertyResponse } = useGetProperty(editPropertyId || null);
+    const { data: existingAddressResponse } = usePropertyAddress(editPropertyId || null);
+    const [hasPrefilled, setHasPrefilled] = useState(false);
+    const [existingFiles, setExistingFiles] = useState<PropertyFile[]>([]);
+    const [addressId, setAddressId] = useState("");
     
     // KYC Verification Check
     const { data: customerResponse, isLoading: isLoadingCustomer } = useGetCustomer(user?.id || null);
@@ -83,15 +101,50 @@ export default function AddPropertyForm() {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Sync names from auth if available
+    // Sync names from auth if available (skipped once we've prefilled from an existing property)
     useEffect(() => {
-        if (user) {
+        if (user && !isEditMode) {
             setFirstName(user.firstName || "");
             setLastName(user.lastName || "");
             setEmail(user.email || "");
             setPhone(user.phoneNumber || "");
         }
-    }, [user]);
+    }, [user, isEditMode]);
+
+    // Prefill the form from the existing property once it loads.
+    useEffect(() => {
+        if (!isEditMode || hasPrefilled || !existingPropertyResponse?.data) return;
+
+        const p = existingPropertyResponse.data;
+        setPropertyType(p.propertyType);
+        setTitle(p.title || "");
+        setDescription(p.description || "");
+        setAvailability(p.availability);
+        setListingType(p.propertyLeaseType);
+        setPrice(String(p.price));
+        const [first, ...rest] = (p.contactPersonName || "").split(" ");
+        setFirstName(first || "");
+        setLastName(rest.join(" "));
+        setEmail(p.contactPersonEmail || "");
+        setPhone(p.contactPersonPhoneNumber || "");
+        setSelectedFeatures(
+            Object.entries(FEATURES_MAP)
+                .filter(([, bit]) => (p.features & bit) !== 0)
+                .map(([name]) => name)
+        );
+        setExistingFiles(p.files || []);
+        setHasPrefilled(true);
+    }, [isEditMode, hasPrefilled, existingPropertyResponse]);
+
+    useEffect(() => {
+        if (!isEditMode || !existingAddressResponse?.data) return;
+
+        const addr = existingAddressResponse.data;
+        setAddressId(addr.id);
+        setAddress(addr.place || "");
+        setCity(addr.city || "");
+        setState(addr.state || "Lagos");
+    }, [isEditMode, existingAddressResponse]);
 
     // Validation
     const isStep1Valid =
@@ -100,7 +153,7 @@ export default function AddPropertyForm() {
         address.trim() !== "" &&
         city !== "" &&
         state !== "" &&
-        images.length > 0;
+        (isEditMode ? existingFiles.length + images.length > 0 : images.length > 0);
 
     const isStep2Valid =
         price.trim() !== "" &&
@@ -198,6 +251,51 @@ export default function AddPropertyForm() {
             },
             onError: (error: any) => {
                 alert(error?.response?.data?.message || "Failed to save property. Please check your inputs.");
+            }
+        });
+    };
+
+    const handleUpdate = () => {
+        if (!user || !editPropertyId) return;
+
+        const featuresValue = selectedFeatures.reduce((acc, feature) => acc | FEATURES_MAP[feature], 0);
+
+        updateProperty({
+            id: editPropertyId,
+            data: {
+                id: editPropertyId,
+                title,
+                description,
+                propertyType,
+                price: parseFloat(price.replace(/,/g, '')),
+                availability,
+                propertyLeaseType: listingType,
+                features: featuresValue,
+                contactPersonName: `${firstName} ${lastName}`,
+                contactPersonEmail: email,
+                contactPersonPhoneNumber: phone,
+                propertyAddress: {
+                    id: addressId,
+                    place: address,
+                    city,
+                    state,
+                    country: "Nigeria",
+                    postalCode: existingAddressResponse?.data?.postalCode || "100001",
+                },
+                authenticatedUserId: user.id,
+            }
+        }, {
+            onSuccess: () => {
+                if (images.length > 0) {
+                    uploadFiles({ id: editPropertyId, files: images }, {
+                        onSettled: () => router.push("/properties"),
+                    });
+                } else {
+                    router.push("/properties");
+                }
+            },
+            onError: (error: any) => {
+                alert(error?.response?.data?.message || "Failed to update property. Please check your inputs.");
             }
         });
     };
@@ -358,6 +456,13 @@ export default function AddPropertyForm() {
                     )}
 
                     <div className="flex flex-wrap gap-4 mt-6">
+                        {isEditMode && existingFiles.map((file) => (
+                            <div key={file.id} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800">
+                                {file.fileUrl && (
+                                    <Image src={file.fileUrl} alt="Existing property photo" fill className="object-cover" />
+                                )}
+                            </div>
+                        ))}
                         {previews.map((preview, index) => (
                             <div key={index} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 group">
                                 <Image src={preview} alt={`Preview ${index}`} fill className="object-cover" />
@@ -523,21 +628,36 @@ export default function AddPropertyForm() {
                     </div>
 
                     <div className="pt-8 text-center space-y-4">
-                        <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500">Publish to list it for renters and buyers now, or save as a draft to publish later.</p>
-                        <button
-                            onClick={() => handlePublish(true)}
-                            disabled={isCreating}
-                            className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
-                        >
-                            {isCreating ? <Loader2 className="animate-spin" /> : "Publish Property"}
-                        </button>
-                        <button
-                            onClick={() => handlePublish(false)}
-                            disabled={isCreating}
-                            className="w-full py-4 rounded-[20px] border-2 border-[#002B7F] text-[#002B7F] font-bold text-[15px] font-montserrat hover:bg-[#002B7F]/5 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
-                        >
-                            Save as Draft
-                        </button>
+                        {isEditMode ? (
+                            <>
+                                <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500">Review your changes, then save.</p>
+                                <button
+                                    onClick={handleUpdate}
+                                    disabled={isUpdating}
+                                    className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                                >
+                                    {isUpdating ? <Loader2 className="animate-spin" /> : "Save Changes"}
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500">Publish to list it for renters and buyers now, or save as a draft to publish later.</p>
+                                <button
+                                    onClick={() => handlePublish(true)}
+                                    disabled={isCreating}
+                                    className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                                >
+                                    {isCreating ? <Loader2 className="animate-spin" /> : "Publish Property"}
+                                </button>
+                                <button
+                                    onClick={() => handlePublish(false)}
+                                    disabled={isCreating}
+                                    className="w-full py-4 rounded-[20px] border-2 border-[#002B7F] text-[#002B7F] font-bold text-[15px] font-montserrat hover:bg-[#002B7F]/5 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                                >
+                                    Save as Draft
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

@@ -8,16 +8,27 @@ import PropertyDeletedModal from "./PropertyDeletedModal";
 import { PropertyDetail } from "@/types/property";
 import { useProperty } from "@/hooks/useProperty";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface OwnerPropertyCardProps {
     property: PropertyDetail;
 }
 
 export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) {
+    const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeletedSuccessOpen, setIsDeletedSuccessOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    const goToEdit = () => router.push(`/properties/edit/${property.id}`);
+
+    const handleCardClick = () => {
+        // The delete modals are nested in the DOM under this card, so a click
+        // anywhere inside them would otherwise bubble up and trigger navigation.
+        if (isDeleteModalOpen || isDeletedSuccessOpen) return;
+        goToEdit();
+    };
 
     const { deleteProperty, isDeleting, setPublished, isSettingPublished } = useProperty();
 
@@ -49,7 +60,10 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
     const requests = 0; // Requests would come from inspection API if needed
 
     return (
-        <div className="bg-white dark:bg-gray-900 rounded-[24px] border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-md transition-shadow group relative flex flex-col h-full">
+        <div
+            onClick={handleCardClick}
+            className="bg-white dark:bg-gray-900 rounded-[24px] border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-md transition-shadow group relative flex flex-col h-full cursor-pointer"
+        >
             {/* Image Container */}
             <div className="relative h-64 w-full flex-shrink-0">
                 <Image
@@ -67,7 +81,7 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                 )}
 
                 {/* Menu Trigger */}
-                <div className="absolute top-4 right-4" ref={menuRef}>
+                <div className="absolute top-4 right-4" ref={menuRef} onClick={(e) => e.stopPropagation()}>
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${isMenuOpen
@@ -81,7 +95,13 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                     {/* Dropdown Menu */}
                     {isMenuOpen && (
                         <div className="absolute top-12 right-0 w-[180px] bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-50 py-2 z-50 animate-in fade-in zoom-in duration-200">
-                            <button className="w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                            <button
+                                onClick={() => {
+                                    setIsMenuOpen(false);
+                                    goToEdit();
+                                }}
+                                className="w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                            >
                                 Edit
                             </button>
                             <Link href={`/inspections`} className="block w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
