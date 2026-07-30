@@ -38,7 +38,7 @@ export default function PrivacyPage() {
                                 Last Updated: May 20, 2026
                             </p>
                             <p>
-                                At <strong>Real-estacy</strong>, protecting your privacy and the confidentiality of your personal and financial information is fundamental to the way we do business. This detailed Privacy Policy explains how we collect, use, share, and protect your information when you interact with our platform, whether as a property owner, renter, or site visitor.
+                                At <strong>Housing Hub</strong>, protecting your privacy and the confidentiality of your personal and financial information is fundamental to the way we do business. This detailed Privacy Policy explains how we collect, use, share, and protect your information when you interact with our platform, whether as a property owner, renter, or site visitor.
                             </p>
                             
                             <h3 className="text-[18px] font-bold text-[#1A1A1A] mt-6">1. Information We Collect</h3>
@@ -72,7 +72,7 @@ export default function PrivacyPage() {
                             <ul className="list-disc pl-5 space-y-2">
                                 <li><strong>Service Providers:</strong> We share data with trusted third parties who assist us with payment processing, identity verification, and hosting services. These partners are bound by strict confidentiality agreements.</li>
                                 <li><strong>Other Users:</strong> Relevant information is shared between owners and renters (e.g., contact info after a lease agreement) to facilitate the rental process.</li>
-                                <li><strong>Legal Requirements:</strong> We may disclose information if required by law, subpoena, or other legal processes, or to protect the rights and safety of Real-estacy and our users.</li>
+                                <li><strong>Legal Requirements:</strong> We may disclose information if required by law, subpoena, or other legal processes, or to protect the rights and safety of Housing Hub and our users.</li>
                             </ul>
                             
                             <h3 className="text-[18px] font-bold text-[#1A1A1A] mt-6">4. Data Security</h3>
@@ -101,9 +101,8 @@ export default function PrivacyPage() {
                                 If you have any questions, concerns, or requests regarding this Privacy Policy or how we handle your data, please contact our Data Protection Officer at:
                             </p>
                             <div className="bg-gray-50 p-4 rounded-lg mt-2 border border-gray-100">
-                                <p><strong>Email:</strong> privacy@real-estacy.com</p>
-                                <p><strong>Address:</strong> 123 Real Estate Avenue, Tech District, 90210</p>
-                                <p><strong>Phone:</strong> +1 (800) 555-0199</p>
+                                <p><strong>Email:</strong> info@housinghub.ng</p>
+                                <p><strong>Phone:</strong> +234 916 634 8464</p>
                             </div>
                         </div>
                     </div>
