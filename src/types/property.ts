@@ -108,7 +108,6 @@ export interface UpdatePropertyRequest {
     contactPersonEmail: string | null;
     contactPersonPhoneNumber: string | null;
     propertyAddress: {
-        id: string;
         place: string | null;
         city: string | null;
         state: string | null;

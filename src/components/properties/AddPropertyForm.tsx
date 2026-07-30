@@ -51,6 +51,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
         updateProperty, isUpdating,
         useGetProperty, usePropertyAddress,
         uploadFiles,
+        setPublished, isSettingPublished,
     } = useProperty();
     const { useGetCustomer } = useCustomer();
 
@@ -59,7 +60,6 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
     const { data: existingAddressResponse } = usePropertyAddress(editPropertyId || null);
     const [hasPrefilled, setHasPrefilled] = useState(false);
     const [existingFiles, setExistingFiles] = useState<PropertyFile[]>([]);
-    const [addressId, setAddressId] = useState("");
     
     // KYC Verification Check
     const { data: customerResponse, isLoading: isLoadingCustomer } = useGetCustomer(user?.id || null);
@@ -140,7 +140,6 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
         if (!isEditMode || !existingAddressResponse?.data) return;
 
         const addr = existingAddressResponse.data;
-        setAddressId(addr.id);
         setAddress(addr.place || "");
         setCity(addr.city || "");
         setState(addr.state || "Lagos");
@@ -255,10 +254,20 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
         });
     };
 
-    const handleUpdate = () => {
+    const handleUpdate = (publishAfterSave: boolean = false) => {
         if (!user || !editPropertyId) return;
 
         const featuresValue = selectedFeatures.reduce((acc, feature) => acc | FEATURES_MAP[feature], 0);
+
+        const finishUp = () => {
+            if (publishAfterSave) {
+                setPublished({ id: editPropertyId, publish: true }, {
+                    onSettled: () => router.push("/properties"),
+                });
+            } else {
+                router.push("/properties");
+            }
+        };
 
         updateProperty({
             id: editPropertyId,
@@ -275,7 +284,6 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                 contactPersonEmail: email,
                 contactPersonPhoneNumber: phone,
                 propertyAddress: {
-                    id: addressId,
                     place: address,
                     city,
                     state,
@@ -288,10 +296,10 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
             onSuccess: () => {
                 if (images.length > 0) {
                     uploadFiles({ id: editPropertyId, files: images }, {
-                        onSettled: () => router.push("/properties"),
+                        onSettled: finishUp,
                     });
                 } else {
-                    router.push("/properties");
+                    finishUp();
                 }
             },
             onError: (error: any) => {
@@ -630,11 +638,26 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                     <div className="pt-8 text-center space-y-4">
                         {isEditMode ? (
                             <>
-                                <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500">Review your changes, then save.</p>
+                                <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500">
+                                    {existingPropertyResponse?.data?.isPublished
+                                        ? "Review your changes, then save."
+                                        : "Save your changes, and publish now or keep it as a draft."}
+                                </p>
+                                {!existingPropertyResponse?.data?.isPublished && (
+                                    <button
+                                        onClick={() => handleUpdate(true)}
+                                        disabled={isUpdating || isSettingPublished}
+                                        className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                                    >
+                                        {isUpdating || isSettingPublished ? <Loader2 className="animate-spin" /> : "Save & Publish"}
+                                    </button>
+                                )}
                                 <button
-                                    onClick={handleUpdate}
-                                    disabled={isUpdating}
-                                    className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                                    onClick={() => handleUpdate(false)}
+                                    disabled={isUpdating || isSettingPublished}
+                                    className={existingPropertyResponse?.data?.isPublished
+                                        ? "w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                                        : "w-full py-4 rounded-[20px] border-2 border-[#002B7F] text-[#002B7F] font-bold text-[15px] font-montserrat hover:bg-[#002B7F]/5 transition-all flex items-center justify-center gap-2 disabled:opacity-60"}
                                 >
                                     {isUpdating ? <Loader2 className="animate-spin" /> : "Save Changes"}
                                 </button>
