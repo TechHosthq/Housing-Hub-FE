@@ -4,7 +4,7 @@ import { Search } from "lucide-react";
 
 export default function Footer() {
     return (
-        <footer className="bg-[#07358B] text-white pt-24 pb-16 px-8">
+        <footer className="bg-[#07358B] dark:bg-[#041d40] text-white pt-24 pb-16 px-8">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-20 mb-16">
                 <div className="space-y-6">
                     <div className="flex items-center gap-3">
