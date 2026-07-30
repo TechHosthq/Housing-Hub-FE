@@ -1,7 +1,6 @@
 "use client";
 
 import { Bed, Bath, Wifi, Car, Zap, MapPin, ChevronDown, Loader2 } from "lucide-react";
-import Image from "next/image";
 import { useProperty } from "@/hooks/useProperty";
 
 interface PropertyInfoProps {
@@ -22,6 +21,10 @@ export default function PropertyInfo({ propertyId, property }: PropertyInfoProps
     
     const apiAddress = addressResponse?.isSuccessful ? addressResponse.data : null;
     const hasValidAddress = apiAddress && apiAddress.place && apiAddress.city;
+
+    const mapQuery = hasValidAddress
+        ? [apiAddress.place, apiAddress.city, apiAddress.state].filter(Boolean).join(", ")
+        : property.location;
 
     return (
         <div className="space-y-8">
@@ -101,17 +104,20 @@ export default function PropertyInfo({ propertyId, property }: PropertyInfoProps
                     <h3 className="text-[14px] font-black text-[#1A1A1A] font-montserrat">Map</h3>
                     <ChevronDown size={16} className="text-[#666666]" />
                 </div>
-                <div className="w-full h-48 rounded-[22px] overflow-hidden relative">
-                    <Image
-                        src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=2074"
-                        alt="Map"
-                        fill
-                        className="object-cover grayscale opacity-50"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-8 h-8 rounded-full bg-primary-dark/20 animate-ping absolute" />
-                        <div className="w-4 h-4 rounded-full bg-primary-dark relative shadow-lg ring-4 ring-white" />
-                    </div>
+                <div className="w-full h-48 rounded-[22px] overflow-hidden relative bg-gray-100">
+                    {mapQuery ? (
+                        <iframe
+                            title="Property location"
+                            src={`https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`}
+                            className="w-full h-full border-0"
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center text-[11px] text-gray-400 font-medium">
+                            Location not available
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

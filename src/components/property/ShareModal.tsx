@@ -1,25 +1,47 @@
 "use client";
 
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface ShareModalProps {
     isOpen: boolean;
     onClose: () => void;
+    propertyTitle: string;
 }
 
-export default function ShareModal({ isOpen, onClose }: ShareModalProps) {
+export default function ShareModal({ isOpen, onClose, propertyTitle }: ShareModalProps) {
     const [isVisible, setIsVisible] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
             setIsVisible(true);
         } else {
             setIsVisible(false);
+            setCopied(false);
         }
     }, [isOpen]);
 
     if (!isOpen) return null;
+
+    const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+
+    const handleCopyLink = async () => {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleShareWhatsApp = () => {
+        const text = `${propertyTitle} — ${shareUrl}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+    };
+
+    const handleShareEmail = () => {
+        const subject = propertyTitle;
+        const body = `Check out this property: ${shareUrl}`;
+        window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    };
 
     return (
         <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all duration-300 ${isVisible ? "opacity-100" : "opacity-0"}`}>
@@ -46,13 +68,23 @@ export default function ShareModal({ isOpen, onClose }: ShareModalProps) {
 
                 {/* Options */}
                 <div className="space-y-4">
-                    <button className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all">
-                        Copy Link
+                    <button
+                        onClick={handleCopyLink}
+                        className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all flex items-center justify-between"
+                    >
+                        {copied ? "Link Copied" : "Copy Link"}
+                        {copied && <Check size={16} className="text-primary-dark" />}
                     </button>
-                    <button className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all">
+                    <button
+                        onClick={handleShareWhatsApp}
+                        className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all"
+                    >
                         Share On WhatsApp
                     </button>
-                    <button className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all">
+                    <button
+                        onClick={handleShareEmail}
+                        className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all"
+                    >
                         Share Via Email
                     </button>
                 </div>

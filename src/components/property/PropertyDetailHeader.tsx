@@ -5,7 +5,11 @@ import { useState } from "react";
 import ShareModal from "./ShareModal";
 import ReportModal from "./ReportModal";
 
-export default function PropertyDetailHeader() {
+interface PropertyDetailHeaderProps {
+    propertyTitle: string;
+}
+
+export default function PropertyDetailHeader({ propertyTitle }: PropertyDetailHeaderProps) {
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
@@ -32,6 +36,7 @@ export default function PropertyDetailHeader() {
             <ShareModal
                 isOpen={isShareModalOpen}
                 onClose={() => setIsShareModalOpen(false)}
+                propertyTitle={propertyTitle}
             />
 
             <ReportModal

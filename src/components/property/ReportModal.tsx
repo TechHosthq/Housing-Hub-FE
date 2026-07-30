@@ -51,7 +51,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
             />
 
             {/* Modal Content */}
-            <div className={`relative bg-white rounded-[28px] p-8 w-full max-w-[440px] shadow-2xl transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
+            <div className={`relative bg-white rounded-[28px] p-8 w-full max-w-[440px] max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
                 {/* Header */}
                 <div className="flex justify-between items-start mb-6">
                     <div>

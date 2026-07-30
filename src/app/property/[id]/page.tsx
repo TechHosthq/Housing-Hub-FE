@@ -77,7 +77,7 @@ export default function PropertyDetailPage() {
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Main Content Side */}
                     <div className="flex-1 bg-white rounded-[28px] border border-[#F2F2F2] p-8 shadow-sm">
-                        <PropertyDetailHeader />
+                        <PropertyDetailHeader propertyTitle={displayProperty.title} />
 
                         <div className="space-y-10">
                             <PropertyGallery images={images} />
