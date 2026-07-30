@@ -35,13 +35,13 @@ export default function ResetPasswordForm() {
             </Link>
 
             <div className="mt-16 space-y-6">
-                <h1 className="text-[17px] font-bold text-[#1A1A1A] font-montserrat text-center">
+                <h1 className="text-[17px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat text-center">
                     Reset Password
                 </h1>
 
                 {forgotPasswordSuccess ? (
                     <div className="text-center space-y-4">
-                        <div className="p-4 bg-green-50 text-green-700 rounded-2xl text-sm">
+                        <div className="p-4 bg-green-50 dark:bg-green-900/20 text-green-700 rounded-2xl text-sm">
                             Reset link has been sent to your email address.
                         </div>
                         <Link href="/login" className="text-[#3b82f6] hover:underline text-xs font-semibold">
@@ -51,16 +51,16 @@ export default function ResetPasswordForm() {
                 ) : (
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         <div className="space-y-1">
-                            <label className="text-[9px] font-semibold text-[#666666]">Email Address</label>
+                            <label className="text-[9px] font-semibold text-[#666666] dark:text-gray-400">Email Address</label>
                             <input
                                 type="email"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
+                                className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-primary-dark transition-colors"
                                 placeholder=""
                             />
-                            <p className="text-[11px] text-gray-400 mt-2 leading-relaxed">
+                            <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-2 leading-relaxed">
                                 Enter your email address and we'll send you a link to reset your password.
                             </p>
                         </div>

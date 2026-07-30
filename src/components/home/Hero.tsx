@@ -79,22 +79,22 @@ export default function Hero() {
     const renderDropdown = (key: keyof typeof FILTER_OPTIONS, label: string) => (
         <div className="flex-1 relative" ref={activeDropdown === key ? dropdownRef : null}>
             <div 
-                className={`px-4 py-3 flex items-center justify-between cursor-pointer rounded-full transition-all group ${activeDropdown === key ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+                className={`px-4 py-3 flex items-center justify-between cursor-pointer rounded-full transition-all group ${activeDropdown === key ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}
                 onClick={() => toggleDropdown(key)}
             >
-                <span className={`text-[15px] truncate w-full text-left ${filters[key] ? 'font-semibold text-[#1A1A1A]' : 'font-medium text-gray-500'}`}>
+                <span className={`text-[15px] truncate w-full text-left ${filters[key] ? 'font-semibold text-[#1A1A1A] dark:text-gray-100' : 'font-medium text-gray-500 dark:text-gray-500'}`}>
                     {filters[key] || label}
                 </span>
-                <ChevronDown size={16} className={`text-gray-400 transition-transform duration-300 flex-shrink-0 ml-2 ${activeDropdown === key ? 'rotate-180 text-[#002D6B]' : 'group-hover:text-gray-600'}`} />
+                <ChevronDown size={16} className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 flex-shrink-0 ml-2 ${activeDropdown === key ? 'rotate-180 text-[#002D6B]' : 'group-hover:text-gray-600'}`} />
             </div>
 
             {/* Dropdown Menu */}
             {activeDropdown === key && (
-                <div className="absolute top-[calc(100%+8px)] left-0 w-full min-w-[200px] bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-[calc(100%+8px)] left-0 w-full min-w-[200px] bg-white dark:bg-gray-900 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 dark:border-gray-800 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     {FILTER_OPTIONS[key].map((option) => (
                         <div
                             key={option}
-                            className={`px-5 py-3 text-[14px] font-semibold cursor-pointer hover:bg-gray-50 transition-colors flex items-center ${filters[key] === option ? 'text-[#0095FF] bg-blue-50/50' : 'text-gray-600'}`}
+                            className={`px-5 py-3 text-[14px] font-semibold cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors flex items-center ${filters[key] === option ? 'text-[#0095FF] bg-blue-50/50' : 'text-gray-600 dark:text-gray-400'}`}
                             onClick={() => handleSelect(key, option)}
                         >
                             {option}
@@ -131,7 +131,7 @@ export default function Hero() {
                 </p>
 
                 {/* Search Card */}
-                <div className="bg-white shadow-2xl max-w-5xl mx-auto relative rounded-3xl md:rounded-full p-3 md:p-2.5 overflow-visible">
+                <div className="bg-white dark:bg-gray-900 shadow-2xl max-w-5xl mx-auto relative rounded-3xl md:rounded-full p-3 md:p-2.5 overflow-visible">
                     {/* Mobile: 3-row list of filters */}
                     <div className="flex flex-col md:hidden divide-y divide-gray-100 rounded-2xl border border-gray-100 mb-3">
                         {(['location', 'propertyType', 'priceRange'] as const).map((key) => {
@@ -143,20 +143,20 @@ export default function Hero() {
                             return (
                                 <div key={key} className="relative" ref={activeDropdown === key ? dropdownRef : null}>
                                     <div
-                                        className={`px-3 py-3 flex items-center justify-between cursor-pointer transition-all ${activeDropdown === key ? 'bg-gray-50' : 'hover:bg-gray-50'}`}
+                                        className={`px-3 py-3 flex items-center justify-between cursor-pointer transition-all ${activeDropdown === key ? 'bg-gray-50 dark:bg-gray-800/50' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}
                                         onClick={() => toggleDropdown(key)}
                                     >
-                                        <span className={`text-[13px] truncate w-full text-left ${filters[key] ? 'font-semibold text-[#1A1A1A]' : 'font-medium text-gray-500'}`}>
+                                        <span className={`text-[13px] truncate w-full text-left ${filters[key] ? 'font-semibold text-[#1A1A1A] dark:text-gray-100' : 'font-medium text-gray-500 dark:text-gray-500'}`}>
                                             {filters[key] || labels[key]}
                                         </span>
-                                        <ChevronDown size={14} className={`text-gray-400 transition-transform duration-300 flex-shrink-0 ml-1 ${activeDropdown === key ? 'rotate-180 text-[#002D6B]' : ''}`} />
+                                        <ChevronDown size={14} className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 flex-shrink-0 ml-1 ${activeDropdown === key ? 'rotate-180 text-[#002D6B]' : ''}`} />
                                     </div>
                                     {activeDropdown === key && (
-                                        <div className="absolute top-[calc(100%+4px)] left-0 w-[160px] bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 py-2 z-[200]">
+                                        <div className="absolute top-[calc(100%+4px)] left-0 w-[160px] bg-white dark:bg-gray-900 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 dark:border-gray-800 py-2 z-[200]">
                                             {FILTER_OPTIONS[key].map((option) => (
                                                 <div
                                                     key={option}
-                                                    className={`px-4 py-2.5 text-[13px] font-semibold cursor-pointer hover:bg-gray-50 transition-colors ${filters[key] === option ? 'text-[#0095FF] bg-blue-50/50' : 'text-gray-600'}`}
+                                                    className={`px-4 py-2.5 text-[13px] font-semibold cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${filters[key] === option ? 'text-[#0095FF] bg-blue-50/50' : 'text-gray-600 dark:text-gray-400'}`}
                                                     onClick={() => handleSelect(key, option)}
                                                 >
                                                     {option}
@@ -181,9 +181,9 @@ export default function Hero() {
                     <div className="hidden md:flex flex-row items-center w-full">
                         <div className="flex flex-1 items-center min-w-0">
                             {renderDropdown('location', 'Location')}
-                            <div className="w-[1px] h-10 bg-gray-200 mx-1 flex-shrink-0"></div>
+                            <div className="w-[1px] h-10 bg-gray-200 dark:bg-gray-700 mx-1 flex-shrink-0"></div>
                             {renderDropdown('propertyType', 'Property Type')}
-                            <div className="w-[1px] h-10 bg-gray-200 mx-1 flex-shrink-0"></div>
+                            <div className="w-[1px] h-10 bg-gray-200 dark:bg-gray-700 mx-1 flex-shrink-0"></div>
                             {renderDropdown('priceRange', 'Price Range')}
                         </div>
                         <div className="bg-[#002D6B] text-white px-6 py-4 rounded-full flex items-center justify-center gap-2 m-1 flex-shrink-0">

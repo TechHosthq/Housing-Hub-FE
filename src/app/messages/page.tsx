@@ -29,13 +29,13 @@ export default function MessagesPage() {
                 {isChatting && (
                     <button
                         onClick={handleBack}
-                        className="flex items-center gap-2 text-[#666666] text-[13px] font-bold hover:text-[#002B7F] transition-colors mb-6 group"
+                        className="flex items-center gap-2 text-[#666666] dark:text-gray-400 text-[13px] font-bold hover:text-[#002B7F] transition-colors mb-6 group"
                     >
                         <span className="text-[18px] group-hover:-translate-x-1 transition-transform">←</span> Back
                     </button>
                 )}
 
-                <h1 className="text-[28px] font-black text-[#1A1A1A] font-montserrat mb-8">
+                <h1 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-8">
                     My Account
                 </h1>
 

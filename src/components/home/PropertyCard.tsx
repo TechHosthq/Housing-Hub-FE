@@ -32,7 +32,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
     return (
         <Link
             href={`/property/${id}`}
-            className="bg-white rounded-[22px] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 group flex flex-col h-full cursor-pointer hover:-translate-y-2"
+            className="bg-white dark:bg-gray-900 rounded-[22px] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-gray-800 group flex flex-col h-full cursor-pointer hover:-translate-y-2"
         >
             <div className="m-2">
                 <div className="relative h-56 w-full overflow-hidden rounded-[16px]">
@@ -53,23 +53,23 @@ export default function PropertyCard({ property }: PropertyCardProps) {
 
             <div className="p-7 flex flex-col flex-1">
                 <div className="flex flex-col mb-4">
-                    <h3 className="font-semibold text-xl text-[#1A1A1A] leading-tight line-clamp-1 mb-1 group-hover:text-[#0095FF] transition-colors">{title}</h3>
+                    <h3 className="font-semibold text-xl text-[#1A1A1A] dark:text-gray-100 leading-tight line-clamp-1 mb-1 group-hover:text-[#0095FF] transition-colors">{title}</h3>
                     <span className="font-bold text-[#0066CC] text-2xl">{price}</span>
                 </div>
 
-                <div className="flex items-center gap-2 text-[14px] mb-8 text-gray-400 font-bold">
+                <div className="flex items-center gap-2 text-[14px] mb-8 text-gray-400 dark:text-gray-500 font-bold">
                     <MapPin size={18} className="flex-shrink-0 text-[#0095FF]" />
                     <span className="truncate">{location}</span>
                 </div>
 
-                <div className="mt-auto flex items-center gap-4 pt-6 border-t border-gray-100">
+                <div className="mt-auto flex items-center gap-4 pt-6 border-t border-gray-100 dark:border-gray-800">
                     <div className="flex items-center gap-2">
-                        <Bed size={18} className="text-gray-400" />
-                        <span className="text-[13px] font-medium text-gray-600">{bedrooms} Bedrooms</span>
+                        <Bed size={18} className="text-gray-400 dark:text-gray-500" />
+                        <span className="text-[13px] font-medium text-gray-600 dark:text-gray-400">{bedrooms} Bedrooms</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <ShowerHead size={18} className="text-gray-400" />
-                        <span className="text-[13px] font-medium text-gray-600">{bathrooms} Bathrooms</span>
+                        <ShowerHead size={18} className="text-gray-400 dark:text-gray-500" />
+                        <span className="text-[13px] font-medium text-gray-600 dark:text-gray-400">{bathrooms} Bathrooms</span>
                     </div>
                 </div>
             </div>

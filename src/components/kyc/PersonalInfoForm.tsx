@@ -111,12 +111,12 @@ export default function PersonalInfoForm() {
                 Back
             </Link>
 
-            <h1 className="text-[17px] font-black text-[#1A1A1A] font-montserrat mb-10">
+            <h1 className="text-[17px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-10">
                 Personal Info
             </h1>
 
             {error && (
-                <div className="px-4 py-3 mb-6 text-[13px] text-red-600 bg-red-50 border border-red-100 rounded-2xl font-semibold">
+                <div className="px-4 py-3 mb-6 text-[13px] text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 rounded-2xl font-semibold">
                     {error}
                 </div>
             )}
@@ -124,7 +124,7 @@ export default function PersonalInfoForm() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-8">
                 <div className="space-y-6">
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider">
+                        <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider">
                             First Name<span className="text-red-500">*</span>
                         </label>
                         <input
@@ -133,12 +133,12 @@ export default function PersonalInfoForm() {
                             value={formData.firstName}
                             onChange={handleInputChange}
                             placeholder="Enter first name"
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider">
+                        <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider">
                             Last Name<span className="text-red-500">*</span>
                         </label>
                         <input
@@ -147,12 +147,12 @@ export default function PersonalInfoForm() {
                             value={formData.lastName}
                             onChange={handleInputChange}
                             placeholder="Enter last name"
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider">
+                        <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider">
                             Date of Birth<span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
@@ -161,7 +161,7 @@ export default function PersonalInfoForm() {
                                 name="dateOfBirth"
                                 value={formData.dateOfBirth}
                                 onChange={handleInputChange}
-                                className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm"
+                                className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm"
                             />
                         </div>
                     </div>
@@ -169,7 +169,7 @@ export default function PersonalInfoForm() {
 
                 <div className="space-y-6">
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider">
+                        <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider">
                             Job Title
                         </label>
                         <input
@@ -178,12 +178,12 @@ export default function PersonalInfoForm() {
                             value={formData.jobTitle}
                             onChange={handleInputChange}
                             placeholder="e.g. Software Engineer"
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider">
+                        <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider">
                             Company Name
                         </label>
                         <input
@@ -192,12 +192,12 @@ export default function PersonalInfoForm() {
                             value={formData.companyName}
                             onChange={handleInputChange}
                             placeholder="e.g. Google"
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider">
+                        <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider">
                             Industry
                         </label>
                         <input
@@ -206,7 +206,7 @@ export default function PersonalInfoForm() {
                             value={formData.industry}
                             onChange={handleInputChange}
                             placeholder="e.g. Technology"
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
 

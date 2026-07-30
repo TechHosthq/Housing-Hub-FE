@@ -18,14 +18,14 @@ export default function DeleteListingModal({ isOpen, onClose, onConfirm }: Delet
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-[24px] w-full max-w-[500px] p-12 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-[24px] w-full max-w-[500px] p-12 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
                 <div className="flex flex-col items-center text-center">
                     {/* Content */}
-                    <h2 className="text-[32px] font-black text-[#1A1A1A] font-montserrat mb-6">
+                    <h2 className="text-[32px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-6">
                         Delete Listing
                     </h2>
 
-                    <p className="text-[16px] font-bold text-gray-400 leading-relaxed max-w-[380px] mb-12">
+                    <p className="text-[16px] font-bold text-gray-400 dark:text-gray-500 leading-relaxed max-w-[380px] mb-12">
                         Deleting this listing means your are permanently removing this property
                         from the platform.
                     </p>
@@ -34,13 +34,13 @@ export default function DeleteListingModal({ isOpen, onClose, onConfirm }: Delet
                     <div className="flex gap-4 w-full">
                         <button
                             onClick={onClose}
-                            className="flex-1 py-5 rounded-[40px] border border-gray-100 bg-white text-gray-400 font-black text-[18px] font-montserrat hover:bg-gray-50 transition-all shadow-sm transform active:scale-[0.98]"
+                            className="flex-1 py-5 rounded-[40px] border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-400 dark:text-gray-500 font-black text-[18px] font-montserrat hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all shadow-sm transform active:scale-[0.98]"
                         >
                             Cancel
                         </button>
                         <button
                             onClick={onConfirm}
-                            className="flex-1 py-5 rounded-[40px] border border-[#FF4D4D] bg-white text-[#FF4D4D] font-black text-[18px] font-montserrat hover:bg-red-50 transition-all shadow-sm transform active:scale-[0.98]"
+                            className="flex-1 py-5 rounded-[40px] border border-[#FF4D4D] bg-white dark:bg-gray-900 text-[#FF4D4D] font-black text-[18px] font-montserrat hover:bg-red-50 transition-all shadow-sm transform active:scale-[0.98]"
                         >
                             Delete
                         </button>

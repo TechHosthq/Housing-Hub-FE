@@ -4,7 +4,7 @@ import FAQAccordion from "@/components/faq/FAQAccordion";
 
 export default function FAQPage() {
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <Navbar />
 
             {/* FAQ Hero Section */}
@@ -23,7 +23,7 @@ export default function FAQPage() {
             </section>
 
             {/* FAQ Content Section */}
-            <section className="bg-white">
+            <section className="bg-white dark:bg-gray-900">
                 <FAQAccordion />
             </section>
 

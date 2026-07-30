@@ -73,19 +73,19 @@ export default function AccountTypePage() {
     if (!isAuthenticated) return null;
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <Navbar />
 
             <div className="max-w-3xl mx-auto px-6 pt-32 pb-24">
-                <h1 className="text-[24px] md:text-[28px] font-black text-[#1A1A1A] font-montserrat text-center">
+                <h1 className="text-[24px] md:text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat text-center">
                     How will you use Housing Hub?
                 </h1>
-                <p className="text-[14px] text-[#666666] text-center mt-3 mb-10">
+                <p className="text-[14px] text-[#666666] dark:text-gray-400 text-center mt-3 mb-10">
                     This sets up your dashboard. You can only choose once, so pick what fits you best.
                 </p>
 
                 {error && (
-                    <div className="mb-6 px-4 py-3 text-[13px] text-red-600 bg-red-50 border border-red-100 rounded-2xl text-center font-semibold">
+                    <div className="mb-6 px-4 py-3 text-[13px] text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-100 rounded-2xl text-center font-semibold">
                         {error}
                     </div>
                 )}
@@ -102,19 +102,19 @@ export default function AccountTypePage() {
                                 className={`w-full flex items-start gap-4 text-left p-5 rounded-2xl border-2 transition-all ${
                                     isSelected
                                         ? "border-[#002D6B] bg-[#F5F8FF]"
-                                        : "border-gray-100 hover:border-gray-200"
+                                        : "border-gray-100 dark:border-gray-800 hover:border-gray-200"
                                 }`}
                             >
                                 <span
                                     className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${
-                                        isSelected ? "bg-[#002D6B] text-white" : "bg-gray-50 text-gray-400"
+                                        isSelected ? "bg-[#002D6B] text-white" : "bg-gray-50 dark:bg-gray-800/50 text-gray-400 dark:text-gray-500"
                                     }`}
                                 >
                                     <Icon size={20} />
                                 </span>
                                 <span className="flex-1">
-                                    <span className="block text-[15px] font-bold text-[#1A1A1A]">{title}</span>
-                                    <span className="block text-[13px] text-[#666666] mt-1">{description}</span>
+                                    <span className="block text-[15px] font-bold text-[#1A1A1A] dark:text-gray-100">{title}</span>
+                                    <span className="block text-[13px] text-[#666666] dark:text-gray-400 mt-1">{description}</span>
                                 </span>
                             </button>
                         );

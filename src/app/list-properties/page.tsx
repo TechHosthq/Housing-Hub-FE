@@ -5,7 +5,7 @@ import WhyList from "@/components/list-property/WhyList";
 
 export default function ListPropertiesPage() {
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <Navbar />
             <ListHero />
             <WhyList />

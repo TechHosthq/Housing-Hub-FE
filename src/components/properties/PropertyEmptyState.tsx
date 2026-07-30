@@ -8,7 +8,7 @@ export default function PropertyEmptyState() {
             <div className="w-20 h-20 rounded-full bg-[#E9F3FF] flex items-center justify-center mb-6 shadow-sm">
                 <Home size={32} className="text-[#0095FF]" strokeWidth={1.5} />
             </div>
-            <h3 className="text-[18px] font-bold text-[#1A1A1A] font-montserrat text-center">
+            <h3 className="text-[18px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat text-center">
                 Your listed property shows here
             </h3>
         </div>

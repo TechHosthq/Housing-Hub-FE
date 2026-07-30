@@ -178,7 +178,7 @@ export default function AddPropertyForm() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-12">
             <div className="space-y-10">
                 <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Property Type
                     </label>
                     <div className="flex flex-wrap gap-3">
@@ -187,8 +187,8 @@ export default function AddPropertyForm() {
                                 key={type}
                                 onClick={() => setPropertyType(idx as PropertyType)}
                                 className={`px-8 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${propertyType === idx
-                                    ? "border-[#0095FF] text-[#0095FF] bg-white"
-                                    : "border-gray-100 text-gray-400 hover:border-gray-200"
+                                    ? "border-[#0095FF] text-[#0095FF] bg-white dark:bg-gray-900"
+                                    : "border-gray-100 dark:border-gray-800 text-gray-400 dark:text-gray-500 hover:border-gray-200"
                                     }`}
                             >
                                 {type}
@@ -198,7 +198,7 @@ export default function AddPropertyForm() {
                 </div>
 
                 <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Property Title<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -206,12 +206,12 @@ export default function AddPropertyForm() {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="Aliart House"
-                        className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300"
+                        className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-300 dark:placeholder:text-gray-600"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Description<span className="text-red-500">*</span>
                     </label>
                     <textarea
@@ -219,35 +219,35 @@ export default function AddPropertyForm() {
                         onChange={(e) => setDescription(e.target.value.slice(0, 1000))}
                         placeholder="Enter property description..."
                         rows={5}
-                        className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300 resize-none leading-relaxed"
+                        className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-300 dark:placeholder:text-gray-600 resize-none leading-relaxed"
                     />
-                    <div className="mt-2 text-[12px] font-bold text-gray-400 text-right">
+                    <div className="mt-2 text-[12px] font-bold text-gray-400 dark:text-gray-500 text-right">
                         {description.length}/1000 characters
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Availability Status<span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                         <select
                             value={availability}
                             onChange={(e) => setAvailability(parseInt(e.target.value) as AvailabilityStatus)}
-                            className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] appearance-none bg-white cursor-pointer"
+                            className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100 appearance-none bg-white dark:bg-gray-900 cursor-pointer"
                         >
                             <option value={AvailabilityStatus.Available}>Available</option>
                             <option value={AvailabilityStatus.Occupied}>Occupied</option>
                             <option value={AvailabilityStatus.Sold}>Sold</option>
                         </select>
-                        <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                        <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" size={20} />
                     </div>
                 </div>
             </div>
 
             <div className="space-y-10">
                 <div className="space-y-4">
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Address<span className="text-red-500"> *</span>
                     </label>
                     <input
@@ -255,7 +255,7 @@ export default function AddPropertyForm() {
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         placeholder="Alirat street"
-                        className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300 mb-4"
+                        className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-300 dark:placeholder:text-gray-600 mb-4"
                     />
                     <div className="grid grid-cols-2 gap-4">
                         <input
@@ -263,25 +263,25 @@ export default function AddPropertyForm() {
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
                             placeholder="City e.g. Ikeja"
-                            className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] placeholder:text-gray-300"
+                            className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                         <div className="relative">
                             <select
                                 value={state}
                                 onChange={(e) => setState(e.target.value)}
-                                className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] appearance-none bg-white cursor-pointer"
+                                className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100 appearance-none bg-white dark:bg-gray-900 cursor-pointer"
                             >
                                 {NIGERIAN_STATES.map((option) => (
                                     <option key={option} value={option}>{option}</option>
                                 ))}
                             </select>
-                            <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
+                            <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" size={18} />
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Features
                     </label>
                     <div className="flex flex-wrap gap-3">
@@ -290,8 +290,8 @@ export default function AddPropertyForm() {
                                 key={feature}
                                 onClick={() => toggleFeature(feature)}
                                 className={`px-6 py-3 rounded-full border-2 font-bold text-[13px] transition-all ${selectedFeatures.includes(feature)
-                                    ? "border-[#0095FF] text-[#0095FF] bg-white"
-                                    : "border-gray-50 text-gray-400 hover:border-gray-100"
+                                    ? "border-[#0095FF] text-[#0095FF] bg-white dark:bg-gray-900"
+                                    : "border-gray-50 text-gray-400 dark:text-gray-500 hover:border-gray-100"
                                     }`}
                             >
                                 {feature}
@@ -301,18 +301,18 @@ export default function AddPropertyForm() {
                 </div>
 
                 <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Pictures (Multiple)<span className="text-red-500">*</span>
                     </label>
 
                     <div
                         onClick={() => fileInputRef.current?.click()}
-                        className="bg-gray-50/50 border-2 border-dashed border-gray-100 rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+                        className="bg-gray-50/50 dark:bg-gray-800/50 border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
                     >
-                        <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center mb-4">
-                            <Upload size={24} className="text-gray-400" />
+                        <div className="w-12 h-12 rounded-full bg-white dark:bg-gray-900 shadow-sm flex items-center justify-center mb-4">
+                            <Upload size={24} className="text-gray-400 dark:text-gray-500" />
                         </div>
-                        <span className="text-[16px] font-bold text-gray-400">Upload Images</span>
+                        <span className="text-[16px] font-bold text-gray-400 dark:text-gray-500">Upload Images</span>
                         <p className="text-[11px] font-bold text-gray-300 mt-2 uppercase tracking-wide">
                             JPG or PNG, max 8MB (up to 10 images)
                         </p>
@@ -328,7 +328,7 @@ export default function AddPropertyForm() {
 
                     <div className="flex flex-wrap gap-4 mt-6">
                         {previews.map((preview, index) => (
-                            <div key={index} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 group">
+                            <div key={index} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 group">
                                 <Image src={preview} alt={`Preview ${index}`} fill className="object-cover" />
                                 <button
                                     onClick={(e) => { e.stopPropagation(); removeImage(index); }}
@@ -346,7 +346,7 @@ export default function AddPropertyForm() {
                     disabled={!isStep1Valid}
                     className={`w-full py-5 rounded-[20px] font-black text-[18px] font-montserrat transition-all mt-10 shadow-lg ${isStep1Valid
                         ? "bg-[#002B7F] text-white hover:bg-[#001D4B]"
-                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                         }`}
                 >
                     Continue
@@ -359,15 +359,15 @@ export default function AddPropertyForm() {
         <div className="max-w-4xl">
             <div className="space-y-10">
                 <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Listing Type<span className="text-red-500">*</span>
                     </label>
                     <div className="flex gap-4">
                         <button
                             onClick={() => setListingType(PropertyLeaseType.Sale)}
                             className={`px-12 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${listingType === PropertyLeaseType.Sale
-                                ? "border-[#0095FF] text-[#0095FF] bg-white"
-                                : "border-gray-100 text-gray-400 hover:border-gray-200"
+                                ? "border-[#0095FF] text-[#0095FF] bg-white dark:bg-gray-900"
+                                : "border-gray-100 dark:border-gray-800 text-gray-400 dark:text-gray-500 hover:border-gray-200"
                                 }`}
                         >
                             Sale
@@ -375,8 +375,8 @@ export default function AddPropertyForm() {
                         <button
                             onClick={() => setListingType(PropertyLeaseType.Rent)}
                             className={`px-12 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${listingType === PropertyLeaseType.Rent
-                                ? "border-[#0095FF] text-[#0095FF] bg-white"
-                                : "border-gray-100 text-gray-400 hover:border-gray-200"
+                                ? "border-[#0095FF] text-[#0095FF] bg-white dark:bg-gray-900"
+                                : "border-gray-100 dark:border-gray-800 text-gray-400 dark:text-gray-500 hover:border-gray-200"
                                 }`}
                         >
                             Rent
@@ -385,23 +385,23 @@ export default function AddPropertyForm() {
                 </div>
 
                 <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Price (Per Year)<span className="text-red-500">*</span>
                     </label>
                     <div className="relative max-w-xs">
-                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#1A1A1A] font-bold">₦</div>
+                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#1A1A1A] dark:text-gray-100 font-bold">₦</div>
                         <input
                             type="text"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
                             placeholder="350,000"
-                            className="w-full pl-12 pr-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A]"
+                            className="w-full pl-12 pr-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100"
                         />
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Contact Name<span className="text-red-500">*</span>
                     </label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -410,20 +410,20 @@ export default function AddPropertyForm() {
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                             placeholder="First Name"
-                            className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A]"
+                            className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100"
                         />
                         <input
                             type="text"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
                             placeholder="Last Name"
-                            className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A]"
+                            className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100"
                         />
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-[12px] font-black text-[#1A1A1A] uppercase tracking-wider mb-4">
+                    <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
                         Phone Number<span className="text-red-500">*</span>
                     </label>
                     <input
@@ -431,7 +431,7 @@ export default function AddPropertyForm() {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+234 000000000000"
-                        className="w-full px-6 py-4 rounded-xl border border-gray-100 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A]"
+                        className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100"
                     />
                 </div>
 
@@ -441,7 +441,7 @@ export default function AddPropertyForm() {
                         disabled={!isStep2Valid}
                         className={`w-full md:w-96 py-5 rounded-[20px] font-black text-[18px] font-montserrat transition-all shadow-lg ${isStep2Valid
                             ? "bg-[#002B7F] text-white hover:bg-[#001D4B]"
-                            : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                            : "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                             }`}
                     >
                         Continue
@@ -454,45 +454,45 @@ export default function AddPropertyForm() {
     const renderStep3 = () => (
         <div className="space-y-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-white border border-gray-100 rounded-[20px] p-10 shadow-sm">
-                    <h2 className="text-[24px] font-black text-[#1A1A1A] mb-8">Property Details</h2>
+                <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-10 shadow-sm">
+                    <h2 className="text-[24px] font-black text-[#1A1A1A] dark:text-gray-100 mb-8">Property Details</h2>
                     <div className="space-y-6">
                         <div className="flex justify-between items-start gap-4">
-                            <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Property Type</span>
-                            <span className="text-[14px] font-bold text-[#1A1A1A]">{PROPERTY_TYPES[propertyType]}</span>
+                            <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Property Type</span>
+                            <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{PROPERTY_TYPES[propertyType]}</span>
                         </div>
                         <div className="flex justify-between items-start gap-4">
-                            <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Property Title</span>
-                            <span className="text-[14px] font-bold text-[#1A1A1A] text-right">{title}</span>
+                            <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Property Title</span>
+                            <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 text-right">{title}</span>
                         </div>
                         <div className="space-y-3">
-                            <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest block">Description</span>
-                            <p className="text-[13px] font-bold text-[#1A1A1A] leading-relaxed">{description}</p>
+                            <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest block">Description</span>
+                            <p className="text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 leading-relaxed">{description}</p>
                         </div>
                         <div className="flex justify-between items-start gap-4">
-                            <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Address</span>
-                            <span className="text-[14px] font-bold text-[#1A1A1A] text-right">{address}, {city}, {state}</span>
+                            <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Address</span>
+                            <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 text-right">{address}, {city}, {state}</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="space-y-8">
-                    <div className="bg-white border border-gray-100 rounded-[20px] p-8 shadow-sm">
-                        <h2 className="text-[24px] font-black text-[#1A1A1A] mb-8">Pricing & Contact</h2>
+                    <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-8 shadow-sm">
+                        <h2 className="text-[24px] font-black text-[#1A1A1A] dark:text-gray-100 mb-8">Pricing & Contact</h2>
                         <div className="space-y-6">
                             <div className="flex justify-between items-center">
-                                <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Price</span>
-                                <span className="text-[14px] font-black text-[#1A1A1A]">₦ {parseFloat(price).toLocaleString()}</span>
+                                <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Price</span>
+                                <span className="text-[14px] font-black text-[#1A1A1A] dark:text-gray-100">₦ {parseFloat(price).toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Contact</span>
-                                <span className="text-[14px] font-bold text-[#1A1A1A]">{firstName} {lastName}</span>
+                                <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Contact</span>
+                                <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{firstName} {lastName}</span>
                             </div>
                         </div>
                     </div>
 
                     <div className="pt-8 text-center space-y-4">
-                        <p className="text-[12px] font-bold text-gray-400">Publish to list it for renters and buyers now, or save as a draft to publish later.</p>
+                        <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500">Publish to list it for renters and buyers now, or save as a draft to publish later.</p>
                         <button
                             onClick={() => handlePublish(true)}
                             disabled={isCreating}
@@ -532,7 +532,7 @@ export default function AddPropertyForm() {
                 Back
             </button>
 
-            <h1 className="text-[32px] font-black text-[#1A1A1A] font-montserrat mb-12">
+            <h1 className="text-[32px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-12">
                 {step === 1 ? "Step 1: Property Details" : step === 2 ? "Step 2: Pricing & Contact" : "Preview All Information"}
             </h1>
 
@@ -540,7 +540,7 @@ export default function AddPropertyForm() {
 
             {showKycModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md transition-all animate-in fade-in duration-300">
-                    <div className="bg-white rounded-[24px] max-w-md w-full p-8 shadow-2xl border border-gray-100 flex flex-col items-center text-center animate-in zoom-in-95 duration-200">
+                    <div className="bg-white dark:bg-gray-900 rounded-[24px] max-w-md w-full p-8 shadow-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center text-center animate-in zoom-in-95 duration-200">
                         {/* Shield Warning Icon */}
                         <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mb-6">
                             <svg className="w-8 h-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -548,11 +548,11 @@ export default function AddPropertyForm() {
                             </svg>
                         </div>
 
-                        <h2 className="text-[22px] font-black text-[#1A1A1A] font-montserrat mb-3">
+                        <h2 className="text-[22px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3">
                             KYC Verification Required
                         </h2>
-                        
-                        <p className="text-gray-500 text-sm font-medium leading-relaxed mb-8">
+
+                        <p className="text-gray-500 dark:text-gray-500 text-sm font-medium leading-relaxed mb-8">
                             To ensure platform security and trust, house owners must verify their identity before publishing property listings.
                         </p>
 
@@ -568,7 +568,7 @@ export default function AddPropertyForm() {
                             {/* Action 2: Go back to Dashboard */}
                             <button
                                 onClick={() => router.push("/dashboard")}
-                                className="w-full py-3.5 rounded-xl font-bold text-sm text-gray-400 hover:text-gray-600 transition-all text-center mt-2"
+                                className="w-full py-3.5 rounded-xl font-bold text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 transition-all text-center mt-2"
                             >
                                 Cancel & Back to Dashboard
                             </button>

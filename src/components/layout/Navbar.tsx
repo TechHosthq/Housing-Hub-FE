@@ -52,7 +52,7 @@ export default function Navbar() {
         : "U";
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white px-6 md:px-8 py-3.5 shadow-sm border-b border-gray-50">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 px-6 md:px-8 py-3.5 shadow-sm border-b border-gray-50">
             <div className="max-w-7xl mx-auto flex items-center justify-between w-full">
                 {/* Logo */}
                 <div className="flex items-center">
@@ -74,7 +74,7 @@ export default function Navbar() {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className={`${pathname === link.href ? "text-[#0095FF]" : "text-[#1A1A1A]"} hover:text-[#0095FF] transition-colors text-base`}
+                            className={`${pathname === link.href ? "text-[#0095FF]" : "text-[#1A1A1A] dark:text-gray-100"} hover:text-[#0095FF] transition-colors text-base`}
                         >
                             {link.name}
                         </Link>
@@ -93,10 +93,10 @@ export default function Navbar() {
                                     {initials}
                                 </div>
                                 <div className="flex flex-col items-start leading-none">
-                                    <span className="text-[13px] font-black text-[#1A1A1A]">
+                                    <span className="text-[13px] font-black text-[#1A1A1A] dark:text-gray-100">
                                         {user.firstName} {user.lastName}
                                     </span>
-                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">
+                                    <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tight">
                                         {roleLabel}
                                     </span>
                                 </div>
@@ -104,27 +104,27 @@ export default function Navbar() {
 
                             {/* Dropdown */}
                             {isUserMenuOpen && (
-                                <div className="absolute right-0 top-[calc(100%+12px)] w-52 bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                                <div className="absolute right-0 top-[calc(100%+12px)] w-52 bg-white dark:bg-gray-900 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 dark:border-gray-800 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                                     <Link
                                         href="/profile"
                                         onClick={() => setIsUserMenuOpen(false)}
-                                        className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors group"
+                                        className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group"
                                     >
-                                        <User size={16} className="text-gray-400 group-hover:text-[#0095FF] transition-colors" />
-                                        <span className="text-[13px] font-bold text-[#1A1A1A]">Profile</span>
+                                        <User size={16} className="text-gray-400 dark:text-gray-500 group-hover:text-[#0095FF] transition-colors" />
+                                        <span className="text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100">Profile</span>
                                     </Link>
                                     <Link
                                         href="/dashboard"
                                         onClick={() => setIsUserMenuOpen(false)}
-                                        className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors group"
+                                        className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group"
                                     >
-                                        <LayoutDashboard size={16} className="text-gray-400 group-hover:text-[#0095FF] transition-colors" />
-                                        <span className="text-[13px] font-bold text-[#1A1A1A]">Dashboard</span>
+                                        <LayoutDashboard size={16} className="text-gray-400 dark:text-gray-500 group-hover:text-[#0095FF] transition-colors" />
+                                        <span className="text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100">Dashboard</span>
                                     </Link>
-                                    <div className="my-1 border-t border-gray-100" />
+                                    <div className="my-1 border-t border-gray-100 dark:border-gray-800" />
                                     <button
                                         onClick={handleLogout}
-                                        className="w-full flex items-center gap-3 px-5 py-3 hover:bg-red-50 transition-colors group"
+                                        className="w-full flex items-center gap-3 px-5 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors group"
                                     >
                                         <LogOut size={16} className="text-red-400 group-hover:text-red-500 transition-colors" />
                                         <span className="text-[13px] font-bold text-red-500">Logout</span>
@@ -166,19 +166,19 @@ export default function Navbar() {
 
                 {/* Mobile Menu Overlay */}
                 {isMenuOpen && (
-                    <div className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden flex flex-col p-6 gap-6 font-bold border-t border-gray-100 animate-in slide-in-from-top duration-200">
+                    <div className="absolute top-full left-0 right-0 bg-white dark:bg-gray-900 shadow-lg md:hidden flex flex-col p-6 gap-6 font-bold border-t border-gray-100 dark:border-gray-800 animate-in slide-in-from-top duration-200">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`${pathname === link.href ? "text-[#3b82f6]" : "text-[#1A1A1A]"} hover:text-primary transition-colors`}
+                                className={`${pathname === link.href ? "text-[#3b82f6]" : "text-[#1A1A1A] dark:text-gray-100"} hover:text-primary transition-colors`}
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 {link.name}
                             </Link>
                         ))}
 
-                        <div className="flex flex-col gap-4 pt-4 border-t border-gray-100">
+                        <div className="flex flex-col gap-4 pt-4 border-t border-gray-100 dark:border-gray-800">
                             {isAuthenticated && user ? (
                                 <>
                                     {/* Mobile user info */}
@@ -187,25 +187,25 @@ export default function Navbar() {
                                             {initials}
                                         </div>
                                         <div className="flex flex-col leading-none">
-                                            <span className="text-[14px] font-black text-[#1A1A1A]">
+                                            <span className="text-[14px] font-black text-[#1A1A1A] dark:text-gray-100">
                                                 {user.firstName} {user.lastName}
                                             </span>
-                                            <span className="text-[11px] font-bold text-gray-400">{roleLabel}</span>
+                                            <span className="text-[11px] font-bold text-gray-400 dark:text-gray-500">{roleLabel}</span>
                                         </div>
                                     </div>
                                     <Link
                                         href="/profile"
-                                        className="text-[#1A1A1A] font-bold text-base flex items-center gap-2"
+                                        className="text-[#1A1A1A] dark:text-gray-100 font-bold text-base flex items-center gap-2"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
-                                        <User size={18} className="text-gray-400" /> Profile
+                                        <User size={18} className="text-gray-400 dark:text-gray-500" /> Profile
                                     </Link>
                                     <Link
                                         href="/dashboard"
-                                        className="text-[#1A1A1A] font-bold text-base flex items-center gap-2"
+                                        className="text-[#1A1A1A] dark:text-gray-100 font-bold text-base flex items-center gap-2"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
-                                        <LayoutDashboard size={18} className="text-gray-400" /> Dashboard
+                                        <LayoutDashboard size={18} className="text-gray-400 dark:text-gray-500" /> Dashboard
                                     </Link>
                                     <button
                                         onClick={handleLogout}

@@ -196,7 +196,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
     if (!inspection) {
         return (
             <div className="min-h-screen flex items-center justify-center flex-col gap-4">
-                <p className="text-xl font-bold text-gray-500">Inspection not found.</p>
+                <p className="text-xl font-bold text-gray-500 dark:text-gray-500">Inspection not found.</p>
                 <Link href="/inspections" className="text-primary-dark font-bold hover:underline">Back to Inspections</Link>
             </div>
         );
@@ -206,7 +206,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
     const isAwaitingFeedback = inspection.status === InspectionStatus.Completed;
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <DashboardNavbar />
 
             <div className="max-w-7xl mx-auto px-6 pt-32 pb-20">
@@ -218,7 +218,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                     Back
                 </Link>
 
-                <h1 className="text-[28px] font-black text-[#1A1A1A] font-montserrat mb-8">
+                <h1 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-8">
                     Inspection Details
                 </h1>
 
@@ -227,7 +227,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                     {role === "Customer" && <StatusBanner status={inspection.status as any} />}
 
                     {/* Property Header Card */}
-                    <div className="bg-white rounded-[22px] border border-[#F2F2F2] px-6 py-6 flex items-center gap-6">
+                    <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 px-6 py-6 flex items-center gap-6">
                         <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
                             <Image
                                 src={propertyImage}
@@ -237,7 +237,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                             />
                         </div>
                         <div>
-                            <h3 className="text-[20px] font-black text-[#1A1A1A] font-montserrat mb-1">
+                            <h3 className="text-[20px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-1">
                                 {inspection.propertyName || "Property Inspection"}
                             </h3>
                             <p className="text-[13px] text-[#A3A3A3] font-bold">
@@ -248,33 +248,33 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
 
                     {/* Info Cards Row */}
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white rounded-[22px] border border-[#F2F2F2] p-6 flex items-center gap-5">
+                        <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-6 flex items-center gap-5">
                             <div className="w-12 h-12 rounded-full bg-[#E5F4FF] flex items-center justify-center text-[#0095FF]">
                                 <Calendar size={20} />
                             </div>
                             <div>
-                                <p className="text-[16px] font-black text-[#1A1A1A] font-montserrat mb-0.5">Date</p>
+                                <p className="text-[16px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-0.5">Date</p>
                                 <p className="text-[14px] text-[#A3A3A3] font-bold">
                                     {inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "MMMM dd, yyyy") : "N/A"}
                                 </p>
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-[22px] border border-[#F2F2F2] p-6 flex items-center gap-5">
+                        <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-6 flex items-center gap-5">
                             <div className="w-12 h-12 rounded-full bg-[#E5F4FF] flex items-center justify-center text-[#0095FF]">
                                 <Clock size={20} />
                             </div>
                             <div>
-                                <p className="text-[16px] font-black text-[#1A1A1A] font-montserrat mb-0.5">Time</p>
+                                <p className="text-[16px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-0.5">Time</p>
                                 <p className="text-[14px] text-[#A3A3A3] font-bold">{inspection.scheduledTime}</p>
                             </div>
                         </div>
                     </div>
 
                     {/* Note Card */}
-                    <div className="bg-white rounded-[22px] border border-[#F2F2F2] p-8">
-                        <h3 className="text-[18px] font-black text-[#1A1A1A] font-montserrat mb-3">Additional Note</h3>
-                        <p className="text-[14px] text-[#666666] font-medium leading-relaxed">
+                    <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8">
+                        <h3 className="text-[18px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3">Additional Note</h3>
+                        <p className="text-[14px] text-[#666666] dark:text-gray-400 font-medium leading-relaxed">
                             {inspection.note || "No additional notes provided."}
                         </p>
                     </div>
@@ -285,25 +285,25 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                             {/* Timeline - Using real statuses might need mapping for labels */}
                             <InspectionTimeline steps={[]} /> {/* Timeline needs real data mapping */}
 
-                            <div className="bg-white rounded-[22px] border border-[#F2F2F2] p-8">
+                            <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8">
                                 {isAwaitingFeedback ? (
                                     <>
-                                        <h3 className="text-[17px] font-black text-[#1A1A1A] font-montserrat mb-2">Add a comment</h3>
-                                        <p className="text-[11px] text-[#666666] font-bold mb-6">
+                                        <h3 className="text-[17px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-2">Add a comment</h3>
+                                        <p className="text-[11px] text-[#666666] dark:text-gray-400 font-bold mb-6">
                                             Please share your feedback about this inspection.
                                         </p>
                                         <div className="flex flex-col items-end gap-4">
                                             <textarea
                                                 value={comment}
                                                 onChange={(e) => setComment(e.target.value)}
-                                                className="w-full h-32 p-4 rounded-xl border border-[#F2F2F2] bg-white resize-none focus:outline-none focus:border-primary-dark text-sm"
+                                                className="w-full h-32 p-4 rounded-xl border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 resize-none focus:outline-none focus:border-primary-dark text-sm"
                                                 placeholder="Add your comment here..."
                                             />
                                             <button
                                                 disabled={!comment.trim()}
                                                 className={`px-10 py-3 rounded-full text-[13px] font-bold transition-all ${comment.trim()
                                                     ? "bg-primary-dark text-white hover:bg-primary-dark/90 active:scale-95 shadow-md"
-                                                    : "bg-gray-100 text-[#999999] cursor-not-allowed"
+                                                    : "bg-gray-100 dark:bg-gray-800 text-[#999999] dark:text-gray-500 cursor-not-allowed"
                                                     }`}
                                             >
                                                 Submit
@@ -312,7 +312,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                                     </>
                                 ) : (
                                     <>
-                                        <h3 className="text-[17px] font-black text-[#1A1A1A] font-montserrat mb-6">Need to make changes?</h3>
+                                        <h3 className="text-[17px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-6">Need to make changes?</h3>
                                         <div className="flex gap-4">
                                             <button 
                                                 onClick={() => setIsRescheduleModalOpen(true)}

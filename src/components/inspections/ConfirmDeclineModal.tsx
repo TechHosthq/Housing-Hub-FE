@@ -34,15 +34,15 @@ export default function ConfirmDeclineModal({
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-[32px] w-full max-w-[550px] p-8 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[550px] p-8 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-[28px] font-bold text-[#1A1A1A] font-montserrat">
+                    <h2 className="text-[28px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Decline Inspection
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-[#1A1A1A] hover:opacity-70 transition-opacity"
+                        className="text-[#1A1A1A] dark:text-gray-100 hover:opacity-70 transition-opacity"
                     >
                         <X size={24} />
                     </button>
@@ -59,7 +59,7 @@ export default function ConfirmDeclineModal({
                         <textarea
                             value={reason}
                             onChange={(e) => setReason(e.target.value.slice(0, maxChars))}
-                            className="w-full h-40 p-5 rounded-[12px] border border-[#E5E5E5] bg-white resize-none focus:outline-none focus:border-[#0095FF] focus:ring-2 focus:ring-[#0095FF]/10 text-[15px] text-[#1A1A1A] font-medium placeholder:text-[#A3A3A3]"
+                            className="w-full h-40 p-5 rounded-[12px] border border-[#E5E5E5] dark:border-gray-800 bg-white dark:bg-gray-900 resize-none focus:outline-none focus:border-[#0095FF] focus:ring-2 focus:ring-[#0095FF]/10 text-[15px] text-[#1A1A1A] dark:text-gray-100 font-medium placeholder:text-[#A3A3A3]"
                             placeholder="Provide a reason..."
                             maxLength={maxChars}
                         />
@@ -81,7 +81,7 @@ export default function ConfirmDeclineModal({
                         onClick={handleConfirm}
                         disabled={!reason.trim()}
                         className={`flex-1 py-4 px-6 rounded-full border-[1.5px] text-[15px] font-bold transition-all active:scale-[0.98] ${!reason.trim()
-                            ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                            ? "border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                             : "border-[#FF4D4C] text-[#FF4D4C] hover:bg-red-50"
                             }`}
                     >

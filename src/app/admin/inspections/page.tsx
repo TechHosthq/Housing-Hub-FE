@@ -49,26 +49,26 @@ export default function AdminInspectionsPage() {
         <div className="flex flex-col gap-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-[28px] font-black text-[#1A1A1A] font-montserrat mb-2">Inspection Management</h1>
-                    <p className="text-gray-500 font-medium">Monitor and manage property inspections.</p>
+                    <h1 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-2">Inspection Management</h1>
+                    <p className="text-gray-500 dark:text-gray-500 font-medium">Monitor and manage property inspections.</p>
                 </div>
             </div>
 
             {/* Filters & Search */}
-            <div className="bg-white p-4 rounded-[20px] border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-center">
+            <div className="bg-white dark:bg-gray-900 p-4 rounded-[20px] border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col md:flex-row gap-4 items-center">
                 <div className="relative flex-1 w-full">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
                     <input
                         type="text"
                         placeholder="Search by property name or ID..."
-                        className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl text-[14px] focus:ring-2 focus:ring-[#0095FF]/20 transition-all outline-none"
+                        className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-800/50 border-none rounded-xl text-[14px] focus:ring-2 focus:ring-[#0095FF]/20 transition-all outline-none"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
                 <div className="flex items-center gap-3 w-full md:w-auto">
                     <select
-                        className="flex-1 md:w-40 py-3 px-4 bg-gray-50 border-none rounded-xl text-[14px] focus:ring-2 focus:ring-[#0095FF]/20 transition-all outline-none appearance-none font-bold text-gray-600"
+                        className="flex-1 md:w-40 py-3 px-4 bg-gray-50 dark:bg-gray-800/50 border-none rounded-xl text-[14px] focus:ring-2 focus:ring-[#0095FF]/20 transition-all outline-none appearance-none font-bold text-gray-600 dark:text-gray-400"
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                     >
@@ -81,20 +81,20 @@ export default function AdminInspectionsPage() {
             </div>
 
             {/* Inspections Table */}
-            <div className="bg-white rounded-[24px] border border-gray-100 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-gray-900 rounded-[24px] border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="bg-gray-50 border-b border-gray-100">
-                                <th className="px-8 py-5 text-[13px] font-black text-gray-500 uppercase tracking-wider">Property & ID</th>
-                                <th className="px-6 py-5 text-[13px] font-black text-gray-500 uppercase tracking-wider">Schedule</th>
-                                <th className="px-6 py-5 text-[13px] font-black text-gray-500 uppercase tracking-wider">Status</th>
-                                <th className="px-8 py-5 text-[13px] font-black text-gray-500 uppercase tracking-wider text-right">Actions</th>
+                            <tr className="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
+                                <th className="px-8 py-5 text-[13px] font-black text-gray-500 dark:text-gray-500 uppercase tracking-wider">Property & ID</th>
+                                <th className="px-6 py-5 text-[13px] font-black text-gray-500 dark:text-gray-500 uppercase tracking-wider">Schedule</th>
+                                <th className="px-6 py-5 text-[13px] font-black text-gray-500 dark:text-gray-500 uppercase tracking-wider">Status</th>
+                                <th className="px-8 py-5 text-[13px] font-black text-gray-500 dark:text-gray-500 uppercase tracking-wider text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
                             {filteredInspections.map((inspection) => (
-                                <tr key={inspection.id} className="hover:bg-gray-50/50 transition-colors group">
+                                <tr key={inspection.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors group">
                                     <td className="px-8 py-5">
                                         <div className="flex items-center gap-4">
                                             <div className="w-14 h-14 rounded-xl relative overflow-hidden flex-shrink-0">
@@ -106,7 +106,7 @@ export default function AdminInspectionsPage() {
                                                 />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="font-bold text-[#1A1A1A] group-hover:text-[#0095FF] transition-colors">{inspection.propertyName || "Property Inspection"}</span>
+                                                <span className="font-bold text-[#1A1A1A] dark:text-gray-100 group-hover:text-[#0095FF] transition-colors">{inspection.propertyName || "Property Inspection"}</span>
                                                 <span className="text-[11px] text-[#0095FF] font-black uppercase tracking-wider">{inspection.id.slice(0, 8).toUpperCase()}</span>
                                             </div>
                                         </div>
@@ -114,10 +114,10 @@ export default function AdminInspectionsPage() {
                                     <td className="px-6 py-5">
                                         <div className="flex flex-col gap-1">
                                             <div className="flex items-center gap-2 text-[13px] font-bold text-gray-700">
-                                                <Calendar size={14} className="text-gray-400" />
+                                                <Calendar size={14} className="text-gray-400 dark:text-gray-500" />
                                                 {inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "MMM dd, yyyy") : "N/A"}
                                             </div>
-                                            <div className="flex items-center gap-2 text-[12px] text-gray-400 font-medium">
+                                            <div className="flex items-center gap-2 text-[12px] text-gray-400 dark:text-gray-500 font-medium">
                                                 <Clock size={14} />
                                                 {inspection.scheduledTime}
                                             </div>
@@ -126,8 +126,8 @@ export default function AdminInspectionsPage() {
                                     <td className="px-6 py-5">
                                         <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${
                                             inspection.status === InspectionStatus.Confirmed ? "bg-blue-50 text-[#0095FF]" :
-                                            inspection.status === InspectionStatus.Completed ? "bg-green-50 text-green-600" :
-                                            inspection.status === InspectionStatus.Cancelled || inspection.status === InspectionStatus.Declined ? "bg-red-50 text-red-600" :
+                                            inspection.status === InspectionStatus.Completed ? "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400" :
+                                            inspection.status === InspectionStatus.Cancelled || inspection.status === InspectionStatus.Declined ? "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400" :
                                             "bg-orange-50 text-orange-600"
                                         }`}>
                                             {statusLabels[inspection.status]}
@@ -148,20 +148,20 @@ export default function AdminInspectionsPage() {
                 </div>
 
                 {/* Pagination */}
-                <div className="px-8 py-5 border-t border-gray-100 flex items-center justify-between">
-                    <span className="text-[13px] font-bold text-gray-400">
+                <div className="px-8 py-5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                    <span className="text-[13px] font-bold text-gray-400 dark:text-gray-500">
                         Showing {filteredInspections.length} inspections
                     </span>
                     <div className="flex items-center gap-2">
                         <button 
-                            className="p-2 border border-gray-200 rounded-lg text-gray-400 disabled:opacity-50"
+                            className="p-2 border border-gray-200 dark:border-gray-800 rounded-lg text-gray-400 dark:text-gray-500 disabled:opacity-50"
                             disabled={pageNumber === 1}
                             onClick={() => setPageNumber(prev => Math.max(1, prev - 1))}
                         >
                             <ChevronLeft size={18} />
                         </button>
                         <button 
-                            className="p-2 border border-gray-200 rounded-lg text-gray-400 disabled:opacity-50"
+                            className="p-2 border border-gray-200 dark:border-gray-800 rounded-lg text-gray-400 dark:text-gray-500 disabled:opacity-50"
                             disabled={!inspectionsResponse?.data?.hasNextPage}
                             onClick={() => setPageNumber(prev => prev + 1)}
                         >

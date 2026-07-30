@@ -30,18 +30,18 @@ export default function KYCSuccessModal({ isOpen, onClose }: KYCSuccessModalProp
             />
 
             {/* Modal Content */}
-            <div className={`relative bg-white rounded-[28px] p-10 w-full max-w-[320px] shadow-2xl flex flex-col items-center text-center transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
+            <div className={`relative bg-white dark:bg-gray-900 rounded-[28px] p-10 w-full max-w-[320px] shadow-2xl flex flex-col items-center text-center transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
                 {/* Success Icon */}
                 <div className="w-20 h-20 rounded-full bg-[#E9F3FF] flex items-center justify-center mb-6 relative">
                     <div className="absolute inset-0 rounded-full bg-[#E9F3FF] animate-ping opacity-20" />
                     <Check size={32} className="text-[#0095FF] relative z-10" strokeWidth={3} />
                 </div>
 
-                <h2 className="text-[20px] font-black text-[#1A1A1A] mb-4 font-montserrat leading-tight">
+                <h2 className="text-[20px] font-black text-[#1A1A1A] dark:text-gray-100 mb-4 font-montserrat leading-tight">
                     KYC Submitted Successfully!
                 </h2>
 
-                <p className="text-[11px] text-[#666666] leading-relaxed max-w-[240px]">
+                <p className="text-[11px] text-[#666666] dark:text-gray-400 leading-relaxed max-w-[240px]">
                     Your KYC verification is being reviewed by our admin team. This usually takes 24-48 hours. You'll receive a notification once approved
                 </p>
             </div>

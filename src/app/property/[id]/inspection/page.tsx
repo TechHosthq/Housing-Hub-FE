@@ -33,7 +33,7 @@ export default async function InspectionPage({ params }: { params: Promise<{ id:
     }
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <DashboardNavbar />
 
             <div className="pt-24 pb-20">

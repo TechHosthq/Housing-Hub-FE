@@ -28,15 +28,15 @@ export default function AcceptInspectionModal({
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-[32px] w-full max-w-[550px] p-8 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[550px] p-8 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-[24px] font-bold text-[#1A1A1A] font-montserrat">
+                    <h2 className="text-[24px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Accept Inspection
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-[#1A1A1A] hover:opacity-70 transition-opacity"
+                        className="text-[#1A1A1A] dark:text-gray-100 hover:opacity-70 transition-opacity"
                     >
                         <X size={24} />
                     </button>

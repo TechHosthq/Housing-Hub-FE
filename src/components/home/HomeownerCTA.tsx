@@ -16,10 +16,10 @@ export default function HomeownerCTA() {
 
             <div className="relative max-w-[1008px] mx-auto w-full z-10">
                 <div className="w-full md:w-2/3 text-center md:text-left px-4">
-                    <h2 className="text-5xl md:text-7xl font-bold text-[#1A1A1A] mb-4 tracking-tight leading-[1.1]">
+                    <h2 className="text-5xl md:text-7xl font-bold text-[#1A1A1A] dark:text-gray-100 mb-4 tracking-tight leading-[1.1]">
                         Are You a Homeowner?
                     </h2>
-                    <p className="text-gray-600 text-xl md:text-2xl mb-12 font-medium leading-relaxed whitespace-nowrap">
+                    <p className="text-gray-600 dark:text-gray-400 text-xl md:text-2xl mb-12 font-medium leading-relaxed whitespace-nowrap">
                         List your property and connect with verified buyers and renters
                     </p>
                     <div className="flex flex-col sm:flex-row gap-6 justify-center md:justify-start items-center">

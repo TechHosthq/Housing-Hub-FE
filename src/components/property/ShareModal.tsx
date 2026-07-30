@@ -52,15 +52,15 @@ export default function ShareModal({ isOpen, onClose, propertyTitle }: ShareModa
             />
 
             {/* Modal Content */}
-            <div className={`relative bg-white rounded-[28px] p-8 w-full max-w-[400px] shadow-2xl transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
+            <div className={`relative bg-white dark:bg-gray-900 rounded-[28px] p-8 w-full max-w-[400px] shadow-2xl transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
                 {/* Header */}
                 <div className="flex justify-between items-center mb-10">
-                    <h2 className="text-[24px] font-black text-[#1A1A1A] font-montserrat">
+                    <h2 className="text-[24px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Share Property
                     </h2>
                     <button
                         onClick={onClose}
-                        className="p-1 hover:bg-gray-100 rounded-full transition-colors text-[#1A1A1A]"
+                        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-[#1A1A1A] dark:text-gray-100"
                     >
                         <X size={24} />
                     </button>
@@ -70,20 +70,20 @@ export default function ShareModal({ isOpen, onClose, propertyTitle }: ShareModa
                 <div className="space-y-4">
                     <button
                         onClick={handleCopyLink}
-                        className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all flex items-center justify-between"
+                        className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] dark:border-gray-800 text-left text-[#999999] dark:text-gray-500 text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all flex items-center justify-between"
                     >
                         {copied ? "Link Copied" : "Copy Link"}
                         {copied && <Check size={16} className="text-primary-dark" />}
                     </button>
                     <button
                         onClick={handleShareWhatsApp}
-                        className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all"
+                        className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] dark:border-gray-800 text-left text-[#999999] dark:text-gray-500 text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all"
                     >
                         Share On WhatsApp
                     </button>
                     <button
                         onClick={handleShareEmail}
-                        className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] text-left text-[#999999] text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all"
+                        className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] dark:border-gray-800 text-left text-[#999999] dark:text-gray-500 text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all"
                     >
                         Share Via Email
                     </button>

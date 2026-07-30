@@ -75,16 +75,16 @@ export default function InspectionForm({ property }: InspectionFormProps) {
 
             <div className="flex flex-col lg:flex-row gap-8">
                 {/* Main Form Area */}
-                <div className="flex-1 bg-white rounded-[28px] border border-[#F2F2F2] p-8 shadow-sm">
-                    <h2 className="text-[17px] font-black text-[#1A1A1A] font-montserrat mb-10">Request Inspection</h2>
+                <div className="flex-1 bg-white dark:bg-gray-900 rounded-[28px] border border-[#F2F2F2] dark:border-gray-800 p-8 shadow-sm">
+                    <h2 className="text-[17px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-10">Request Inspection</h2>
 
                     <div className="flex items-center gap-6 mb-12">
                         <div className="relative w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
                             <Image src={property.image} alt={property.title} fill className="object-cover" />
                         </div>
                         <div>
-                            <h3 className="text-[15px] font-black text-[#1A1A1A] font-montserrat">{property.title}</h3>
-                            <p className="text-[11px] text-[#999999] mt-0.5">{property.location}</p>
+                            <h3 className="text-[15px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">{property.title}</h3>
+                            <p className="text-[11px] text-[#999999] dark:text-gray-500 mt-0.5">{property.location}</p>
                             <p className="text-[15px] font-black text-[#0095FF] mt-1 font-montserrat">{property.price}/yr</p>
                         </div>
                     </div>
@@ -92,26 +92,26 @@ export default function InspectionForm({ property }: InspectionFormProps) {
                     <form onSubmit={handleSubmit} className="space-y-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider mb-2 block">SELECT DATE</label>
+                                <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider mb-2 block">SELECT DATE</label>
                                 <DatePicker value={date} onChange={setDate} />
                             </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider mb-2 block">SELECT TIME</label>
+                                <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider mb-2 block">SELECT TIME</label>
                                 <TimePicker value={time} onChange={setTime} />
                             </div>
                         </div>
 
                         <div className="space-y-1.5">
-                            <label className="text-[9px] font-bold text-[#666666] uppercase tracking-wider mb-2 block">ADDITIONAL NOTE</label>
+                            <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider mb-2 block">ADDITIONAL NOTE</label>
                             <textarea
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}
                                 placeholder="Placeholder"
                                 rows={5}
-                                className="w-full px-5 py-4 rounded-xl border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors text-sm placeholder:text-gray-300 resize-none font-medium"
+                                className="w-full px-5 py-4 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-primary-dark transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600 resize-none font-medium"
                             ></textarea>
                         </div>
 
@@ -129,19 +129,19 @@ export default function InspectionForm({ property }: InspectionFormProps) {
 
                 {/* Sidebar Info */}
                 <div className="w-full lg:max-w-[280px]">
-                    <div className="bg-white rounded-[22px] border border-[#F2F2F2] p-6 shadow-sm">
-                        <h3 className="text-[14px] font-black text-[#1A1A1A] font-montserrat mb-6">Listing Information</h3>
+                    <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-6 shadow-sm">
+                        <h3 className="text-[14px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-6">Listing Information</h3>
                         <div className="space-y-4">
                             <div className="flex justify-between items-center">
-                                <span className="text-[11px] text-[#666666]">Property ID</span>
+                                <span className="text-[11px] text-[#666666] dark:text-gray-400">Property ID</span>
                                 <span className="text-[11px] font-bold text-[#333333]">SPH-12024</span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-[11px] text-[#666666]">Listed Date</span>
+                                <span className="text-[11px] text-[#666666] dark:text-gray-400">Listed Date</span>
                                 <span className="text-[11px] font-bold text-[#333333]">Dec 1, 2024</span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-[11px] text-[#666666]">Status</span>
+                                <span className="text-[11px] text-[#666666] dark:text-gray-400">Status</span>
                                 <span className="px-2.5 py-1 rounded-lg bg-[#E9F3FF] text-[#0095FF] text-[9px] font-black uppercase">Available</span>
                             </div>
                         </div>

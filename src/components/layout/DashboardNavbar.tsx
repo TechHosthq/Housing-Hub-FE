@@ -24,7 +24,7 @@ export default function DashboardNavbar() {
     const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white px-6 md:px-8 py-3.5 flex items-center justify-between shadow-sm border-b border-gray-50">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 px-6 md:px-8 py-3.5 flex items-center justify-between shadow-sm border-b border-gray-50">
             <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center">
@@ -42,27 +42,27 @@ export default function DashboardNavbar() {
                 <div className="hidden md:flex items-center gap-10">
                     <Link
                         href="/dashboard"
-                        className={`${isActive("/dashboard") ? "text-[#0095FF]" : "text-[#1A1A1A]"} font-bold text-sm hover:text-[#0095FF] transition-colors`}
+                        className={`${isActive("/dashboard") ? "text-[#0095FF]" : "text-[#1A1A1A] dark:text-gray-100"} font-bold text-sm hover:text-[#0095FF] transition-colors`}
                     >
                         Dashboard
                     </Link>
                     {role === "Owner" && (
                         <Link
                             href="/properties"
-                            className={`${isActive("/properties") ? "text-[#0095FF]" : "text-[#1A1A1A]"} font-bold text-sm hover:text-[#0095FF] transition-colors`}
+                            className={`${isActive("/properties") ? "text-[#0095FF]" : "text-[#1A1A1A] dark:text-gray-100"} font-bold text-sm hover:text-[#0095FF] transition-colors`}
                         >
                             Property
                         </Link>
                     )}
                     <Link
                         href="/inspections"
-                        className={`${isActive("/inspections") ? "text-[#0095FF]" : "text-[#1A1A1A]"} font-bold text-sm hover:text-[#0095FF] transition-colors`}
+                        className={`${isActive("/inspections") ? "text-[#0095FF]" : "text-[#1A1A1A] dark:text-gray-100"} font-bold text-sm hover:text-[#0095FF] transition-colors`}
                     >
                         Inspection
                     </Link>
                     <Link
                         href="/messages"
-                        className={`${isActive("/messages") ? "text-[#0095FF]" : "text-[#1A1A1A]"} font-bold text-sm hover:text-[#0095FF] transition-colors`}
+                        className={`${isActive("/messages") ? "text-[#0095FF]" : "text-[#1A1A1A] dark:text-gray-100"} font-bold text-sm hover:text-[#0095FF] transition-colors`}
                     >
                         Message
                     </Link>
@@ -72,7 +72,7 @@ export default function DashboardNavbar() {
                 <div className="flex items-center gap-6">
                     <button 
                         onClick={() => router.push("/notifications")}
-                        className="relative text-[#1A1A1A] hover:text-[#0095FF] transition-colors"
+                        className="relative text-[#1A1A1A] dark:text-gray-100 hover:text-[#0095FF] transition-colors"
                     >
                         <Bell size={24} strokeWidth={1.5} />
                         {unreadCount > 0 && (
@@ -85,22 +85,22 @@ export default function DashboardNavbar() {
                     <div className="relative">
                         <div
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                            className="flex items-center gap-3 pl-6 border-l border-gray-100 cursor-pointer group"
+                            className="flex items-center gap-3 pl-6 border-l border-gray-100 dark:border-gray-800 cursor-pointer group"
                         >
-                            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
+                            <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
                                 <div className="w-full h-full bg-[#E9F3FF] flex items-center justify-center text-[#002B7F] font-black text-[14px] uppercase">
                                     {currentUser?.firstName?.[0]}{currentUser?.lastName?.[0] || "U"}
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-[14px] font-black text-[#1A1A1A]">
+                                <span className="text-[14px] font-black text-[#1A1A1A] dark:text-gray-100">
                                     {currentUser?.firstName} {currentUser?.lastName || "User"}
                                 </span>
                                 <div className="flex items-center gap-1">
-                                    <span className="text-[11px] text-gray-400 font-bold transition-colors group-hover:text-[#0095FF]">{role}</span>
+                                    <span className="text-[11px] text-gray-400 dark:text-gray-500 font-bold transition-colors group-hover:text-[#0095FF]">{role}</span>
                                     <ChevronDown
                                         size={14}
-                                        className={`text-gray-400 transition-all duration-300 group-hover:text-[#0095FF] ${isDropdownOpen ? "rotate-180" : ""}`}
+                                        className={`text-gray-400 dark:text-gray-500 transition-all duration-300 group-hover:text-[#0095FF] ${isDropdownOpen ? "rotate-180" : ""}`}
                                     />
                                 </div>
                             </div>

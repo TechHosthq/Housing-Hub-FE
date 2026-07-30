@@ -32,24 +32,24 @@ export default function UserActionModal({ isOpen, onClose, onAction, type }: Use
             />
 
             {/* Modal */}
-            <div className="relative bg-white w-full max-w-[500px] rounded-[32px] p-10 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col gap-8">
+            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[500px] rounded-[32px] p-10 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col gap-8">
                 <div className="flex flex-col gap-3 text-center">
-                    <h2 className="text-[32px] font-bold text-[#1A1A1A] font-montserrat">
+                    <h2 className="text-[32px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         {isBlock ? "Block User?" : "Unblock User?"}
                     </h2>
-                    <p className="text-[16px] text-gray-500 font-medium">
+                    <p className="text-[16px] text-gray-500 dark:text-gray-500 font-medium">
                         Please provide a reason for {isBlock ? "blocking" : "unblocking"} the User.
                     </p>
                 </div>
 
                 <div className="flex flex-col gap-2">
                     <textarea
-                        className="w-full min-h-[160px] p-5 bg-white border border-gray-200 rounded-[20px] text-[15px] font-medium text-[#1A1A1A] placeholder:text-gray-300 outline-none focus:border-[#0095FF]/50 transition-all resize-none shadow-sm"
+                        className="w-full min-h-[160px] p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-[20px] text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-300 dark:placeholder:text-gray-600 outline-none focus:border-[#0095FF]/50 transition-all resize-none shadow-sm"
                         placeholder={isBlock ? "Reason for Blocking..." : "Reason for Unblocking..."}
                         value={reason}
                         onChange={(e) => setReason(e.target.value.slice(0, maxChars))}
                     />
-                    <div className="text-[12px] text-gray-400 font-bold text-right">
+                    <div className="text-[12px] text-gray-400 dark:text-gray-500 font-bold text-right">
                         {reason.length}/{maxChars} Characters
                     </div>
                 </div>
@@ -57,7 +57,7 @@ export default function UserActionModal({ isOpen, onClose, onAction, type }: Use
                 <div className="flex items-center gap-4">
                     <button
                         onClick={onClose}
-                        className="flex-1 py-4.5 bg-white border border-gray-100 rounded-full font-bold text-[16px] text-[#999999] hover:bg-gray-50 transition-all shadow-sm"
+                        className="flex-1 py-4.5 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-full font-bold text-[16px] text-[#999999] dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all shadow-sm"
                     >
                         Cancel
                     </button>

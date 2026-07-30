@@ -21,7 +21,7 @@ export default function PropertyDetailPage() {
 
     if (isLoading) {
         return (
-            <main className="min-h-screen bg-white">
+            <main className="min-h-screen bg-white dark:bg-gray-900">
                 <Navbar />
                 <div className="flex items-center justify-center min-h-[60vh]">
                     <Loader2 className="animate-spin text-primary-dark w-12 h-12" />
@@ -35,7 +35,7 @@ export default function PropertyDetailPage() {
 
     if (!property) {
         return (
-            <main className="min-h-screen bg-white">
+            <main className="min-h-screen bg-white dark:bg-gray-900">
                 <Navbar />
                 <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
                     <h1 className="text-2xl font-bold">Property Not Found</h1>
@@ -62,7 +62,7 @@ export default function PropertyDetailPage() {
     };
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <Navbar />
 
             <div className="max-w-7xl mx-auto px-6 pt-24 pb-20">
@@ -76,7 +76,7 @@ export default function PropertyDetailPage() {
 
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Main Content Side */}
-                    <div className="flex-1 bg-white rounded-[28px] border border-[#F2F2F2] p-8 shadow-sm">
+                    <div className="flex-1 bg-white dark:bg-gray-900 rounded-[28px] border border-[#F2F2F2] dark:border-gray-800 p-8 shadow-sm">
                         <PropertyDetailHeader propertyTitle={displayProperty.title} />
 
                         <div className="space-y-10">

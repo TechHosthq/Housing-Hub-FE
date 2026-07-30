@@ -24,22 +24,22 @@ export default function RejectKYCModal({ isOpen, onClose, onReject }: RejectKYCM
             />
 
             {/* Modal */}
-            <div className="relative bg-white w-full max-w-[500px] rounded-[24px] p-8 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col gap-6">
+            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[500px] rounded-[24px] p-8 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col gap-6">
                 <div className="flex flex-col gap-2 text-center">
-                    <h2 className="text-[28px] font-bold text-[#1A1A1A] font-montserrat">Reject KYC Submission</h2>
-                    <p className="text-[15px] text-gray-500 font-medium">
+                    <h2 className="text-[28px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Reject KYC Submission</h2>
+                    <p className="text-[15px] text-gray-500 dark:text-gray-500 font-medium">
                         Please provide a reason for rejecting the KYC.
                     </p>
                 </div>
 
                 <div className="flex flex-col gap-2">
                     <textarea
-                        className="w-full min-h-[160px] p-4 bg-white border border-gray-200 rounded-xl text-[15px] font-medium text-[#1A1A1A] placeholder:text-gray-300 outline-none focus:border-[#0095FF]/50 transition-all resize-none"
+                        className="w-full min-h-[160px] p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-[15px] font-medium text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-300 dark:placeholder:text-gray-600 outline-none focus:border-[#0095FF]/50 transition-all resize-none"
                         placeholder="Reason for Rejection..."
                         value={reason}
                         onChange={(e) => setReason(e.target.value.slice(0, maxChars))}
                     />
-                    <span className="text-[12px] text-gray-400 font-medium text-right">
+                    <span className="text-[12px] text-gray-400 dark:text-gray-500 font-medium text-right">
                         {reason.length}/{maxChars} Characters
                     </span>
                 </div>
@@ -47,7 +47,7 @@ export default function RejectKYCModal({ isOpen, onClose, onReject }: RejectKYCM
                 <div className="flex items-center gap-4">
                     <button
                         onClick={onClose}
-                        className="flex-1 py-4 border border-gray-100 rounded-full font-bold text-[16px] text-gray-500 hover:bg-gray-50 transition-all"
+                        className="flex-1 py-4 border border-gray-100 dark:border-gray-800 rounded-full font-bold text-[16px] text-gray-500 dark:text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all"
                     >
                         Cancel
                     </button>

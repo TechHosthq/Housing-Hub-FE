@@ -45,13 +45,13 @@ export default function LoginForm() {
 
     return (
         <div className="w-full max-w-[350px] px-4 py-8">
-            <h1 className="text-[17px] font-bold text-[#1A1A1A] mb-7 text-center font-montserrat">
+            <h1 className="text-[17px] font-bold text-[#1A1A1A] dark:text-gray-100 mb-7 text-center font-montserrat">
                 Welcome Back
             </h1>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
                 {loginError && (
-                    <div className="p-3 text-xs text-red-500 bg-red-50 rounded-lg text-center">
+                    <div className="p-3 text-xs text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg text-center">
                         {(() => {
                             // Handle both: raw response rejection (isSuccessful:false) and HTTP error
                             const err = loginError as any;
@@ -68,26 +68,26 @@ export default function LoginForm() {
                 )}
 
                 <div className="space-y-1">
-                    <label className="text-[9px] font-semibold text-[#666666]">Email or Phone Number</label>
+                    <label className="text-[9px] font-semibold text-[#666666] dark:text-gray-400">Email or Phone Number</label>
                     <input
                         type="text"
                         required
                         value={formData.emailOrPhone}
                         onChange={(e) => setFormData({ ...formData, emailOrPhone: e.target.value })}
-                        className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
+                        className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-primary-dark transition-colors"
                         placeholder=""
                     />
                 </div>
 
                 <div className="space-y-1">
-                    <label className="text-[9px] font-semibold text-[#666666]">Password</label>
+                    <label className="text-[9px] font-semibold text-[#666666] dark:text-gray-400">Password</label>
                     <div className="relative">
                         <input
                             type={showPassword ? "text" : "password"}
                             required
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] focus:outline-none focus:border-primary-dark transition-colors"
+                            className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-primary-dark transition-colors"
                             placeholder=""
                         />
                         <button
@@ -115,7 +115,7 @@ export default function LoginForm() {
                     </button>
 
                     {googleError && (
-                        <div className="p-3 text-xs text-red-500 bg-red-50 rounded-lg text-center">
+                        <div className="p-3 text-xs text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg text-center">
                             {googleError.message}
                         </div>
                     )}
@@ -126,7 +126,7 @@ export default function LoginForm() {
                     />
 
                     <div className="text-center pt-2">
-                        <p className="text-xs text-gray-600">
+                        <p className="text-xs text-gray-600 dark:text-gray-400">
                             Don't have an Account? <Link href="/register" className="text-[#3b82f6] hover:underline">Sign up</Link>
                         </p>
                     </div>

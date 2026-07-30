@@ -8,7 +8,7 @@ export default function DashboardPage() {
     const allProperties = propertiesData.properties;
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <DashboardNavbar />
 
             <div className="max-w-7xl mx-auto px-6 md:px-8 pt-24 pb-20">

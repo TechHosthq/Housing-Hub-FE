@@ -38,17 +38,17 @@ export default function ClientPagination({
     if (totalCount === 0) return null;
 
     return (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 border-t border-gray-100 pt-8 animate-in fade-in duration-300">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 border-t border-gray-100 dark:border-gray-800 pt-8 animate-in fade-in duration-300">
             <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="flex items-center gap-2">
-                    <span className="text-[13px] font-bold text-gray-400">Show</span>
+                    <span className="text-[13px] font-bold text-gray-400 dark:text-gray-500">Show</span>
                     <select
                         value={pageSize}
                         onChange={(e) => {
                             setPageSize(Number(e.target.value));
                             setCurrentPage(1);
                         }}
-                        className="h-10 px-3 border border-gray-200 rounded-[10px] text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-[#002B7F] transition-all bg-white cursor-pointer hover:border-gray-300"
+                        className="h-10 px-3 border border-gray-200 dark:border-gray-800 rounded-[10px] text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-[#002B7F] transition-all bg-white dark:bg-gray-900 cursor-pointer hover:border-gray-300"
                     >
                         <option value={10}>10</option>
                         <option value={20}>20</option>
@@ -57,12 +57,12 @@ export default function ClientPagination({
                     </select>
                 </div>
 
-                <p className="text-[13px] font-bold text-gray-400">
-                    Showing <span className="text-[#1A1A1A]">{totalCount > 0 ? startIndex + 1 : 0}</span> to{" "}
-                    <span className="text-[#1A1A1A]">
+                <p className="text-[13px] font-bold text-gray-400 dark:text-gray-500">
+                    Showing <span className="text-[#1A1A1A] dark:text-gray-100">{totalCount > 0 ? startIndex + 1 : 0}</span> to{" "}
+                    <span className="text-[#1A1A1A] dark:text-gray-100">
                         {Math.min(startIndex + pageSize, totalCount)}
                     </span>{" "}
-                    of <span className="text-[#1A1A1A]">{totalCount}</span> records
+                    of <span className="text-[#1A1A1A] dark:text-gray-100">{totalCount}</span> records
                 </p>
             </div>
 
@@ -70,7 +70,7 @@ export default function ClientPagination({
                 <button
                     onClick={() => handlePageChange(1)}
                     disabled={currentPage === 1}
-                    className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 text-gray-500 bg-white hover:bg-gray-50 hover:border-gray-300 disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-gray-200 transition-all cursor-pointer disabled:cursor-not-allowed"
+                    className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-500 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:border-gray-300 disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-gray-200 transition-all cursor-pointer disabled:cursor-not-allowed"
                     aria-label="First page"
                 >
                     <ChevronsLeft size={18} />
@@ -79,14 +79,14 @@ export default function ClientPagination({
                 <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 text-gray-500 bg-white hover:bg-gray-50 hover:border-gray-300 disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-gray-200 transition-all cursor-pointer disabled:cursor-not-allowed"
+                    className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-500 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:border-gray-300 disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-gray-200 transition-all cursor-pointer disabled:cursor-not-allowed"
                     aria-label="Previous page"
                 >
                     <ChevronLeft size={18} />
                 </button>
 
                 <div className="flex items-center gap-2">
-                    <span className="text-[13px] font-bold text-gray-400">Page</span>
+                    <span className="text-[13px] font-bold text-gray-400 dark:text-gray-500">Page</span>
                     <input
                         type="text"
                         value={inputPage}
@@ -110,15 +110,15 @@ export default function ClientPagination({
                                 setInputPage(currentPage.toString());
                             }
                         }}
-                        className="w-12 h-10 border border-gray-200 rounded-[10px] text-center text-[13px] font-bold text-[#1A1A1A] focus:outline-none focus:border-[#002B7F] transition-all bg-white disabled:opacity-50 disabled:bg-gray-50 disabled:cursor-not-allowed"
+                        className="w-12 h-10 border border-gray-200 dark:border-gray-800 rounded-[10px] text-center text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-[#002B7F] transition-all bg-white dark:bg-gray-900 disabled:opacity-50 disabled:bg-gray-50 disabled:cursor-not-allowed"
                     />
-                    <span className="text-[13px] font-bold text-gray-400">of {totalPages}</span>
+                    <span className="text-[13px] font-bold text-gray-400 dark:text-gray-500">of {totalPages}</span>
                 </div>
 
                 <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage >= totalPages}
-                    className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 text-gray-500 bg-white hover:bg-gray-50 hover:border-gray-300 disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-gray-200 transition-all cursor-pointer disabled:cursor-not-allowed"
+                    className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-500 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:border-gray-300 disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-gray-200 transition-all cursor-pointer disabled:cursor-not-allowed"
                     aria-label="Next page"
                 >
                     <ChevronRight size={18} />
@@ -127,7 +127,7 @@ export default function ClientPagination({
                 <button
                     onClick={() => handlePageChange(totalPages)}
                     disabled={currentPage >= totalPages}
-                    className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 text-gray-500 bg-white hover:bg-gray-50 hover:border-gray-300 disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-gray-200 transition-all cursor-pointer disabled:cursor-not-allowed"
+                    className="w-10 h-10 rounded-full flex items-center justify-center border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-500 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:border-gray-300 disabled:opacity-40 disabled:hover:bg-white disabled:hover:border-gray-200 transition-all cursor-pointer disabled:cursor-not-allowed"
                     aria-label="Last page"
                 >
                     <ChevronsRight size={18} />
