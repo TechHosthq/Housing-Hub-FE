@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ChevronLeft, ChevronDown, Upload, X, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown, Upload, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import PropertyPublishedModal from "./PropertyPublishedModal";
@@ -90,6 +90,11 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
     const [images, setImages] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
     const [imageError, setImageError] = useState("");
+    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+    const existingFileUrls = isEditMode
+        ? existingFiles.map((f) => f.fileUrl).filter((url): url is string => !!url)
+        : [];
+    const allPreviewUrls = [...existingFileUrls, ...previews];
 
     // Step 2 State
     const [listingType, setListingType] = useState<PropertyLeaseType>(PropertyLeaseType.Rent);
@@ -464,16 +469,25 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                     )}
 
                     <div className="flex flex-wrap gap-4 mt-6">
-                        {isEditMode && existingFiles.map((file) => (
-                            <div key={file.id} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800">
-                                {file.fileUrl && (
-                                    <Image src={file.fileUrl} alt="Existing property photo" fill className="object-cover" />
-                                )}
-                            </div>
+                        {existingFileUrls.map((url, index) => (
+                            <button
+                                key={url}
+                                type="button"
+                                onClick={() => setLightboxIndex(index)}
+                                className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 cursor-zoom-in"
+                            >
+                                <Image src={url} alt="Existing property photo" fill className="object-cover" />
+                            </button>
                         ))}
                         {previews.map((preview, index) => (
                             <div key={index} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 group">
-                                <Image src={preview} alt={`Preview ${index}`} fill className="object-cover" />
+                                <button
+                                    type="button"
+                                    onClick={() => setLightboxIndex(existingFileUrls.length + index)}
+                                    className="absolute inset-0 w-full h-full cursor-zoom-in"
+                                >
+                                    <Image src={preview} alt={`Preview ${index}`} fill className="object-cover" />
+                                </button>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); removeImage(index); }}
                                     className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
@@ -747,6 +761,52 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                                 Cancel & Back to Dashboard
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {lightboxIndex !== null && allPreviewUrls.length > 0 && (
+                <div
+                    className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+                    onClick={() => setLightboxIndex(null)}
+                >
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+                    <button
+                        onClick={() => setLightboxIndex(null)}
+                        className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
+                    >
+                        <X size={24} />
+                    </button>
+                    {allPreviewUrls.length > 1 && (
+                        <>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setLightboxIndex((i) => ((i ?? 0) - 1 + allPreviewUrls.length) % allPreviewUrls.length);
+                                }}
+                                className="absolute left-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+                            >
+                                <ChevronLeft size={22} />
+                            </button>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setLightboxIndex((i) => ((i ?? 0) + 1) % allPreviewUrls.length);
+                                }}
+                                className="absolute right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+                            >
+                                <ChevronRight size={22} />
+                            </button>
+                        </>
+                    )}
+                    <div className="relative w-[90vw] h-[85vh]" onClick={(e) => e.stopPropagation()}>
+                        <Image
+                            src={allPreviewUrls[lightboxIndex]}
+                            alt="Property photo preview"
+                            fill
+                            sizes="90vw"
+                            className="object-contain"
+                        />
                     </div>
                 </div>
             )}

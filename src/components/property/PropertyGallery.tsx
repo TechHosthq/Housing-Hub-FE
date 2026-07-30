@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 
@@ -10,6 +10,7 @@ interface PropertyGalleryProps {
 
 export default function PropertyGallery({ images }: PropertyGalleryProps) {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
     const nextImage = () => setActiveIndex((prev) => (prev + 1) % images.length);
     const prevImage = () => setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
@@ -18,14 +19,20 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
         <div className="space-y-4">
             {/* Featured Image */}
             <div className="relative aspect-[16/9] w-full rounded-[22px] overflow-hidden group">
-                <Image
-                    src={images[activeIndex]}
-                    alt="Property"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 800px"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                <button
+                    type="button"
+                    onClick={() => setIsPreviewOpen(true)}
+                    className="absolute inset-0 w-full h-full cursor-zoom-in"
+                >
+                    <Image
+                        src={images[activeIndex]}
+                        alt="Property"
+                        fill
+                        priority
+                        sizes="(max-width: 1024px) 100vw, 800px"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                </button>
 
                 {/* Navigation Arrows */}
                 <button
@@ -55,6 +62,46 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
                     </button>
                 ))}
             </div>
+
+            {isPreviewOpen && (
+                <div
+                    className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+                    onClick={() => setIsPreviewOpen(false)}
+                >
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+                    <button
+                        onClick={() => setIsPreviewOpen(false)}
+                        className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
+                    >
+                        <X size={24} />
+                    </button>
+                    {images.length > 1 && (
+                        <>
+                            <button
+                                onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                                className="absolute left-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+                            >
+                                <ChevronLeft size={22} />
+                            </button>
+                            <button
+                                onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                                className="absolute right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+                            >
+                                <ChevronRight size={22} />
+                            </button>
+                        </>
+                    )}
+                    <div className="relative w-[90vw] h-[85vh]" onClick={(e) => e.stopPropagation()}>
+                        <Image
+                            src={images[activeIndex]}
+                            alt="Property preview"
+                            fill
+                            sizes="90vw"
+                            className="object-contain"
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
