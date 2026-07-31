@@ -30,7 +30,7 @@ const statusLabels: Record<InspectionStatus, string> = {
 };
 
 export default function InspectionListCard({ inspection }: InspectionListCardProps) {
-    const propertyImage = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070"; // Fallback
+    const propertyImage = inspection.propertyImageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
     
     return (
         <Link href={`/inspections/${inspection.id || ''}`} className="block w-full">

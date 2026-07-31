@@ -203,7 +203,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
         );
     }
 
-    const propertyImage = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
+    const propertyImage = inspection.propertyImageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
     const isAwaitingFeedback = inspection.status === InspectionStatus.Completed;
 
     return (

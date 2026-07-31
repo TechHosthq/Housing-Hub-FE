@@ -29,6 +29,7 @@ export interface Inspection {
     rescheduledDate: string | null;
     rescheduledTime: string | null;
     rescheduleNote: string | null;
+    propertyImageUrl?: string | null;
 }
 
 export interface CreateInspectionRequest {
