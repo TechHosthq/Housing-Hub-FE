@@ -26,8 +26,12 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         ? ((property as PropertyDetail).files?.[0]?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070")
         : (property as Property).image;
 
-    const bedrooms = isApiProperty ? (Math.floor(Math.random() * 3) + 2) : (property as Property).bedrooms; 
+    const bedrooms = isApiProperty ? (Math.floor(Math.random() * 3) + 2) : (property as Property).bedrooms;
     const bathrooms = isApiProperty ? (Math.floor(Math.random() * 2) + 1) : (property as Property).bathrooms;
+
+    // Only real, admin-verified properties get the "Verified" badge — mock
+    // properties keep their own static tag.
+    const showBadge = isApiProperty ? (property as PropertyDetail).isVerified : !!(property as Property).tag;
 
     return (
         <Link
@@ -43,11 +47,13 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
-                        <span className="text-[11px] font-semibold text-[#002B7F] tracking-wide">
-                            {isApiProperty ? "Verified" : (property as Property).tag}
-                        </span>
-                    </div>
+                    {showBadge && (
+                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
+                            <span className="text-[11px] font-semibold text-[#002B7F] tracking-wide">
+                                {isApiProperty ? "Verified" : (property as Property).tag}
+                            </span>
+                        </div>
+                    )}
                 </div>
             </div>
 
