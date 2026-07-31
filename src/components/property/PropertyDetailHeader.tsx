@@ -8,6 +8,7 @@ import ReportModal from "./ReportModal";
 import DeleteListingModal from "../properties/DeleteListingModal";
 import PropertyDeletedModal from "../properties/PropertyDeletedModal";
 import { useProperty } from "@/hooks/useProperty";
+import { useAuthStore } from "@/store/useAuthStore";
 
 interface PropertyDetailHeaderProps {
     propertyId: string;
@@ -17,6 +18,7 @@ interface PropertyDetailHeaderProps {
 
 export default function PropertyDetailHeader({ propertyId, propertyTitle, isOwner }: PropertyDetailHeaderProps) {
     const router = useRouter();
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const { deleteProperty, isDeleting } = useProperty();
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -53,7 +55,7 @@ export default function PropertyDetailHeader({ propertyId, propertyTitle, isOwne
                         </button>
                     ) : (
                         <button
-                            onClick={() => setIsReportModalOpen(true)}
+                            onClick={() => isAuthenticated ? setIsReportModalOpen(true) : router.push("/login")}
                             className="hover:text-red-500 transition-colors"
                         >
                             <AlertCircle size={18} />
@@ -71,6 +73,7 @@ export default function PropertyDetailHeader({ propertyId, propertyTitle, isOwne
             <ReportModal
                 isOpen={isReportModalOpen}
                 onClose={() => setIsReportModalOpen(false)}
+                propertyId={propertyId}
             />
 
             <DeleteListingModal

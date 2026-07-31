@@ -139,6 +139,11 @@ export const propertyService = {
         return response.data;
     },
 
+    reportProperty: async (propertyId: string, reason: string, note: string): Promise<ApiResponse<boolean>> => {
+        const response = await apiClient.post<ApiResponse<boolean>>(`/api/v1/Property/${propertyId}/report`, { reason, note });
+        return response.data;
+    },
+
     // Legacy/Proxy methods
     getPropertyAddressByProperty: async (propertyId: string): Promise<PropertyAddressResponse> => {
         const response = await apiClient.get<PropertyAddressResponse>(`/api/v1/PropertyAddress/property/${propertyId}`);

@@ -113,6 +113,11 @@ export const useProperty = () => {
         }
     });
 
+    const reportPropertyMutation = useMutation({
+        mutationFn: ({ propertyId, reason, note }: { propertyId: string, reason: string, note: string }) =>
+            propertyService.reportProperty(propertyId, reason, note),
+    });
+
     return {
         useAllProperties,
         useGetProperty,
@@ -133,6 +138,8 @@ export const useProperty = () => {
         isUploading: uploadFilesMutation.isPending,
         deleteFile: deleteFileMutation.mutate,
         isDeletingFile: deleteFileMutation.isPending,
+        reportProperty: reportPropertyMutation.mutate,
+        isReportingProperty: reportPropertyMutation.isPending,
         setPublished: publishMutation.mutate,
         isSettingPublished: publishMutation.isPending,
     };
