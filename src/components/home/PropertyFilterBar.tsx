@@ -31,12 +31,16 @@ export default function PropertyFilterBar() {
         propertyType: "",
         priceRange: "",
     });
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    // Close dropdown when clicking outside
+    // Close dropdown when clicking outside the whole filter bar. (Both the
+    // mobile and desktop layouts below are always mounted — only CSS-hidden
+    // via md: classes — so a ref scoped to "the active dropdown" would bind
+    // to whichever layout's node commits last, not necessarily the visible
+    // one; scoping to the outer container avoids that.)
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
                 setActiveDropdown(null);
             }
         }
@@ -71,7 +75,7 @@ export default function PropertyFilterBar() {
     };
 
     const renderDropdown = (key: keyof typeof FILTER_OPTIONS, label: string) => (
-        <div className="flex-1 relative" ref={activeDropdown === key ? dropdownRef : null}>
+        <div className="flex-1 relative">
             <div
                 className={`px-4 py-3 flex items-center justify-between cursor-pointer rounded-full transition-all group ${activeDropdown === key ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}
                 onClick={() => toggleDropdown(key)}
@@ -108,7 +112,7 @@ export default function PropertyFilterBar() {
     );
 
     return (
-        <div className="bg-white dark:bg-gray-900 shadow-2xl max-w-5xl mx-auto relative rounded-3xl md:rounded-full p-3 md:p-2.5 overflow-visible">
+        <div ref={containerRef} className="bg-white dark:bg-gray-900 shadow-2xl max-w-5xl mx-auto relative rounded-3xl md:rounded-full p-3 md:p-2.5 overflow-visible">
             {/* Mobile: 3-row list of filters */}
             <div className="flex flex-col md:hidden divide-y divide-gray-100 rounded-2xl border border-gray-100 mb-3">
                 {(['location', 'propertyType', 'priceRange'] as const).map((key) => {
@@ -118,7 +122,7 @@ export default function PropertyFilterBar() {
                         priceRange: 'Price Range',
                     };
                     return (
-                        <div key={key} className="relative" ref={activeDropdown === key ? dropdownRef : null}>
+                        <div key={key} className="relative">
                             <div
                                 className={`px-3 py-3 flex items-center justify-between cursor-pointer transition-all ${activeDropdown === key ? 'bg-gray-50 dark:bg-gray-800/50' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}
                                 onClick={() => toggleDropdown(key)}
