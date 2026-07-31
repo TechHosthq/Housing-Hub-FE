@@ -11,6 +11,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useProperty } from "@/hooks/useProperty";
+import { useAuthStore } from "@/store/useAuthStore";
 import { use } from "react";
 
 export default function PropertyDetailPage() {
@@ -18,6 +19,7 @@ export default function PropertyDetailPage() {
     const id = params.id as string;
     const { useGetProperty } = useProperty();
     const { data: propertyResponse, isLoading } = useGetProperty(id);
+    const currentUser = useAuthStore((state) => state.user);
 
     if (isLoading) {
         return (
@@ -77,7 +79,11 @@ export default function PropertyDetailPage() {
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Main Content Side */}
                     <div className="flex-1 bg-white dark:bg-gray-900 rounded-[28px] border border-[#F2F2F2] dark:border-gray-800 p-8 shadow-sm">
-                        <PropertyDetailHeader propertyTitle={displayProperty.title} />
+                        <PropertyDetailHeader
+                            propertyId={property.id}
+                            propertyTitle={displayProperty.title}
+                            isOwner={!!currentUser && currentUser.id === property.ownerId}
+                        />
 
                         <div className="space-y-10">
                             <PropertyGallery images={images} />

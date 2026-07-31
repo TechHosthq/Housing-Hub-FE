@@ -1,17 +1,36 @@
 "use client";
 
-import { Share2, AlertCircle } from "lucide-react";
+import { Share2, AlertCircle, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import ShareModal from "./ShareModal";
 import ReportModal from "./ReportModal";
+import DeleteListingModal from "../properties/DeleteListingModal";
+import PropertyDeletedModal from "../properties/PropertyDeletedModal";
+import { useProperty } from "@/hooks/useProperty";
 
 interface PropertyDetailHeaderProps {
+    propertyId: string;
     propertyTitle: string;
+    isOwner: boolean;
 }
 
-export default function PropertyDetailHeader({ propertyTitle }: PropertyDetailHeaderProps) {
+export default function PropertyDetailHeader({ propertyId, propertyTitle, isOwner }: PropertyDetailHeaderProps) {
+    const router = useRouter();
+    const { deleteProperty, isDeleting } = useProperty();
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeletedSuccessOpen, setIsDeletedSuccessOpen] = useState(false);
+
+    const handleDelete = () => {
+        deleteProperty(propertyId, {
+            onSuccess: () => {
+                setIsDeleteModalOpen(false);
+                setIsDeletedSuccessOpen(true);
+            }
+        });
+    };
 
     return (
         <>
@@ -24,12 +43,22 @@ export default function PropertyDetailHeader({ propertyTitle }: PropertyDetailHe
                     >
                         <Share2 size={18} />
                     </button>
-                    <button
-                        onClick={() => setIsReportModalOpen(true)}
-                        className="hover:text-red-500 transition-colors"
-                    >
-                        <AlertCircle size={18} />
-                    </button>
+                    {isOwner ? (
+                        <button
+                            onClick={() => setIsDeleteModalOpen(true)}
+                            disabled={isDeleting}
+                            className="hover:text-red-500 transition-colors disabled:opacity-50"
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => setIsReportModalOpen(true)}
+                            className="hover:text-red-500 transition-colors"
+                        >
+                            <AlertCircle size={18} />
+                        </button>
+                    )}
                 </div>
             </header>
 
@@ -42,6 +71,20 @@ export default function PropertyDetailHeader({ propertyTitle }: PropertyDetailHe
             <ReportModal
                 isOpen={isReportModalOpen}
                 onClose={() => setIsReportModalOpen(false)}
+            />
+
+            <DeleteListingModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDelete}
+            />
+
+            <PropertyDeletedModal
+                isOpen={isDeletedSuccessOpen}
+                onClose={() => {
+                    setIsDeletedSuccessOpen(false);
+                    router.push("/properties");
+                }}
             />
         </>
     );
