@@ -8,6 +8,7 @@ export interface Message {
     content: string | null;
     isRead: boolean;
     dateCreated: string;
+    isSystemMessage?: boolean;
 }
 
 export interface Conversation {
