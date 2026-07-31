@@ -98,10 +98,18 @@ export const useProperty = () => {
     });
 
     const uploadFilesMutation = useMutation({
-        mutationFn: ({ id, files }: { id: string, files: File[] }) => 
+        mutationFn: ({ id, files }: { id: string, files: File[] }) =>
             propertyService.uploadPropertyFiles(id, files),
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: ['property', variables.id] });
+        }
+    });
+
+    const deleteFileMutation = useMutation({
+        mutationFn: ({ propertyId, fileId }: { propertyId: string, fileId: string }) =>
+            propertyService.deletePropertyFile(propertyId, fileId),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['property', variables.propertyId] });
         }
     });
 
@@ -123,6 +131,8 @@ export const useProperty = () => {
         isDeleting: deletePropertyMutation.isPending,
         uploadFiles: uploadFilesMutation.mutate,
         isUploading: uploadFilesMutation.isPending,
+        deleteFile: deleteFileMutation.mutate,
+        isDeletingFile: deleteFileMutation.isPending,
         setPublished: publishMutation.mutate,
         isSettingPublished: publishMutation.isPending,
     };
