@@ -181,6 +181,22 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect, newR
                             ) : (
                                 <>
                                     {[...messages].reverse().map((msg) => {
+                                        if (msg.isSystemMessage) {
+                                            return (
+                                                <div key={msg.id} className="flex justify-center">
+                                                    <div className="max-w-[85%] text-center space-y-1">
+                                                        <div className="px-5 py-3 rounded-[12px] text-[12px] leading-relaxed bg-[#F2F7FF] border border-[#D9E9FF] text-[#1A1A1A] dark:text-gray-100">
+                                                            <span className="block text-[9px] font-black uppercase tracking-wider text-primary-dark mb-1">{msg.senderName || "Admin"}</span>
+                                                            {msg.content}
+                                                        </div>
+                                                        <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500">
+                                                            {formatDistanceToNow(new Date(msg.dateCreated), { addSuffix: true })}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+
                                         const isOutgoing = msg.senderId === currentUser?.id;
                                         return (
                                             <div
