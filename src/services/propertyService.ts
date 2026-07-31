@@ -72,7 +72,10 @@ export const propertyService = {
     },
 
     unpublishProperty: async (id: string): Promise<ApiResponse<boolean>> => {
-        const response = await apiClient.put<ApiResponse<boolean>>(`/api/v1/Property/${id}/unpublish`);
+        // There is no separate /unpublish route on the owner-facing controller (only
+        // Admin's moderation controller has one) — the real route takes isPublished as
+        // a query flag on the same /publish endpoint.
+        const response = await apiClient.put<ApiResponse<boolean>>(`/api/v1/Property/${id}/publish?isPublished=false`);
         return response.data;
     },
 
