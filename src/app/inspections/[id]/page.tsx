@@ -186,31 +186,25 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
         }, 2000);
     };
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="animate-spin text-primary-dark w-12 h-12" />
-            </div>
-        );
-    }
-
-    if (!inspection) {
-        return (
-            <div className="min-h-screen flex items-center justify-center flex-col gap-4">
-                <p className="text-xl font-bold text-gray-500 dark:text-gray-500">Inspection not found.</p>
-                <Link href="/inspections" className="text-primary-dark font-bold hover:underline">Back to Inspections</Link>
-            </div>
-        );
-    }
-
-    const propertyImage = inspection.propertyImageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
-    const isAwaitingFeedback = inspection.status === InspectionStatus.Completed;
+    const propertyImage = inspection?.propertyImageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
+    const isAwaitingFeedback = inspection?.status === InspectionStatus.Completed;
 
     return (
         <main className="min-h-screen bg-white dark:bg-gray-900">
             <DashboardNavbar />
 
             <div className="max-w-7xl mx-auto px-6 pt-32 pb-20">
+                {isLoading ? (
+                    <div className="flex items-center justify-center min-h-[40vh]">
+                        <Loader2 className="animate-spin text-primary-dark w-12 h-12" />
+                    </div>
+                ) : !inspection ? (
+                    <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+                        <p className="text-xl font-bold text-gray-500 dark:text-gray-500">Inspection not found.</p>
+                        <Link href="/inspections" className="text-primary-dark font-bold hover:underline">Back to Inspections</Link>
+                    </div>
+                ) : (
+                <>
                 <Link
                     href="/inspections"
                     className="inline-flex items-center gap-2 text-primary-dark font-bold text-sm mb-8 hover:opacity-70 transition-opacity"
@@ -362,6 +356,8 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                         </div>
                     )}
                 </div>
+                </>
+                )}
             </div>
 
             <Footer />
@@ -373,43 +369,47 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                 message={successConfig.message}
             />
 
-            <AcceptInspectionModal
-                isOpen={isAcceptModalOpen}
-                onClose={() => setIsAcceptModalOpen(false)}
-                onConfirm={handleConfirmAccept}
-                date={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "MMMM dd, yyyy") : ""}
-                time={formatTimeTo12h(inspection.scheduledTime)}
-            />
+            {inspection && (
+                <>
+                    <AcceptInspectionModal
+                        isOpen={isAcceptModalOpen}
+                        onClose={() => setIsAcceptModalOpen(false)}
+                        onConfirm={handleConfirmAccept}
+                        date={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "MMMM dd, yyyy") : ""}
+                        time={formatTimeTo12h(inspection.scheduledTime)}
+                    />
 
-            <DeclineInspectionModal
-                isOpen={isDeclineModalOpen}
-                onClose={() => setIsDeclineModalOpen(false)}
-                onSelectOption={handleDeclineOption}
-            />
+                    <DeclineInspectionModal
+                        isOpen={isDeclineModalOpen}
+                        onClose={() => setIsDeclineModalOpen(false)}
+                        onSelectOption={handleDeclineOption}
+                    />
 
-            <SuggestRescheduleModal
-                isOpen={isRescheduleModalOpen}
-                onClose={() => setIsRescheduleModalOpen(false)}
-                onSuggest={handleRescheduleSuggest}
-                initialDate={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "yyyy-MM-dd") : ""}
-                initialTime={inspection.scheduledTime}
-            />
+                    <SuggestRescheduleModal
+                        isOpen={isRescheduleModalOpen}
+                        onClose={() => setIsRescheduleModalOpen(false)}
+                        onSuggest={handleRescheduleSuggest}
+                        initialDate={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "yyyy-MM-dd") : ""}
+                        initialTime={inspection.scheduledTime}
+                    />
 
-            <AssignStaffModal
-                isOpen={isAssignStaffModalOpen}
-                onClose={() => setIsAssignStaffModalOpen(false)}
-                onAssign={handleAssignStaff}
-                onReschedule={() => {
-                    setIsAssignStaffModalOpen(false);
-                    setIsRescheduleModalOpen(true);
-                }}
-            />
+                    <AssignStaffModal
+                        isOpen={isAssignStaffModalOpen}
+                        onClose={() => setIsAssignStaffModalOpen(false)}
+                        onAssign={handleAssignStaff}
+                        onReschedule={() => {
+                            setIsAssignStaffModalOpen(false);
+                            setIsRescheduleModalOpen(true);
+                        }}
+                    />
 
-            <ConfirmDeclineModal
-                isOpen={isConfirmDeclineModalOpen}
-                onClose={() => setIsConfirmDeclineModalOpen(false)}
-                onConfirm={handleConfirmDecline}
-            />
+                    <ConfirmDeclineModal
+                        isOpen={isConfirmDeclineModalOpen}
+                        onClose={() => setIsConfirmDeclineModalOpen(false)}
+                        onConfirm={handleConfirmDecline}
+                    />
+                </>
+            )}
         </main>
     );
 }
