@@ -57,7 +57,7 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
     const location = property.propertyAddress?.city || "Lagos";
     const image = property.files?.[0]?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
     const views = property.viewCount || 0;
-    const requests = 0; // Requests would come from inspection API if needed
+    const requests = property.inspectionCount ?? 0;
 
     return (
         <div
