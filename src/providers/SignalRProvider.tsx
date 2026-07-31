@@ -6,10 +6,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createHubConnection } from "@/lib/signalr";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useNotificationSoundStore } from "@/store/useNotificationSoundStore";
+import { playNotificationAudio, registerNotificationAudioUnlock } from "@/lib/notificationAudio";
 
 const playNotificationSound = () => {
     if (!useNotificationSoundStore.getState().isSoundEnabled) return;
-    new Audio("/sounds/notification.wav").play().catch(() => {});
+    playNotificationAudio();
 };
 
 const ChatConnectionContext = createContext<HubConnection | null>(null);
@@ -21,6 +22,10 @@ export default function SignalRProvider({ children }: { children: React.ReactNod
     const queryClient = useQueryClient();
     const [chatConnection, setChatConnection] = useState<HubConnection | null>(null);
     const connectionsRef = useRef<{ chat: HubConnection; notification: HubConnection } | null>(null);
+
+    useEffect(() => {
+        return registerNotificationAudioUnlock();
+    }, []);
 
     useEffect(() => {
         if (!isAuthenticated) {

@@ -3,21 +3,12 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { NIGERIAN_STATES } from "@/lib/nigerianStates";
 
 const FILTER_OPTIONS = {
-    location: ["Lagos", "Abuja", "Port Harcourt", "Ibadan", "Enugu"],
+    location: NIGERIAN_STATES,
     propertyType: ["House", "Apartment", "Guesthouse", "Flat", "Duplex"],
     priceRange: ["₦1M - ₦5M", "₦5M - ₦20M", "₦20M - ₦50M", "₦50M+"],
-};
-
-// State vs. city distinction matches how the backend's address filter works
-// (PropertyAddress.City / .State, each matched with a case-insensitive contains).
-const LOCATION_PARAM: Record<string, { state?: string; city?: string }> = {
-    "Lagos": { state: "Lagos" },
-    "Abuja": { state: "Abuja" },
-    "Port Harcourt": { city: "Port Harcourt" },
-    "Ibadan": { city: "Ibadan" },
-    "Enugu": { city: "Enugu" },
 };
 
 const PRICE_RANGE_PARAM: Record<string, { minPrice?: number; maxPrice?: number }> = {
@@ -65,9 +56,7 @@ export default function PropertyFilterBar() {
         if (price?.minPrice) params.set('minPrice', String(price.minPrice));
         if (price?.maxPrice) params.set('maxPrice', String(price.maxPrice));
 
-        const location = updated.location ? LOCATION_PARAM[updated.location] : undefined;
-        if (location?.state) params.set('state', location.state);
-        if (location?.city) params.set('city', location.city);
+        if (updated.location) params.set('state', updated.location);
 
         const query = params.toString();
         router.push(query ? `/dashboard?${query}` : '/dashboard');

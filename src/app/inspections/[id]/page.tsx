@@ -16,6 +16,7 @@ import DeclineInspectionModal from "@/components/inspections/DeclineInspectionMo
 import SuggestRescheduleModal from "@/components/inspections/SuggestRescheduleModal";
 import AssignStaffModal from "@/components/inspections/AssignStaffModal";
 import ConfirmDeclineModal from "@/components/inspections/ConfirmDeclineModal";
+import CancelInspectionModal from "@/components/inspections/CancelInspectionModal";
 import { useInspection } from "@/hooks/useInspection";
 import inspectionService from "@/services/inspectionService";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -45,8 +46,12 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
     const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
     const [isAssignStaffModalOpen, setIsAssignStaffModalOpen] = useState(false);
     const [isConfirmDeclineModalOpen, setIsConfirmDeclineModalOpen] = useState(false);
+    const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+    const [isCancelling, setIsCancelling] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [successConfig, setSuccessConfig] = useState({ title: "", message: "" });
+    const [rescheduleRejectNote, setRescheduleRejectNote] = useState("");
+    const [isRejectingReschedule, setIsRejectingReschedule] = useState(false);
 
     const inspection = inspectionResponse?.data;
 
@@ -143,7 +148,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                 setIsRescheduleModalOpen(false);
                 setSuccessConfig({
                     title: "Reschedule Proposed",
-                    message: `A request to reschedule for ${format(new Date(data.date + "T00:00:00"), "MMMM dd, yyyy")} at ${data.time} has been sent to the customer.`
+                    message: `A request to reschedule for ${format(new Date(data.date + "T00:00:00"), "MMMM dd, yyyy")} at ${data.time} has been sent to the ${role === "Customer" ? "owner" : "customer"}.`
                 });
                 setIsSuccessModalOpen(true);
                 setTimeout(() => {
@@ -153,22 +158,55 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
         });
     };
 
-    const handleCancel = () => {
+    const handleAcceptReschedule = () => {
         if (!inspection) return;
-        if (confirm("Are you sure you want to cancel this inspection?")) {
-            inspectionService.deleteInspection(inspection.id).then((response) => {
-                if (response.isSuccessful) {
-                    setSuccessConfig({
-                        title: "Inspection Cancelled",
-                        message: "The inspection request has been successfully removed."
-                    });
-                    setIsSuccessModalOpen(true);
-                    setTimeout(() => {
-                        router.push("/inspections");
-                    }, 2000);
-                }
-            });
-        }
+        respondToReschedule({ id: inspection.id, accept: true }, {
+            onSuccess: () => {
+                setSuccessConfig({
+                    title: "Reschedule Confirmed",
+                    message: "The new date and time have been confirmed."
+                });
+                setIsSuccessModalOpen(true);
+            }
+        });
+    };
+
+    const handleRejectReschedule = () => {
+        if (!inspection) return;
+        respondToReschedule({ id: inspection.id, accept: false, note: rescheduleRejectNote || undefined }, {
+            onSuccess: () => {
+                setIsRejectingReschedule(false);
+                setRescheduleRejectNote("");
+                setSuccessConfig({
+                    title: "Reschedule Declined",
+                    message: "The inspection has reverted to its original date and time."
+                });
+                setIsSuccessModalOpen(true);
+            }
+        });
+    };
+
+    const handleCancel = () => {
+        setIsCancelModalOpen(true);
+    };
+
+    const handleConfirmCancel = () => {
+        if (!inspection) return;
+        setIsCancelling(true);
+        inspectionService.deleteInspection(inspection.id).then((response) => {
+            setIsCancelling(false);
+            if (response.isSuccessful) {
+                setIsCancelModalOpen(false);
+                setSuccessConfig({
+                    title: "Inspection Cancelled",
+                    message: "The inspection request has been successfully removed."
+                });
+                setIsSuccessModalOpen(true);
+                setTimeout(() => {
+                    router.push("/inspections");
+                }, 2000);
+            }
+        });
     };
 
     const handleAssignStaff = (staffId: string) => {
@@ -186,31 +224,25 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
         }, 2000);
     };
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="animate-spin text-primary-dark w-12 h-12" />
-            </div>
-        );
-    }
-
-    if (!inspection) {
-        return (
-            <div className="min-h-screen flex items-center justify-center flex-col gap-4">
-                <p className="text-xl font-bold text-gray-500 dark:text-gray-500">Inspection not found.</p>
-                <Link href="/inspections" className="text-primary-dark font-bold hover:underline">Back to Inspections</Link>
-            </div>
-        );
-    }
-
-    const propertyImage = inspection.propertyImageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
-    const isAwaitingFeedback = inspection.status === InspectionStatus.Completed;
+    const propertyImage = inspection?.propertyImageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
+    const isAwaitingFeedback = inspection?.status === InspectionStatus.Completed;
 
     return (
         <main className="min-h-screen bg-white dark:bg-gray-900">
             <DashboardNavbar />
 
             <div className="max-w-7xl mx-auto px-6 pt-32 pb-20">
+                {isLoading ? (
+                    <div className="flex items-center justify-center min-h-[40vh]">
+                        <Loader2 className="animate-spin text-primary-dark w-12 h-12" />
+                    </div>
+                ) : !inspection ? (
+                    <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+                        <p className="text-xl font-bold text-gray-500 dark:text-gray-500">Inspection not found.</p>
+                        <Link href="/inspections" className="text-primary-dark font-bold hover:underline">Back to Inspections</Link>
+                    </div>
+                ) : (
+                <>
                 <Link
                     href="/inspections"
                     className="inline-flex items-center gap-2 text-primary-dark font-bold text-sm mb-8 hover:opacity-70 transition-opacity"
@@ -280,11 +312,75 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                         </p>
                     </div>
 
+                    {/* Respond to a proposed reschedule — shown to whichever party needs to act */}
+                    {inspection.status === InspectionStatus.Rescheduled && (
+                        <div className="bg-[#F2F7FF] rounded-[22px] border border-[#D9E9FF] p-8">
+                            <h3 className="text-[18px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-2">New Date Proposed</h3>
+                            <p className="text-[14px] text-[#666666] dark:text-gray-400 font-medium leading-relaxed mb-6">
+                                {inspection.rescheduledDate && format(new Date(inspection.rescheduledDate), "MMMM dd, yyyy")} at {formatTimeTo12h(inspection.rescheduledTime || undefined)}
+                                {inspection.rescheduleNote && <> — &ldquo;{inspection.rescheduleNote}&rdquo;</>}
+                            </p>
+
+                            {isRejectingReschedule ? (
+                                <div className="space-y-4">
+                                    <textarea
+                                        value={rescheduleRejectNote}
+                                        onChange={(e) => setRescheduleRejectNote(e.target.value)}
+                                        className="w-full h-24 p-4 rounded-xl border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 resize-none focus:outline-none focus:border-primary-dark text-sm"
+                                        placeholder="Let them know why this time doesn't work (optional)..."
+                                    />
+                                    <div className="flex gap-4">
+                                        <button
+                                            onClick={() => setIsRejectingReschedule(false)}
+                                            className="flex-1 py-3 rounded-full border border-gray-200 dark:border-gray-800 text-[13px] font-bold text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all"
+                                        >
+                                            Back
+                                        </button>
+                                        <button
+                                            onClick={handleRejectReschedule}
+                                            disabled={isRespondingToReschedule}
+                                            className="flex-1 py-3 rounded-full bg-[#FF3B30] text-white text-[13px] font-bold hover:bg-[#FF3B30]/90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                        >
+                                            {isRespondingToReschedule && <Loader2 className="animate-spin" size={16} />}
+                                            Confirm Decline
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={() => setIsRejectingReschedule(true)}
+                                        className="flex-1 py-4 rounded-full border-[2px] border-[#FF3B30] text-[15px] font-black text-[#FF3B30] font-montserrat hover:bg-red-50 transition-all active:scale-[0.98]"
+                                    >
+                                        Decline
+                                    </button>
+                                    <button
+                                        onClick={handleAcceptReschedule}
+                                        disabled={isRespondingToReschedule}
+                                        className="flex-1 py-4 rounded-full bg-primary-dark text-white text-[15px] font-black font-montserrat hover:bg-primary-dark/90 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+                                    >
+                                        {isRespondingToReschedule && <Loader2 className="animate-spin" size={16} />}
+                                        Accept New Date
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {/* Conditional Sections based on Role */}
                     {role === "Customer" ? (
                         <>
                             {/* Timeline - Using real statuses might need mapping for labels */}
                             <InspectionTimeline steps={[]} /> {/* Timeline needs real data mapping */}
+
+                            {inspection.propertyOwnerId && (
+                                <Link
+                                    href={`/messages?recipientId=${inspection.propertyOwnerId}`}
+                                    className="block w-full text-center py-4 rounded-full border-[2px] border-primary-dark text-[16px] font-black text-primary-dark font-montserrat hover:bg-primary-dark/5 transition-all active:scale-[0.98]"
+                                >
+                                    Message Owner
+                                </Link>
+                            )}
 
                             <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8">
                                 {isAwaitingFeedback ? (
@@ -342,6 +438,15 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                                 Message Customer
                             </Link>
 
+                            {(inspection.status === InspectionStatus.Pending || inspection.status === InspectionStatus.Confirmed) && (
+                                <button
+                                    onClick={() => setIsRescheduleModalOpen(true)}
+                                    className="block w-full text-center py-4 rounded-full border-[2px] border-[#0095FF] text-[16px] font-black text-[#0095FF] font-montserrat hover:bg-blue-50 transition-all active:scale-[0.98]"
+                                >
+                                    Suggest Another Date
+                                </button>
+                            )}
+
                             {inspection.status === InspectionStatus.Pending && (
                                 <div className="flex gap-6">
                                     <button
@@ -362,6 +467,8 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                         </div>
                     )}
                 </div>
+                </>
+                )}
             </div>
 
             <Footer />
@@ -373,43 +480,54 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                 message={successConfig.message}
             />
 
-            <AcceptInspectionModal
-                isOpen={isAcceptModalOpen}
-                onClose={() => setIsAcceptModalOpen(false)}
-                onConfirm={handleConfirmAccept}
-                date={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "MMMM dd, yyyy") : ""}
-                time={formatTimeTo12h(inspection.scheduledTime)}
-            />
+            {inspection && (
+                <>
+                    <AcceptInspectionModal
+                        isOpen={isAcceptModalOpen}
+                        onClose={() => setIsAcceptModalOpen(false)}
+                        onConfirm={handleConfirmAccept}
+                        date={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "MMMM dd, yyyy") : ""}
+                        time={formatTimeTo12h(inspection.scheduledTime)}
+                    />
 
-            <DeclineInspectionModal
-                isOpen={isDeclineModalOpen}
-                onClose={() => setIsDeclineModalOpen(false)}
-                onSelectOption={handleDeclineOption}
-            />
+                    <DeclineInspectionModal
+                        isOpen={isDeclineModalOpen}
+                        onClose={() => setIsDeclineModalOpen(false)}
+                        onSelectOption={handleDeclineOption}
+                    />
 
-            <SuggestRescheduleModal
-                isOpen={isRescheduleModalOpen}
-                onClose={() => setIsRescheduleModalOpen(false)}
-                onSuggest={handleRescheduleSuggest}
-                initialDate={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "yyyy-MM-dd") : ""}
-                initialTime={inspection.scheduledTime}
-            />
+                    <SuggestRescheduleModal
+                        isOpen={isRescheduleModalOpen}
+                        onClose={() => setIsRescheduleModalOpen(false)}
+                        onSuggest={handleRescheduleSuggest}
+                        initialDate={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "yyyy-MM-dd") : ""}
+                        initialTime={inspection.scheduledTime}
+                    />
 
-            <AssignStaffModal
-                isOpen={isAssignStaffModalOpen}
-                onClose={() => setIsAssignStaffModalOpen(false)}
-                onAssign={handleAssignStaff}
-                onReschedule={() => {
-                    setIsAssignStaffModalOpen(false);
-                    setIsRescheduleModalOpen(true);
-                }}
-            />
+                    <AssignStaffModal
+                        isOpen={isAssignStaffModalOpen}
+                        onClose={() => setIsAssignStaffModalOpen(false)}
+                        onAssign={handleAssignStaff}
+                        onReschedule={() => {
+                            setIsAssignStaffModalOpen(false);
+                            setIsRescheduleModalOpen(true);
+                        }}
+                    />
 
-            <ConfirmDeclineModal
-                isOpen={isConfirmDeclineModalOpen}
-                onClose={() => setIsConfirmDeclineModalOpen(false)}
-                onConfirm={handleConfirmDecline}
-            />
+                    <ConfirmDeclineModal
+                        isOpen={isConfirmDeclineModalOpen}
+                        onClose={() => setIsConfirmDeclineModalOpen(false)}
+                        onConfirm={handleConfirmDecline}
+                    />
+
+                    <CancelInspectionModal
+                        isOpen={isCancelModalOpen}
+                        isCancelling={isCancelling}
+                        onClose={() => setIsCancelModalOpen(false)}
+                        onConfirm={handleConfirmCancel}
+                    />
+                </>
+            )}
         </main>
     );
 }

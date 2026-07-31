@@ -30,6 +30,7 @@ export interface Inspection {
     rescheduledTime: string | null;
     rescheduleNote: string | null;
     propertyImageUrl?: string | null;
+    propertyOwnerId?: string | null;
 }
 
 export interface CreateInspectionRequest {

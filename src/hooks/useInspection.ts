@@ -62,8 +62,8 @@ export const useInspection = () => {
     });
 
     const respondToRescheduleMutation = useMutation({
-        mutationFn: ({ id, accept }: { id: string, accept: boolean }) => 
-            inspectionService.respondToReschedule(id, accept),
+        mutationFn: ({ id, accept, note }: { id: string, accept: boolean, note?: string }) =>
+            inspectionService.respondToReschedule(id, accept, note),
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: ['inspection', variables.id] });
             queryClient.invalidateQueries({ queryKey: ['my-inspections'] });
