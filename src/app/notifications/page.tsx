@@ -9,21 +9,21 @@ import { Bell, Check, Loader2, Info, Calendar, UserCheck, XCircle } from "lucide
 import { format } from "date-fns";
 
 const notificationIcons: Record<number, any> = {
-    [NotificationType.InspectionRequested]: Calendar,
+    [NotificationType.InspectionScheduled]: Calendar,
     [NotificationType.InspectionConfirmed]: Check,
     [NotificationType.InspectionDeclined]: XCircle,
     [NotificationType.InspectionRescheduled]: Calendar,
-    [NotificationType.InspectionCompleted]: UserCheck,
+    [NotificationType.InspectionCancelled]: XCircle,
     [NotificationType.KYCApproved]: UserCheck,
     [NotificationType.KYCRejected]: XCircle,
 };
 
 const iconColors: Record<number, string> = {
-    [NotificationType.InspectionRequested]: "bg-blue-100 text-blue-600",
+    [NotificationType.InspectionScheduled]: "bg-blue-100 text-blue-600",
     [NotificationType.InspectionConfirmed]: "bg-green-100 text-green-600 dark:text-green-400",
     [NotificationType.InspectionDeclined]: "bg-red-100 text-red-600 dark:text-red-400",
     [NotificationType.InspectionRescheduled]: "bg-orange-100 text-orange-600",
-    [NotificationType.InspectionCompleted]: "bg-purple-100 text-purple-600",
+    [NotificationType.InspectionCancelled]: "bg-red-100 text-red-600 dark:text-red-400",
     [NotificationType.KYCApproved]: "bg-green-100 text-green-600 dark:text-green-400",
     [NotificationType.KYCRejected]: "bg-red-100 text-red-600 dark:text-red-400",
 };
