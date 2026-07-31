@@ -80,8 +80,8 @@ export default function TimePicker({ value, onChange }: TimePickerProps) {
                     </div>
 
                     <div className="flex justify-end gap-6">
-                        <button onClick={() => setIsOpen(false)} className="text-[10px] font-bold text-[#0095FF] uppercase">Cancel</button>
-                        <button onClick={handleConfirm} className="text-[10px] font-bold text-[#0095FF] uppercase">OK</button>
+                        <button type="button" onClick={() => setIsOpen(false)} className="text-[10px] font-bold text-[#0095FF] uppercase">Cancel</button>
+                        <button type="button" onClick={handleConfirm} className="text-[10px] font-bold text-[#0095FF] uppercase">OK</button>
                     </div>
                 </div>
             )}

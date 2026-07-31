@@ -51,14 +51,14 @@ export default function DatePicker({ value, onChange }: DatePickerProps) {
                 <div className="absolute top-full left-0 mt-2 z-50 bg-[#E9F3FF] rounded-[22px] p-6 shadow-xl border border-[#D9E9FF] w-[280px]">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
-                            <button onClick={() => changeMonth(-1)} className="text-[#666666] dark:text-gray-400 hover:text-[#1A1A1A]"><ChevronLeft size={16} /></button>
+                            <button type="button" onClick={() => changeMonth(-1)} className="text-[#666666] dark:text-gray-400 hover:text-[#1A1A1A]"><ChevronLeft size={16} /></button>
                             <span className="text-[12px] font-bold text-[#1A1A1A] dark:text-gray-100 px-2">{months[viewDate.getMonth()]}</span>
-                            <button onClick={() => changeMonth(1)} className="text-[#666666] dark:text-gray-400 hover:text-[#1A1A1A]"><ChevronRight size={16} /></button>
+                            <button type="button" onClick={() => changeMonth(1)} className="text-[#666666] dark:text-gray-400 hover:text-[#1A1A1A]"><ChevronRight size={16} /></button>
                         </div>
                         <div className="flex items-center gap-2">
-                            <button className="text-[#666666] dark:text-gray-400 hover:text-[#1A1A1A]"><ChevronLeft size={16} /></button>
+                            <button type="button" className="text-[#666666] dark:text-gray-400 hover:text-[#1A1A1A]"><ChevronLeft size={16} /></button>
                             <span className="text-[12px] font-bold text-[#1A1A1A] dark:text-gray-100 px-2">{viewDate.getFullYear()}</span>
-                            <button className="text-[#666666] dark:text-gray-400 hover:text-[#1A1A1A]"><ChevronRight size={16} /></button>
+                            <button type="button" className="text-[#666666] dark:text-gray-400 hover:text-[#1A1A1A]"><ChevronRight size={16} /></button>
                         </div>
                     </div>
 
@@ -77,6 +77,7 @@ export default function DatePicker({ value, onChange }: DatePickerProps) {
                             return (
                                 <button
                                     key={day}
+                                    type="button"
                                     onClick={() => selectDate(day)}
                                     className={`text-[10px] w-7 h-7 flex items-center justify-center mx-auto rounded-full transition-all ${isSelected ? "bg-[#0095FF] text-white font-bold" : "text-[#1A1A1A] dark:text-gray-100 hover:bg-white/50"
                                         }`}
@@ -88,8 +89,8 @@ export default function DatePicker({ value, onChange }: DatePickerProps) {
                     </div>
 
                     <div className="flex justify-end gap-6 mt-8">
-                        <button onClick={() => setIsOpen(false)} className="text-[10px] font-bold text-[#0095FF] uppercase">Cancel</button>
-                        <button onClick={() => setIsOpen(false)} className="text-[10px] font-bold text-[#0095FF] uppercase">OK</button>
+                        <button type="button" onClick={() => setIsOpen(false)} className="text-[10px] font-bold text-[#0095FF] uppercase">Cancel</button>
+                        <button type="button" onClick={() => setIsOpen(false)} className="text-[10px] font-bold text-[#0095FF] uppercase">OK</button>
                     </div>
                 </div>
             )}
