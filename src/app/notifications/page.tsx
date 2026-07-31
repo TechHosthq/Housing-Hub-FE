@@ -7,6 +7,7 @@ import { useNotification } from "@/hooks/useNotification";
 import { Notification, NotificationType } from "@/types/notification";
 import { Bell, Check, Loader2, Info, Calendar, UserCheck, XCircle } from "lucide-react";
 import { format } from "date-fns";
+import NotificationDetailModal from "@/components/notifications/NotificationDetailModal";
 
 const notificationIcons: Record<number, any> = {
     [NotificationType.InspectionScheduled]: Calendar,
@@ -30,6 +31,7 @@ const iconColors: Record<number, string> = {
 
 export default function NotificationsPage() {
     const [pageNumber, setPageNumber] = useState(1);
+    const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
     const { useGetNotifications, markAsRead, markAllAsRead, isMarkingAllRead } = useNotification();
     
     const { data: notificationsResponse, isLoading } = useGetNotifications({
@@ -45,6 +47,13 @@ export default function NotificationsPage() {
 
     const handleRead = (id: string) => {
         markAsRead(id);
+    };
+
+    const handleOpenNotification = (notification: Notification) => {
+        setSelectedNotification(notification);
+        if (!notification.isRead) {
+            handleRead(notification.id);
+        }
     };
 
     return (
@@ -78,9 +87,9 @@ export default function NotificationsPage() {
                             {notifications.map((notification: Notification) => {
                                 const Icon = notificationIcons[notification.type] || Info;
                                 return (
-                                    <div 
+                                    <div
                                         key={notification.id}
-                                        onClick={() => !notification.isRead && handleRead(notification.id)}
+                                        onClick={() => handleOpenNotification(notification)}
                                         className={`p-6 rounded-[22px] border transition-all cursor-pointer flex items-start gap-5 ${
                                             notification.isRead 
                                             ? "bg-white dark:bg-gray-900 border-[#F2F2F2] dark:border-gray-800" 
@@ -124,6 +133,12 @@ export default function NotificationsPage() {
             </div>
 
             <Footer />
+
+            <NotificationDetailModal
+                isOpen={!!selectedNotification}
+                onClose={() => setSelectedNotification(null)}
+                notification={selectedNotification}
+            />
         </main>
     );
 }
