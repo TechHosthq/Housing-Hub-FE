@@ -10,15 +10,9 @@ import { PropertyType, AvailabilityStatus, PropertyLeaseType, PropertyFile } fro
 import { useAuth } from "@/hooks/useAuth";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useRouter } from "next/navigation";
+import { NIGERIAN_STATES } from "@/lib/nigerianStates";
 
 const PROPERTY_TYPES = ["House", "Apartment", "Guesthouse", "Flat", "Duplex"];
-const NIGERIAN_STATES = [
-    "Abia", "Abuja", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa",
-    "Benue", "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu",
-    "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara",
-    "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers",
-    "Sokoto", "Taraba", "Yobe", "Zamfara",
-];
 const FEATURES = ["Wifi", "Car Pack", "Security Camera", "Swimming Pool", "Gym", "Generator", "Balcony"];
 
 const FEATURES_MAP: Record<string, number> = {
