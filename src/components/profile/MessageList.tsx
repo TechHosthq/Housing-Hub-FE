@@ -21,7 +21,7 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect, newR
     const chatConnection = useChatConnection();
     const [searchQuery, setSearchQuery] = useState("");
     const [messageInput, setMessageInput] = useState("");
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
 
     // Join the open conversation's SignalR group so NewMessageInConversation reaches us.
     useEffect(() => {
@@ -45,8 +45,13 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect, newR
         }
     }, [selectedId, markAsRead]);
 
+    // Scroll only the message list's own container, never the page — scrollIntoView
+    // would otherwise walk up and scroll any scrollable ancestor, including the page.
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        const container = messagesContainerRef.current;
+        if (container) {
+            container.scrollTop = container.scrollHeight;
+        }
     }, [messages]);
 
     const filteredConversations = conversations.filter(conv =>
@@ -162,7 +167,7 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect, newR
                             </h2>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-8 space-y-6 bg-white dark:bg-gray-900">
+                        <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-8 space-y-6 bg-white dark:bg-gray-900">
                             {isNewConversation ? (
                                 <div className="flex flex-col items-center justify-center h-full text-center">
                                     <p className="text-[12px] text-[#666666] dark:text-gray-400 font-medium">
@@ -196,7 +201,6 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect, newR
                                             </div>
                                         );
                                     })}
-                                    <div ref={messagesEndRef} />
                                 </>
                             )}
                         </div>
