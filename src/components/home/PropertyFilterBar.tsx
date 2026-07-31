@@ -8,10 +8,11 @@ import { NIGERIAN_STATES } from "@/lib/nigerianStates";
 const FILTER_OPTIONS = {
     location: NIGERIAN_STATES,
     propertyType: ["House", "Apartment", "Guesthouse", "Flat", "Duplex"],
-    priceRange: ["₦1M - ₦5M", "₦5M - ₦20M", "₦20M - ₦50M", "₦50M+"],
+    priceRange: ["Under ₦1M", "₦1M - ₦5M", "₦5M - ₦20M", "₦20M - ₦50M", "₦50M+"],
 };
 
 const PRICE_RANGE_PARAM: Record<string, { minPrice?: number; maxPrice?: number }> = {
+    "Under ₦1M": { minPrice: 0, maxPrice: 1_000_000 },
     "₦1M - ₦5M": { minPrice: 1_000_000, maxPrice: 5_000_000 },
     "₦5M - ₦20M": { minPrice: 5_000_000, maxPrice: 20_000_000 },
     "₦20M - ₦50M": { minPrice: 20_000_000, maxPrice: 50_000_000 },
@@ -53,8 +54,8 @@ export default function PropertyFilterBar() {
         if (updated.propertyType) params.set('propertyType', updated.propertyType);
 
         const price = updated.priceRange ? PRICE_RANGE_PARAM[updated.priceRange] : undefined;
-        if (price?.minPrice) params.set('minPrice', String(price.minPrice));
-        if (price?.maxPrice) params.set('maxPrice', String(price.maxPrice));
+        if (price?.minPrice != null) params.set('minPrice', String(price.minPrice));
+        if (price?.maxPrice != null) params.set('maxPrice', String(price.maxPrice));
 
         if (updated.location) params.set('state', updated.location);
 
@@ -83,7 +84,7 @@ export default function PropertyFilterBar() {
 
             {/* Dropdown Menu */}
             {activeDropdown === key && (
-                <div className="absolute top-[calc(100%+8px)] left-0 w-full min-w-[200px] bg-white dark:bg-gray-900 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 dark:border-gray-800 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-[calc(100%+8px)] left-0 w-full min-w-[200px] max-h-[280px] overflow-y-auto bg-white dark:bg-gray-900 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 dark:border-gray-800 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     {FILTER_OPTIONS[key].map((option) => (
                         <div
                             key={option}
@@ -128,7 +129,7 @@ export default function PropertyFilterBar() {
                                 <ChevronDown size={14} className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 flex-shrink-0 ml-1 ${activeDropdown === key ? 'rotate-180 text-[#002D6B]' : ''}`} />
                             </div>
                             {activeDropdown === key && (
-                                <div className="absolute top-[calc(100%+4px)] left-0 w-[160px] bg-white dark:bg-gray-900 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 dark:border-gray-800 py-2 z-[200]">
+                                <div className="absolute top-[calc(100%+4px)] left-0 w-[160px] max-h-[240px] overflow-y-auto bg-white dark:bg-gray-900 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 dark:border-gray-800 py-2 z-[200]">
                                     {FILTER_OPTIONS[key].map((option) => (
                                         <div
                                             key={option}
