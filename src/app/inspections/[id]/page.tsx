@@ -16,6 +16,7 @@ import DeclineInspectionModal from "@/components/inspections/DeclineInspectionMo
 import SuggestRescheduleModal from "@/components/inspections/SuggestRescheduleModal";
 import AssignStaffModal from "@/components/inspections/AssignStaffModal";
 import ConfirmDeclineModal from "@/components/inspections/ConfirmDeclineModal";
+import CancelInspectionModal from "@/components/inspections/CancelInspectionModal";
 import { useInspection } from "@/hooks/useInspection";
 import inspectionService from "@/services/inspectionService";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -45,6 +46,8 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
     const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
     const [isAssignStaffModalOpen, setIsAssignStaffModalOpen] = useState(false);
     const [isConfirmDeclineModalOpen, setIsConfirmDeclineModalOpen] = useState(false);
+    const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+    const [isCancelling, setIsCancelling] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [successConfig, setSuccessConfig] = useState({ title: "", message: "" });
 
@@ -154,21 +157,26 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
     };
 
     const handleCancel = () => {
+        setIsCancelModalOpen(true);
+    };
+
+    const handleConfirmCancel = () => {
         if (!inspection) return;
-        if (confirm("Are you sure you want to cancel this inspection?")) {
-            inspectionService.deleteInspection(inspection.id).then((response) => {
-                if (response.isSuccessful) {
-                    setSuccessConfig({
-                        title: "Inspection Cancelled",
-                        message: "The inspection request has been successfully removed."
-                    });
-                    setIsSuccessModalOpen(true);
-                    setTimeout(() => {
-                        router.push("/inspections");
-                    }, 2000);
-                }
-            });
-        }
+        setIsCancelling(true);
+        inspectionService.deleteInspection(inspection.id).then((response) => {
+            setIsCancelling(false);
+            if (response.isSuccessful) {
+                setIsCancelModalOpen(false);
+                setSuccessConfig({
+                    title: "Inspection Cancelled",
+                    message: "The inspection request has been successfully removed."
+                });
+                setIsSuccessModalOpen(true);
+                setTimeout(() => {
+                    router.push("/inspections");
+                }, 2000);
+            }
+        });
     };
 
     const handleAssignStaff = (staffId: string) => {
@@ -407,6 +415,13 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                         isOpen={isConfirmDeclineModalOpen}
                         onClose={() => setIsConfirmDeclineModalOpen(false)}
                         onConfirm={handleConfirmDecline}
+                    />
+
+                    <CancelInspectionModal
+                        isOpen={isCancelModalOpen}
+                        isCancelling={isCancelling}
+                        onClose={() => setIsCancelModalOpen(false)}
+                        onConfirm={handleConfirmCancel}
                     />
                 </>
             )}
