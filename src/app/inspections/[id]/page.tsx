@@ -288,6 +288,15 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                             {/* Timeline - Using real statuses might need mapping for labels */}
                             <InspectionTimeline steps={[]} /> {/* Timeline needs real data mapping */}
 
+                            {inspection.propertyOwnerId && (
+                                <Link
+                                    href={`/messages?recipientId=${inspection.propertyOwnerId}`}
+                                    className="block w-full text-center py-4 rounded-full border-[2px] border-primary-dark text-[16px] font-black text-primary-dark font-montserrat hover:bg-primary-dark/5 transition-all active:scale-[0.98]"
+                                >
+                                    Message Owner
+                                </Link>
+                            )}
+
                             <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8">
                                 {isAwaitingFeedback ? (
                                     <>
