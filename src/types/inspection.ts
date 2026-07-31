@@ -29,7 +29,6 @@ export interface Inspection {
     rescheduledDate: string | null;
     rescheduledTime: string | null;
     rescheduleNote: string | null;
-    dateRequested?: string;
 }
 
 export interface CreateInspectionRequest {
