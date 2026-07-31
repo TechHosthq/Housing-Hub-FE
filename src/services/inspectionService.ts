@@ -55,8 +55,10 @@ const inspectionService = {
         return response.data;
     },
 
-    respondToReschedule: async (id: string, accept: boolean): Promise<InspectionResponse> => {
-        const response = await apiClient.put(`/api/v1/Inspection/${id}/respond-reschedule?accept=${accept}`);
+    respondToReschedule: async (id: string, accept: boolean, note?: string): Promise<InspectionResponse> => {
+        const params = new URLSearchParams({ accept: String(accept) });
+        if (note) params.set('note', note);
+        const response = await apiClient.put(`/api/v1/Inspection/${id}/respond-reschedule?${params.toString()}`);
         return response.data;
     }
 };
