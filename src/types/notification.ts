@@ -6,8 +6,9 @@ export enum NotificationType {
     InspectionDeclined = 2,
     InspectionRescheduled = 3,
     InspectionCancelled = 4,
-    KYCApproved = 5,
-    KYCRejected = 6,
+    NewMessage = 5,
+    KYCApproved = 6,
+    KYCRejected = 7,
     // Add other types as they are discovered
 }
 

@@ -5,15 +5,19 @@ import { SendMessageRequest } from '@/types/chat';
 export const useChat = () => {
     const queryClient = useQueryClient();
 
+    // SignalR can't run under this app's Lambda deployment (no persistent
+    // WebSocket support there), so real-time delivery falls back to polling.
     const useConversations = () => useQuery({
         queryKey: ['conversations'],
-        queryFn: chatService.getConversations
+        queryFn: chatService.getConversations,
+        refetchInterval: 10000
     });
 
     const useMessages = (conversationId: string | null, pageNumber: number = 1, pageSize: number = 20) => useQuery({
         queryKey: ['messages', conversationId, pageNumber],
         queryFn: () => chatService.getMessages(conversationId!, pageNumber, pageSize),
-        enabled: !!conversationId
+        enabled: !!conversationId,
+        refetchInterval: conversationId ? 5000 : false
     });
 
     const sendMessageMutation = useMutation({
