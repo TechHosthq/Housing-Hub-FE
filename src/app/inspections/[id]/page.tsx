@@ -353,6 +353,15 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                                 Message Customer
                             </Link>
 
+                            {(inspection.status === InspectionStatus.Pending || inspection.status === InspectionStatus.Confirmed) && (
+                                <button
+                                    onClick={() => setIsRescheduleModalOpen(true)}
+                                    className="block w-full text-center py-4 rounded-full border-[2px] border-[#0095FF] text-[16px] font-black text-[#0095FF] font-montserrat hover:bg-blue-50 transition-all active:scale-[0.98]"
+                                >
+                                    Suggest Another Date
+                                </button>
+                            )}
+
                             {inspection.status === InspectionStatus.Pending && (
                                 <div className="flex gap-6">
                                     <button
