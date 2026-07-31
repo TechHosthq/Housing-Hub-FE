@@ -333,23 +333,32 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                         </>
                     ) : (
                         /* Owner Actions */
-                        inspection.status === InspectionStatus.Pending && (
-                            <div className="flex gap-6 mt-8">
-                                <button
-                                    onClick={() => handleOwnerAction("Decline")}
-                                    className="flex-1 py-4 rounded-full border-[2px] border-[#FF4D4C] text-[16px] font-black text-[#FF4D4C] font-montserrat hover:bg-red-50 transition-all active:scale-[0.98]"
-                                >
-                                    Decline
-                                </button>
-                                <button
-                                    onClick={() => handleOwnerAction("Accept")}
-                                    className="flex-1 py-4 rounded-full border-[2px] border-[#0095FF] text-[16px] font-black text-[#0095FF] font-montserrat hover:bg-blue-50 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
-                                >
-                                    {isResponding && <Loader2 className="animate-spin" size={20} />}
-                                    Accept
-                                </button>
-                            </div>
-                        )
+                        <div className="mt-8 space-y-4">
+                            <Link
+                                href={`/messages?recipientId=${inspection.customerId}`}
+                                className="block w-full text-center py-4 rounded-full border-[2px] border-primary-dark text-[16px] font-black text-primary-dark font-montserrat hover:bg-primary-dark/5 transition-all active:scale-[0.98]"
+                            >
+                                Message Customer
+                            </Link>
+
+                            {inspection.status === InspectionStatus.Pending && (
+                                <div className="flex gap-6">
+                                    <button
+                                        onClick={() => handleOwnerAction("Decline")}
+                                        className="flex-1 py-4 rounded-full border-[2px] border-[#FF4D4C] text-[16px] font-black text-[#FF4D4C] font-montserrat hover:bg-red-50 transition-all active:scale-[0.98]"
+                                    >
+                                        Decline
+                                    </button>
+                                    <button
+                                        onClick={() => handleOwnerAction("Accept")}
+                                        className="flex-1 py-4 rounded-full border-[2px] border-[#0095FF] text-[16px] font-black text-[#0095FF] font-montserrat hover:bg-blue-50 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                    >
+                                        {isResponding && <Loader2 className="animate-spin" size={20} />}
+                                        Accept
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>
