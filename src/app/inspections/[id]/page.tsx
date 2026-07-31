@@ -21,6 +21,7 @@ import inspectionService from "@/services/inspectionService";
 import { useAuthStore } from "@/store/useAuthStore";
 import { InspectionStatus } from "@/types/inspection";
 import { format } from "date-fns";
+import { formatTimeTo12h } from "@/utils/dateUtils";
 
 export default function InspectionDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
@@ -132,7 +133,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
             id: inspection.id,
             data: {
                 inspectionId: inspection.id,
-                rescheduledDate: new Date(data.date).toISOString(),
+                rescheduledDate: data.date,
                 rescheduledTime: data.time,
                 note: data.note,
                 authenticatedUserId: currentUser.id
@@ -142,7 +143,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                 setIsRescheduleModalOpen(false);
                 setSuccessConfig({
                     title: "Reschedule Proposed",
-                    message: `A request to reschedule for ${data.date} at ${data.time} has been sent to the customer.`
+                    message: `A request to reschedule for ${format(new Date(data.date + "T00:00:00"), "MMMM dd, yyyy")} at ${data.time} has been sent to the customer.`
                 });
                 setIsSuccessModalOpen(true);
                 setTimeout(() => {
@@ -266,7 +267,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                             </div>
                             <div>
                                 <p className="text-[16px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-0.5">Time</p>
-                                <p className="text-[14px] text-[#A3A3A3] font-bold">{inspection.scheduledTime}</p>
+                                <p className="text-[14px] text-[#A3A3A3] font-bold">{formatTimeTo12h(inspection.scheduledTime)}</p>
                             </div>
                         </div>
                     </div>
@@ -377,7 +378,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                 onClose={() => setIsAcceptModalOpen(false)}
                 onConfirm={handleConfirmAccept}
                 date={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "MMMM dd, yyyy") : ""}
-                time={inspection.scheduledTime}
+                time={formatTimeTo12h(inspection.scheduledTime)}
             />
 
             <DeclineInspectionModal

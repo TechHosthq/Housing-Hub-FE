@@ -10,7 +10,7 @@ import SuccessModal from "../common/SuccessModal";
 import { useRouter } from "next/navigation";
 import { useInspection } from "@/hooks/useInspection";
 import { useAuthStore } from "@/store/useAuthStore";
-import { formatTimeTo24h } from "@/utils/dateUtils";
+import { formatTimeTo24h, todayLocalISODate } from "@/utils/dateUtils";
 
 interface InspectionFormProps {
     property: {
@@ -27,7 +27,7 @@ export default function InspectionForm({ property }: InspectionFormProps) {
     const currentUser = useAuthStore((state) => state.user);
     const { createInspection, isCreatingInspection } = useInspection();
     
-    const [date, setDate] = useState("2025-08-17");
+    const [date, setDate] = useState(todayLocalISODate);
     const [time, setTime] = useState("");
     const [note, setNote] = useState("");
     const [showModal, setShowModal] = useState(false);

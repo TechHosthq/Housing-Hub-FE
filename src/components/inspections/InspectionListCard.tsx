@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Inspection, InspectionStatus } from "@/types/inspection";
 import { format } from "date-fns";
+import { formatTimeTo12h } from "@/utils/dateUtils";
 
 interface InspectionListCardProps {
     inspection: Inspection;
@@ -67,7 +68,7 @@ export default function InspectionListCard({ inspection }: InspectionListCardPro
                         </div>
                         <div className="flex items-center gap-2 text-[#666666] dark:text-gray-400">
                             <Clock size={14} className="text-[#002D6B]" />
-                            <span className="text-[11px] font-bold">{inspection.scheduledTime}</span>
+                            <span className="text-[11px] font-bold">{formatTimeTo12h(inspection.scheduledTime)}</span>
                         </div>
                     </div>
 
