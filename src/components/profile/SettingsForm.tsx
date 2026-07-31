@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useUserRole } from "@/context/UserRoleContext";
 import { useThemeStore } from "@/store/useThemeStore";
 import { useNotificationSoundStore } from "@/store/useNotificationSoundStore";
+import { playNotificationAudio } from "@/lib/notificationAudio";
 import DeleteAccountModal from "./DeleteAccountModal";
 import ResetPasswordModal from "./ResetPasswordModal";
 
@@ -67,19 +68,32 @@ export default function SettingsForm() {
                                 const isOn = item.id === "notification-sound" ? isSoundEnabled : isDarkMode;
                                 const onToggle = item.id === "notification-sound" ? toggleSound : toggleDarkMode;
                                 return (
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            onToggle();
-                                        }}
-                                        className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none ${isOn ? "bg-primary-dark" : "bg-gray-200 dark:bg-gray-700"
-                                            }`}
-                                    >
-                                        <div
-                                            className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${isOn ? "translate-x-5" : "translate-x-0"
+                                    <div className="flex items-center gap-3">
+                                        {item.id === "notification-sound" && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    playNotificationAudio();
+                                                }}
+                                                className="text-[11px] font-bold text-primary-dark hover:underline"
+                                            >
+                                                Test
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onToggle();
+                                            }}
+                                            className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none ${isOn ? "bg-primary-dark" : "bg-gray-200 dark:bg-gray-700"
                                                 }`}
-                                        />
-                                    </button>
+                                        >
+                                            <div
+                                                className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${isOn ? "translate-x-5" : "translate-x-0"
+                                                    }`}
+                                            />
+                                        </button>
+                                    </div>
                                 );
                             })()
                         ) : (
