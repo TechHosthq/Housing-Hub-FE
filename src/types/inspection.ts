@@ -1,12 +1,14 @@
 import { ApiResponse } from "./auth";
 
+// Must match backend HousingHub.Model.Enums.InspectionStatus exactly — these are
+// serialized/deserialized as raw numbers, not names.
 export enum InspectionStatus {
     Pending = 0,
     Confirmed = 1,
-    Cancelled = 2,
-    Completed = 3,
-    Declined = 4,
-    RescheduleRequested = 5
+    Declined = 2,
+    Rescheduled = 3,
+    Completed = 4,
+    Cancelled = 5
 }
 
 export interface Inspection {
@@ -27,7 +29,7 @@ export interface Inspection {
     rescheduledDate: string | null;
     rescheduledTime: string | null;
     rescheduleNote: string | null;
-    dateRequested?: string;
+    propertyImageUrl?: string | null;
 }
 
 export interface CreateInspectionRequest {

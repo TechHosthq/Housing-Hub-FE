@@ -28,14 +28,17 @@ export default function InspectionsPage() {
     const isLoading = isOwner ? isLoadingOwner : isLoadingMy;
 
     // Helper functions to safely check status regardless of string/number format
-    const isPending = (val: any) => val === InspectionStatus.Pending || val === 0 || val === '0' || val === 'Pending';
+    // Rescheduled inspections are awaiting the other party's response, so they
+    // count as "pending" for tab-filtering purposes, same as a fresh request.
+    const isPending = (val: any) => val === InspectionStatus.Pending || val === 0 || val === '0' || val === 'Pending' || val === InspectionStatus.Rescheduled || val === 3 || val === '3' || val === 'Rescheduled';
     const isConfirmed = (val: any) => val === InspectionStatus.Confirmed || val === 1 || val === '1' || val === 'Confirmed';
-    const isCompleted = (val: any) => val === InspectionStatus.Completed || val === 3 || val === '3' || val === 'Completed';
-    const isCanceled = (val: any) => val === InspectionStatus.Cancelled || val === 2 || val === '2' || val === 'Cancelled' || val === 'Canceled' || val === InspectionStatus.Declined || val === 4 || val === '4' || val === 'Declined';
+    const isCompleted = (val: any) => val === InspectionStatus.Completed || val === 4 || val === '4' || val === 'Completed';
+    const isCanceled = (val: any) => val === InspectionStatus.Cancelled || val === 5 || val === '5' || val === 'Cancelled' || val === 'Canceled' || val === InspectionStatus.Declined || val === 2 || val === '2' || val === 'Declined';
 
     const filteredInspections = inspections.filter(inspection => {
         if (activeTab === "All") return true;
-        if (activeTab === "Upcoming") return isConfirmed(inspection.status) || isPending(inspection.status);
+        if (activeTab === "Pending") return isPending(inspection.status);
+        if (activeTab === "Upcoming") return isConfirmed(inspection.status);
         if (activeTab === "Completed") return isCompleted(inspection.status);
         if (activeTab === "Canceled") return isCanceled(inspection.status);
         return true;
@@ -43,7 +46,8 @@ export default function InspectionsPage() {
 
     const TABS = [
         { label: "All", count: inspections.length },
-        { label: "Upcoming", count: inspections.filter(i => isConfirmed(i.status) || isPending(i.status)).length },
+        { label: "Pending", count: inspections.filter(i => isPending(i.status)).length },
+        { label: "Upcoming", count: inspections.filter(i => isConfirmed(i.status)).length },
         { label: "Completed", count: inspections.filter(i => isCompleted(i.status)).length },
         { label: "Canceled", count: inspections.filter(i => isCanceled(i.status)).length }
     ];

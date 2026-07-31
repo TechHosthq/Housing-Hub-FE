@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserRole } from "@/context/UserRoleContext";
 import { useThemeStore } from "@/store/useThemeStore";
+import { useNotificationSoundStore } from "@/store/useNotificationSoundStore";
 import DeleteAccountModal from "./DeleteAccountModal";
 import ResetPasswordModal from "./ResetPasswordModal";
 
@@ -13,6 +14,8 @@ export default function SettingsForm() {
     const { role } = useUserRole();
     const isDarkMode = useThemeStore((state) => state.isDarkMode);
     const toggleDarkMode = useThemeStore((state) => state.toggleDarkMode);
+    const isSoundEnabled = useNotificationSoundStore((state) => state.isSoundEnabled);
+    const toggleSound = useNotificationSoundStore((state) => state.toggleSound);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
@@ -21,6 +24,7 @@ export default function SettingsForm() {
         { label: "Notifications", type: "link", href: "/notifications" },
         { label: "Privacy", type: "link", href: "/privacy" },
         { label: "Dark Mode", type: "toggle", id: "dark-mode" },
+        { label: "Notification Sound", type: "toggle", id: "notification-sound" },
         ...(role === "Owner" ? [] : [{ label: "Switch To Owners Account", type: "link", href: "/switch-account" }]),
         { label: "Delete Account", type: "button", id: "delete-account", isDanger: true }
     ];
@@ -59,19 +63,25 @@ export default function SettingsForm() {
                         </span>
 
                         {item.type === "toggle" ? (
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    toggleDarkMode();
-                                }}
-                                className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none ${isDarkMode ? "bg-primary-dark" : "bg-gray-200 dark:bg-gray-700"
-                                    }`}
-                            >
-                                <div
-                                    className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${isDarkMode ? "translate-x-5" : "translate-x-0"
-                                        }`}
-                                />
-                            </button>
+                            (() => {
+                                const isOn = item.id === "notification-sound" ? isSoundEnabled : isDarkMode;
+                                const onToggle = item.id === "notification-sound" ? toggleSound : toggleDarkMode;
+                                return (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onToggle();
+                                        }}
+                                        className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none ${isOn ? "bg-primary-dark" : "bg-gray-200 dark:bg-gray-700"
+                                            }`}
+                                    >
+                                        <div
+                                            className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${isOn ? "translate-x-5" : "translate-x-0"
+                                                }`}
+                                        />
+                                    </button>
+                                );
+                            })()
                         ) : (
                             <ChevronRight
                                 size={18}

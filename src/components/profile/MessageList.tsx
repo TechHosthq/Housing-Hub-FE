@@ -11,9 +11,11 @@ interface MessageListProps {
     viewMode: "list" | "chat";
     selectedId: string | null;
     onThreadSelect: (id: string) => void;
+    /** Deep-linked recipient with no existing conversation yet (e.g. "Message Owner"). */
+    newRecipientId?: string | null;
 }
 
-export default function MessageList({ viewMode, selectedId, onThreadSelect }: MessageListProps) {
+export default function MessageList({ viewMode, selectedId, onThreadSelect, newRecipientId }: MessageListProps) {
     const { useConversations, useMessages, sendMessage, markAsRead } = useChat();
     const currentUser = useAuthStore((state) => state.user);
     const chatConnection = useChatConnection();
@@ -53,13 +55,23 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
     );
 
     const activeChat = conversations.find(c => c.id === selectedId);
+    const isNewConversation = !activeChat && !!newRecipientId;
+
+    // Once the deep-linked recipient's conversation exists (created as a side
+    // effect of sending the first message), switch over to it like any other thread.
+    useEffect(() => {
+        if (selectedId || !newRecipientId) return;
+        const existing = conversations.find(c => c.participantId === newRecipientId);
+        if (existing) onThreadSelect(existing.id);
+    }, [conversations, newRecipientId, selectedId, onThreadSelect]);
 
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!messageInput.trim() || !activeChat) return;
+        const recipientId = activeChat?.participantId ?? newRecipientId;
+        if (!messageInput.trim() || !recipientId) return;
 
         sendMessage({
-            recipientId: activeChat.participantId,
+            recipientId,
             content: messageInput
         });
         setMessageInput("");
@@ -142,16 +154,22 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect }: Me
             <ThreadList />
 
             <div className="flex-1 bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 shadow-sm flex flex-col h-full overflow-hidden">
-                {activeChat ? (
+                {(activeChat || isNewConversation) ? (
                     <>
                         <div className="px-8 py-5 border-b border-[#F2F2F2] dark:border-gray-800 flex items-center justify-between bg-white dark:bg-gray-900 shrink-0">
                             <h2 className="text-[16px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">
-                                {activeChat.participantName || "Unknown User"}
+                                {activeChat ? (activeChat.participantName || "Unknown User") : "New Message"}
                             </h2>
                         </div>
 
                         <div className="flex-1 overflow-y-auto p-8 space-y-6 bg-white dark:bg-gray-900">
-                            {isLoadingMsgs ? (
+                            {isNewConversation ? (
+                                <div className="flex flex-col items-center justify-center h-full text-center">
+                                    <p className="text-[12px] text-[#666666] dark:text-gray-400 font-medium">
+                                        Send a message to start the conversation.
+                                    </p>
+                                </div>
+                            ) : isLoadingMsgs ? (
                                 <div className="flex justify-center py-20">
                                     <Loader2 className="animate-spin text-primary-dark" />
                                 </div>

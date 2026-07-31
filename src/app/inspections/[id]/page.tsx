@@ -21,6 +21,7 @@ import inspectionService from "@/services/inspectionService";
 import { useAuthStore } from "@/store/useAuthStore";
 import { InspectionStatus } from "@/types/inspection";
 import { format } from "date-fns";
+import { formatTimeTo12h } from "@/utils/dateUtils";
 
 export default function InspectionDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
@@ -132,7 +133,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
             id: inspection.id,
             data: {
                 inspectionId: inspection.id,
-                rescheduledDate: new Date(data.date).toISOString(),
+                rescheduledDate: data.date,
                 rescheduledTime: data.time,
                 note: data.note,
                 authenticatedUserId: currentUser.id
@@ -142,7 +143,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                 setIsRescheduleModalOpen(false);
                 setSuccessConfig({
                     title: "Reschedule Proposed",
-                    message: `A request to reschedule for ${data.date} at ${data.time} has been sent to the customer.`
+                    message: `A request to reschedule for ${format(new Date(data.date + "T00:00:00"), "MMMM dd, yyyy")} at ${data.time} has been sent to the customer.`
                 });
                 setIsSuccessModalOpen(true);
                 setTimeout(() => {
@@ -202,7 +203,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
         );
     }
 
-    const propertyImage = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
+    const propertyImage = inspection.propertyImageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
     const isAwaitingFeedback = inspection.status === InspectionStatus.Completed;
 
     return (
@@ -266,7 +267,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                             </div>
                             <div>
                                 <p className="text-[16px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-0.5">Time</p>
-                                <p className="text-[14px] text-[#A3A3A3] font-bold">{inspection.scheduledTime}</p>
+                                <p className="text-[14px] text-[#A3A3A3] font-bold">{formatTimeTo12h(inspection.scheduledTime)}</p>
                             </div>
                         </div>
                     </div>
@@ -333,23 +334,32 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                         </>
                     ) : (
                         /* Owner Actions */
-                        inspection.status === InspectionStatus.Pending && (
-                            <div className="flex gap-6 mt-8">
-                                <button
-                                    onClick={() => handleOwnerAction("Decline")}
-                                    className="flex-1 py-4 rounded-full border-[2px] border-[#FF4D4C] text-[16px] font-black text-[#FF4D4C] font-montserrat hover:bg-red-50 transition-all active:scale-[0.98]"
-                                >
-                                    Decline
-                                </button>
-                                <button
-                                    onClick={() => handleOwnerAction("Accept")}
-                                    className="flex-1 py-4 rounded-full border-[2px] border-[#0095FF] text-[16px] font-black text-[#0095FF] font-montserrat hover:bg-blue-50 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
-                                >
-                                    {isResponding && <Loader2 className="animate-spin" size={20} />}
-                                    Accept
-                                </button>
-                            </div>
-                        )
+                        <div className="mt-8 space-y-4">
+                            <Link
+                                href={`/messages?recipientId=${inspection.customerId}`}
+                                className="block w-full text-center py-4 rounded-full border-[2px] border-primary-dark text-[16px] font-black text-primary-dark font-montserrat hover:bg-primary-dark/5 transition-all active:scale-[0.98]"
+                            >
+                                Message Customer
+                            </Link>
+
+                            {inspection.status === InspectionStatus.Pending && (
+                                <div className="flex gap-6">
+                                    <button
+                                        onClick={() => handleOwnerAction("Decline")}
+                                        className="flex-1 py-4 rounded-full border-[2px] border-[#FF4D4C] text-[16px] font-black text-[#FF4D4C] font-montserrat hover:bg-red-50 transition-all active:scale-[0.98]"
+                                    >
+                                        Decline
+                                    </button>
+                                    <button
+                                        onClick={() => handleOwnerAction("Accept")}
+                                        className="flex-1 py-4 rounded-full border-[2px] border-[#0095FF] text-[16px] font-black text-[#0095FF] font-montserrat hover:bg-blue-50 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                    >
+                                        {isResponding && <Loader2 className="animate-spin" size={20} />}
+                                        Accept
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>
@@ -368,7 +378,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                 onClose={() => setIsAcceptModalOpen(false)}
                 onConfirm={handleConfirmAccept}
                 date={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "MMMM dd, yyyy") : ""}
-                time={inspection.scheduledTime}
+                time={formatTimeTo12h(inspection.scheduledTime)}
             />
 
             <DeclineInspectionModal

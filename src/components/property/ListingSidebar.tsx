@@ -5,9 +5,11 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 interface ListingSidebarProps {
     propertyId?: string;
+    ownerId?: string;
+    isOwner?: boolean;
 }
 
-export default function ListingSidebar({ propertyId }: ListingSidebarProps) {
+export default function ListingSidebar({ propertyId, ownerId, isOwner }: ListingSidebarProps) {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
     // Anyone can view a listing, but booking needs an account. Send signed-out
@@ -18,6 +20,13 @@ export default function ListingSidebar({ propertyId }: ListingSidebarProps) {
         : isAuthenticated
             ? inspectionPath
             : `/login?redirect=${encodeURIComponent(inspectionPath)}`;
+
+    const messagePath = ownerId ? `/messages?recipientId=${ownerId}` : null;
+    const messageHref = !messagePath
+        ? "#"
+        : isAuthenticated
+            ? messagePath
+            : `/login?redirect=${encodeURIComponent(messagePath)}`;
 
     return (
         <div className="w-full lg:max-w-[280px] space-y-6">
@@ -39,13 +48,22 @@ export default function ListingSidebar({ propertyId }: ListingSidebarProps) {
                     </div>
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-8 space-y-3">
                     <Link
                         href={inspectionHref}
                         className="block w-full text-center bg-primary-dark hover:bg-primary-dark/90 text-white py-3.5 rounded-full text-[12px] font-bold transition-all shadow-md"
                     >
                         {isAuthenticated ? "Request Inspection" : "Sign in to Request Inspection"}
                     </Link>
+
+                    {!isOwner && messagePath && (
+                        <Link
+                            href={messageHref}
+                            className="block w-full text-center bg-white dark:bg-gray-900 border border-primary-dark text-primary-dark hover:bg-primary-dark/5 py-3.5 rounded-full text-[12px] font-bold transition-all"
+                        >
+                            {isAuthenticated ? "Message Owner" : "Sign in to Message Owner"}
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>

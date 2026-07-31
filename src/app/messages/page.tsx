@@ -1,14 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
 import AccountSidebar from "@/components/profile/AccountSidebar";
 import MessageList from "@/components/profile/MessageList";
 
-export default function MessagesPage() {
-    const [isChatting, setIsChatting] = useState(false);
+function MessagesContent() {
+    const searchParams = useSearchParams();
+    const newRecipientId = searchParams.get("recipientId");
+
+    const [isChatting, setIsChatting] = useState(!!newRecipientId);
     const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
+
+    // Deep-linked from e.g. a property page's "Message Owner" button.
+    useEffect(() => {
+        if (newRecipientId) setIsChatting(true);
+    }, [newRecipientId]);
 
     const handleThreadSelect = (id: string) => {
         setSelectedThreadId(id);
@@ -48,11 +57,20 @@ export default function MessagesPage() {
                         viewMode={isChatting ? "chat" : "list"}
                         selectedId={selectedThreadId}
                         onThreadSelect={handleThreadSelect}
+                        newRecipientId={selectedThreadId ? null : newRecipientId}
                     />
                 </div>
             </div>
 
             <Footer />
         </main>
+    );
+}
+
+export default function MessagesPage() {
+    return (
+        <Suspense fallback={null}>
+            <MessagesContent />
+        </Suspense>
     );
 }

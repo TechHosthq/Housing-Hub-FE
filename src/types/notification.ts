@@ -1,11 +1,11 @@
 import { ApiResponse, PaginatedResponse } from "./auth";
 
 export enum NotificationType {
-    InspectionRequested = 0,
+    InspectionScheduled = 0,
     InspectionConfirmed = 1,
     InspectionDeclined = 2,
     InspectionRescheduled = 3,
-    InspectionCompleted = 4,
+    InspectionCancelled = 4,
     KYCApproved = 5,
     KYCRejected = 6,
     // Add other types as they are discovered

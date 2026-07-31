@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Inspection, InspectionStatus } from "@/types/inspection";
 import { format } from "date-fns";
+import { formatTimeTo12h } from "@/utils/dateUtils";
 
 interface InspectionListCardProps {
     inspection: Inspection;
@@ -16,7 +17,7 @@ const statusStyles: Record<InspectionStatus, string> = {
     [InspectionStatus.Completed]: "bg-[#E9F3FF] text-primary-dark border-[#D9E9FF]",
     [InspectionStatus.Cancelled]: "bg-[#FFF2F2] text-[#FF3B30] border-[#FFD9D9]",
     [InspectionStatus.Declined]: "bg-[#FFF2F2] text-[#FF3B30] border-[#FFD9D9]",
-    [InspectionStatus.RescheduleRequested]: "bg-[#F2F7FF] text-[#0095FF] border-[#D9E9FF]",
+    [InspectionStatus.Rescheduled]: "bg-[#F2F7FF] text-[#0095FF] border-[#D9E9FF]",
 };
 
 const statusLabels: Record<InspectionStatus, string> = {
@@ -25,11 +26,11 @@ const statusLabels: Record<InspectionStatus, string> = {
     [InspectionStatus.Completed]: "Completed",
     [InspectionStatus.Cancelled]: "Cancelled",
     [InspectionStatus.Declined]: "Declined",
-    [InspectionStatus.RescheduleRequested]: "Reschedule Requested",
+    [InspectionStatus.Rescheduled]: "Reschedule Requested",
 };
 
 export default function InspectionListCard({ inspection }: InspectionListCardProps) {
-    const propertyImage = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070"; // Fallback
+    const propertyImage = inspection.propertyImageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
     
     return (
         <Link href={`/inspections/${inspection.id || ''}`} className="block w-full">
@@ -67,7 +68,7 @@ export default function InspectionListCard({ inspection }: InspectionListCardPro
                         </div>
                         <div className="flex items-center gap-2 text-[#666666] dark:text-gray-400">
                             <Clock size={14} className="text-[#002D6B]" />
-                            <span className="text-[11px] font-bold">{inspection.scheduledTime}</span>
+                            <span className="text-[11px] font-bold">{formatTimeTo12h(inspection.scheduledTime)}</span>
                         </div>
                     </div>
 

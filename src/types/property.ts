@@ -62,7 +62,11 @@ export interface PropertyDetail {
     viewCount: number;
     isPublished: boolean;
     publishedAt: string | null;
+    isVerified: boolean;
+    verifiedAt: string | null;
     files: PropertyFile[];
+    /** Count of open (Pending or Rescheduled) inspection requests. Only populated on owner-list endpoints. */
+    inspectionCount?: number;
     propertyAddress?: PropertyAddress;
 }
 

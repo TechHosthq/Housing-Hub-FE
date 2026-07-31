@@ -1,8 +1,16 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function ListHero() {
+    const router = useRouter();
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+    const handleGetStarted = () => {
+        router.push(isAuthenticated ? "/properties/add" : "/login");
+    };
+
     return (
         <section className="relative h-[385px] flex items-center justify-center pt-14 overflow-hidden">
             {/* Background with modern apartment buildings overlay */}
@@ -20,12 +28,12 @@ export default function ListHero() {
                 <p className="text-white/90 text-xl md:text-2xl mb-12 max-w-2xl mx-auto font-medium">
                     Connect with verified buyers and renters across Nigeria
                 </p>
-                <Link
-                    href="#get-started"
+                <button
+                    onClick={handleGetStarted}
                     className="bg-[#07358B] text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-primary-dark/90 transition-all shadow-xl"
                 >
                     Get Started
-                </Link>
+                </button>
             </div>
         </section>
     );

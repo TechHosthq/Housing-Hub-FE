@@ -2,18 +2,22 @@
 
 import { Clock, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { parseTimeValue } from "@/utils/dateUtils";
 
 interface TimePickerProps {
+    /** "h:mm AM/PM" or 24-hour "HH:mm[:ss]". */
     value: string;
+    /** Called with a "h:mm AM/PM" string. */
     onChange: (time: string) => void;
 }
 
 export default function TimePicker({ value, onChange }: TimePickerProps) {
     const [isOpen, setIsOpen] = useState(false);
 
-    const [hour, setHour] = useState("10");
-    const [minute, setMinute] = useState("00");
-    const [period, setPeriod] = useState("AM");
+    const initial = parseTimeValue(value);
+    const [hour, setHour] = useState(initial?.hour ?? "10");
+    const [minute, setMinute] = useState(initial?.minute ?? "00");
+    const [period, setPeriod] = useState<string>(initial?.period ?? "AM");
 
     const togglePicker = () => setIsOpen(!isOpen);
 
@@ -80,8 +84,8 @@ export default function TimePicker({ value, onChange }: TimePickerProps) {
                     </div>
 
                     <div className="flex justify-end gap-6">
-                        <button onClick={() => setIsOpen(false)} className="text-[10px] font-bold text-[#0095FF] uppercase">Cancel</button>
-                        <button onClick={handleConfirm} className="text-[10px] font-bold text-[#0095FF] uppercase">OK</button>
+                        <button type="button" onClick={() => setIsOpen(false)} className="text-[10px] font-bold text-[#0095FF] uppercase">Cancel</button>
+                        <button type="button" onClick={handleConfirm} className="text-[10px] font-bold text-[#0095FF] uppercase">OK</button>
                     </div>
                 </div>
             )}

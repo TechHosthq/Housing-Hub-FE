@@ -24,7 +24,10 @@ export default function Navbar() {
         // The public listings live on the homepage; /properties is the owner's
         // private "my listings" page and requires auth.
         { name: "Browse Homes", href: "/" },
-        { name: "List Properties", href: "/list-properties" },
+        // Customers manage inspections instead of listing properties.
+        isAuthenticated && roleLabel === "Customer"
+            ? { name: "Inspections", href: "/inspections" }
+            : { name: "List Properties", href: "/list-properties" },
         { name: "FAQ", href: "/faq" },
     ];
 

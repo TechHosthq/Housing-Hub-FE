@@ -24,7 +24,7 @@ export default function HomeownerCTA() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-6 justify-center md:justify-start items-center">
                         <Link
-                            href="/list-property"
+                            href="/list-properties"
                             className="bg-primary-dark text-white px-7 py-3.5 rounded-[14px] font-bold text-lg hover:bg-primary-dark/90 transition-all text-center min-w-[154px]"
                         >
                             List Your Property

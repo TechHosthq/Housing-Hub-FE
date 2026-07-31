@@ -47,7 +47,7 @@ const statusConfigs: Record<InspectionStatus, { title: string; message: string; 
         titleColor: "text-[#1A1A1A] dark:text-gray-100",
         textColor: "text-[#666666] dark:text-gray-400"
     },
-    [InspectionStatus.RescheduleRequested]: {
+    [InspectionStatus.Rescheduled]: {
         title: "Reschedule Proposed",
         message: "A new time has been proposed for this inspection.",
         bgColor: "bg-[#F2F7FF]",
