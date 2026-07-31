@@ -92,7 +92,11 @@ export default function PropertyDetailPage() {
                     </div>
 
                     {/* Sidebar Side */}
-                    <ListingSidebar propertyId={property.id} />
+                    <ListingSidebar
+                        propertyId={property.id}
+                        ownerId={property.ownerId}
+                        isOwner={!!currentUser && currentUser.id === property.ownerId}
+                    />
                 </div>
             </div>
 
