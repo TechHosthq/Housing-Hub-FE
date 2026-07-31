@@ -5,6 +5,12 @@ import { HubConnection } from "@microsoft/signalr";
 import { useQueryClient } from "@tanstack/react-query";
 import { createHubConnection } from "@/lib/signalr";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useNotificationSoundStore } from "@/store/useNotificationSoundStore";
+
+const playNotificationSound = () => {
+    if (!useNotificationSoundStore.getState().isSoundEnabled) return;
+    new Audio("/sounds/notification.wav").play().catch(() => {});
+};
 
 const ChatConnectionContext = createContext<HubConnection | null>(null);
 
@@ -39,15 +45,20 @@ export default function SignalRProvider({ children }: { children: React.ReactNod
             queryClient.invalidateQueries({ queryKey: ["messages"] });
         };
 
-        notification.on("ReceiveNotification", invalidateNotifications);
+        notification.on("ReceiveNotification", () => {
+            invalidateNotifications();
+            playNotificationSound();
+        });
 
         chat.on("ReceiveMessage", () => {
             invalidateMessages();
             invalidateConversations();
+            playNotificationSound();
         });
         chat.on("NewMessageInConversation", () => {
             invalidateMessages();
             invalidateConversations();
+            playNotificationSound();
         });
         chat.on("ConversationUpdated", invalidateConversations);
         chat.on("MessagesRead", invalidateConversations);
