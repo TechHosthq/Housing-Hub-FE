@@ -1,4 +1,4 @@
-import Navbar from "@/components/layout/Navbar";
+import HomeHeader from "@/components/layout/HomeHeader";
 import Hero from "@/components/home/Hero";
 import PropertyGrid from "@/components/home/PropertyGrid";
 import HowItWorks from "@/components/home/HowItWorks";
@@ -12,7 +12,7 @@ import NearbyGrid from "@/components/home/NearbyGrid";
 export default function Home() {
   return (
     <main className="min-h-screen bg-white dark:bg-gray-900">
-      <Navbar />
+      <HomeHeader />
 
       <div className="pt-0">
         <Hero />
