@@ -16,7 +16,7 @@ const statusStyles: Record<InspectionStatus, string> = {
     [InspectionStatus.Completed]: "bg-[#E9F3FF] text-primary-dark border-[#D9E9FF]",
     [InspectionStatus.Cancelled]: "bg-[#FFF2F2] text-[#FF3B30] border-[#FFD9D9]",
     [InspectionStatus.Declined]: "bg-[#FFF2F2] text-[#FF3B30] border-[#FFD9D9]",
-    [InspectionStatus.RescheduleRequested]: "bg-[#F2F7FF] text-[#0095FF] border-[#D9E9FF]",
+    [InspectionStatus.Rescheduled]: "bg-[#F2F7FF] text-[#0095FF] border-[#D9E9FF]",
 };
 
 const statusLabels: Record<InspectionStatus, string> = {
@@ -25,7 +25,7 @@ const statusLabels: Record<InspectionStatus, string> = {
     [InspectionStatus.Completed]: "Completed",
     [InspectionStatus.Cancelled]: "Cancelled",
     [InspectionStatus.Declined]: "Declined",
-    [InspectionStatus.RescheduleRequested]: "Reschedule Requested",
+    [InspectionStatus.Rescheduled]: "Reschedule Requested",
 };
 
 export default function InspectionListCard({ inspection }: InspectionListCardProps) {

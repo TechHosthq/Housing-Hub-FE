@@ -80,7 +80,7 @@ export default function OwnerMetrics() {
     // Helper functions to safely check enum values whether API returns string or number
     const isAvailable = (val: any) => val === 1 || val === '1';
     const isPending = (val: any) => val === InspectionStatus.Pending || val === 0 || val === '0' || val === 'Pending';
-    const isCompleted = (val: any) => val === InspectionStatus.Completed || val === 3 || val === '3' || val === 'Completed';
+    const isCompleted = (val: any) => val === InspectionStatus.Completed || val === 4 || val === '4' || val === 'Completed';
 
     // Calculate JS filters
     const stats = {

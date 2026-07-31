@@ -14,7 +14,7 @@ const statusLabels: Record<InspectionStatus, string> = {
     [InspectionStatus.Completed]: "Completed",
     [InspectionStatus.Cancelled]: "Cancelled",
     [InspectionStatus.Declined]: "Declined",
-    [InspectionStatus.RescheduleRequested]: "Reschedule Requested",
+    [InspectionStatus.Rescheduled]: "Reschedule Requested",
 };
 
 export default function AdminInspectionsPage() {

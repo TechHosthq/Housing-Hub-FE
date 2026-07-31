@@ -30,8 +30,8 @@ export default function InspectionsPage() {
     // Helper functions to safely check status regardless of string/number format
     const isPending = (val: any) => val === InspectionStatus.Pending || val === 0 || val === '0' || val === 'Pending';
     const isConfirmed = (val: any) => val === InspectionStatus.Confirmed || val === 1 || val === '1' || val === 'Confirmed';
-    const isCompleted = (val: any) => val === InspectionStatus.Completed || val === 3 || val === '3' || val === 'Completed';
-    const isCanceled = (val: any) => val === InspectionStatus.Cancelled || val === 2 || val === '2' || val === 'Cancelled' || val === 'Canceled' || val === InspectionStatus.Declined || val === 4 || val === '4' || val === 'Declined';
+    const isCompleted = (val: any) => val === InspectionStatus.Completed || val === 4 || val === '4' || val === 'Completed';
+    const isCanceled = (val: any) => val === InspectionStatus.Cancelled || val === 5 || val === '5' || val === 'Cancelled' || val === 'Canceled' || val === InspectionStatus.Declined || val === 2 || val === '2' || val === 'Declined';
 
     const filteredInspections = inspections.filter(inspection => {
         if (activeTab === "All") return true;
