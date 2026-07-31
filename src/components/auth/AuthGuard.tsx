@@ -13,6 +13,7 @@ import { useHasHydrated } from '@/hooks/useHasHydrated';
 // browsing happens on '/' and '/property/[id]'.
 const PUBLIC_ROUTES = [
     '/',
+    '/dashboard',
     '/login',
     '/register',
     '/forgot-password',

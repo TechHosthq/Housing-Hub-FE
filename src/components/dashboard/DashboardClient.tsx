@@ -6,12 +6,14 @@ import PropertyCard from "@/components/home/PropertyCard";
 import DashboardSearchIcon from "@/components/icons/DashboardSearchIcon";
 import OwnerDashboard from "@/components/dashboard/OwnerDashboard";
 import { useUserRole } from "@/context/UserRoleContext";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useSearchParams } from "next/navigation";
 import { useProperty } from "@/hooks/useProperty";
 import { Loader2 } from "lucide-react";
 
 export default function DashboardClient({ allProperties }: { allProperties: any[] }) {
     const { role } = useUserRole();
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const searchParams = useSearchParams();
     const { useTrendingProperties, useNewProperties, useAllProperties } = useProperty();
 
@@ -50,7 +52,7 @@ export default function DashboardClient({ allProperties }: { allProperties: any[
     return (
         <>
             {/* KYC Notification */}
-            {!isKycSubmitted && !hasFilters && <KYCBanner />}
+            {isAuthenticated && !isKycSubmitted && !hasFilters && <KYCBanner />}
 
             {/* Search & Filter */}
             <DashboardSearch />
