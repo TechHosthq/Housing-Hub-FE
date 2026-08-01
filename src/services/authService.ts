@@ -16,7 +16,9 @@ import {
     ChangePasswordResponse,
     GoogleAuthRequest,
     GoogleAuthResponse,
-    CustomerType
+    CustomerType,
+    RefreshTokenRequest,
+    RefreshTokenResponse
 } from '@/types/auth';
 
 const authService = {
@@ -74,6 +76,15 @@ const authService = {
      */
     setAccountType: async (customerType: CustomerType): Promise<LoginResponse> => {
         const response = await apiClient.put('/api/v1/Auth/account-type', { customerType });
+        return response.data;
+    },
+
+    /**
+     * Exchanges a refresh token for a new access token + rotated refresh token.
+     * Called by apiClient's response interceptor on a 401, not directly by UI code.
+     */
+    refreshToken: async (data: RefreshTokenRequest): Promise<RefreshTokenResponse> => {
+        const response = await apiClient.post('/api/v1/Auth/refresh-token', data, { skipErrorToast: true });
         return response.data;
     },
 

@@ -10,6 +10,8 @@ declare module 'axios' {
          * inline instead (e.g. auth forms that need actionable, contextual copy).
          */
         skipErrorToast?: boolean;
+        /** Internal: marks a request that already went through one refresh-and-retry cycle. */
+        _retriedAfterRefresh?: boolean;
     }
 }
 
@@ -37,10 +39,8 @@ const apiClient = axios.create({
 // Add a request interceptor to include the auth token
 apiClient.interceptors.request.use(
     (config) => {
-        const token = typeof window !== 'undefined' ? (localStorage.getItem('auth-storage') 
-            ? JSON.parse(localStorage.getItem('auth-storage') || '{}')?.state?.token 
-            : null) : null;
-        
+        const { token } = readAuthStorage();
+
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -63,6 +63,56 @@ const shouldToast = (config: { method?: string; skipErrorToast?: boolean } | und
     return ['POST', 'PUT', 'DELETE'].includes(method);
 };
 
+const REFRESH_TOKEN_PATH = '/api/v1/Auth/refresh-token';
+
+/**
+ * At most one refresh-token exchange is ever in flight at a time. Refresh
+ * tokens rotate on every use — a second concurrent call with the same
+ * (now-stale) token would look like a replay to the backend and revoke every
+ * session. Every 401 that arrives while a refresh is already running just
+ * awaits that same promise instead of starting its own.
+ */
+let refreshPromise: Promise<string | null> | null = null;
+
+function readAuthStorage(): { token: string | null; refreshToken: string | null } {
+    if (typeof window === 'undefined') return { token: null, refreshToken: null };
+    try {
+        const state = JSON.parse(localStorage.getItem('auth-storage') || '{}')?.state;
+        return { token: state?.token ?? null, refreshToken: state?.refreshToken ?? null };
+    } catch {
+        return { token: null, refreshToken: null };
+    }
+}
+
+async function refreshAccessToken(): Promise<string | null> {
+    if (refreshPromise) return refreshPromise;
+
+    refreshPromise = (async () => {
+        const { refreshToken } = readAuthStorage();
+        if (!refreshToken) return null;
+
+        try {
+            // Plain axios, not `apiClient` — this must never itself pass back through
+            // the response interceptor below, or a failed refresh would try to refresh.
+            const response = await axios.post(`${baseURL}${REFRESH_TOKEN_PATH}`, { refreshToken });
+            const data = response.data?.data;
+            if (!data?.token) return null;
+
+            const { token, refreshToken: newRefreshToken, ...user } = data;
+            useAuthStore.getState().setAuth(user, token, newRefreshToken);
+            return token as string;
+        } catch {
+            return null;
+        }
+    })();
+
+    try {
+        return await refreshPromise;
+    } finally {
+        refreshPromise = null;
+    }
+}
+
 // Add a response interceptor to handle errors globally
 apiClient.interceptors.response.use(
     (response) => {
@@ -77,12 +127,27 @@ apiClient.interceptors.response.use(
         }
         return response;
     },
-    (error) => {
-        // Handle 401 Unauthorized errors
-        if (error.response?.status === 401) {
-            if (typeof window !== 'undefined') {
-                useAuthStore.getState().clearAuth();
+    async (error) => {
+        const originalRequest = error.config;
+
+        // Handle 401 Unauthorized errors by attempting a silent refresh-and-retry —
+        // but never for the refresh call itself, or a bad refresh token would loop.
+        if (
+            error.response?.status === 401 &&
+            typeof window !== 'undefined' &&
+            !originalRequest?._retriedAfterRefresh &&
+            !originalRequest?.url?.includes(REFRESH_TOKEN_PATH)
+        ) {
+            originalRequest._retriedAfterRefresh = true;
+            const newToken = await refreshAccessToken();
+
+            if (newToken) {
+                originalRequest.headers = originalRequest.headers || {};
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                return apiClient(originalRequest);
             }
+
+            useAuthStore.getState().clearAuth();
         }
 
         // Display toast for POST, PUT, DELETE errors

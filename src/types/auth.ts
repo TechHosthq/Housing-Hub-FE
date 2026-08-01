@@ -45,6 +45,7 @@ export interface PaginatedResponse<T> {
 
 export interface AuthData extends User {
     token: string | null;
+    refreshToken?: string | null;
 }
 
 export interface LoginRequest {
@@ -121,3 +122,9 @@ export interface GoogleAuthRequest {
 }
 
 export type GoogleAuthResponse = ApiResponse<AuthData>;
+
+export interface RefreshTokenRequest {
+    refreshToken: string;
+}
+
+export type RefreshTokenResponse = ApiResponse<AuthData>;

@@ -20,8 +20,8 @@ export const useAuth = () => {
         mutationFn: (data: LoginRequest) => authService.login(data),
         onSuccess: (response) => {
             if (response.isSuccessful && response.data.token) {
-                const { token, ...user } = response.data;
-                setAuth(user, token);
+                const { token, refreshToken, ...user } = response.data;
+                setAuth(user, token, refreshToken);
             }
         },
     });
@@ -105,8 +105,8 @@ export const useGoogleAuth = () => {
         mutationFn: (idToken: string) => authService.googleAuth({ idToken }),
         onSuccess: (response) => {
             if (response.isSuccessful && response.data?.token) {
-                const { token, ...user } = response.data;
-                setAuth(user, token);
+                const { token, refreshToken, ...user } = response.data;
+                setAuth(user, token, refreshToken);
             }
         },
         // Failures (HTTP errors and isSuccessful:false) are surfaced by the
@@ -133,8 +133,8 @@ export const useAccountType = () => {
         mutationFn: (customerType: CustomerType) => authService.setAccountType(customerType),
         onSuccess: (response) => {
             if (response.isSuccessful && response.data?.token) {
-                const { token, ...user } = response.data;
-                setAuth(user, token);
+                const { token, refreshToken, ...user } = response.data;
+                setAuth(user, token, refreshToken);
             }
         },
     });
