@@ -5,11 +5,20 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useToastStore } from "@/store/useToastStore";
+import { useResendCooldown } from "@/hooks/useResendCooldown";
+
+// The endpoint is anti-enumeration by design (identical response whether or
+// not the email is registered), so the cooldown can't come from the server's
+// response without leaking that distinction — this just mirrors the fixed,
+// known 5-minute cooldown the backend already enforces.
+const RESET_RESEND_SECONDS = 5 * 60;
 
 export default function ResetPasswordForm() {
     const { forgotPassword, isSendingForgotEmail, forgotPasswordSuccess, forgotPasswordMessage } = useAuth();
     const showSuccess = useToastStore((state) => state.showSuccess);
     const [email, setEmail] = useState("");
+
+    const { isCoolingDown, formatted, startCooldown } = useResendCooldown(email);
 
     // Fire success toast with the server's actual message
     useEffect(() => {
@@ -21,6 +30,13 @@ export default function ResetPasswordForm() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         forgotPassword({ email });
+        startCooldown(RESET_RESEND_SECONDS);
+    };
+
+    const handleResend = () => {
+        if (isCoolingDown) return;
+        forgotPassword({ email });
+        startCooldown(RESET_RESEND_SECONDS);
     };
 
     return (
@@ -42,8 +58,17 @@ export default function ResetPasswordForm() {
                 {forgotPasswordSuccess ? (
                     <div className="text-center space-y-4">
                         <div className="p-4 bg-green-50 dark:bg-green-900/20 text-green-700 rounded-2xl text-sm">
-                            Reset link has been sent to your email address.
+                            {forgotPasswordMessage ?? "If an account with that email exists, a password reset link has been sent."}
                         </div>
+                        <button
+                            type="button"
+                            onClick={handleResend}
+                            disabled={isSendingForgotEmail || isCoolingDown}
+                            className="text-[#3b82f6] hover:underline text-xs font-semibold disabled:opacity-60 disabled:no-underline flex items-center justify-center gap-2 mx-auto"
+                        >
+                            {isSendingForgotEmail && <Loader2 className="animate-spin" size={14} />}
+                            {isCoolingDown ? `Resend link in ${formatted}` : "Resend link"}
+                        </button>
                         <Link href="/login" className="text-[#3b82f6] hover:underline text-xs font-semibold">
                             Back to Login
                         </Link>
