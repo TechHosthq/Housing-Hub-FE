@@ -136,7 +136,7 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                                             value={formData.currentPassword}
                                             onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
                                             placeholder="Enter current password"
-                                            className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[#1A1A1A] dark:text-gray-100 text-[14px] font-semibold transition-all focus:border-[#002D6B] outline-none placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                                            className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[#1A1A1A] dark:text-gray-100 text-[14px] font-semibold transition-all focus:border-[#0B2545] outline-none placeholder:text-gray-300 dark:placeholder:text-gray-600"
                                         />
                                         <button
                                             type="button"
@@ -161,7 +161,7 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                                             value={formData.newPassword}
                                             onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
                                             placeholder="At least 8 characters"
-                                            className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[#1A1A1A] dark:text-gray-100 text-[14px] font-semibold transition-all focus:border-[#002D6B] outline-none placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                                            className="w-full px-6 py-4 rounded-full border-2 border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[#1A1A1A] dark:text-gray-100 text-[14px] font-semibold transition-all focus:border-[#0B2545] outline-none placeholder:text-gray-300 dark:placeholder:text-gray-600"
                                         />
                                         <button
                                             type="button"
@@ -188,7 +188,7 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                                             className={`w-full px-6 py-4 rounded-full border-2 bg-white dark:bg-gray-900 text-[#1A1A1A] dark:text-gray-100 text-[14px] font-semibold transition-all outline-none placeholder:text-gray-300 dark:placeholder:text-gray-600 ${
                                                 formData.confirmPassword && formData.confirmPassword !== formData.newPassword
                                                     ? "border-red-300 focus:border-red-400"
-                                                    : "border-[#F2F2F2] dark:border-gray-800 focus:border-[#002D6B]"
+                                                    : "border-[#F2F2F2] dark:border-gray-800 focus:border-[#0B2545]"
                                             }`}
                                         />
                                         <button
@@ -209,7 +209,7 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                                 <button
                                     type="submit"
                                     disabled={isChangingPassword}
-                                    className="w-full py-4 rounded-full bg-[#002D6B] hover:bg-[#001D4B] text-white text-[15px] font-black transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-2 disabled:opacity-70 mt-2"
+                                    className="w-full py-4 rounded-full bg-[#0B2545] hover:bg-[#071A33] text-white text-[15px] font-black transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-2 disabled:opacity-70 mt-2"
                                 >
                                     {isChangingPassword && <Loader2 className="animate-spin" size={20} />}
                                     {isChangingPassword ? "Updating..." : "Update Password"}

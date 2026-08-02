@@ -61,7 +61,7 @@ export default function Navbar() {
                 <div className="flex items-center">
                     <Link href="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
                         <Image
-                            src="/images/logo.png"
+                            src="/images/logo.svg"
                             alt="Housing Hub Logo"
                             width={180}
                             height={45}
@@ -92,7 +92,7 @@ export default function Navbar() {
                                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                                 className="flex items-center gap-3 group"
                             >
-                                <div className="w-10 h-10 rounded-full bg-[#002D6B] flex items-center justify-center text-white font-black text-[14px] shadow-md group-hover:bg-[#0095FF] transition-colors">
+                                <div className="w-10 h-10 rounded-full bg-[#0B2545] flex items-center justify-center text-white font-black text-[14px] shadow-md group-hover:bg-[#0095FF] transition-colors">
                                     {initials}
                                 </div>
                                 <div className="flex flex-col items-start leading-none">
@@ -142,7 +142,7 @@ export default function Navbar() {
                             <Link
                                 href="/login"
                                 className={pathname === "/login"
-                                    ? "bg-[#07358B] text-white px-7 py-2.5 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all"
+                                    ? "bg-[#0B2545] text-white px-7 py-2.5 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all"
                                     : "text-primary-dark font-bold text-base hover:opacity-80 transition-opacity"}
                             >
                                 Login
@@ -151,7 +151,7 @@ export default function Navbar() {
                                 href="/register"
                                 className={pathname === "/login"
                                     ? "text-primary-dark font-bold text-base hover:opacity-80 transition-opacity"
-                                    : "bg-[#07358B] text-white px-7 py-2.5 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all"}
+                                    : "bg-[#0B2545] text-white px-7 py-2.5 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all"}
                             >
                                 Register
                             </Link>
@@ -186,7 +186,7 @@ export default function Navbar() {
                                 <>
                                     {/* Mobile user info */}
                                     <div className="flex items-center gap-3 pb-2">
-                                        <div className="w-10 h-10 rounded-full bg-[#002D6B] flex items-center justify-center text-white font-black text-[14px]">
+                                        <div className="w-10 h-10 rounded-full bg-[#0B2545] flex items-center justify-center text-white font-black text-[14px]">
                                             {initials}
                                         </div>
                                         <div className="flex flex-col leading-none">
@@ -228,7 +228,7 @@ export default function Navbar() {
                                     </Link>
                                     <Link
                                         href="/register"
-                                        className="bg-[#07358B] text-white px-6 py-3 rounded-full font-bold text-center text-lg"
+                                        className="bg-[#0B2545] text-white px-6 py-3 rounded-full font-bold text-center text-lg"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
                                         Register

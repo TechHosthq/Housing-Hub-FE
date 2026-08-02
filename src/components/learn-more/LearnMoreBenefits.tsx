@@ -31,7 +31,7 @@ export default function LearnMoreBenefits() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {benefits.map((benefit, index) => (
-                        <div key={index} className="flex gap-6 p-6 bg-white dark:bg-gray-900 rounded-[17px] border border-gray-100 dark:border-gray-800 shadow-sm hover:border-[#07358B] hover:shadow-md transition-all duration-500">
+                        <div key={index} className="flex gap-6 p-6 bg-white dark:bg-gray-900 rounded-[17px] border border-gray-100 dark:border-gray-800 shadow-sm hover:border-[#0B2545] hover:shadow-md transition-all duration-500">
                             <div className="flex-shrink-0 w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
                                 {benefit.icon}
                             </div>

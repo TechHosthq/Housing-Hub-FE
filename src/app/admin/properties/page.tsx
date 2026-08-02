@@ -255,7 +255,7 @@ export default function AdminPropertiesPage() {
                                 key={filter.value}
                                 onClick={() => setInspectionFilter(filter.value)}
                                 className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all ${inspectionFilter === filter.value
-                                    ? "bg-[#002B7F] text-white"
+                                    ? "bg-[#0B2545] text-white"
                                     : "bg-gray-50 dark:bg-gray-800/50 text-[#999999] dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
                                     }`}
                             >

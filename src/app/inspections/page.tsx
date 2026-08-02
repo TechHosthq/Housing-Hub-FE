@@ -142,7 +142,7 @@ export default function InspectionsPage() {
                                                     setPageSize(Number(e.target.value));
                                                     setCurrentPage(1); // Reset to page 1
                                                 }}
-                                                className="h-10 px-3 border border-gray-200 dark:border-gray-800 rounded-[10px] text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-[#002B7F] transition-all bg-white dark:bg-gray-900 cursor-pointer hover:border-gray-300"
+                                                className="h-10 px-3 border border-gray-200 dark:border-gray-800 rounded-[10px] text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-[#0B2545] transition-all bg-white dark:bg-gray-900 cursor-pointer hover:border-gray-300"
                                             >
                                                 <option value={5}>5</option>
                                                 <option value={10}>10</option>
@@ -207,7 +207,7 @@ export default function InspectionsPage() {
                                                         setInputPage(currentPage.toString());
                                                     }
                                                 }}
-                                                className="w-12 h-10 border border-gray-200 dark:border-gray-800 rounded-[10px] text-center text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-[#002B7F] transition-all bg-white dark:bg-gray-900 disabled:opacity-50 disabled:bg-gray-50 disabled:cursor-not-allowed"
+                                                className="w-12 h-10 border border-gray-200 dark:border-gray-800 rounded-[10px] text-center text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 focus:outline-none focus:border-[#0B2545] transition-all bg-white dark:bg-gray-900 disabled:opacity-50 disabled:bg-gray-50 disabled:cursor-not-allowed"
                                             />
                                             <span className="text-[13px] font-bold text-gray-400 dark:text-gray-500">of {totalPages}</span>
                                         </div>

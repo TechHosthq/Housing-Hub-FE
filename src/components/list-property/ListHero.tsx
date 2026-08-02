@@ -30,7 +30,7 @@ export default function ListHero() {
                 </p>
                 <button
                     onClick={handleGetStarted}
-                    className="bg-[#07358B] text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-primary-dark/90 transition-all shadow-xl"
+                    className="bg-[#0B2545] text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-primary-dark/90 transition-all shadow-xl"
                 >
                     Get Started
                 </button>

@@ -133,7 +133,7 @@ export default function PersonalInfoForm() {
                             value={formData.firstName}
                             onChange={handleInputChange}
                             placeholder="Enter first name"
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#0B2545] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
 
@@ -147,7 +147,7 @@ export default function PersonalInfoForm() {
                             value={formData.lastName}
                             onChange={handleInputChange}
                             placeholder="Enter last name"
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#0B2545] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
 
@@ -161,7 +161,7 @@ export default function PersonalInfoForm() {
                                 name="dateOfBirth"
                                 value={formData.dateOfBirth}
                                 onChange={handleInputChange}
-                                className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm"
+                                className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#0B2545] transition-colors text-sm"
                             />
                         </div>
                     </div>
@@ -178,7 +178,7 @@ export default function PersonalInfoForm() {
                             value={formData.jobTitle}
                             onChange={handleInputChange}
                             placeholder="e.g. Software Engineer"
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#0B2545] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
 
@@ -192,7 +192,7 @@ export default function PersonalInfoForm() {
                             value={formData.companyName}
                             onChange={handleInputChange}
                             placeholder="e.g. Google"
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#0B2545] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
 
@@ -206,7 +206,7 @@ export default function PersonalInfoForm() {
                             value={formData.industry}
                             onChange={handleInputChange}
                             placeholder="e.g. Technology"
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#0B2545] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
 

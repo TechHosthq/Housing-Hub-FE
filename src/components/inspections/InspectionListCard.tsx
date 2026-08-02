@@ -67,7 +67,7 @@ export default function InspectionListCard({ inspection }: InspectionListCardPro
                             </span>
                         </div>
                         <div className="flex items-center gap-2 text-[#666666] dark:text-gray-400">
-                            <Clock size={14} className="text-[#002D6B]" />
+                            <Clock size={14} className="text-[#0B2545]" />
                             <span className="text-[11px] font-bold">{formatTimeTo12h(inspection.scheduledTime)}</span>
                         </div>
                     </div>

@@ -12,7 +12,7 @@ export default function LearnMoreCTA() {
     };
 
     return (
-        <section className="relative py-20 px-6 bg-[#07358B] text-center overflow-hidden">
+        <section className="relative py-20 px-6 bg-[#0B2545] text-center overflow-hidden">
             <div className="relative z-10 max-w-2xl mx-auto">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight" style={{ color: "#fff" }}>
                     Ready to List Your Property?
@@ -22,7 +22,7 @@ export default function LearnMoreCTA() {
                 </p>
                 <button
                     onClick={handleGetStarted}
-                    className="bg-white text-[#07358B] px-8 py-3 rounded-full font-bold text-lg hover:bg-white/90 transition-all shadow-xl"
+                    className="bg-white text-[#0B2545] px-8 py-3 rounded-full font-bold text-lg hover:bg-white/90 transition-all shadow-xl"
                 >
                     Get Started
                 </button>

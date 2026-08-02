@@ -99,7 +99,7 @@ export default function AdminCustomersPage() {
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
-                <button className="bg-[#002B7F] text-white px-8 py-3.5 rounded-full font-bold text-[14px] hover:bg-[#001D56] transition-all flex items-center gap-2">
+                <button className="bg-[#0B2545] text-white px-8 py-3.5 rounded-full font-bold text-[14px] hover:bg-[#001D56] transition-all flex items-center gap-2">
                     <Search size={18} />
                     Search
                 </button>
@@ -111,7 +111,7 @@ export default function AdminCustomersPage() {
                         key={label}
                         onClick={() => setActiveTab(label)}
                         className={`px-6 py-2.5 rounded-full text-[13px] font-bold transition-all ${activeTab === label
-                            ? "bg-[#002B7F] text-white"
+                            ? "bg-[#0B2545] text-white"
                             : "bg-[#F2F2F2] text-[#999999] dark:text-gray-500 hover:bg-gray-200"
                             }`}
                     >

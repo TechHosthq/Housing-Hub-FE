@@ -97,7 +97,7 @@ export default function SuggestRescheduleModal({
                     </button>
                     <button
                         onClick={() => onSuggest({ date, time: formatTimeTo24h(time), note })}
-                        className="flex-1 py-4 rounded-full bg-[#002B7F] text-[16px] font-bold text-white font-montserrat hover:bg-[#001D54] transition-all shadow-md active:scale-[0.98]"
+                        className="flex-1 py-4 rounded-full bg-[#0B2545] text-[16px] font-bold text-white font-montserrat hover:bg-[#001D54] transition-all shadow-md active:scale-[0.98]"
                     >
                         Suggest
                     </button>

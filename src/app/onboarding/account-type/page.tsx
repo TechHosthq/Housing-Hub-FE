@@ -101,13 +101,13 @@ export default function AccountTypePage() {
                                 aria-pressed={isSelected}
                                 className={`w-full flex items-start gap-4 text-left p-5 rounded-2xl border-2 transition-all ${
                                     isSelected
-                                        ? "border-[#002D6B] bg-[#F5F8FF]"
+                                        ? "border-[#0B2545] bg-[#F5F8FF]"
                                         : "border-gray-100 dark:border-gray-800 hover:border-gray-200"
                                 }`}
                             >
                                 <span
                                     className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${
-                                        isSelected ? "bg-[#002D6B] text-white" : "bg-gray-50 dark:bg-gray-800/50 text-gray-400 dark:text-gray-500"
+                                        isSelected ? "bg-[#0B2545] text-white" : "bg-gray-50 dark:bg-gray-800/50 text-gray-400 dark:text-gray-500"
                                     }`}
                                 >
                                     <Icon size={20} />

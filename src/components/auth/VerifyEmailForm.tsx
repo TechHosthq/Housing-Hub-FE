@@ -72,7 +72,7 @@ export default function VerifyEmailForm() {
                         </p>
                         <Link
                             href="/login"
-                            className="w-full bg-[#07358B] text-white py-4 rounded-full font-bold text-base hover:bg-[#052562] transition-all shadow-lg text-center"
+                            className="w-full bg-[#0B2545] text-white py-4 rounded-full font-bold text-base hover:bg-[#071A33] transition-all shadow-lg text-center"
                         >
                             Go to Login
                         </Link>
@@ -96,7 +96,7 @@ export default function VerifyEmailForm() {
                                     type="button"
                                     onClick={handleResend}
                                     disabled={!email || isResendingOtp || isCoolingDown}
-                                    className="w-full bg-[#07358B] text-white py-4 rounded-full font-bold text-base hover:bg-[#052562] transition-all shadow-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
+                                    className="w-full bg-[#0B2545] text-white py-4 rounded-full font-bold text-base hover:bg-[#071A33] transition-all shadow-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
                                 >
                                     {isResendingOtp && <Loader2 className="animate-spin" size={16} />}
                                     {isCoolingDown ? `Resend Link in ${formatted}` : "Resend Link"}

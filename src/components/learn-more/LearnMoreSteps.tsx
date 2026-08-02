@@ -25,7 +25,7 @@ export default function LearnMoreSteps() {
 
                 <div className="space-y-4">
                     {steps.map((step, index) => (
-                        <div key={index} className="flex gap-6 p-6 bg-white dark:bg-gray-900 rounded-[17px] border border-gray-100 dark:border-gray-800 shadow-sm hover:border-[#07358B] hover:bg-[#f0f6ff] dark:hover:bg-gray-800 transition-all duration-300">
+                        <div key={index} className="flex gap-6 p-6 bg-white dark:bg-gray-900 rounded-[17px] border border-gray-100 dark:border-gray-800 shadow-sm hover:border-[#0B2545] hover:bg-[#f0f6ff] dark:hover:bg-gray-800 transition-all duration-300">
                             <div className="flex-shrink-0 w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#3b82f6] font-bold text-2xl border border-blue-100">
                                 {index + 1}
                             </div>
