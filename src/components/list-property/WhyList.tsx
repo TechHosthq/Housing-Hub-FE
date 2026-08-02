@@ -52,7 +52,7 @@ export default function WhyList() {
                     {/* Features Container */}
                     <div className="space-y-6">
                         {features.map((feature, index) => (
-                            <div key={index} className="flex gap-6 p-6 bg-white dark:bg-gray-900 rounded-[17px] border border-gray-100 dark:border-gray-800 shadow-sm hover:border-[#07358B] hover:shadow-md transition-all duration-500 hover:scale-101">
+                            <div key={index} className="flex gap-6 p-6 bg-white dark:bg-gray-900 rounded-[17px] border border-gray-100 dark:border-gray-800 shadow-sm hover:border-[#0B2545] hover:shadow-md transition-all duration-500 hover:scale-101">
                                 <div className="flex-shrink-0 w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
                                     {feature.icon}
                                 </div>

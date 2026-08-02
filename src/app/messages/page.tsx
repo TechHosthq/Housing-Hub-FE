@@ -38,7 +38,7 @@ function MessagesContent() {
                 {isChatting && (
                     <button
                         onClick={handleBack}
-                        className="flex items-center gap-2 text-[#666666] dark:text-gray-400 text-[13px] font-bold hover:text-[#002B7F] transition-colors mb-6 group"
+                        className="flex items-center gap-2 text-[#666666] dark:text-gray-400 text-[13px] font-bold hover:text-[#0B2545] transition-colors mb-6 group"
                     >
                         <span className="text-[18px] group-hover:-translate-x-1 transition-transform">←</span> Back
                     </button>

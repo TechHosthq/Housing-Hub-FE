@@ -49,7 +49,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                     />
                     {showBadge && (
                         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
-                            <span className="text-[11px] font-semibold text-[#002B7F] tracking-wide">
+                            <span className="text-[11px] font-semibold text-[#0B2545] tracking-wide">
                                 {isApiProperty ? "Verified" : (property as Property).tag}
                             </span>
                         </div>

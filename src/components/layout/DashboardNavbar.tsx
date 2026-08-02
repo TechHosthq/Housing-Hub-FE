@@ -46,7 +46,7 @@ export default function DashboardNavbar() {
                 {/* Logo */}
                 <Link href="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
                     <Image
-                        src="/images/logo.png"
+                        src="/images/logo.svg"
                         alt="Housing Hub Logo"
                         width={180}
                         height={45}
@@ -90,7 +90,7 @@ export default function DashboardNavbar() {
                                     className="flex items-center gap-3 pl-6 border-l border-gray-100 dark:border-gray-800 cursor-pointer group"
                                 >
                                     <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
-                                        <div className="w-full h-full bg-[#E9F3FF] flex items-center justify-center text-[#002B7F] font-black text-[14px] uppercase">
+                                        <div className="w-full h-full bg-[#E9F3FF] flex items-center justify-center text-[#0B2545] font-black text-[14px] uppercase">
                                             {currentUser?.firstName?.[0]}{currentUser?.lastName?.[0] || "U"}
                                         </div>
                                     </div>
@@ -124,7 +124,7 @@ export default function DashboardNavbar() {
                             </Link>
                             <Link
                                 href="/register"
-                                className="bg-[#07358B] text-white px-7 py-2.5 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all"
+                                className="bg-[#0B2545] text-white px-7 py-2.5 rounded-full font-bold text-base hover:bg-primary-dark/90 transition-all"
                             >
                                 Register
                             </Link>
@@ -158,7 +158,7 @@ export default function DashboardNavbar() {
                             {isAuthenticated ? (
                                 <>
                                     <div className="flex items-center gap-3 pb-2">
-                                        <div className="w-10 h-10 rounded-full bg-[#E9F3FF] flex items-center justify-center text-[#002B7F] font-black text-[14px] uppercase">
+                                        <div className="w-10 h-10 rounded-full bg-[#E9F3FF] flex items-center justify-center text-[#0B2545] font-black text-[14px] uppercase">
                                             {currentUser?.firstName?.[0]}{currentUser?.lastName?.[0] || "U"}
                                         </div>
                                         <div className="flex flex-col leading-none">
@@ -211,7 +211,7 @@ export default function DashboardNavbar() {
                                     </Link>
                                     <Link
                                         href="/register"
-                                        className="bg-[#07358B] text-white px-6 py-3 rounded-full font-bold text-center text-lg"
+                                        className="bg-[#0B2545] text-white px-6 py-3 rounded-full font-bold text-center text-lg"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
                                         Register

@@ -515,7 +515,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                     onClick={() => setStep(2)}
                     disabled={!isStep1Valid}
                     className={`w-full py-5 rounded-[20px] font-black text-[18px] font-montserrat transition-all mt-10 shadow-lg ${isStep1Valid
-                        ? "bg-[#002B7F] text-white hover:bg-[#001D4B]"
+                        ? "bg-[#0B2545] text-white hover:bg-[#071A33]"
                         : "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                         }`}
                 >
@@ -610,7 +610,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                         onClick={() => setStep(3)}
                         disabled={!isStep2Valid}
                         className={`w-full md:w-96 py-5 rounded-[20px] font-black text-[18px] font-montserrat transition-all shadow-lg ${isStep2Valid
-                            ? "bg-[#002B7F] text-white hover:bg-[#001D4B]"
+                            ? "bg-[#0B2545] text-white hover:bg-[#071A33]"
                             : "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                             }`}
                     >
@@ -673,7 +673,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                                     <button
                                         onClick={() => handleUpdate(true)}
                                         disabled={isUpdating || isSettingPublished}
-                                        className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                                        className="w-full py-5 rounded-[20px] bg-[#0B2545] text-white font-black text-[18px] font-montserrat hover:bg-[#071A33] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
                                     >
                                         {isUpdating || isSettingPublished ? <Loader2 className="animate-spin" /> : "Save & Publish"}
                                     </button>
@@ -682,8 +682,8 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                                     onClick={() => handleUpdate(false)}
                                     disabled={isUpdating || isSettingPublished}
                                     className={existingPropertyResponse?.data?.isPublished
-                                        ? "w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
-                                        : "w-full py-4 rounded-[20px] border-2 border-[#002B7F] text-[#002B7F] font-bold text-[15px] font-montserrat hover:bg-[#002B7F]/5 transition-all flex items-center justify-center gap-2 disabled:opacity-60"}
+                                        ? "w-full py-5 rounded-[20px] bg-[#0B2545] text-white font-black text-[18px] font-montserrat hover:bg-[#071A33] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                                        : "w-full py-4 rounded-[20px] border-2 border-[#0B2545] text-[#0B2545] font-bold text-[15px] font-montserrat hover:bg-[#0B2545]/5 transition-all flex items-center justify-center gap-2 disabled:opacity-60"}
                                 >
                                     {isUpdating ? <Loader2 className="animate-spin" /> : "Save Changes"}
                                 </button>
@@ -694,14 +694,14 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                                 <button
                                     onClick={() => handlePublish(true)}
                                     disabled={isCreating}
-                                    className="w-full py-5 rounded-[20px] bg-[#002B7F] text-white font-black text-[18px] font-montserrat hover:bg-[#001D4B] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                                    className="w-full py-5 rounded-[20px] bg-[#0B2545] text-white font-black text-[18px] font-montserrat hover:bg-[#071A33] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
                                 >
                                     {isCreating ? <Loader2 className="animate-spin" /> : "Publish Property"}
                                 </button>
                                 <button
                                     onClick={() => handlePublish(false)}
                                     disabled={isCreating}
-                                    className="w-full py-4 rounded-[20px] border-2 border-[#002B7F] text-[#002B7F] font-bold text-[15px] font-montserrat hover:bg-[#002B7F]/5 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                                    className="w-full py-4 rounded-[20px] border-2 border-[#0B2545] text-[#0B2545] font-bold text-[15px] font-montserrat hover:bg-[#0B2545]/5 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
                                 >
                                     Save as Draft
                                 </button>
@@ -760,7 +760,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                             {/* Action 1: Complete KYC */}
                             <Link
                                 href="/kyc/personal-info"
-                                className="w-full py-4 rounded-xl bg-[#002B7F] hover:bg-[#001D4B] text-white font-bold text-sm transition-all text-center"
+                                className="w-full py-4 rounded-xl bg-[#0B2545] hover:bg-[#071A33] text-white font-bold text-sm transition-all text-center"
                             >
                                 Complete KYC Verification
                             </Link>

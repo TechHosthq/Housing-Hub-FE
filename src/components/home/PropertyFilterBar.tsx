@@ -83,7 +83,7 @@ export default function PropertyFilterBar() {
                 <span className={`text-[15px] truncate w-full text-left ${filters[key] ? 'font-semibold text-[#1A1A1A] dark:text-gray-100' : 'font-medium text-gray-500 dark:text-gray-500'}`}>
                     {filters[key] || label}
                 </span>
-                <ChevronDown size={16} className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 flex-shrink-0 ml-2 ${activeDropdown === key ? 'rotate-180 text-[#002D6B]' : 'group-hover:text-gray-600'}`} />
+                <ChevronDown size={16} className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 flex-shrink-0 ml-2 ${activeDropdown === key ? 'rotate-180 text-[#0B2545]' : 'group-hover:text-gray-600'}`} />
             </div>
 
             {/* Dropdown Menu */}
@@ -130,7 +130,7 @@ export default function PropertyFilterBar() {
                                 <span className={`text-[13px] truncate w-full text-left ${filters[key] ? 'font-semibold text-[#1A1A1A] dark:text-gray-100' : 'font-medium text-gray-500 dark:text-gray-500'}`}>
                                     {filters[key] || labels[key]}
                                 </span>
-                                <ChevronDown size={14} className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 flex-shrink-0 ml-1 ${activeDropdown === key ? 'rotate-180 text-[#002D6B]' : ''}`} />
+                                <ChevronDown size={14} className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 flex-shrink-0 ml-1 ${activeDropdown === key ? 'rotate-180 text-[#0B2545]' : ''}`} />
                             </div>
                             {activeDropdown === key && (
                                 <div className="absolute top-[calc(100%+4px)] left-0 w-[160px] max-h-[240px] overflow-y-auto bg-white dark:bg-gray-900 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 dark:border-gray-800 py-2 z-[200]">
@@ -167,7 +167,7 @@ export default function PropertyFilterBar() {
                     <div className="w-[1px] h-10 bg-gray-200 dark:bg-gray-700 mx-1 flex-shrink-0"></div>
                     {renderDropdown('priceRange', 'Price Range')}
                 </div>
-                <div className="bg-[#002D6B] text-white px-6 py-4 rounded-full flex items-center justify-center gap-2 m-1 flex-shrink-0">
+                <div className="bg-[#0B2545] text-white px-6 py-4 rounded-full flex items-center justify-center gap-2 m-1 flex-shrink-0">
                     <Search size={18} className="stroke-[3px]" />
                 </div>
             </div>

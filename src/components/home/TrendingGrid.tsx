@@ -50,7 +50,7 @@ export default function TrendingGrid() {
                 <p className="text-red-500 font-bold text-xl">Failed to load trending properties.</p>
                 <button 
                     onClick={() => window.location.reload()} 
-                    className="mt-4 px-6 py-2 bg-[#002B7F] text-white rounded-full font-bold hover:bg-[#001D4B] transition-all"
+                    className="mt-4 px-6 py-2 bg-[#0B2545] text-white rounded-full font-bold hover:bg-[#071A33] transition-all"
                 >
                     Retry
                 </button>
@@ -87,8 +87,8 @@ export default function TrendingGrid() {
                             onClick={() => setCurrentPage(page)}
                             className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${
                                 currentPage === page
-                                    ? "bg-[#002D6B] text-white"
-                                    : "bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-800 hover:border-[#002D6B] hover:text-[#002D6B]"
+                                    ? "bg-[#0B2545] text-white"
+                                    : "bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-800 hover:border-[#0B2545] hover:text-[#0B2545]"
                             }`}
                         >
                             {page}

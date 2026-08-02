@@ -117,7 +117,7 @@ export default function SubmitIDForm() {
                         value={formData.docNumber}
                         onChange={handleInputChange}
                         placeholder="Enter your document number"
-                        className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                        className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#0B2545] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                     />
                 </div>
 
@@ -130,7 +130,7 @@ export default function SubmitIDForm() {
                             name="docType"
                             value={formData.docType}
                             onChange={handleInputChange}
-                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#002D6B] transition-colors text-sm appearance-none bg-white dark:bg-gray-900"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#0B2545] transition-colors text-sm appearance-none bg-white dark:bg-gray-900"
                         >
                             <option value="1">National Identity Number (NIN)</option>
                             <option value="2">Government Issued ID Card</option>

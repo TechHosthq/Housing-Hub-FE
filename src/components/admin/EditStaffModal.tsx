@@ -152,7 +152,7 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSave }: EditS
                         </button>
                         <button
                             type="submit"
-                            className="px-12 py-4 bg-[#002B7F] text-white rounded-[20px] font-bold text-[16px] hover:bg-opacity-90 transition-all shadow-lg shadow-blue-900/10 font-montserrat"
+                            className="px-12 py-4 bg-[#0B2545] text-white rounded-[20px] font-bold text-[16px] hover:bg-opacity-90 transition-all shadow-lg shadow-blue-900/10 font-montserrat"
                         >
                             Save
                         </button>

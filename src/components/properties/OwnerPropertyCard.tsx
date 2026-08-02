@@ -139,7 +139,7 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                     <h3 className="text-[16px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat line-clamp-1">
                         {title}
                     </h3>
-                    <div className="text-[16px] font-black text-[#002B7F] font-montserrat whitespace-nowrap">
+                    <div className="text-[16px] font-black text-[#0B2545] font-montserrat whitespace-nowrap">
                         ₦{price}
                     </div>
                 </div>

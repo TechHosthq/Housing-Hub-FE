@@ -101,7 +101,7 @@ export default function NearbyGrid() {
                     <button
                         onClick={handleLoadMore}
                         disabled={isFetching}
-                        className="bg-white dark:bg-gray-900 text-[#002B7F] border-2 border-[#002B7F] px-12 py-4 rounded-full font-black text-lg hover:bg-[#002B7F] hover:text-white transition-all hover:shadow-2xl disabled:opacity-50 flex items-center gap-3 group active:scale-95"
+                        className="bg-white dark:bg-gray-900 text-[#0B2545] border-2 border-[#0B2545] px-12 py-4 rounded-full font-black text-lg hover:bg-[#0B2545] hover:text-white transition-all hover:shadow-2xl disabled:opacity-50 flex items-center gap-3 group active:scale-95"
                     >
                         {isFetching ? (
                             <>

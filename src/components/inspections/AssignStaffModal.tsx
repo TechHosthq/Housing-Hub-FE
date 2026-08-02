@@ -145,7 +145,7 @@ export default function AssignStaffModal({
                         disabled={!selectedStaff}
                         className={`flex-1 py-4 px-6 rounded-full text-[15px] font-bold transition-all active:scale-[0.98] ${!selectedStaff
                                 ? "bg-[#F2F2F2] text-[#A3A3A3] cursor-not-allowed"
-                                : "bg-[#002B7F] text-white hover:bg-[#001F5C] shadow-lg shadow-blue-900/10"
+                                : "bg-[#0B2545] text-white hover:bg-[#001F5C] shadow-lg shadow-blue-900/10"
                             }`}
                     >
                         {isNoneAvailable ? "Reschedule Instead" : "Assign"}

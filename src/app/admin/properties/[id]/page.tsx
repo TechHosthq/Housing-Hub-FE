@@ -184,7 +184,7 @@ export default function PropertyInformationPage() {
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-blue-100 text-[#002B7F] rounded">
+                                    <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-blue-100 text-[#0B2545] rounded">
                                         ID: {inspection.id.slice(0, 6)}
                                     </span>
                                 </div>
@@ -216,7 +216,7 @@ export default function PropertyInformationPage() {
 
             <button
                 onClick={handleToggleStatus}
-                className="w-full py-5 bg-[#002B7F] text-white rounded-[16px] font-bold text-[16px] hover:bg-opacity-90 transition-all shadow-md mt-4"
+                className="w-full py-5 bg-[#0B2545] text-white rounded-[16px] font-bold text-[16px] hover:bg-opacity-90 transition-all shadow-md mt-4"
             >
                 {isPublished ? "Unpublish Property" : "Publish Property"}
             </button>

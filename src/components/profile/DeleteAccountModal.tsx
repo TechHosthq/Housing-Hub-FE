@@ -74,14 +74,14 @@ export default function DeleteAccountModal({ isOpen, onClose }: DeleteAccountMod
                                 key={r.id}
                                 onClick={() => setReason(r.id)}
                                 className={`flex items-center gap-4 px-6 py-4 rounded-full border transition-all cursor-pointer ${reason === r.id
-                                    ? "border-[#002B7F] bg-white dark:bg-gray-900 shadow-sm"
+                                    ? "border-[#0B2545] bg-white dark:bg-gray-900 shadow-sm"
                                     : "border-[#F2F2F2] dark:border-gray-800 hover:border-gray-300"
                                     }`}
                             >
-                                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${reason === r.id ? "border-[#002B7F]" : "border-gray-300"
+                                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${reason === r.id ? "border-[#0B2545]" : "border-gray-300"
                                     }`}>
                                     {reason === r.id && (
-                                        <div className="w-3 h-3 bg-[#002B7F] rounded-full" />
+                                        <div className="w-3 h-3 bg-[#0B2545] rounded-full" />
                                     )}
                                 </div>
                                 <span className={`text-[14px] font-bold ${reason === r.id ? "text-[#1A1A1A] dark:text-gray-100" : "text-[#666666] dark:text-gray-400"
@@ -102,7 +102,7 @@ export default function DeleteAccountModal({ isOpen, onClose }: DeleteAccountMod
                                 value={note}
                                 onChange={(e) => setNote(e.target.value.slice(0, maxChars))}
                                 placeholder="Provide more information about the reason..."
-                                className="w-full h-32 px-5 py-4 rounded-[16px] border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-medium text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-300 dark:placeholder:text-gray-600 focus:outline-none focus:border-[#002B7F] transition-all resize-none shadow-sm"
+                                className="w-full h-32 px-5 py-4 rounded-[16px] border border-[#F2F2F2] dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] font-medium text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-300 dark:placeholder:text-gray-600 focus:outline-none focus:border-[#0B2545] transition-all resize-none shadow-sm"
                             />
                             <div className="absolute -bottom-6 right-0 text-[11px] font-bold text-gray-400 dark:text-gray-500">
                                 {note.length}/{maxChars} Characters
