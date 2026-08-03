@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ChevronLeft, ChevronRight, ChevronDown, Upload, X, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown, Upload, X, Loader2, Play } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import PropertyPublishedModal from "./PropertyPublishedModal";
 import { useProperty } from "@/hooks/useProperty";
-import { PropertyType, AvailabilityStatus, PropertyLeaseType, PropertyFile } from "@/types/property";
+import { PropertyType, AvailabilityStatus, PropertyLeaseType, PropertyFile, PropertyFileType } from "@/types/property";
 import { useAuth } from "@/hooks/useAuth";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useRouter } from "next/navigation";
@@ -92,7 +92,10 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
         ? existingFiles.filter((f): f is PropertyFile & { fileUrl: string } => !!f.fileUrl)
         : [];
     const existingFileUrls = existingFileItems.map((f) => f.fileUrl);
-    const allPreviewUrls = [...existingFileUrls, ...previews];
+    const allPreviewItems = [
+        ...existingFileItems.map((f) => ({ url: f.fileUrl, isVideo: f.type === PropertyFileType.Video })),
+        ...previews.map((url, i) => ({ url, isVideo: images[i]?.type.startsWith("video/") ?? false })),
+    ];
 
     const handleDeleteExistingFile = (fileId: string) => {
         if (!editPropertyId) return;
@@ -488,42 +491,66 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                     )}
 
                     <div className="flex flex-wrap gap-4 mt-6">
-                        {existingFileItems.map((file, index) => (
-                            <div key={file.id} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 group">
-                                <button
-                                    type="button"
-                                    onClick={() => setLightboxIndex(index)}
-                                    className="absolute inset-0 w-full h-full cursor-zoom-in"
-                                >
-                                    <Image src={file.fileUrl} alt="Existing property photo" fill className="object-cover" />
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={(e) => { e.stopPropagation(); handleDeleteExistingFile(file.id); }}
-                                    disabled={isDeletingFile}
-                                    className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white opacity-80 hover:opacity-100 transition-opacity shadow-lg disabled:opacity-50"
-                                >
-                                    <X size={14} strokeWidth={3} />
-                                </button>
-                            </div>
-                        ))}
-                        {previews.map((preview, index) => (
-                            <div key={index} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 group">
-                                <button
-                                    type="button"
-                                    onClick={() => setLightboxIndex(existingFileUrls.length + index)}
-                                    className="absolute inset-0 w-full h-full cursor-zoom-in"
-                                >
-                                    <Image src={preview} alt={`Preview ${index}`} fill className="object-cover" />
-                                </button>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); removeImage(index); }}
-                                    className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white opacity-80 hover:opacity-100 transition-opacity shadow-lg"
-                                >
-                                    <X size={14} strokeWidth={3} />
-                                </button>
-                            </div>
-                        ))}
+                        {existingFileItems.map((file, index) => {
+                            const isVideo = file.type === PropertyFileType.Video;
+                            return (
+                                <div key={file.id} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 group bg-black">
+                                    <button
+                                        type="button"
+                                        onClick={() => setLightboxIndex(index)}
+                                        className="absolute inset-0 w-full h-full cursor-zoom-in"
+                                    >
+                                        {isVideo ? (
+                                            <>
+                                                <video src={file.fileUrl} muted preload="metadata" className="w-full h-full object-cover" />
+                                                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                                    <Play size={16} className="text-white" fill="white" />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <Image src={file.fileUrl} alt="Existing property photo" fill className="object-cover" />
+                                        )}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={(e) => { e.stopPropagation(); handleDeleteExistingFile(file.id); }}
+                                        disabled={isDeletingFile}
+                                        className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white opacity-80 hover:opacity-100 transition-opacity shadow-lg disabled:opacity-50"
+                                    >
+                                        <X size={14} strokeWidth={3} />
+                                    </button>
+                                </div>
+                            );
+                        })}
+                        {previews.map((preview, index) => {
+                            const isVideo = images[index]?.type.startsWith("video/") ?? false;
+                            return (
+                                <div key={index} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 group bg-black">
+                                    <button
+                                        type="button"
+                                        onClick={() => setLightboxIndex(existingFileUrls.length + index)}
+                                        className="absolute inset-0 w-full h-full cursor-zoom-in"
+                                    >
+                                        {isVideo ? (
+                                            <>
+                                                <video src={preview} muted preload="metadata" className="w-full h-full object-cover" />
+                                                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                                    <Play size={16} className="text-white" fill="white" />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <Image src={preview} alt={`Preview ${index}`} fill className="object-cover" />
+                                        )}
+                                    </button>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); removeImage(index); }}
+                                        className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white opacity-80 hover:opacity-100 transition-opacity shadow-lg"
+                                    >
+                                        <X size={14} strokeWidth={3} />
+                                    </button>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -835,7 +862,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                 </div>
             )}
 
-            {lightboxIndex !== null && allPreviewUrls.length > 0 && (
+            {lightboxIndex !== null && allPreviewItems.length > 0 && (
                 <div
                     className="fixed inset-0 z-[100] flex items-center justify-center p-4"
                     onClick={() => setLightboxIndex(null)}
@@ -847,12 +874,12 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                     >
                         <X size={24} />
                     </button>
-                    {allPreviewUrls.length > 1 && (
+                    {allPreviewItems.length > 1 && (
                         <>
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    setLightboxIndex((i) => ((i ?? 0) - 1 + allPreviewUrls.length) % allPreviewUrls.length);
+                                    setLightboxIndex((i) => ((i ?? 0) - 1 + allPreviewItems.length) % allPreviewItems.length);
                                 }}
                                 className="absolute left-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
                             >
@@ -861,7 +888,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    setLightboxIndex((i) => ((i ?? 0) + 1) % allPreviewUrls.length);
+                                    setLightboxIndex((i) => ((i ?? 0) + 1) % allPreviewItems.length);
                                 }}
                                 className="absolute right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
                             >
@@ -870,13 +897,23 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                         </>
                     )}
                     <div className="relative w-[90vw] h-[85vh]" onClick={(e) => e.stopPropagation()}>
-                        <Image
-                            src={allPreviewUrls[lightboxIndex]}
-                            alt="Property photo preview"
-                            fill
-                            sizes="90vw"
-                            className="object-contain"
-                        />
+                        {allPreviewItems[lightboxIndex].isVideo ? (
+                            <video
+                                key={allPreviewItems[lightboxIndex].url}
+                                src={allPreviewItems[lightboxIndex].url}
+                                controls
+                                autoPlay
+                                className="w-full h-full object-contain"
+                            />
+                        ) : (
+                            <Image
+                                src={allPreviewItems[lightboxIndex].url}
+                                alt="Property photo preview"
+                                fill
+                                sizes="90vw"
+                                className="object-contain"
+                            />
+                        )}
                     </div>
                 </div>
             )}

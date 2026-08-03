@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { Bed, Bath, ShowerHead, MapPin } from "lucide-react";
+import { Bed, Bath, ShowerHead, MapPin, Play } from "lucide-react";
 import { Property } from "@/types";
-import { PropertyDetail } from "@/types/property";
+import { PropertyDetail, PropertyFileType } from "@/types/property";
 import Link from "next/link";
 
 interface PropertyCardProps {
@@ -22,8 +22,11 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         ? ((property as PropertyDetail).propertyAddress?.city || (property as PropertyDetail).propertyAddress?.place || "Lagos, Nigeria") 
         : (property as Property).location;
     
-    const image = isApiProperty 
-        ? ((property as PropertyDetail).files?.[0]?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070")
+    const files = isApiProperty ? (property as PropertyDetail).files : undefined;
+    const coverFile = files?.find(f => f.type === PropertyFileType.Image) || files?.[0];
+    const isCoverVideo = coverFile?.type === PropertyFileType.Video;
+    const image = isApiProperty
+        ? (coverFile?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070")
         : (property as Property).image;
 
     const bedrooms = isApiProperty ? (Math.floor(Math.random() * 3) + 2) : (property as Property).bedrooms;
@@ -39,14 +42,28 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             className="bg-white dark:bg-gray-900 rounded-[22px] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-gray-800 group flex flex-col h-full cursor-pointer hover:-translate-y-2"
         >
             <div className="m-2">
-                <div className="relative h-56 w-full overflow-hidden rounded-[16px]">
-                    <Image
-                        src={image}
-                        alt={title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                    />
+                <div className="relative h-56 w-full overflow-hidden rounded-[16px] bg-black">
+                    {isCoverVideo ? (
+                        <>
+                            <video
+                                src={image}
+                                muted
+                                preload="metadata"
+                                className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                <Play size={32} className="text-white" fill="white" />
+                            </div>
+                        </>
+                    ) : (
+                        <Image
+                            src={image}
+                            alt={title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                        />
+                    )}
                     {showBadge && (
                         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
                             <span className="text-[11px] font-semibold text-[#0B2545] tracking-wide">

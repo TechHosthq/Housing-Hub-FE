@@ -13,6 +13,7 @@ import { useParams } from "next/navigation";
 import { useProperty } from "@/hooks/useProperty";
 import { useAuthStore } from "@/store/useAuthStore";
 import { use } from "react";
+import { PropertyFile, PropertyFileType } from "@/types/property";
 
 export default function PropertyDetailPage() {
     const params = useParams();
@@ -48,10 +49,18 @@ export default function PropertyDetailPage() {
         );
     }
 
-    // Map API files to gallery images
-    const images = property.files?.length > 0 
-        ? property.files.map(f => f.fileUrl).filter(Boolean) as string[]
-        : ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070"];
+    // Map API files to gallery files
+    const galleryFiles: PropertyFile[] = property.files?.length > 0
+        ? property.files.filter(f => f.fileUrl)
+        : [{
+            id: "fallback",
+            dateCreated: "",
+            dateModified: "",
+            fileUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070",
+            type: PropertyFileType.Image,
+            dateUploaded: "",
+            propertyId: property.id,
+        }];
 
     // Map PropertyDetail to PropertyInfo expected format
     const displayProperty = {
@@ -86,7 +95,7 @@ export default function PropertyDetailPage() {
                         />
 
                         <div className="space-y-10">
-                            <PropertyGallery images={images} />
+                            <PropertyGallery files={galleryFiles} />
                             <PropertyInfo propertyId={property.id} property={displayProperty} />
                         </div>
                     </div>

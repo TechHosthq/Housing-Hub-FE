@@ -1,69 +1,98 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Play } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
+import { PropertyFile, PropertyFileType } from "@/types/property";
 
 interface PropertyGalleryProps {
-    images: string[];
+    files: PropertyFile[];
 }
 
-export default function PropertyGallery({ images }: PropertyGalleryProps) {
+export default function PropertyGallery({ files }: PropertyGalleryProps) {
     const [activeIndex, setActiveIndex] = useState(0);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-    const nextImage = () => setActiveIndex((prev) => (prev + 1) % images.length);
-    const prevImage = () => setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
+    const nextImage = () => setActiveIndex((prev) => (prev + 1) % files.length);
+    const prevImage = () => setActiveIndex((prev) => (prev - 1 + files.length) % files.length);
+
+    const activeFile = files[activeIndex];
+    const isActiveVideo = activeFile?.type === PropertyFileType.Video;
 
     return (
         <div className="space-y-4">
-            {/* Featured Image */}
-            <div className="relative aspect-[16/9] w-full rounded-[22px] overflow-hidden group">
-                <button
-                    type="button"
-                    onClick={() => setIsPreviewOpen(true)}
-                    className="absolute inset-0 w-full h-full cursor-zoom-in"
-                >
-                    <Image
-                        src={images[activeIndex]}
-                        alt="Property"
-                        fill
-                        priority
-                        sizes="(max-width: 1024px) 100vw, 800px"
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+            {/* Featured Media */}
+            <div className="relative aspect-[16/9] w-full rounded-[22px] overflow-hidden group bg-black">
+                {isActiveVideo ? (
+                    <video
+                        key={activeFile.fileUrl}
+                        src={activeFile.fileUrl || undefined}
+                        controls
+                        className="absolute inset-0 w-full h-full object-contain"
                     />
-                </button>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={() => setIsPreviewOpen(true)}
+                        className="absolute inset-0 w-full h-full cursor-zoom-in"
+                    >
+                        <Image
+                            src={activeFile.fileUrl || ""}
+                            alt="Property"
+                            fill
+                            priority
+                            sizes="(max-width: 1024px) 100vw, 800px"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                    </button>
+                )}
 
                 {/* Navigation Arrows */}
-                <button
-                    onClick={prevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-primary-dark hover:bg-white transition-all shadow-md"
-                >
-                    <ChevronLeft size={18} />
-                </button>
-                <button
-                    onClick={nextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-primary-dark hover:bg-white transition-all shadow-md"
-                >
-                    <ChevronRight size={18} />
-                </button>
+                {files.length > 1 && (
+                    <>
+                        <button
+                            onClick={prevImage}
+                            className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-primary-dark hover:bg-white transition-all shadow-md z-10"
+                        >
+                            <ChevronLeft size={18} />
+                        </button>
+                        <button
+                            onClick={nextImage}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-primary-dark hover:bg-white transition-all shadow-md z-10"
+                        >
+                            <ChevronRight size={18} />
+                        </button>
+                    </>
+                )}
             </div>
 
             {/* Thumbnails */}
             <div className="grid grid-cols-5 gap-3">
-                {images.map((img, idx) => (
-                    <button
-                        key={idx}
-                        onClick={() => setActiveIndex(idx)}
-                        className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all ${activeIndex === idx ? "border-primary-dark" : "border-transparent opacity-70 hover:opacity-100"
-                            }`}
-                    >
-                        <Image src={img} alt={`Thumbnail ${idx}`} fill sizes="160px" className="object-cover" />
-                    </button>
-                ))}
+                {files.map((file, idx) => {
+                    const isVideo = file.type === PropertyFileType.Video;
+                    return (
+                        <button
+                            key={file.id}
+                            onClick={() => setActiveIndex(idx)}
+                            className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all bg-black ${activeIndex === idx ? "border-primary-dark" : "border-transparent opacity-70 hover:opacity-100"
+                                }`}
+                        >
+                            {isVideo ? (
+                                <>
+                                    <video src={file.fileUrl || undefined} muted preload="metadata" className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                        <Play size={18} className="text-white" fill="white" />
+                                    </div>
+                                </>
+                            ) : (
+                                <Image src={file.fileUrl || ""} alt={`Thumbnail ${idx}`} fill sizes="160px" className="object-cover" />
+                            )}
+                        </button>
+                    );
+                })}
             </div>
 
-            {isPreviewOpen && (
+            {isPreviewOpen && !isActiveVideo && (
                 <div
                     className="fixed inset-0 z-[100] flex items-center justify-center p-4"
                     onClick={() => setIsPreviewOpen(false)}
@@ -75,7 +104,7 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
                     >
                         <X size={24} />
                     </button>
-                    {images.length > 1 && (
+                    {files.length > 1 && (
                         <>
                             <button
                                 onClick={(e) => { e.stopPropagation(); prevImage(); }}
@@ -93,7 +122,7 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
                     )}
                     <div className="relative w-[90vw] h-[85vh]" onClick={(e) => e.stopPropagation()}>
                         <Image
-                            src={images[activeIndex]}
+                            src={activeFile.fileUrl || ""}
                             alt="Property preview"
                             fill
                             sizes="90vw"
