@@ -60,6 +60,11 @@ const inspectionService = {
         if (note) params.set('note', note);
         const response = await apiClient.put(`/api/v1/Inspection/${id}/respond-reschedule?${params.toString()}`);
         return response.data;
+    },
+
+    handOffToHousingHub: async (id: string): Promise<InspectionResponse> => {
+        const response = await apiClient.put(`/api/v1/Inspection/${id}/handoff`);
+        return response.data;
     }
 };
 

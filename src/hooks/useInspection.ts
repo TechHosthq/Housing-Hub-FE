@@ -71,6 +71,14 @@ export const useInspection = () => {
         }
     });
 
+    const handOffMutation = useMutation({
+        mutationFn: (id: string) => inspectionService.handOffToHousingHub(id),
+        onSuccess: (_, id) => {
+            queryClient.invalidateQueries({ queryKey: ['inspection', id] });
+            queryClient.invalidateQueries({ queryKey: ['owner-inspections'] });
+        }
+    });
+
     return {
         useGetInspection,
         useMyInspections,
@@ -84,5 +92,7 @@ export const useInspection = () => {
         isRescheduling: rescheduleMutation.isPending,
         respondToReschedule: respondToRescheduleMutation.mutate,
         isRespondingToReschedule: respondToRescheduleMutation.isPending,
+        handOffToHousingHub: handOffMutation.mutate,
+        isHandingOff: handOffMutation.isPending,
     };
 };

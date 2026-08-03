@@ -14,7 +14,6 @@ import { useUserRole } from "@/context/UserRoleContext";
 import AcceptInspectionModal from "@/components/inspections/AcceptInspectionModal";
 import DeclineInspectionModal from "@/components/inspections/DeclineInspectionModal";
 import SuggestRescheduleModal from "@/components/inspections/SuggestRescheduleModal";
-import AssignStaffModal from "@/components/inspections/AssignStaffModal";
 import ConfirmDeclineModal from "@/components/inspections/ConfirmDeclineModal";
 import CancelInspectionModal from "@/components/inspections/CancelInspectionModal";
 import { useInspection } from "@/hooks/useInspection";
@@ -29,14 +28,15 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
     const router = useRouter();
     const { role } = useUserRole();
     const currentUser = useAuthStore((state) => state.user);
-    const { 
-        useGetInspection, 
-        respondToInspection, 
+    const {
+        useGetInspection,
+        respondToInspection,
         isResponding,
         reschedule,
         isRescheduling,
         respondToReschedule,
-        isRespondingToReschedule
+        isRespondingToReschedule,
+        handOffToHousingHub
     } = useInspection();
 
     const { data: inspectionResponse, isLoading } = useGetInspection(id);
@@ -44,7 +44,6 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
     const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
     const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
     const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
-    const [isAssignStaffModalOpen, setIsAssignStaffModalOpen] = useState(false);
     const [isConfirmDeclineModalOpen, setIsConfirmDeclineModalOpen] = useState(false);
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
     const [isCancelling, setIsCancelling] = useState(false);
@@ -96,7 +95,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
             return;
         }
         if (optionId === "assign") {
-            setIsAssignStaffModalOpen(true);
+            handleHandOff();
             return;
         }
         if (optionId === "decline") {
@@ -209,19 +208,21 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
         });
     };
 
-    const handleAssignStaff = (staffId: string) => {
-        // This endpoint doesn't seem to exist in the provided list, 
-        // assuming it might be handled by respondToInspection with a specific note/status or separate service.
-        // For now, I'll just mock it since it's not in the provided API list.
-        setIsAssignStaffModalOpen(false);
-        setSuccessConfig({
-            title: "Assigned to Staff",
-            message: "The inspection has been assigned to a Spacehub staff member."
+    const handleHandOff = () => {
+        if (!inspection) return;
+
+        handOffToHousingHub(inspection.id, {
+            onSuccess: () => {
+                setSuccessConfig({
+                    title: "Handed Off to HousingHub",
+                    message: "A HousingHub team member will be assigned to manage this inspection shortly."
+                });
+                setIsSuccessModalOpen(true);
+                setTimeout(() => {
+                    router.push("/inspections");
+                }, 2000);
+            }
         });
-        setIsSuccessModalOpen(true);
-        setTimeout(() => {
-            router.push("/inspections");
-        }, 2000);
     };
 
     const propertyImage = inspection?.propertyImageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
@@ -375,7 +376,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
 
                             {inspection.propertyOwnerId && (
                                 <Link
-                                    href={`/messages?recipientId=${inspection.propertyOwnerId}`}
+                                    href={`/messages?recipientId=${inspection.propertyOwnerId}${inspection.propertyOwnerName ? `&recipientName=${encodeURIComponent(inspection.propertyOwnerName)}` : ""}`}
                                     className="block w-full text-center py-4 rounded-full border-[2px] border-primary-dark text-[16px] font-black text-primary-dark font-montserrat hover:bg-primary-dark/5 transition-all active:scale-[0.98]"
                                 >
                                     Message Owner
@@ -432,7 +433,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                         /* Owner Actions */
                         <div className="mt-8 space-y-4">
                             <Link
-                                href={`/messages?recipientId=${inspection.customerId}`}
+                                href={`/messages?recipientId=${inspection.customerId}${inspection.customerName ? `&recipientName=${encodeURIComponent(inspection.customerName)}` : ""}`}
                                 className="block w-full text-center py-4 rounded-full border-[2px] border-primary-dark text-[16px] font-black text-primary-dark font-montserrat hover:bg-primary-dark/5 transition-all active:scale-[0.98]"
                             >
                                 Message Customer
@@ -502,16 +503,6 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                         onSuggest={handleRescheduleSuggest}
                         initialDate={inspection.scheduledDate ? format(new Date(inspection.scheduledDate), "yyyy-MM-dd") : ""}
                         initialTime={inspection.scheduledTime}
-                    />
-
-                    <AssignStaffModal
-                        isOpen={isAssignStaffModalOpen}
-                        onClose={() => setIsAssignStaffModalOpen(false)}
-                        onAssign={handleAssignStaff}
-                        onReschedule={() => {
-                            setIsAssignStaffModalOpen(false);
-                            setIsRescheduleModalOpen(true);
-                        }}
                     />
 
                     <ConfirmDeclineModal

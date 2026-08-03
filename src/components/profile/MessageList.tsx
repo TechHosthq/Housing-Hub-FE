@@ -13,9 +13,12 @@ interface MessageListProps {
     onThreadSelect: (id: string) => void;
     /** Deep-linked recipient with no existing conversation yet (e.g. "Message Owner"). */
     newRecipientId?: string | null;
+    /** Recipient's display name, passed alongside newRecipientId so the header
+     * doesn't have to wait for a conversation to exist before showing who this is. */
+    newRecipientName?: string | null;
 }
 
-export default function MessageList({ viewMode, selectedId, onThreadSelect, newRecipientId }: MessageListProps) {
+export default function MessageList({ viewMode, selectedId, onThreadSelect, newRecipientId, newRecipientName }: MessageListProps) {
     const { useConversations, useMessages, sendMessage, markAsRead } = useChat();
     const currentUser = useAuthStore((state) => state.user);
     const chatConnection = useChatConnection();
@@ -163,7 +166,7 @@ export default function MessageList({ viewMode, selectedId, onThreadSelect, newR
                     <>
                         <div className="px-8 py-5 border-b border-[#F2F2F2] dark:border-gray-800 flex items-center justify-between bg-white dark:bg-gray-900 shrink-0">
                             <h2 className="text-[16px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">
-                                {activeChat ? (activeChat.participantName || "Unknown User") : "New Message"}
+                                {activeChat ? (activeChat.participantName || "Unknown User") : (newRecipientName || "New Message")}
                             </h2>
                         </div>
 
