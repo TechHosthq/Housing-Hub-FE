@@ -24,7 +24,7 @@ export default function RejectKYCModal({ isOpen, onClose, onReject }: RejectKYCM
             />
 
             {/* Modal */}
-            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[500px] rounded-[24px] p-8 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col gap-6">
+            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[500px] rounded-[24px] p-6 sm:p-8 max-h-[85vh] overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col gap-6">
                 <div className="flex flex-col gap-2 text-center">
                     <h2 className="text-[28px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">Reject KYC Submission</h2>
                     <p className="text-[15px] text-gray-500 dark:text-gray-500 font-medium">

@@ -101,21 +101,21 @@ export default function ResetPasswordModal({ isOpen, onClose }: ResetPasswordMod
                     />
 
                     {/* Modal Content */}
-                    <div className="relative w-full max-w-[480px] bg-white dark:bg-gray-900 rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-                        <div className="p-8">
-                            {/* Header */}
-                            <div className="flex items-center justify-between mb-10">
-                                <h2 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight">
-                                    Change Password
-                                </h2>
-                                <button
-                                    onClick={handleClose}
-                                    className="w-10 h-10 rounded-full flex items-center justify-center text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                                >
-                                    <X size={24} />
-                                </button>
-                            </div>
+                    <div className="relative w-full max-w-[480px] bg-white dark:bg-gray-900 rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 flex flex-col max-h-[85vh]">
+                        {/* Header */}
+                        <div className="flex items-center justify-between px-6 pt-6 sm:px-8 sm:pt-8 mb-10 flex-shrink-0">
+                            <h2 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight">
+                                Change Password
+                            </h2>
+                            <button
+                                onClick={handleClose}
+                                className="w-10 h-10 rounded-full flex items-center justify-center text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
 
+                        <div className="px-6 pb-6 sm:px-8 sm:pb-8 overflow-y-auto">
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 {/* Error banner */}
                                 {error && (

@@ -18,7 +18,7 @@ export default function DeleteUserModal({ isOpen, onClose, onDelete }: DeleteUse
             />
 
             {/* Modal */}
-            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[500px] rounded-[32px] p-10 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col items-center text-center gap-6">
+            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[500px] rounded-[32px] p-6 sm:p-10 max-h-[85vh] overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col items-center text-center gap-6">
                 <h2 className="text-[32px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight">
                     Delete this User?
                 </h2>

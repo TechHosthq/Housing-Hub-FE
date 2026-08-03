@@ -39,8 +39,8 @@ export default function AddStaffModal({ isOpen, onClose, onAdd }: AddStaffModalP
             />
 
             {/* Modal */}
-            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[800px] rounded-[32px] p-10 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col gap-8">
-                <div className="flex items-center justify-between">
+            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[800px] rounded-[32px] p-6 sm:p-10 max-h-[85vh] shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col gap-8">
+                <div className="flex items-center justify-between flex-shrink-0">
                     <h2 className="text-[32px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight">
                         Add New Staff
                     </h2>
@@ -52,7 +52,7 @@ export default function AddStaffModal({ isOpen, onClose, onAdd }: AddStaffModalP
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-8 overflow-y-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="flex flex-col gap-3">
                             <label className="text-[14px] font-medium text-gray-400 dark:text-gray-500">First Name</label>

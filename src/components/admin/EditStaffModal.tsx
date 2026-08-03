@@ -53,20 +53,20 @@ export default function EditStaffModal({ isOpen, onClose, staff, onSave }: EditS
             />
 
             {/* Modal */}
-            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[800px] rounded-[32px] p-10 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col gap-8">
-                <div className="flex items-center justify-between">
+            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[800px] rounded-[32px] p-6 sm:p-10 max-h-[85vh] shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col gap-8">
+                <div className="flex items-center justify-between flex-shrink-0">
                     <h2 className="text-[32px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat tracking-tight text-center w-full">
                         Edit Staff Info
                     </h2>
                     <button
                         onClick={onClose}
-                        className="absolute right-10 top-10 p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 transition-colors"
+                        className="absolute right-6 top-6 sm:right-10 sm:top-10 p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 transition-colors"
                     >
                         <X size={24} />
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-8 text-left">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-8 text-left overflow-y-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="flex flex-col gap-3">
                             <label className="text-[14px] font-medium text-gray-400 dark:text-gray-500 font-montserrat">First Name</label>

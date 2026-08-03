@@ -97,6 +97,19 @@ export interface CreatePropertyRequest {
     files: File[];
     /** true = publish immediately, false = save as draft. Defaults to publish. */
     publish?: boolean;
+    /** Set true to proceed anyway after the backend warned this looks like a duplicate listing. */
+    confirmDuplicate?: boolean;
+}
+
+export interface PossibleDuplicate {
+    propertyId: string;
+    title: string;
+    address: string;
+}
+
+export interface CreatePropertyResult {
+    property: PropertyDetail | null;
+    possibleDuplicate: PossibleDuplicate | null;
 }
 
 export interface UpdatePropertyRequest {
@@ -134,6 +147,7 @@ export interface PropertyQueryParams {
 }
 
 export type PropertyResponse = ApiResponse<PropertyDetail>;
+export type CreatePropertyResponse = ApiResponse<CreatePropertyResult>;
 export type PropertiesResponse = ApiResponse<PaginatedResponse<PropertyDetail>>;
 export type PropertyDashboardResponse = ApiResponse<PropertyDashboardStats>;
 export type PropertyFilesResponse = ApiResponse<PropertyFile[]>;

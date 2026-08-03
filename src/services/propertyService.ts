@@ -1,13 +1,14 @@
 import apiClient from './apiClient';
 import { ApiResponse, PaginatedResponse } from '@/types/auth';
-import { 
-    PropertyDetail, 
-    PropertyDashboardStats, 
+import {
+    PropertyDetail,
+    PropertyDashboardStats,
     PropertyFile,
     CreatePropertyRequest,
     UpdatePropertyRequest,
     PropertyQueryParams,
     PropertyResponse,
+    CreatePropertyResponse,
     PropertiesResponse,
     PropertyDashboardResponse,
     PropertyFilesResponse,
@@ -36,7 +37,7 @@ export const propertyService = {
         return response.data;
     },
 
-    createProperty: async (data: CreatePropertyRequest): Promise<PropertyResponse> => {
+    createProperty: async (data: CreatePropertyRequest): Promise<CreatePropertyResponse> => {
         const formData = new FormData();
         formData.append('Title', data.title);
         formData.append('Description', data.description);
@@ -61,8 +62,9 @@ export const propertyService = {
 
         // true = publish now, false = save as draft (item 21). Defaults to publish.
         formData.append('Publish', String(data.publish ?? true));
+        formData.append('ConfirmDuplicate', String(data.confirmDuplicate ?? false));
 
-        const response = await apiClient.post<PropertyResponse>('/api/v1/Property', formData);
+        const response = await apiClient.post<CreatePropertyResponse>('/api/v1/Property', formData);
         return response.data;
     },
 

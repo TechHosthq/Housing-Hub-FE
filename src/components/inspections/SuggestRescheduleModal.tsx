@@ -36,9 +36,9 @@ export default function SuggestRescheduleModal({
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[550px] p-8 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[550px] p-6 sm:p-8 max-h-[85vh] shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300 flex flex-col">
                 {/* Header */}
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex justify-between items-center mb-6 flex-shrink-0">
                     <h2 className="text-[24px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Suggest Reschedule
                     </h2>
@@ -50,57 +50,60 @@ export default function SuggestRescheduleModal({
                     </button>
                 </div>
 
-                {/* Body */}
-                <p className="text-[15px] text-[#262626] font-medium leading-relaxed mb-8">
-                    Suggest a new date and time for the inspection. Customer can accept or propose another time.
-                </p>
+                {/* Scrollable body */}
+                <div className="overflow-y-auto">
+                    {/* Body */}
+                    <p className="text-[15px] text-[#262626] font-medium leading-relaxed mb-8">
+                        Suggest a new date and time for the inspection. Customer can accept or propose another time.
+                    </p>
 
-                {/* Form */}
-                <div className="space-y-6 mb-10">
-                    {/* Date Input */}
-                    <div>
-                        <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3 uppercase tracking-wider">
-                            Select Date
-                        </label>
-                        <DatePicker value={date} onChange={setDate} />
+                    {/* Form */}
+                    <div className="space-y-6 mb-10">
+                        {/* Date Input */}
+                        <div>
+                            <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3 uppercase tracking-wider">
+                                Select Date
+                            </label>
+                            <DatePicker value={date} onChange={setDate} />
+                        </div>
+
+                        {/* Time Input */}
+                        <div>
+                            <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3 uppercase tracking-wider">
+                                Select Time
+                            </label>
+                            <TimePicker value={time} onChange={setTime} />
+                        </div>
+
+                        {/* Note Input */}
+                        <div>
+                            <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3 uppercase tracking-wider">
+                                Additional Note (Optional)
+                            </label>
+                            <textarea
+                                value={note}
+                                onChange={(e) => setNote(e.target.value)}
+                                className="w-full h-32 px-5 py-4 rounded-xl border border-gray-200 dark:border-gray-800 text-[15px] font-medium text-[#666666] dark:text-gray-400 focus:outline-none focus:border-[#0095FF] resize-none"
+                                placeholder="Book an inspection at your preferred date and time. We coordinate with the homeowner for you."
+                            />
+                        </div>
                     </div>
 
-                    {/* Time Input */}
-                    <div>
-                        <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3 uppercase tracking-wider">
-                            Select Time
-                        </label>
-                        <TimePicker value={time} onChange={setTime} />
+                    {/* Actions */}
+                    <div className="flex gap-4">
+                        <button
+                            onClick={onClose}
+                            className="flex-1 py-4 rounded-full border-[2px] border-[#0095FF] text-[16px] font-bold text-[#0095FF] font-montserrat hover:bg-blue-50 transition-all active:scale-[0.98]"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={() => onSuggest({ date, time: formatTimeTo24h(time), note })}
+                            className="flex-1 py-4 rounded-full bg-[#0B2545] text-[16px] font-bold text-white font-montserrat hover:bg-[#001D54] transition-all shadow-md active:scale-[0.98]"
+                        >
+                            Suggest
+                        </button>
                     </div>
-
-                    {/* Note Input */}
-                    <div>
-                        <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3 uppercase tracking-wider">
-                            Additional Note (Optional)
-                        </label>
-                        <textarea
-                            value={note}
-                            onChange={(e) => setNote(e.target.value)}
-                            className="w-full h-32 px-5 py-4 rounded-xl border border-gray-200 dark:border-gray-800 text-[15px] font-medium text-[#666666] dark:text-gray-400 focus:outline-none focus:border-[#0095FF] resize-none"
-                            placeholder="Book an inspection at your preferred date and time. We coordinate with the homeowner for you."
-                        />
-                    </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-4">
-                    <button
-                        onClick={onClose}
-                        className="flex-1 py-4 rounded-full border-[2px] border-[#0095FF] text-[16px] font-bold text-[#0095FF] font-montserrat hover:bg-blue-50 transition-all active:scale-[0.98]"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={() => onSuggest({ date, time: formatTimeTo24h(time), note })}
-                        className="flex-1 py-4 rounded-full bg-[#0B2545] text-[16px] font-bold text-white font-montserrat hover:bg-[#001D54] transition-all shadow-md active:scale-[0.98]"
-                    >
-                        Suggest
-                    </button>
                 </div>
             </div>
         </div>

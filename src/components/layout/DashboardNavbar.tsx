@@ -187,6 +187,13 @@ export default function DashboardNavbar() {
                                         )}
                                     </button>
                                     <Link
+                                        href="/preferences"
+                                        className="text-[#1A1A1A] dark:text-gray-100 font-bold text-base"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        Saved Searches
+                                    </Link>
+                                    <Link
                                         href="/settings"
                                         className="text-[#1A1A1A] dark:text-gray-100 font-bold text-base"
                                         onClick={() => setIsMenuOpen(false)}

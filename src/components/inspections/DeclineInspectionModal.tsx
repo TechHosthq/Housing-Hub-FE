@@ -52,9 +52,9 @@ export default function DeclineInspectionModal({
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[550px] p-8 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[550px] p-6 sm:p-8 max-h-[85vh] shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300 flex flex-col">
                 {/* Header */}
-                <div className="flex justify-between items-center mb-4">
+                <div className="flex justify-between items-center mb-4 flex-shrink-0">
                     <h2 className="text-[24px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Decline Inspection
                     </h2>
@@ -66,37 +66,40 @@ export default function DeclineInspectionModal({
                     </button>
                 </div>
 
-                {/* Body */}
-                <p className="text-[15px] text-[#262626] font-medium leading-relaxed mb-8">
-                    Please provide a reason for declining this inspection request.
-                </p>
+                {/* Scrollable body */}
+                <div className="overflow-y-auto">
+                    {/* Body */}
+                    <p className="text-[15px] text-[#262626] font-medium leading-relaxed mb-8">
+                        Please provide a reason for declining this inspection request.
+                    </p>
 
-                {/* Options List */}
-                <div className="space-y-4">
-                    {DECLINE_OPTIONS.map((option) => (
-                        <button
-                            key={option.id}
-                            onClick={() => onSelectOption(option.id)}
-                            className={`w-full group flex items-center justify-between p-5 rounded-[24px] border-[1.5px] transition-all active:scale-[0.98] ${option.type === "danger"
-                                    ? "border-[#FF4D4C] hover:bg-red-50/50"
-                                    : "border-[#0095FF] hover:bg-blue-50/50"
-                                }`}
-                        >
-                            <div className="text-left">
-                                <h3 className="text-[16px] font-bold font-montserrat text-[#1A1A1A] dark:text-gray-100 mb-0.5">
-                                    {option.title}
-                                </h3>
-                                <p className="text-[14px] text-[#A3A3A3] font-medium">
-                                    {option.description}
-                                </p>
-                            </div>
-                            <ChevronRight
-                                size={20}
-                                className={`transition-transform group-hover:translate-x-1 ${option.type === "danger" ? "text-[#FF4D4C]" : "text-[#0095FF]"
+                    {/* Options List */}
+                    <div className="space-y-4">
+                        {DECLINE_OPTIONS.map((option) => (
+                            <button
+                                key={option.id}
+                                onClick={() => onSelectOption(option.id)}
+                                className={`w-full group flex items-center justify-between p-5 rounded-[24px] border-[1.5px] transition-all active:scale-[0.98] ${option.type === "danger"
+                                        ? "border-[#FF4D4C] hover:bg-red-50/50"
+                                        : "border-[#0095FF] hover:bg-blue-50/50"
                                     }`}
-                            />
-                        </button>
-                    ))}
+                            >
+                                <div className="text-left">
+                                    <h3 className="text-[16px] font-bold font-montserrat text-[#1A1A1A] dark:text-gray-100 mb-0.5">
+                                        {option.title}
+                                    </h3>
+                                    <p className="text-[14px] text-[#A3A3A3] font-medium">
+                                        {option.description}
+                                    </p>
+                                </div>
+                                <ChevronRight
+                                    size={20}
+                                    className={`transition-transform group-hover:translate-x-1 ${option.type === "danger" ? "text-[#FF4D4C]" : "text-[#0095FF]"
+                                        }`}
+                                />
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

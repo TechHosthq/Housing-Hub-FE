@@ -28,7 +28,7 @@ export default function SuccessModal({ isOpen, onClose, title, message }: Succes
             <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300" />
 
             {/* Modal */}
-            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[440px] rounded-[32px] p-12 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col items-center text-center gap-6">
+            <div className="relative bg-white dark:bg-gray-900 w-full max-w-[440px] rounded-[32px] p-6 sm:p-12 max-h-[85vh] overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col items-center text-center gap-6">
                 {/* Success Icon */}
                 <div className="w-20 h-20 rounded-full bg-[#E8F9F1] flex items-center justify-center text-[#00C853] mb-2">
                     <CheckCircle2 size={48} strokeWidth={2.5} />
