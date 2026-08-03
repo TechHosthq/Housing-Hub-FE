@@ -34,7 +34,7 @@ export default function DashboardNavbar() {
     };
 
     const navLinks = [
-        { name: "Dashboard", href: "/dashboard" },
+        { name: "Dashboard", href: "/" },
         ...(role === "Owner" ? [{ name: "Property", href: "/properties" }] : []),
         { name: "Inspection", href: "/inspections" },
         { name: "Message", href: "/messages" },

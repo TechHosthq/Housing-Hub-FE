@@ -18,8 +18,8 @@ const DECLINE_OPTIONS: DeclineOption[] = [
     },
     {
         id: "assign",
-        title: "Assign To Spacehub Staff",
-        description: "Let a staff member handle the inspection",
+        title: "Hand Off to HousingHub",
+        description: "Let a HousingHub staff member handle the inspection for you",
         type: "neutral"
     },
     {
