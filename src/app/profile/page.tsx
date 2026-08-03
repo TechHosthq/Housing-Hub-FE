@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
 import AccountSidebar from "@/components/profile/AccountSidebar";
 import ProfileForm from "@/components/profile/ProfileForm";
+import DocumentPreviewModal from "@/components/common/DocumentPreviewModal";
 import Link from "next/link";
 import { Check, Clock, ShieldAlert } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -13,6 +15,7 @@ export default function MyAccountPage() {
     const user = useAuthStore((state) => state.user);
     const { useGetCustomer } = useCustomer();
     const { data: customerResponse, isLoading } = useGetCustomer(user?.id || null);
+    const [isDocumentPreviewOpen, setIsDocumentPreviewOpen] = useState(false);
 
     const customer = customerResponse?.data;
     // Derive real KYC state from the same source the dashboard uses, instead of a
@@ -71,14 +74,13 @@ export default function MyAccountPage() {
                         </div>
 
                         {status === "verified" && customer?.idDocumentUrl ? (
-                            <a
-                                href={customer.idDocumentUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <button
+                                type="button"
+                                onClick={() => setIsDocumentPreviewOpen(true)}
                                 className="relative z-10 px-8 py-3 rounded-full border border-[#0095FF] text-[#0095FF] text-[13px] font-bold hover:bg-[#0095FF]/5 transition-all active:scale-95 shadow-sm"
                             >
                                 View KYC Document
-                            </a>
+                            </button>
                         ) : status === "none" ? (
                             <Link
                                 href="/kyc/personal-info"
@@ -98,6 +100,13 @@ export default function MyAccountPage() {
                     <ProfileForm />
                 </div>
             </div>
+
+            {isDocumentPreviewOpen && (
+                <DocumentPreviewModal
+                    url={customer?.idDocumentUrl || null}
+                    onClose={() => setIsDocumentPreviewOpen(false)}
+                />
+            )}
 
             <Footer />
         </main>

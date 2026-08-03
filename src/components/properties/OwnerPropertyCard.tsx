@@ -2,10 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { MoreVertical, MapPin, Eye, Clock, Loader2 } from "lucide-react";
+import { MoreVertical, MapPin, Eye, Clock, Loader2, Play } from "lucide-react";
 import DeleteListingModal from "./DeleteListingModal";
 import PropertyDeletedModal from "./PropertyDeletedModal";
-import { PropertyDetail } from "@/types/property";
+import { PropertyDetail, PropertyFileType } from "@/types/property";
 import { useProperty } from "@/hooks/useProperty";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -55,7 +55,9 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
     const title = property.title || "Property Title";
     const price = property.price.toLocaleString();
     const location = property.propertyAddress?.city || "Lagos";
-    const image = property.files?.[0]?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
+    const coverFile = property.files?.find(f => f.type === PropertyFileType.Image) || property.files?.[0];
+    const isCoverVideo = coverFile?.type === PropertyFileType.Video;
+    const image = coverFile?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070";
     const views = property.viewCount || 0;
     const requests = property.inspectionCount ?? 0;
 
@@ -65,13 +67,27 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
             className="bg-white dark:bg-gray-900 rounded-[24px] border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-md transition-shadow group relative flex flex-col h-full cursor-pointer"
         >
             {/* Image Container */}
-            <div className="relative h-64 w-full flex-shrink-0">
-                <Image
-                    src={image}
-                    alt={title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+            <div className="relative h-64 w-full flex-shrink-0 bg-black">
+                {isCoverVideo ? (
+                    <>
+                        <video
+                            src={image}
+                            muted
+                            preload="metadata"
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                            <Play size={32} className="text-white" fill="white" />
+                        </div>
+                    </>
+                ) : (
+                    <Image
+                        src={image}
+                        alt={title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                )}
 
                 {/* Draft / published badge */}
                 {!property.isPublished && (
