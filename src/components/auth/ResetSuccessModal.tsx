@@ -35,7 +35,7 @@ export default function ResetSuccessModal({ isOpen, onClose }: ResetSuccessModal
 
             {/* Modal Content */}
             <div
-                className={`relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[320px] p-10 flex flex-col items-center text-center shadow-2xl transition-transform duration-300 ${isOpen ? "scale-100" : "scale-95"
+                className={`relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[320px] p-6 sm:p-10 max-h-[85vh] overflow-y-auto flex flex-col items-center text-center shadow-2xl transition-transform duration-300 ${isOpen ? "scale-100" : "scale-95"
                     }`}
             >
                 {/* Success Icon */}

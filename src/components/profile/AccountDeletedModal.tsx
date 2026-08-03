@@ -28,7 +28,7 @@ export default function AccountDeletedModal({ isOpen }: AccountDeletedModalProps
             <div className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" />
 
             {/* Modal Content */}
-            <div className="relative w-full max-w-[440px] bg-white dark:bg-gray-900 rounded-[32px] shadow-2xl p-12 flex flex-col items-center justify-center animate-in fade-in zoom-in duration-500">
+            <div className="relative w-full max-w-[440px] bg-white dark:bg-gray-900 rounded-[32px] shadow-2xl p-6 sm:p-12 max-h-[85vh] overflow-y-auto flex flex-col items-center justify-center animate-in fade-in zoom-in duration-500">
                 {/* Trash Icon Circle */}
                 <div className="w-24 h-24 bg-[#E9F3FF] rounded-full flex items-center justify-center text-[#0095FF] mb-10 shadow-sm relative">
                     {/* Subtle glow effect */}

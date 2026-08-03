@@ -52,9 +52,9 @@ export default function ShareModal({ isOpen, onClose, propertyTitle }: ShareModa
             />
 
             {/* Modal Content */}
-            <div className={`relative bg-white dark:bg-gray-900 rounded-[28px] p-8 w-full max-w-[400px] shadow-2xl transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
+            <div className={`relative bg-white dark:bg-gray-900 rounded-[28px] p-6 sm:p-8 w-full max-w-[400px] max-h-[85vh] shadow-2xl transform transition-all duration-300 flex flex-col ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
                 {/* Header */}
-                <div className="flex justify-between items-center mb-10">
+                <div className="flex justify-between items-center mb-10 flex-shrink-0">
                     <h2 className="text-[24px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Share Property
                     </h2>
@@ -67,7 +67,7 @@ export default function ShareModal({ isOpen, onClose, propertyTitle }: ShareModa
                 </div>
 
                 {/* Options */}
-                <div className="space-y-4">
+                <div className="space-y-4 overflow-y-auto">
                     <button
                         onClick={handleCopyLink}
                         className="w-full px-6 py-4 rounded-[30px] border border-[#E5E5E5] dark:border-gray-800 text-left text-[#999999] dark:text-gray-500 text-sm font-bold hover:border-primary-dark hover:text-primary-dark transition-all flex items-center justify-between"

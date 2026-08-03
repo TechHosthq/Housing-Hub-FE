@@ -5,7 +5,7 @@ import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
 import { useNotification } from "@/hooks/useNotification";
 import { Notification, NotificationType } from "@/types/notification";
-import { Bell, Check, Loader2, Info, Calendar, UserCheck, XCircle, MessageCircle } from "lucide-react";
+import { Bell, Check, Loader2, Info, Calendar, XCircle, MessageCircle, BellRing } from "lucide-react";
 import { format } from "date-fns";
 import NotificationDetailModal from "@/components/notifications/NotificationDetailModal";
 
@@ -16,8 +16,7 @@ const notificationIcons: Record<number, any> = {
     [NotificationType.InspectionRescheduled]: Calendar,
     [NotificationType.InspectionCancelled]: XCircle,
     [NotificationType.NewMessage]: MessageCircle,
-    [NotificationType.KYCApproved]: UserCheck,
-    [NotificationType.KYCRejected]: XCircle,
+    [NotificationType.PropertyMatch]: BellRing,
 };
 
 const iconColors: Record<number, string> = {
@@ -27,8 +26,7 @@ const iconColors: Record<number, string> = {
     [NotificationType.InspectionRescheduled]: "bg-orange-100 text-orange-600",
     [NotificationType.InspectionCancelled]: "bg-red-100 text-red-600 dark:text-red-400",
     [NotificationType.NewMessage]: "bg-blue-100 text-blue-600",
-    [NotificationType.KYCApproved]: "bg-green-100 text-green-600 dark:text-green-400",
-    [NotificationType.KYCRejected]: "bg-red-100 text-red-600 dark:text-red-400",
+    [NotificationType.PropertyMatch]: "bg-purple-100 text-purple-600",
 };
 
 export default function NotificationsPage() {

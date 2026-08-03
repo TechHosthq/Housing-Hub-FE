@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { X } from "lucide-react";
 import { format } from "date-fns";
 import { Notification } from "@/types/notification";
@@ -46,6 +47,14 @@ export default function NotificationDetailModal({ isOpen, onClose, notification 
                     <p className="text-[15px] text-[#666666] dark:text-gray-400 font-medium leading-relaxed whitespace-pre-wrap">
                         {notification.message}
                     </p>
+                    {notification.propertyId && (
+                        <Link
+                            href={`/property/${notification.propertyId}`}
+                            className="inline-flex mt-6 px-6 py-3 rounded-full bg-primary-dark text-white text-[14px] font-bold hover:opacity-90 transition-opacity"
+                        >
+                            View Property
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>

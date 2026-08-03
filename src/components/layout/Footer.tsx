@@ -4,9 +4,9 @@ import { Search } from "lucide-react";
 
 export default function Footer() {
     return (
-        <footer className="bg-[#0B2545] dark:bg-[#041d40] text-white pt-24 pb-16 px-8">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-20 mb-16">
-                <div className="space-y-6">
+        <footer className="bg-[#0B2545] text-white pt-16 md:pt-24 pb-16 px-6 sm:px-8">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 lg:gap-20 mb-16">
+                <div className="space-y-6 col-span-2 sm:col-span-1">
                     <div className="flex items-center gap-3">
                     <Link href="/" className="flex items-center">
                         <Image
@@ -18,7 +18,7 @@ export default function Footer() {
                             />
                     </Link>
                     </div>
-                    <p className="text-white/80 text-base font-medium max-w-[196px]">
+                    <p className="text-white/80 text-base font-medium max-w-[280px]">
                         Find Verified Properties And Book Inspections With Ease.
                     </p>
                 </div>

@@ -32,7 +32,7 @@ export default function SuccessModal({ isOpen, onClose, title, message }: Succes
             />
 
             {/* Modal Content */}
-            <div className={`relative bg-white dark:bg-gray-900 rounded-[28px] p-10 w-full max-w-[320px] shadow-2xl flex flex-col items-center text-center transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
+            <div className={`relative bg-white dark:bg-gray-900 rounded-[28px] p-6 sm:p-10 w-full max-w-[320px] max-h-[85vh] overflow-y-auto shadow-2xl flex flex-col items-center text-center transform transition-all duration-300 ${isVisible ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}`}>
                 {/* Success Icon */}
                 <div className="w-20 h-20 rounded-full bg-[#E9F3FF] flex items-center justify-center mb-6 relative">
                     <div className="absolute inset-0 rounded-full bg-[#E9F3FF] animate-ping opacity-20" />

@@ -82,6 +82,8 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
 
     // Success Modal State
     const [isPublishedModalOpen, setIsPublishedModalOpen] = useState(false);
+    const [duplicateWarning, setDuplicateWarning] = useState<{ title: string; address: string } | null>(null);
+    const [pendingPublish, setPendingPublish] = useState(true);
     const [images, setImages] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
     const [imageError, setImageError] = useState("");
@@ -221,7 +223,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
     };
 
     // publish=false saves the listing as a draft the owner can publish later (item 21).
-    const handlePublish = async (publish: boolean = true) => {
+    const handlePublish = async (publish: boolean = true, confirmDuplicate: boolean = false) => {
         if (!user) {
             alert("You must be logged in to publish a property.");
             return;
@@ -247,9 +249,18 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
             country: "Nigeria",
             postalCode: "100001",
             files: images,
-            publish
+            publish,
+            confirmDuplicate
         }, {
-            onSuccess: () => {
+            onSuccess: (response) => {
+                if (response.data?.possibleDuplicate) {
+                    setPendingPublish(publish);
+                    setDuplicateWarning({
+                        title: response.data.possibleDuplicate.title,
+                        address: response.data.possibleDuplicate.address
+                    });
+                    return;
+                }
                 if (publish) {
                     setIsPublishedModalOpen(true);
                 } else {
@@ -260,6 +271,11 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                 alert(error?.response?.data?.message || "Failed to save property. Please check your inputs.");
             }
         });
+    };
+
+    const handleConfirmDuplicate = () => {
+        setDuplicateWarning(null);
+        handlePublish(pendingPublish, true);
     };
 
     const handleUpdate = (publishAfterSave: boolean = false) => {
@@ -444,7 +460,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
 
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
-                        Pictures (Multiple)<span className="text-red-500">*</span>
+                        Photos & Videos (Multiple)<span className="text-red-500">*</span>
                     </label>
 
                     <div
@@ -454,9 +470,9 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                         <div className="w-12 h-12 rounded-full bg-white dark:bg-gray-900 shadow-sm flex items-center justify-center mb-4">
                             <Upload size={24} className="text-gray-400 dark:text-gray-500" />
                         </div>
-                        <span className="text-[16px] font-bold text-gray-400 dark:text-gray-500">Upload Images</span>
+                        <span className="text-[16px] font-bold text-gray-400 dark:text-gray-500">Upload Images or Videos</span>
                         <p className="text-[11px] font-bold text-gray-300 mt-2 uppercase tracking-wide">
-                            JPG, PNG, GIF, WEBP or BMP, max 10MB (up to 10 images)
+                            JPG, PNG, GIF, WEBP, BMP images or MP4, MOV, AVI, MKV, WEBM videos, max 10MB (up to 10 files)
                         </p>
                     </div>
                     <input
@@ -464,7 +480,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                         ref={fileInputRef}
                         onChange={handleImageUpload}
                         multiple
-                        accept="image/*"
+                        accept="image/*,video/*"
                         className="hidden"
                     />
                     {imageError && (
@@ -485,7 +501,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                                     type="button"
                                     onClick={(e) => { e.stopPropagation(); handleDeleteExistingFile(file.id); }}
                                     disabled={isDeletingFile}
-                                    className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity shadow-lg disabled:opacity-50"
+                                    className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white opacity-80 hover:opacity-100 transition-opacity shadow-lg disabled:opacity-50"
                                 >
                                     <X size={14} strokeWidth={3} />
                                 </button>
@@ -502,7 +518,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                                 </button>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); removeImage(index); }}
-                                    className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                                    className="absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white opacity-80 hover:opacity-100 transition-opacity shadow-lg"
                                 >
                                     <X size={14} strokeWidth={3} />
                                 </button>
@@ -715,6 +731,48 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                 isOpen={isPublishedModalOpen}
                 onClose={() => { setIsPublishedModalOpen(false); window.location.href = "/properties"; }}
             />
+
+            {duplicateWarning && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md transition-all animate-in fade-in duration-300 p-4">
+                    <div className="bg-white dark:bg-gray-900 rounded-[24px] max-w-md w-full p-6 sm:p-8 max-h-[85vh] overflow-y-auto shadow-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center text-center animate-in zoom-in-95 duration-200">
+                        <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mb-6">
+                            <svg className="w-8 h-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+
+                        <h2 className="text-[22px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3">
+                            Similar Listing Found
+                        </h2>
+
+                        <p className="text-gray-500 dark:text-gray-500 text-sm font-medium leading-relaxed mb-2">
+                            A listing already exists at this address:
+                        </p>
+                        <p className="text-[#1A1A1A] dark:text-gray-100 text-sm font-bold mb-1">
+                            {duplicateWarning.title}
+                        </p>
+                        <p className="text-gray-500 dark:text-gray-500 text-xs font-medium mb-8">
+                            {duplicateWarning.address}
+                        </p>
+
+                        <div className="flex gap-4 w-full">
+                            <button
+                                onClick={() => setDuplicateWarning(null)}
+                                className="flex-1 py-3 rounded-full border border-gray-200 dark:border-gray-800 font-bold text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleConfirmDuplicate}
+                                disabled={isCreating}
+                                className="flex-1 py-3 rounded-full bg-[#0B2545] text-white font-bold text-sm hover:opacity-90 transition-all disabled:opacity-50"
+                            >
+                                Continue Anyway
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 
@@ -740,7 +798,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
 
             {showKycModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md transition-all animate-in fade-in duration-300">
-                    <div className="bg-white dark:bg-gray-900 rounded-[24px] max-w-md w-full p-8 shadow-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center text-center animate-in zoom-in-95 duration-200">
+                    <div className="bg-white dark:bg-gray-900 rounded-[24px] max-w-md w-full p-6 sm:p-8 max-h-[85vh] overflow-y-auto shadow-2xl border border-gray-100 dark:border-gray-800 flex flex-col items-center text-center animate-in zoom-in-95 duration-200">
                         {/* Shield Warning Icon */}
                         <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mb-6">
                             <svg className="w-8 h-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

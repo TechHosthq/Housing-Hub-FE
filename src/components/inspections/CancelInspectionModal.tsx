@@ -21,7 +21,7 @@ export default function CancelInspectionModal({ isOpen, isCancelling, onClose, o
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white dark:bg-gray-900 rounded-[24px] w-full max-w-[500px] p-12 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-[24px] w-full max-w-[500px] p-6 sm:p-12 max-h-[85vh] overflow-y-auto shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
                 <div className="flex flex-col items-center text-center">
                     {/* Content */}
                     <h2 className="text-[32px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-6">

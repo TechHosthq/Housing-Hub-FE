@@ -34,9 +34,9 @@ export default function ConfirmDeclineModal({
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[550px] p-8 overflow-hidden shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-[32px] w-full max-w-[550px] p-6 sm:p-8 max-h-[85vh] shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300 flex flex-col">
                 {/* Header */}
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex justify-between items-center mb-6 flex-shrink-0">
                     <h2 className="text-[28px] font-bold text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                         Decline Inspection
                     </h2>
@@ -48,45 +48,48 @@ export default function ConfirmDeclineModal({
                     </button>
                 </div>
 
-                {/* Body */}
-                <p className="text-[15px] text-[#262626] font-medium leading-relaxed mb-8">
-                    Please provide a reason for declining this inspection request.
-                </p>
+                {/* Scrollable body */}
+                <div className="overflow-y-auto">
+                    {/* Body */}
+                    <p className="text-[15px] text-[#262626] font-medium leading-relaxed mb-8">
+                        Please provide a reason for declining this inspection request.
+                    </p>
 
-                {/* Textarea Section */}
-                <div className="mb-8">
-                    <div className="relative">
-                        <textarea
-                            value={reason}
-                            onChange={(e) => setReason(e.target.value.slice(0, maxChars))}
-                            className="w-full h-40 p-5 rounded-[12px] border border-[#E5E5E5] dark:border-gray-800 bg-white dark:bg-gray-900 resize-none focus:outline-none focus:border-[#0095FF] focus:ring-2 focus:ring-[#0095FF]/10 text-[15px] text-[#1A1A1A] dark:text-gray-100 font-medium placeholder:text-[#A3A3A3]"
-                            placeholder="Provide a reason..."
-                            maxLength={maxChars}
-                        />
-                        <div className="absolute -bottom-7 right-0 text-[12px] font-bold text-[#A3A3A3]">
-                            {reason.length}/{maxChars} Characters
+                    {/* Textarea Section */}
+                    <div className="mb-8">
+                        <div className="relative">
+                            <textarea
+                                value={reason}
+                                onChange={(e) => setReason(e.target.value.slice(0, maxChars))}
+                                className="w-full h-40 p-5 rounded-[12px] border border-[#E5E5E5] dark:border-gray-800 bg-white dark:bg-gray-900 resize-none focus:outline-none focus:border-[#0095FF] focus:ring-2 focus:ring-[#0095FF]/10 text-[15px] text-[#1A1A1A] dark:text-gray-100 font-medium placeholder:text-[#A3A3A3]"
+                                placeholder="Provide a reason..."
+                                maxLength={maxChars}
+                            />
+                            <div className="absolute -bottom-7 right-0 text-[12px] font-bold text-[#A3A3A3]">
+                                {reason.length}/{maxChars} Characters
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Footer Buttons */}
-                <div className="flex gap-4 mt-4">
-                    <button
-                        onClick={onClose}
-                        className="flex-1 py-4 px-6 rounded-full border border-[#0095FF] text-[15px] font-bold text-[#0095FF] hover:bg-blue-50/50 transition-all active:scale-[0.98]"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={handleConfirm}
-                        disabled={!reason.trim()}
-                        className={`flex-1 py-4 px-6 rounded-full border-[1.5px] text-[15px] font-bold transition-all active:scale-[0.98] ${!reason.trim()
-                            ? "border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
-                            : "border-[#FF4D4C] text-[#FF4D4C] hover:bg-red-50"
-                            }`}
-                    >
-                        Confirm Decline
-                    </button>
+                    {/* Footer Buttons */}
+                    <div className="flex gap-4 mt-4">
+                        <button
+                            onClick={onClose}
+                            className="flex-1 py-4 px-6 rounded-full border border-[#0095FF] text-[15px] font-bold text-[#0095FF] hover:bg-blue-50/50 transition-all active:scale-[0.98]"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleConfirm}
+                            disabled={!reason.trim()}
+                            className={`flex-1 py-4 px-6 rounded-full border-[1.5px] text-[15px] font-bold transition-all active:scale-[0.98] ${!reason.trim()
+                                ? "border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                                : "border-[#FF4D4C] text-[#FF4D4C] hover:bg-red-50"
+                                }`}
+                        >
+                            Confirm Decline
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
