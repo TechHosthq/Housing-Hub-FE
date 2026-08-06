@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useRouter } from "next/navigation";
 import { NIGERIAN_STATES } from "@/lib/nigerianStates";
+import { useToastStore } from "@/store/useToastStore";
 
 const PROPERTY_TYPES = ["House", "Apartment", "Guesthouse", "Flat", "Duplex"];
 const FEATURES = ["Wifi", "Car Pack", "Security Camera", "Swimming Pool", "Gym", "Generator", "Balcony"];
@@ -25,8 +26,11 @@ const FEATURES_MAP: Record<string, number> = {
     "Balcony": 64
 };
 
-// Matches the backend's ValidateFile allowlist exactly (PropertyCommandService).
-const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+// File extensions match the backend's ValidateFile allowlist exactly (PropertyCommandService).
+// Size is capped well below the backend's own 10MB limit because uploads go through API
+// Gateway + Lambda, which has a hard 6MB payload ceiling (worse once multipart/base64
+// overhead is added) — stopgap until uploads move to direct-to-S3 presigned URLs.
+const MAX_FILE_SIZE_BYTES = 4 * 1024 * 1024;
 const ALLOWED_FILE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".mp4", ".mov", ".avi", ".mkv", ".webm"];
 
 interface AddPropertyFormProps {
@@ -40,6 +44,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
     const [step, setStep] = useState(1);
     const router = useRouter();
     const { user } = useAuth();
+    const { showSuccess, showError } = useToastStore();
     const {
         createProperty, isCreating,
         updateProperty, isUpdating,
@@ -196,7 +201,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                 continue;
             }
             if (file.size > MAX_FILE_SIZE_BYTES) {
-                error = `${file.name}: file is larger than 10MB.`;
+                error = `${file.name}: file is larger than 4MB.`;
                 continue;
             }
             validFiles.push(file);
@@ -282,11 +287,18 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
     };
 
     const handleUpdate = (publishAfterSave: boolean = false) => {
-        if (!user || !editPropertyId) return;
+        if (!editPropertyId) return;
+
+        if (!user) {
+            showError("Your session has expired. Please log in again.");
+            router.push("/login");
+            return;
+        }
 
         const featuresValue = selectedFeatures.reduce((acc, feature) => acc | FEATURES_MAP[feature], 0);
 
         const finishUp = () => {
+            showSuccess(publishAfterSave ? "Property updated and published." : "Property updated successfully.");
             if (publishAfterSave) {
                 setPublished({ id: editPropertyId, publish: true }, {
                     onSettled: () => router.push("/properties"),
@@ -475,7 +487,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                         </div>
                         <span className="text-[16px] font-bold text-gray-400 dark:text-gray-500">Upload Images or Videos</span>
                         <p className="text-[11px] font-bold text-gray-300 mt-2 uppercase tracking-wide">
-                            JPG, PNG, GIF, WEBP, BMP images or MP4, MOV, AVI, MKV, WEBM videos, max 10MB (up to 10 files)
+                            JPG, PNG, GIF, WEBP, BMP images or MP4, MOV, AVI, MKV, WEBM videos, max 4MB (up to 10 files)
                         </p>
                     </div>
                     <input

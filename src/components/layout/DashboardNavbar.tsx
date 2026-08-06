@@ -34,7 +34,9 @@ export default function DashboardNavbar() {
     };
 
     const navLinks = [
-        { name: "Dashboard", href: "/" },
+        // Owners get their dedicated overview (property/inspection stats); customers
+        // keep the unified browsing homepage (issue 5b/5c) since they have no such overview.
+        { name: "Dashboard", href: role === "Owner" ? "/dashboard" : "/" },
         ...(role === "Owner" ? [{ name: "Property", href: "/properties" }] : []),
         { name: "Inspection", href: "/inspections" },
         { name: "Message", href: "/messages" },

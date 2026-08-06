@@ -117,7 +117,7 @@ export default function Navbar() {
                                         <span className="text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100">Profile</span>
                                     </Link>
                                     <Link
-                                        href="/"
+                                        href={roleLabel === "Owner" ? "/dashboard" : "/"}
                                         onClick={() => setIsUserMenuOpen(false)}
                                         className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group"
                                     >
@@ -204,7 +204,7 @@ export default function Navbar() {
                                         <User size={18} className="text-gray-400 dark:text-gray-500" /> Profile
                                     </Link>
                                     <Link
-                                        href="/"
+                                        href={roleLabel === "Owner" ? "/dashboard" : "/"}
                                         className="text-[#1A1A1A] dark:text-gray-100 font-bold text-base flex items-center gap-2"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
