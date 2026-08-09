@@ -1,10 +1,9 @@
 import apiClient from './apiClient';
-import { 
-    CustomerResponse, 
-    CustomersResponse, 
-    UpdateProfileRequest, 
+import {
+    CustomerResponse,
+    UpdateProfileRequest,
     CreateCustomerRequest,
-    SubmitKycRequest, 
+    SubmitKycRequest,
     KycResponse,
     DocumentUploadResponse,
     ApiResponse,
@@ -12,16 +11,16 @@ import {
     AddressRequest
 } from '@/types/customer';
 
+/**
+ * Consumer-app customer API.
+ *
+ * Administrative operations (listing all customers, approving KYC, deleting
+ * accounts) deliberately live only in the separate admin application. They are
+ * not exposed here so they cannot be called from a consumer session.
+ */
 const customerService = {
     getCustomer: async (id: string): Promise<CustomerResponse> => {
         const response = await apiClient.get(`/api/v1/Customer/${id}`);
-        return response.data;
-    },
-
-    getAllCustomers: async (pageNumber: number = 1, pageSize: number = 20): Promise<CustomersResponse> => {
-        const response = await apiClient.get('/api/v1/Customer/all', {
-            params: { pageNumber, pageSize }
-        });
         return response.data;
     },
 
@@ -47,11 +46,6 @@ const customerService = {
         return response.data;
     },
 
-    verifyKyc: async (id: string, approve: boolean): Promise<KycResponse> => {
-        const response = await apiClient.put(`/api/v1/Customer/${id}/kyc/verify?approve=${approve}`);
-        return response.data;
-    },
-
     // Returns the stored image URL (ApiResponse<string>).
     uploadProfilePhoto: async (file: File): Promise<ApiResponse<string | null>> => {
         const formData = new FormData();
@@ -62,11 +56,6 @@ const customerService = {
 
     removeProfilePhoto: async (): Promise<ApiResponse<string | null>> => {
         const response = await apiClient.delete('/api/v1/Customer/profile/photo');
-        return response.data;
-    },
-
-    deleteCustomer: async (id: string): Promise<ApiResponse<boolean>> => {
-        const response = await apiClient.delete(`/api/v1/Customer/${id}`);
         return response.data;
     },
 

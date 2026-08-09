@@ -12,11 +12,6 @@ export const useCustomer = () => {
         enabled: !!id
     });
 
-    const useAllCustomers = (pageNumber: number = 1, pageSize: number = 20) => useQuery({
-        queryKey: ['customers', pageNumber, pageSize],
-        queryFn: () => customerService.getAllCustomers(pageNumber, pageSize)
-    });
-
     const createCustomerMutation = useMutation({
         mutationFn: (data: CreateCustomerRequest) => customerService.createCustomer(data),
         onSuccess: (response) => {
@@ -44,14 +39,6 @@ export const useCustomer = () => {
 
     const uploadDocumentMutation = useMutation({
         mutationFn: (file: File) => customerService.uploadKycDocument(file)
-    });
-
-    const verifyKycMutation = useMutation({
-        mutationFn: ({ id, approve }: { id: string, approve: boolean }) => customerService.verifyKyc(id, approve),
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: ['customer', variables.id] });
-            queryClient.invalidateQueries({ queryKey: ['customers'] });
-        }
     });
 
     const currentUserId = useAuthStore.getState().user?.id;
@@ -85,7 +72,6 @@ export const useCustomer = () => {
 
     return {
         useGetCustomer,
-        useAllCustomers,
         createCustomer: createCustomerMutation.mutate,
         isCreatingCustomer: createCustomerMutation.isPending,
         updateProfile: updateProfileMutation.mutate,
@@ -94,8 +80,6 @@ export const useCustomer = () => {
         isSubmittingKyc: submitKycMutation.isPending,
         uploadDocument: uploadDocumentMutation.mutateAsync,
         isUploadingDocument: uploadDocumentMutation.isPending,
-        verifyKyc: verifyKycMutation.mutate,
-        isVerifyingKyc: verifyKycMutation.isPending,
         uploadProfilePhoto: uploadPhotoMutation.mutateAsync,
         isUploadingPhoto: uploadPhotoMutation.isPending,
         removeProfilePhoto: removePhotoMutation.mutateAsync,
