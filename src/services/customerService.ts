@@ -2,7 +2,6 @@ import apiClient from './apiClient';
 import {
     CustomerResponse,
     UpdateProfileRequest,
-    CreateCustomerRequest,
     SubmitKycRequest,
     KycResponse,
     DocumentUploadResponse,
@@ -21,11 +20,6 @@ import {
 const customerService = {
     getCustomer: async (id: string): Promise<CustomerResponse> => {
         const response = await apiClient.get(`/api/v1/Customer/${id}`);
-        return response.data;
-    },
-
-    createCustomer: async (data: CreateCustomerRequest): Promise<CustomerResponse> => {
-        const response = await apiClient.post('/api/v1/Customer', data);
         return response.data;
     },
 

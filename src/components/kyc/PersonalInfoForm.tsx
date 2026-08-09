@@ -11,12 +11,13 @@ import { useCustomer } from "@/hooks/useCustomer";
 export default function PersonalInfoForm() {
     const router = useRouter();
     const { formData: storeData, updateFormData } = useKYCStore();
-    const { useGetCustomer, updateProfile, isUpdatingProfile, createCustomer, isCreatingCustomer } = useCustomer();
+    const { useGetCustomer, updateProfile, isUpdatingProfile } = useCustomer();
     const user = useAuthStore(state => state.user);
     
-    // Check if the customer profile already exists
+    // Prefill from the existing profile. Every authenticated user has a customer
+    // record — AuthService creates one on registration and on Google sign-in — so
+    // there is no "create" path here, only update.
     const { data: customerResponse, isLoading: isLoadingCustomer } = useGetCustomer(user?.id || null);
-    const customerExists = !!customerResponse?.data;
 
     const [error, setError] = useState("");
     const [formData, setFormData] = useState({
@@ -70,36 +71,22 @@ export default function PersonalInfoForm() {
             setError(err?.response?.data?.message || err?.message || "An unexpected error occurred");
         };
 
-        if (customerExists) {
-            updateProfile({
-                customerId: user.id,
-                firstName: formData.firstName || null,
-                lastName: formData.lastName || null,
-                phoneNumber: user.phoneNumber || null,
-                dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : null,
-                jobTitle: formData.jobTitle || null,
-                companyName: formData.companyName || null,
-                industry: formData.industry || null
-            }, {
-                onSuccess: handleSuccess,
-                onError: handleError
-            });
-        } else {
-            createCustomer({
-                firstName: formData.firstName || null,
-                lastName: formData.lastName || null,
-                email: user.email || null,
-                phoneNumber: user.phoneNumber || null,
-                customerType: user.customerType || 0,
-                dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : null,
-            }, {
-                onSuccess: handleSuccess,
-                onError: handleError
-            });
-        }
+        updateProfile({
+            customerId: user.id,
+            firstName: formData.firstName || null,
+            lastName: formData.lastName || null,
+            phoneNumber: user.phoneNumber || null,
+            dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : null,
+            jobTitle: formData.jobTitle || null,
+            companyName: formData.companyName || null,
+            industry: formData.industry || null
+        }, {
+            onSuccess: handleSuccess,
+            onError: handleError
+        });
     };
 
-    const isPending = isUpdatingProfile || isCreatingCustomer;
+    const isPending = isUpdatingProfile;
 
     return (
         <div className="w-full max-w-7xl mx-auto py-8">

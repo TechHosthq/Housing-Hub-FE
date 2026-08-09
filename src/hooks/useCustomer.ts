@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import customerService from '@/services/customerService';
-import { UpdateProfileRequest, SubmitKycRequest, AddressRequest, CreateCustomerRequest } from '@/types/customer';
+import { UpdateProfileRequest, SubmitKycRequest, AddressRequest } from '@/types/customer';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export const useCustomer = () => {
@@ -10,15 +10,6 @@ export const useCustomer = () => {
         queryKey: ['customer', id],
         queryFn: () => customerService.getCustomer(id!),
         enabled: !!id
-    });
-
-    const createCustomerMutation = useMutation({
-        mutationFn: (data: CreateCustomerRequest) => customerService.createCustomer(data),
-        onSuccess: (response) => {
-            if (response.isSuccessful && response.data?.id) {
-                queryClient.invalidateQueries({ queryKey: ['customer', response.data.id] });
-            }
-        }
     });
 
     const updateProfileMutation = useMutation({
@@ -72,8 +63,6 @@ export const useCustomer = () => {
 
     return {
         useGetCustomer,
-        createCustomer: createCustomerMutation.mutate,
-        isCreatingCustomer: createCustomerMutation.isPending,
         updateProfile: updateProfileMutation.mutate,
         isUpdatingProfile: updateProfileMutation.isPending,
         submitKyc: submitKycMutation.mutate,
