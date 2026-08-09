@@ -50,8 +50,16 @@ export const useAuth = () => {
         mutationFn: (data: ChangePasswordRequest) => authService.changePassword(data),
     });
 
-    const logout = () => {
+    /**
+     * Clears local state immediately, then revokes the refresh token server-side.
+     *
+     * Local state goes first on purpose: the user has asked to leave, so the UI should
+     * respond instantly rather than waiting on a network round trip that might fail.
+     */
+    const logout = (allSessions = false) => {
+        const { refreshToken } = useAuthStore.getState();
         clearAuth();
+        void authService.logout(refreshToken, allSessions);
     };
 
     return {
