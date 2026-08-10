@@ -28,6 +28,18 @@ const customerService = {
         return response.data;
     },
 
+    /**
+     * Short-lived viewing link for the signed-in user's own KYC document.
+     *
+     * The document lives behind a private bucket prefix, so `idDocumentUrl` is an
+     * opaque object key and cannot be rendered directly. Fetched on demand rather
+     * than on page load so the ten-minute link isn't half spent before use.
+     */
+    getMyKycDocumentUrl: async (): Promise<ApiResponse<string>> => {
+        const response = await apiClient.get('/api/v1/Customer/me/kyc/document-url');
+        return response.data;
+    },
+
     submitKyc: async (data: SubmitKycRequest): Promise<KycResponse> => {
         const response = await apiClient.post('/api/v1/Customer/kyc', data);
         return response.data;
