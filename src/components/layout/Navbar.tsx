@@ -59,7 +59,7 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto flex items-center justify-between w-full">
                 {/* Logo */}
                 <div className="flex items-center">
-                    <Link href="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
+                    <Link href={roleLabel === "Owner" ? "/dashboard" : "/"} className="flex items-center" onClick={() => setIsMenuOpen(false)}>
                         <Image
                             src="/images/logo.svg"
                             alt="Housing Hub Logo"

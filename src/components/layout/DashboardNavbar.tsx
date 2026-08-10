@@ -46,7 +46,7 @@ export default function DashboardNavbar() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 px-6 md:px-8 py-3.5 flex items-center justify-between shadow-sm border-b border-gray-50">
             <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
                 {/* Logo */}
-                <Link href="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
+                <Link href={role === "Owner" ? "/dashboard" : "/"} className="flex items-center" onClick={() => setIsMenuOpen(false)}>
                     <Image
                         src="/images/logo.svg"
                         alt="Housing Hub Logo"
