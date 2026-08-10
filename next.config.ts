@@ -4,9 +4,30 @@ import type { NextConfig } from "next";
  * Origins the app legitimately talks to. Kept here rather than inline in the CSP
  * string so it is obvious what is allowed and why.
  */
-const API_ORIGIN =
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com';
+/**
+ * Scheme + host + port of a URL, with any path discarded.
+ *
+ * A CSP source expression may carry a path, and when it does the browser matches
+ * on it — a path not ending in `/` matches only that exact path. Since
+ * NEXT_PUBLIC_API_BASE_URL is `https://<id>.execute-api.af-south-1.amazonaws.com/dev`,
+ * using it verbatim in connect-src permits exactly one URL and refuses every API
+ * call beneath it, which shows up as (blocked:csp) on every request.
+ *
+ * Falls back rather than throwing: a malformed value should degrade the policy,
+ * not fail the build.
+ */
+const toOrigin = (url: string | undefined, fallback: string): string => {
+  try {
+    return new URL(url ?? fallback).origin;
+  } catch {
+    return fallback;
+  }
+};
+
+const API_ORIGIN = toOrigin(
+  process.env.NEXT_PUBLIC_API_BASE_URL,
+  'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com',
+);
 
 // SignalR upgrades to a WebSocket against the same host.
 const API_WS_ORIGIN = API_ORIGIN.replace(/^https:/, 'wss:').replace(/^http:/, 'ws:');
