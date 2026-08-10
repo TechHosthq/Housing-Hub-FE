@@ -33,9 +33,13 @@ export default function RegisterForm() {
 
     useEffect(() => {
         if (registerSuccess) {
-            router.push("/verify-email");
+            // Carry the address through. VerifyEmailForm reads ?email= and cannot
+            // offer "resend" without it, so a user whose verification mail never
+            // arrived was stuck on a screen with a permanently disabled button and
+            // no way forward.
+            router.push(`/verify-email?email=${encodeURIComponent(formData.email)}`);
         }
-    }, [registerSuccess, router]);
+    }, [registerSuccess, router, formData.email]);
 
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -177,7 +181,7 @@ export default function RegisterForm() {
                         className="w-6 h-6 rounded-full border-2 border-gray-200 dark:border-gray-800 text-primary-dark focus:ring-primary-dark cursor-pointer accent-primary-dark"
                     />
                     <label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
-                        I agree to the <Link href="#" className="text-[#3b82f6] hover:underline">Terms of Service</Link> and <Link href="#" className="text-[#3b82f6] hover:underline">Privacy Policy</Link>
+                        I agree to the <Link href="/terms" className="text-[#3b82f6] hover:underline">Terms of Service</Link> and <Link href="/privacy" className="text-[#3b82f6] hover:underline">Privacy Policy</Link>
                     </label>
                 </div>
 

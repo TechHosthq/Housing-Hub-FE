@@ -16,13 +16,13 @@ const PUBLIC_ROUTES = [
     '/dashboard',
     '/login',
     '/register',
-    '/forgot-password',
     '/reset-password',
     '/create-new-password',
     '/verify-email',
     '/list-properties',
     '/faq',
     '/privacy',
+    '/terms',
 ];
 
 // Patterns for dynamic public routes (e.g., /property/123).

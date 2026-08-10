@@ -3,7 +3,6 @@
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUserRole } from "@/context/UserRoleContext";
 import { useThemeStore } from "@/store/useThemeStore";
 import { useNotificationSoundStore } from "@/store/useNotificationSoundStore";
 import { playNotificationAudio } from "@/lib/notificationAudio";
@@ -12,7 +11,6 @@ import ResetPasswordModal from "./ResetPasswordModal";
 
 export default function SettingsForm() {
     const router = useRouter();
-    const { role } = useUserRole();
     const isDarkMode = useThemeStore((state) => state.isDarkMode);
     const toggleDarkMode = useThemeStore((state) => state.toggleDarkMode);
     const isSoundEnabled = useNotificationSoundStore((state) => state.isSoundEnabled);
@@ -26,7 +24,6 @@ export default function SettingsForm() {
         { label: "Privacy", type: "link", href: "/privacy" },
         { label: "Dark Mode", type: "toggle", id: "dark-mode" },
         { label: "Notification Sound", type: "toggle", id: "notification-sound" },
-        ...(role === "Owner" ? [] : [{ label: "Switch To Owners Account", type: "link", href: "/switch-account" }]),
         { label: "Delete Account", type: "button", id: "delete-account", isDanger: true }
     ];
 
@@ -35,8 +32,6 @@ export default function SettingsForm() {
             setIsDeleteModalOpen(true);
         } else if (item.id === "reset-password") {
             setIsResetModalOpen(true);
-        } else if (item.href === "/switch-account") {
-            router.push("/kyc");
         } else if (item.type === "link" && item.href) {
             router.push(item.href);
         }

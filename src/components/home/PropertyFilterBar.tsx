@@ -4,11 +4,22 @@ import { useState, useRef, useEffect } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { NIGERIAN_STATES } from "@/lib/nigerianStates";
+import { PropertyType } from "@/types/property";
 
 const FILTER_OPTIONS = {
     location: NIGERIAN_STATES,
     propertyType: ["House", "Apartment", "Guesthouse", "Flat", "Duplex"],
     priceRange: ["Under ₦1M", "₦1M - ₦5M", "₦5M - ₦20M", "₦20M - ₦50M", "₦50M+"],
+};
+
+// The API binds PropertyType as its integer enum. Sending the display name
+// ("House") bound to nothing, so the filter silently returned no results.
+const PROPERTY_TYPE_PARAM: Record<string, PropertyType> = {
+    House: PropertyType.House,
+    Apartment: PropertyType.Apartment,
+    Guesthouse: PropertyType.Guesthouse,
+    Flat: PropertyType.Flat,
+    Duplex: PropertyType.Duplex,
 };
 
 const PRICE_RANGE_PARAM: Record<string, { minPrice?: number; maxPrice?: number }> = {
@@ -31,6 +42,11 @@ export default function PropertyFilterBar() {
         propertyType: "",
         priceRange: "",
     });
+
+    // Free-text query. The dashboard already reads ?q= and renders a results view,
+    // but nothing ever set it — there was no text input, only a decorative
+    // magnifier — so that whole branch was unreachable.
+    const [query, setQuery] = useState("");
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Close dropdown when clicking outside the whole filter bar. (Both the
@@ -52,10 +68,14 @@ export default function PropertyFilterBar() {
         setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
     };
 
-    const navigateWithFilters = (updated: typeof filters) => {
+    const navigateWithFilters = (updated: typeof filters, searchTerm = query) => {
         const params = new URLSearchParams();
 
-        if (updated.propertyType) params.set('propertyType', updated.propertyType);
+        const trimmed = searchTerm.trim();
+        if (trimmed) params.set('q', trimmed);
+
+        const propertyTypeValue = PROPERTY_TYPE_PARAM[updated.propertyType];
+        if (propertyTypeValue) params.set('propertyType', String(propertyTypeValue));
 
         const price = updated.priceRange ? PRICE_RANGE_PARAM[updated.priceRange] : undefined;
         if (price?.minPrice != null) params.set('minPrice', String(price.minPrice));
@@ -73,6 +93,8 @@ export default function PropertyFilterBar() {
         setActiveDropdown(null);
         navigateWithFilters(updated);
     };
+
+    const submitSearch = () => navigateWithFilters(filters);
 
     const renderDropdown = (key: keyof typeof FILTER_OPTIONS, label: string) => (
         <div className="flex-1 relative">
@@ -113,6 +135,24 @@ export default function PropertyFilterBar() {
 
     return (
         <div ref={containerRef} className="bg-white dark:bg-gray-900 shadow-2xl max-w-5xl mx-auto relative rounded-3xl md:rounded-full p-3 md:p-2.5 overflow-visible">
+            {/* Mobile: free-text search above the filter rows */}
+            <form
+                className="md:hidden mb-3"
+                onSubmit={(e) => { e.preventDefault(); submitSearch(); }}
+            >
+                <div className="relative">
+                    <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input
+                        type="search"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder="Search by title, area or feature"
+                        aria-label="Search properties"
+                        className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 text-[13px] text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:border-[#0B2545]"
+                    />
+                </div>
+            </form>
+
             {/* Mobile: 3-row list of filters */}
             <div className="flex flex-col md:hidden divide-y divide-gray-100 rounded-2xl border border-gray-100 mb-3">
                 {(['location', 'propertyType', 'priceRange'] as const).map((key) => {
@@ -158,19 +198,36 @@ export default function PropertyFilterBar() {
                 })}
             </div>
 
-            {/* Desktop: filters fill the pill, no separate search button — selecting a filter navigates immediately */}
-            <div className="hidden md:flex flex-row items-center w-full">
+            {/* Desktop: selecting a filter navigates immediately; the text field needs an
+                explicit submit because navigating on every keystroke would be unusable. */}
+            <form
+                className="hidden md:flex flex-row items-center w-full"
+                onSubmit={(e) => { e.preventDefault(); submitSearch(); }}
+            >
                 <div className="flex flex-1 items-center min-w-0">
                     {renderDropdown('location', 'Location')}
                     <div className="w-[1px] h-10 bg-gray-200 dark:bg-gray-700 mx-1 flex-shrink-0"></div>
                     {renderDropdown('propertyType', 'Property Type')}
                     <div className="w-[1px] h-10 bg-gray-200 dark:bg-gray-700 mx-1 flex-shrink-0"></div>
                     {renderDropdown('priceRange', 'Price Range')}
+                    <div className="w-[1px] h-10 bg-gray-200 dark:bg-gray-700 mx-1 flex-shrink-0"></div>
+                    <input
+                        type="search"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder="Search"
+                        aria-label="Search properties"
+                        className="flex-1 min-w-0 px-4 py-3 bg-transparent text-[15px] text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-500 focus:outline-none"
+                    />
                 </div>
-                <div className="bg-[#0B2545] text-white px-6 py-4 rounded-full flex items-center justify-center gap-2 m-1 flex-shrink-0">
+                <button
+                    type="submit"
+                    aria-label="Search"
+                    className="bg-[#0B2545] text-white px-6 py-4 rounded-full flex items-center justify-center gap-2 m-1 flex-shrink-0 hover:bg-[#071A33] transition-colors"
+                >
                     <Search size={18} className="stroke-[3px]" />
-                </div>
-            </div>
+                </button>
+            </form>
         </div>
     );
 }

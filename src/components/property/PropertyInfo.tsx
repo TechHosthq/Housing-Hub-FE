@@ -1,7 +1,8 @@
 "use client";
 
-import { Bed, Bath, Wifi, Car, Zap, MapPin, ChevronDown, Loader2 } from "lucide-react";
+import { Check, MapPin, ChevronDown, Loader2 } from "lucide-react";
 import { useProperty } from "@/hooks/useProperty";
+import { decodePropertyFeatures } from "@/lib/propertyFeatures";
 
 interface PropertyInfoProps {
     propertyId: string;
@@ -9,13 +10,14 @@ interface PropertyInfoProps {
         title: string;
         price: string;
         location: string;
-        bedrooms: number;
-        bathrooms: number;
         description?: string;
+        /** Bitmask from the API — see lib/propertyFeatures. */
+        features?: number;
     };
 }
 
 export default function PropertyInfo({ propertyId, property }: PropertyInfoProps) {
+    const amenities = decodePropertyFeatures(property.features);
     const { usePropertyAddress } = useProperty();
     const { data: addressResponse, isLoading } = usePropertyAddress(propertyId);
     
@@ -50,20 +52,25 @@ export default function PropertyInfo({ propertyId, property }: PropertyInfoProps
             </div>
 
             {/* Amenities Cards */}
-            <div className="flex flex-wrap gap-2.5">
-                {[
-                    { icon: <Bed size={14} />, label: `${property.bedrooms} Bedrooms` },
-                    { icon: <Bath size={14} />, label: `${property.bathrooms} Bathrooms` },
-                    { icon: <Wifi size={14} />, label: "Internet" },
-                    { icon: <Car size={14} />, label: "Parking" },
-                    { icon: <Zap size={14} />, label: "Prepaid meter" },
-                ].map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white dark:bg-gray-900 border border-[#F2F2F2] dark:border-gray-800 shadow-sm">
-                        <span className="text-[#333333]">{item.icon}</span>
-                        <span className="text-[10px] font-bold text-[#333333]">{item.label}</span>
-                    </div>
-                ))}
-            </div>
+            {/*
+                Driven by the property's own feature bitmask. This used to render a
+                fixed list — bedroom and bathroom counts the API does not store, plus
+                "Internet", "Parking" and "Prepaid meter" — on every listing, so the
+                amenities shown bore no relation to the actual property.
+            */}
+            {amenities.length > 0 && (
+                <div className="flex flex-wrap gap-2.5">
+                    {amenities.map((label) => (
+                        <div
+                            key={label}
+                            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white dark:bg-gray-900 border border-[#F2F2F2] dark:border-gray-800 shadow-sm"
+                        >
+                            <Check size={14} className="text-[#0095FF]" />
+                            <span className="text-[10px] font-bold text-[#333333] dark:text-gray-300">{label}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
 
             {/* Description */}
             <div className="space-y-3">
