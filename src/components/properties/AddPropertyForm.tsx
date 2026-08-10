@@ -233,7 +233,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
     // publish=false saves the listing as a draft the owner can publish later (item 21).
     const handlePublish = async (publish: boolean = true, confirmDuplicate: boolean = false) => {
         if (!user) {
-            alert("You must be logged in to publish a property.");
+            showError("You must be logged in to publish a property.");
             return;
         }
 
@@ -276,7 +276,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                 }
             },
             onError: (error: any) => {
-                alert(error?.response?.data?.message || "Failed to save property. Please check your inputs.");
+                showError(error?.response?.data?.message || "Failed to save property. Please check your inputs.");
             }
         });
     };
@@ -342,7 +342,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                 }
             },
             onError: (error: any) => {
-                alert(error?.response?.data?.message || "Failed to update property. Please check your inputs.");
+                showError(error?.response?.data?.message || "Failed to update property. Please check your inputs.");
             }
         });
     };

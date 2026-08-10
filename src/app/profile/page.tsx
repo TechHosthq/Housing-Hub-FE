@@ -10,12 +10,38 @@ import Link from "next/link";
 import { Check, Clock, ShieldAlert } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useCustomer } from "@/hooks/useCustomer";
+import customerService from "@/services/customerService";
 
 export default function MyAccountPage() {
     const user = useAuthStore((state) => state.user);
     const { useGetCustomer } = useCustomer();
     const { data: customerResponse, isLoading } = useGetCustomer(user?.id || null);
     const [isDocumentPreviewOpen, setIsDocumentPreviewOpen] = useState(false);
+
+    // idDocumentUrl is an opaque key into a private bucket, not something the browser
+    // can load. Exchange it for a short-lived presigned URL when the user actually
+    // asks to see the document.
+    const [documentUrl, setDocumentUrl] = useState<string | null>(null);
+    const [isLoadingDocument, setIsLoadingDocument] = useState(false);
+    const [documentError, setDocumentError] = useState("");
+
+    const openDocument = async () => {
+        setDocumentError("");
+        setIsLoadingDocument(true);
+        try {
+            const response = await customerService.getMyKycDocumentUrl();
+            if (response.isSuccessful && response.data) {
+                setDocumentUrl(response.data);
+                setIsDocumentPreviewOpen(true);
+            } else {
+                setDocumentError(response.message || "Could not load your document.");
+            }
+        } catch {
+            setDocumentError("Could not load your document.");
+        } finally {
+            setIsLoadingDocument(false);
+        }
+    };
 
     const customer = customerResponse?.data;
     // Derive real KYC state from the same source the dashboard uses, instead of a
@@ -74,13 +100,19 @@ export default function MyAccountPage() {
                         </div>
 
                         {status === "verified" && customer?.idDocumentUrl ? (
-                            <button
-                                type="button"
-                                onClick={() => setIsDocumentPreviewOpen(true)}
-                                className="relative z-10 px-8 py-3 rounded-full border border-[#0095FF] text-[#0095FF] text-[13px] font-bold hover:bg-[#0095FF]/5 transition-all active:scale-95 shadow-sm"
-                            >
-                                View KYC Document
-                            </button>
+                            <div className="relative z-10 flex flex-col items-start gap-1">
+                                <button
+                                    type="button"
+                                    onClick={openDocument}
+                                    disabled={isLoadingDocument}
+                                    className="px-8 py-3 rounded-full border border-[#0095FF] text-[#0095FF] text-[13px] font-bold hover:bg-[#0095FF]/5 transition-all active:scale-95 shadow-sm disabled:opacity-60"
+                                >
+                                    {isLoadingDocument ? "Preparing…" : "View KYC Document"}
+                                </button>
+                                {documentError && (
+                                    <span className="text-[11px] font-bold text-red-500">{documentError}</span>
+                                )}
+                            </div>
                         ) : status === "none" ? (
                             <Link
                                 href="/kyc/personal-info"
@@ -101,10 +133,10 @@ export default function MyAccountPage() {
                 </div>
             </div>
 
-            {isDocumentPreviewOpen && (
+            {isDocumentPreviewOpen && documentUrl && (
                 <DocumentPreviewModal
-                    url={customer?.idDocumentUrl || null}
-                    onClose={() => setIsDocumentPreviewOpen(false)}
+                    url={documentUrl}
+                    onClose={() => { setIsDocumentPreviewOpen(false); setDocumentUrl(null); }}
                 />
             )}
 

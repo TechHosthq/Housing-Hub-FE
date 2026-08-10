@@ -2,12 +2,17 @@
 
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
+import { AvailabilityStatus } from "@/types/property";
+import ListingInfoPanel from "./ListingInfoPanel";
 
 interface ListingSidebarProps {
     propertyId?: string;
+    /** ISO timestamp from the API. */
+    listedDate?: string | null;
+    availability?: AvailabilityStatus;
 }
 
-export default function ListingSidebar({ propertyId }: ListingSidebarProps) {
+export default function ListingSidebar({ propertyId, listedDate, availability }: ListingSidebarProps) {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
     // Anyone can view a listing, but booking needs an account. Send signed-out
@@ -21,32 +26,19 @@ export default function ListingSidebar({ propertyId }: ListingSidebarProps) {
 
     return (
         <div className="w-full lg:max-w-[280px] space-y-6">
+            <ListingInfoPanel
+                propertyId={propertyId}
+                listedDate={listedDate}
+                availability={availability}
+            />
+
             <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-6 shadow-sm">
-                <h3 className="text-[14px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-6">Listing Information</h3>
-
-                <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                        <span className="text-[11px] text-[#999999] dark:text-gray-500">Property ID</span>
-                        <span className="text-[11px] font-bold text-[#333333]">SPH-12024</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-[11px] text-[#999999] dark:text-gray-500">Listed Date</span>
-                        <span className="text-[11px] font-bold text-[#333333]">Dec 1, 2024</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-[11px] text-[#999999] dark:text-gray-500">Status</span>
-                        <span className="px-2.5 py-1 rounded-lg bg-[#E9F3FF] text-[#0095FF] text-[9px] font-black uppercase">Available</span>
-                    </div>
-                </div>
-
-                <div className="mt-8">
-                    <Link
-                        href={inspectionHref}
-                        className="block w-full text-center bg-primary-dark hover:bg-primary-dark/90 text-white py-3.5 rounded-full text-[12px] font-bold transition-all shadow-md"
-                    >
-                        {isAuthenticated ? "Request Inspection" : "Sign in to Request Inspection"}
-                    </Link>
-                </div>
+                <Link
+                    href={inspectionHref}
+                    className="block w-full text-center bg-primary-dark hover:bg-primary-dark/90 text-white py-3.5 rounded-full text-[12px] font-bold transition-all shadow-md"
+                >
+                    {isAuthenticated ? "Request Inspection" : "Sign in to Request Inspection"}
+                </Link>
             </div>
         </div>
     );

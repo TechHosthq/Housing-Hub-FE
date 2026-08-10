@@ -17,7 +17,8 @@ export default function SubmitIDForm() {
     const { submitKyc, isSubmittingKyc, uploadDocument, isUploadingDocument } = useCustomer();
     
     const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
-    const [docUrl, setDocUrl] = useState<string | null>(null);
+    // An opaque private-object reference returned by the upload endpoint, not a URL.
+    const [docRef, setDocRef] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState("");
     const [formData, setFormData] = useState({
@@ -28,7 +29,7 @@ export default function SubmitIDForm() {
     const isFormValid =
         formData.docNumber.length === 11 && // NIN is usually 11
         formData.docType &&
-        docUrl;
+        docRef;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -38,16 +39,29 @@ export default function SubmitIDForm() {
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
-            try {
-                const response = await uploadDocument(file);
-                if (response.isSuccessful) {
-                    setUploadedFileName(file.name);
-                    setDocUrl(response.data || "uploaded_url_placeholder");
-                }
-            } catch (error) {
-                console.error("Upload failed", error);
+        if (!file) return;
+
+        setError("");
+        try {
+            const response = await uploadDocument(file);
+
+            // The API returns a private object reference, not a public URL. It is
+            // opaque to us and is only accepted back by submitKyc for this same user.
+            if (response.isSuccessful && response.data) {
+                setUploadedFileName(file.name);
+                setDocRef(response.data);
+                return;
             }
+
+            // Previously this fell through to a literal "uploaded_url_placeholder",
+            // so a failed upload still looked successful and submitted garbage.
+            setUploadedFileName("");
+            setDocRef("");
+            setError(response.message || "Could not upload the document. Please try again.");
+        } catch {
+            setUploadedFileName("");
+            setDocRef("");
+            setError("Could not upload the document. Please check your connection and try again.");
         }
     };
 
@@ -62,7 +76,7 @@ export default function SubmitIDForm() {
             dateOfBirth: storeData.dateOfBirth ? new Date(storeData.dateOfBirth).toISOString() : null,
             nationalIdNumber: formData.docNumber,
             idType: parseInt(formData.docType),
-            idDocumentUrl: docUrl,
+            idDocumentUrl: docRef,
             jobTitle: storeData.jobTitle || null,
             companyName: storeData.companyName || null,
             industry: storeData.industry || null,
@@ -177,7 +191,7 @@ export default function SubmitIDForm() {
                             </div>
                             <button
                                 type="button"
-                                onClick={() => { setUploadedFileName(null); setDocUrl(null); }}
+                                onClick={() => { setUploadedFileName(null); setDocRef(null); }}
                                 className="text-[11px] font-bold text-[#0095FF] hover:underline"
                             >
                                 Replace

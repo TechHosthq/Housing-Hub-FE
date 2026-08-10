@@ -21,7 +21,9 @@ export default async function InspectionPage({ params }: { params: Promise<{ id:
                 title: data.title || "Untitled Property",
                 price: `₦ ${data.price.toLocaleString()}`,
                 location: data.propertyAddress?.city || "Lagos",
-                image: data.files?.[0]?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070"
+                image: data.files?.[0]?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070",
+                listedDate: data.publishedAt ?? data.dateCreated,
+                availability: data.availability,
             };
         }
     } catch (err) {

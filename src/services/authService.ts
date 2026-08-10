@@ -89,6 +89,29 @@ const authService = {
     },
 
     /**
+     * Ends the session server-side by revoking the refresh token.
+     *
+     * Without this, signing out only cleared local state — the refresh token stayed
+     * valid for its full 30-day life, so anyone who recovered it from a shared machine
+     * or a backup still had a working session.
+     *
+     * Never throws: the client is discarding its state regardless, and a network error
+     * here must not leave the user stuck on a screen they've asked to leave.
+     */
+    logout: async (refreshToken: string | null, allSessions = false): Promise<void> => {
+        if (!refreshToken) return;
+        try {
+            await apiClient.post(
+                '/api/v1/Auth/logout',
+                { refreshToken, allSessions },
+                { skipErrorToast: true }
+            );
+        } catch {
+            // Intentionally swallowed — see above.
+        }
+    },
+
+    /**
      * Absolute URL for the optional server-side (redirect) Google flow.
      *
      * NOTE: this must be a full-page navigation (window.location.href) — it returns a

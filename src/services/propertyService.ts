@@ -14,19 +14,8 @@ import {
     PropertyFilesResponse,
     PropertyAddressResponse
 } from '@/types/property';
-import { Property } from "@/types";
-import propertiesData from "@/data/properties.json";
 
 export const propertyService = {
-    // Mock methods preserved for the homepage until fully migrated
-    getMockProperties: (): Property[] => {
-        return propertiesData.properties;
-    },
-    getMockTrendingProperties: (): Property[] => {
-        return propertiesData.properties.filter(p => p.tag === "Trending");
-    },
-
-    // Real API Endpoints
     getAllProperties: async (params: PropertyQueryParams): Promise<PropertiesResponse> => {
         const response = await apiClient.get<PropertiesResponse>('/api/v1/Property/all', { params });
         return response.data;

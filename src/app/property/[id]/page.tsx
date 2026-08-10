@@ -67,9 +67,8 @@ export default function PropertyDetailPage() {
         title: property.title || "Untitled Property",
         price: property.price ? `₦ ${property.price.toLocaleString()}` : "Price upon request",
         location: property.propertyAddress?.city || "Lagos",
-        bedrooms: 4, // API doesn't have these specific counts yet
-        bathrooms: 3,
-        description: property.description || ""
+        description: property.description || "",
+        features: property.features
     };
 
     return (
@@ -101,7 +100,11 @@ export default function PropertyDetailPage() {
                     </div>
 
                     {/* Sidebar Side */}
-                    <ListingSidebar propertyId={property.id} />
+                    <ListingSidebar
+                        propertyId={property.id}
+                        listedDate={property.publishedAt ?? property.dateCreated}
+                        availability={property.availability}
+                    />
                 </div>
             </div>
 

@@ -48,7 +48,7 @@ export default function PrivacyPage() {
                             <ul className="list-disc pl-5 space-y-2">
                                 <li><strong>Personal Identification:</strong> Name, email address, phone number, and physical address provided during account registration.</li>
                                 <li><strong>KYC & Verification Data:</strong> Government-issued IDs, proof of address, and other documents required for owner verification and anti-fraud measures.</li>
-                                <li><strong>Financial Information:</strong> Payment details, bank account information for rent transfers, and transaction history.</li>
+                                <li><strong>Financial Information:</strong> Housing Hub does not currently process payments and does not collect card or bank account details. Rent and fees are paid directly between you and the property owner or agent. This section will be updated before any payment feature launches.</li>
                                 <li><strong>Property Data:</strong> Details about properties listed, including addresses, images, lease terms, and inspection reports.</li>
                                 <li><strong>Usage Data:</strong> Information about how you interact with our platform, including IP addresses, browser types, and device identifiers collected via cookies.</li>
                             </ul>
@@ -58,7 +58,7 @@ export default function PrivacyPage() {
                                 Your information helps us operate efficiently and improve your experience. We use your data to:
                             </p>
                             <ul className="list-disc pl-5 space-y-2">
-                                <li>Facilitate secure property listings, lease agreements, and rent payments.</li>
+                                <li>Facilitate property listings, inspection bookings, and communication between you and property owners or agents.</li>
                                 <li>Verify the identity of property owners and tenants to ensure a safe community.</li>
                                 <li>Communicate with you regarding account updates, inspection schedules, and support inquiries.</li>
                                 <li>Analyze platform usage to improve our interface, features, and overall service quality.</li>
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
                                 We do not sell your personal information. We only share your data in the following specific circumstances:
                             </p>
                             <ul className="list-disc pl-5 space-y-2">
-                                <li><strong>Service Providers:</strong> We share data with trusted third parties who assist us with payment processing, identity verification, and hosting services. These partners are bound by strict confidentiality agreements.</li>
+                                <li><strong>Service Providers:</strong> We share data with trusted third parties who assist us with identity verification, email delivery, and hosting. These partners are bound by confidentiality agreements and process data only on our instructions.</li>
                                 <li><strong>Other Users:</strong> Relevant information is shared between owners and renters (e.g., contact info after a lease agreement) to facilitate the rental process.</li>
                                 <li><strong>Legal Requirements:</strong> We may disclose information if required by law, subpoena, or other legal processes, or to protect the rights and safety of Housing Hub and our users.</li>
                             </ul>
