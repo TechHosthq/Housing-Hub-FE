@@ -82,7 +82,11 @@ export default function VerifyEmailForm() {
                         <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed max-w-[280px] mx-auto">
                             {email && token 
                                 ? "Verifying your email, please wait..." 
-                                : "We've sent a verification link to your email address. Please click the link to verify your account."
+                                // Deliberately does not promise a "verification link": if this
+                                // address already had an account, the API sends a sign-in notice
+                                // instead — registration returns the same response either way so
+                                // it cannot be used to test whether an address is registered.
+                                : "We've sent an email to your address. Open it and follow the instructions to continue."
                             }
                         </p>
 
