@@ -44,3 +44,6 @@ next-env.d.ts
 # local scratch (deleted-file staging on a filesystem without unlink)
 .deleted-admin/
 .next-stale/
+
+# Claude Code local settings (personal permission/config, not project source)
+.claude/settings.json
