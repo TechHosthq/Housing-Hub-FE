@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { HubConnection } from "@microsoft/signalr";
 import { useQueryClient } from "@tanstack/react-query";
-import { createHubConnection } from "@/lib/signalr";
+import { createHubConnection, isRealtimeEnabled } from "@/lib/signalr";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useNotificationSoundStore } from "@/store/useNotificationSoundStore";
 import { playNotificationAudio, registerNotificationAudioUnlock } from "@/lib/notificationAudio";
@@ -28,7 +28,12 @@ export default function SignalRProvider({ children }: { children: React.ReactNod
     }, []);
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        // The hubs are not mapped when the API runs on Lambda, so negotiate returns
+        // 404 and the connection can never succeed. Chat and notifications poll
+        // instead (see useChat / useNotification), so skipping the attempt loses no
+        // functionality — it only removes a guaranteed-failing request and a console
+        // error on every authenticated page load. See lib/signalr.ts.
+        if (!isAuthenticated || !isRealtimeEnabled) {
             connectionsRef.current?.chat.stop();
             connectionsRef.current?.notification.stop();
             connectionsRef.current = null;
