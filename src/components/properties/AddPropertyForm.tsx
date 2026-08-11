@@ -67,13 +67,18 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
 
     const [showKycModal, setShowKycModal] = useState(false);
 
+    // The modal is raised when someone tries to *publish* unverified, not on arrival.
+    //
+    // It used to open the moment the page loaded, which walled off the whole form.
+    // Verification now gates publishing only — the server enforces the same rule, so
+    // this is no longer the control, just the explanation. An owner can build their
+    // listing while their documents are in review and publish it the day they're
+    // approved, instead of bouncing off a modal and possibly not coming back.
     useEffect(() => {
-        if (!isLoadingCustomer && customerResponse?.data && !isKycVerified) {
-            setShowKycModal(true);
-        } else if (isKycVerified) {
-            setShowKycModal(false);
-        }
-    }, [isLoadingCustomer, isKycVerified, customerResponse]);
+        if (isKycVerified) setShowKycModal(false);
+    }, [isKycVerified]);
+
+    const awaitingVerification = !isLoadingCustomer && customerResponse?.data && !isKycVerified;
 
     // Step 1 State
     const [propertyType, setPropertyType] = useState<PropertyType>(PropertyType.House);
@@ -745,9 +750,18 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                             </>
                         ) : (
                             <>
-                                <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500">Publish to list it for renters and buyers now, or save as a draft to publish later.</p>
+                                {awaitingVerification ? (
+                                    <p className="text-[12px] font-bold text-amber-600 dark:text-amber-500">
+                                        Save this as a draft for now — you can publish it as soon as your identity verification is approved.
+                                    </p>
+                                ) : (
+                                    <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500">Publish to list it for renters and buyers now, or save as a draft to publish later.</p>
+                                )}
                                 <button
-                                    onClick={() => handlePublish(true)}
+                                    // Unverified: explain rather than attempt. The server rejects
+                                    // this anyway, so calling it would only surface a toast the
+                                    // owner can't act on.
+                                    onClick={() => (awaitingVerification ? setShowKycModal(true) : handlePublish(true))}
                                     disabled={isCreating}
                                     className="w-full py-5 rounded-[20px] bg-[#0B2545] text-white font-black text-[18px] font-montserrat hover:bg-[#071A33] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
                                 >
@@ -850,7 +864,9 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                         </h2>
 
                         <p className="text-gray-500 dark:text-gray-500 text-sm font-medium leading-relaxed mb-8">
-                            To ensure platform security and trust, house owners must verify their identity before publishing property listings.
+                            Renters need to know who they&apos;re dealing with, so we check every
+                            lister&apos;s ID before their listing goes live. You can save this as a
+                            draft now and publish it the moment you&apos;re approved.
                         </p>
 
                         <div className="flex flex-col gap-3 w-full">
@@ -862,12 +878,14 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                                 Complete KYC Verification
                             </Link>
 
-                            {/* Action 2: Go back to Dashboard */}
+                            {/* Action 2: back to the form, not out of it. Previously this
+                                sent people to the dashboard, which discarded whatever they
+                                had already typed. */}
                             <button
-                                onClick={() => router.push("/dashboard")}
+                                onClick={() => setShowKycModal(false)}
                                 className="w-full py-3.5 rounded-xl font-bold text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 transition-all text-center mt-2"
                             >
-                                Cancel & Back to Dashboard
+                                Keep editing this listing
                             </button>
                         </div>
                     </div>

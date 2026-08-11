@@ -3,6 +3,7 @@ import { Bed, Bath, ShowerHead, MapPin, Play } from "lucide-react";
 import { Property } from "@/types";
 import { PropertyDetail, PropertyFileType } from "@/types/property";
 import Link from "next/link";
+import VerifiedOwnerBadge from "@/components/common/VerifiedOwnerBadge";
 
 interface PropertyCardProps {
     property: Property | PropertyDetail;
@@ -32,9 +33,18 @@ export default function PropertyCard({ property }: PropertyCardProps) {
     const bedrooms = isApiProperty ? (Math.floor(Math.random() * 3) + 2) : (property as Property).bedrooms;
     const bathrooms = isApiProperty ? (Math.floor(Math.random() * 2) + 1) : (property as Property).bathrooms;
 
-    // Only real, admin-verified properties get the "Verified" badge — mock
-    // properties keep their own static tag.
-    const showBadge = isApiProperty ? (property as PropertyDetail).isVerified : !!(property as Property).tag;
+    // Mock properties keep their own static tag in the image overlay.
+    const showBadge = isApiProperty ? false : !!(property as Property).tag;
+
+    // Real listings show identity verification instead.
+    //
+    // This replaces an overlay reading just "Verified", driven by the property-level
+    // `isVerified` moderation flag. That word on its own is the most dangerous copy
+    // on the page: it invites a renter to read it as "this property checks out",
+    // which Housing Hub has not established and cannot until title verification
+    // exists. What is actually known in Phase 1 is who the person is, so that is
+    // what the card says — and the badge carries a tooltip spelling out the limit.
+    const ownerVerified = isApiProperty && (property as PropertyDetail).isOwnerVerified;
 
     return (
         <Link
@@ -67,8 +77,13 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                     {showBadge && (
                         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
                             <span className="text-[11px] font-semibold text-[#0B2545] tracking-wide">
-                                {isApiProperty ? "Verified" : (property as Property).tag}
+                                {(property as Property).tag}
                             </span>
+                        </div>
+                    )}
+                    {ownerVerified && (
+                        <div className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur-md px-1.5 py-1 shadow-sm">
+                            <VerifiedOwnerBadge verified className="bg-transparent dark:bg-transparent" />
                         </div>
                     )}
                 </div>

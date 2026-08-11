@@ -70,6 +70,17 @@ export interface PropertyDetail {
     publishedAt: string | null;
     isVerified: boolean;
     verifiedAt: string | null;
+    /**
+     * The person who listed this has passed Housing Hub's identity check.
+     *
+     * Means: a government ID was submitted and an admin matched it to the account
+     * holder. Does NOT mean they own the property or have the right to let it —
+     * that is title verification, which does not exist yet. Copy rendered from this
+     * flag must not imply otherwise.
+     */
+    isOwnerVerified: boolean;
+    /** Owner's display name. Populated on single-property reads. */
+    ownerName?: string | null;
     files: PropertyFile[];
     /** Count of open (Pending or Rescheduled) inspection requests. Only populated on owner-list endpoints. */
     inspectionCount?: number;
