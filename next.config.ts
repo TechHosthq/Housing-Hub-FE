@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 /**
  * Origins the app legitimately talks to. Kept here rather than inline in the CSP
@@ -28,6 +29,22 @@ const API_ORIGIN = toOrigin(
   process.env.NEXT_PUBLIC_API_BASE_URL,
   'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com',
 );
+
+/**
+ * Sentry's ingest endpoint, derived from the DSN.
+ *
+ * The CSP is enforcing, so without this every error report is refused by the
+ * browser — and the failure is invisible in the worst possible way: monitoring
+ * that looks installed, reports nothing, and leaves you believing there are no
+ * errors. Derived from the DSN rather than hardcoded because the ingest host
+ * encodes the org id and the region (`o123.ingest.de.sentry.io`), which differ
+ * per account.
+ *
+ * Empty string when no DSN is set, and filtered out of the directive below.
+ */
+const SENTRY_ORIGIN = process.env.NEXT_PUBLIC_SENTRY_DSN
+  ? toOrigin(process.env.NEXT_PUBLIC_SENTRY_DSN, '')
+  : '';
 
 // SignalR upgrades to a WebSocket against the same host.
 const API_WS_ORIGIN = API_ORIGIN.replace(/^https:/, 'wss:').replace(/^http:/, 'ws:');
@@ -68,7 +85,7 @@ const contentSecurityPolicy = [
   // site stops playing — the one break that enforcing this policy would otherwise
   // have caused. blob: covers the local preview shown before an upload completes.
   `media-src 'self' blob: ${S3_ORIGIN}`,
-  `connect-src 'self' ${API_ORIGIN} ${API_WS_ORIGIN} https://accounts.google.com`,
+  `connect-src 'self' ${API_ORIGIN} ${API_WS_ORIGIN} https://accounts.google.com ${SENTRY_ORIGIN}`.trim(),
   // Google Sign-In renders in an iframe; property pages embed a Maps iframe.
   "frame-src 'self' https://accounts.google.com https://www.google.com",
   // Clickjacking protection. Also set as X-Frame-Options below for older browsers.
@@ -127,4 +144,32 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+/**
+ * Sentry's build-time wrapper: uploads source maps so a stack trace points at
+ * `PropertyCard.tsx:42` instead of `main-8f3a.js:1:99213`.
+ *
+ * Without readable stack traces the events arrive but tell you almost nothing,
+ * which is a slow way to discover you have monitoring in name only.
+ *
+ * Source map upload needs SENTRY_AUTH_TOKEN, SENTRY_ORG and SENTRY_PROJECT at
+ * BUILD time (Netlify env vars, not runtime). They are absent locally, so
+ * `silent` keeps `npm run build` from printing warnings about it on every dev
+ * build. The maps are hidden from the browser afterwards — uploaded to Sentry,
+ * not served to users, so the bundle stays unreadable to anyone poking at it.
+ */
+export default withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+
+  silent: !process.env.CI,
+  widenClientFileUpload: true,
+  hideSourceMaps: true,
+  disableLogger: true,
+
+  // Routes browser error reports through our own origin so ad blockers, which
+  // block requests to sentry.io by default, do not silently drop them. This is
+  // also why SENTRY_ORIGIN in the CSP is a belt-and-braces measure rather than
+  // the only thing making reporting work.
+  tunnelRoute: '/monitoring',
+});
