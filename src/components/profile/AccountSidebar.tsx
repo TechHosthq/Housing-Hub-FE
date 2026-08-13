@@ -1,6 +1,6 @@
 "use client";
 
-import { User, MessageCircle, Settings } from "lucide-react";
+import { User, MessageCircle, Settings, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -9,6 +9,7 @@ export default function AccountSidebar() {
 
     const menuItems = [
         { label: "Profile Info", icon: User, href: "/profile" },
+        { label: "Verification", icon: ShieldCheck, href: "/verification" },
         { label: "Message", icon: MessageCircle, href: "/messages" },
         { label: "Settings", icon: Settings, href: "/settings" }
     ];
@@ -17,7 +18,11 @@ export default function AccountSidebar() {
         <div className="w-[280px] bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-6 h-fit h-fit shadow-sm">
             <div className="flex flex-col gap-2">
                 {menuItems.map((item) => {
-                    const isActive = pathname === item.href;
+                    // Exact match everywhere except verification, which has child
+                    // routes (/verification/{caseId}) that should keep the section lit.
+                    const isActive = item.href === "/verification"
+                        ? pathname.startsWith("/verification")
+                        : pathname === item.href;
                     return (
                         <Link
                             key={item.label}
