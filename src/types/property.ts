@@ -1,3 +1,4 @@
+import { VerificationTier } from '@/types/verification';
 import { ApiResponse, PaginatedResponse } from "./auth";
 
 export enum PropertyType {
@@ -79,6 +80,11 @@ export interface PropertyDetail {
      * flag must not imply otherwise.
      */
     isOwnerVerified: boolean;
+    /**
+     * Highest verification the lister currently holds. Drives the single badge —
+     * see VerifiedOwnerBadge for why it is one badge rather than one per check.
+     */
+    ownerVerificationTier: VerificationTier;
     /** Owner's display name. Populated on single-property reads. */
     ownerName?: string | null;
     files: PropertyFile[];

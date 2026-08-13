@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import { AvailabilityStatus } from "@/types/property";
+import { VerificationTier } from "@/types/verification";
 import ListingInfoPanel from "./ListingInfoPanel";
 import VerifiedOwnerBadge from "@/components/common/VerifiedOwnerBadge";
 
@@ -11,8 +12,8 @@ interface ListingSidebarProps {
     /** ISO timestamp from the API. */
     listedDate?: string | null;
     availability?: AvailabilityStatus;
-    /** Owner has passed Housing Hub's identity check. See VerifiedOwnerBadge for scope. */
-    isOwnerVerified?: boolean;
+    /** Highest verification the lister holds. See VerifiedOwnerBadge for scope. */
+    ownerVerificationTier?: VerificationTier;
     ownerName?: string | null;
 }
 
@@ -20,7 +21,7 @@ export default function ListingSidebar({
     propertyId,
     listedDate,
     availability,
-    isOwnerVerified = false,
+    ownerVerificationTier = VerificationTier.Unverified,
     ownerName,
 }: ListingSidebarProps) {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -45,14 +46,14 @@ export default function ListingSidebar({
             {/* Directly above the inspection button on purpose: this is the moment
                 the renter decides whether to engage, and it is the only place with
                 room to say what "verified" actually covers. */}
-            {isOwnerVerified && (
+            {ownerVerificationTier >= VerificationTier.IdentityVerified && (
                 <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-4 shadow-sm">
                     {ownerName && (
                         <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
                             Listed by {ownerName}
                         </p>
                     )}
-                    <VerifiedOwnerBadge verified variant="full" />
+                    <VerifiedOwnerBadge tier={ownerVerificationTier} variant="full" />
                 </div>
             )}
 

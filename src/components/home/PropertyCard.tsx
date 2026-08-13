@@ -4,6 +4,7 @@ import { Property } from "@/types";
 import { PropertyDetail, PropertyFileType } from "@/types/property";
 import Link from "next/link";
 import VerifiedOwnerBadge from "@/components/common/VerifiedOwnerBadge";
+import { VerificationTier } from "@/types/verification";
 
 interface PropertyCardProps {
     property: Property | PropertyDetail;
@@ -36,15 +37,18 @@ export default function PropertyCard({ property }: PropertyCardProps) {
     // Mock properties keep their own static tag in the image overlay.
     const showBadge = isApiProperty ? false : !!(property as Property).tag;
 
-    // Real listings show identity verification instead.
+    // Real listings show the lister's verification tier instead.
     //
-    // This replaces an overlay reading just "Verified", driven by the property-level
-    // `isVerified` moderation flag. That word on its own is the most dangerous copy
-    // on the page: it invites a renter to read it as "this property checks out",
-    // which Housing Hub has not established and cannot until title verification
-    // exists. What is actually known in Phase 1 is who the person is, so that is
-    // what the card says — and the badge carries a tooltip spelling out the limit.
-    const ownerVerified = isApiProperty && (property as PropertyDetail).isOwnerVerified;
+    // This replaced an overlay reading just "Verified", driven by the property-level
+    // `isVerified` moderation flag. That word alone is the most dangerous copy on the
+    // page: it invites a renter to read it as "this property checks out", which
+    // Housing Hub has not established and cannot until title verification exists.
+    //
+    // One badge showing the highest tier, never one per check — see
+    // VerifiedOwnerBadge. Each tier states its own limit in the tooltip.
+    const ownerTier = isApiProperty
+        ? (property as PropertyDetail).ownerVerificationTier
+        : VerificationTier.Unverified;
 
     return (
         <Link
@@ -81,9 +85,9 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                             </span>
                         </div>
                     )}
-                    {ownerVerified && (
+                    {ownerTier >= VerificationTier.IdentityVerified && (
                         <div className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur-md px-1.5 py-1 shadow-sm">
-                            <VerifiedOwnerBadge verified className="bg-transparent dark:bg-transparent" />
+                            <VerifiedOwnerBadge tier={ownerTier} className="bg-transparent dark:bg-transparent" />
                         </div>
                     )}
                 </div>
