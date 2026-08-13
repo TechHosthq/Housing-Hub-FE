@@ -1,4 +1,4 @@
-import { BadgeCheck, Building2 } from "lucide-react";
+import { BadgeCheck, Building2, ShieldCheck } from "lucide-react";
 import { VerificationTier } from "@/types/verification";
 
 interface VerifiedOwnerBadgeProps {
@@ -25,9 +25,10 @@ interface VerifiedOwnerBadgeProps {
  *   the account holder. Says nothing about any company or property.
  * - BusinessVerified — additionally, their company registration was checked
  *   against the CAC record. Still says nothing about who owns the property.
- * - TitleVerified — not yet reachable. When it ships it will mean the title
- *   documents for THIS property were reviewed, and only then may the copy imply
- *   anything about ownership.
+ * - TitleVerified — additionally, the title documents for THIS property were
+ *   reviewed. The only tier whose copy may say anything about ownership, and the
+ *   only one gated behind a server-side flag (Verification:ShowTitleBadge),
+ *   because it is the claim a defrauded buyer's lawyer will point at first.
  *
  * Every variant states its own limit in the tooltip or on the face of it. Once a
  * listing carries a badge a renter relies on it, and if they are defrauded later
@@ -40,17 +41,30 @@ export default function VerifiedOwnerBadge({
 }: VerifiedOwnerBadgeProps) {
     if (tier < VerificationTier.IdentityVerified) return null;
 
+    const isTitle = tier >= VerificationTier.TitleVerified;
     const isBusiness = tier >= VerificationTier.BusinessVerified;
 
-    const label = isBusiness ? "Verified Business" : "Verified Owner";
-    const Icon = isBusiness ? Building2 : BadgeCheck;
+    const label = isTitle
+        ? "Title Verified"
+        : isBusiness
+            ? "Verified Business"
+            : "Verified Owner";
 
-    // The limit travels with the claim. Ownership is not verified at either tier.
-    const scopeNote = isBusiness
-        ? "Housing Hub has confirmed this lister's identity and that their company is "
-          + "registered with the CAC. Ownership of the property has not been verified."
-        : "Housing Hub has confirmed this owner's identity with a government-issued ID. "
-          + "Ownership of the property has not been verified.";
+    const Icon = isTitle ? ShieldCheck : isBusiness ? Building2 : BadgeCheck;
+
+    // The limit travels with the claim at every tier. Only the title tier may say
+    // anything about the property itself, and even then it describes what was
+    // reviewed rather than guaranteeing an outcome — "documents were reviewed", not
+    // "this property is safe to buy".
+    const scopeNote = isTitle
+        ? "Housing Hub has reviewed the title documents for this property and "
+          + "confirmed the lister's identity. This is not legal advice or a guarantee "
+          + "of title — take your own legal search before you transact."
+        : isBusiness
+            ? "Housing Hub has confirmed this lister's identity and that their company is "
+              + "registered with the CAC. Ownership of the property has not been verified."
+            : "Housing Hub has confirmed this owner's identity with a government-issued ID. "
+              + "Ownership of the property has not been verified.";
 
     if (variant === "compact") {
         return (
@@ -76,9 +90,11 @@ export default function VerifiedOwnerBadge({
             {/* Visible, not just a tooltip. This is the page where a renter decides,
                 and it is the one place there is room to say what was checked. */}
             <p className="mt-1 text-[11px] leading-snug text-emerald-900/80 dark:text-emerald-200/70">
-                {isBusiness
-                    ? "Identity confirmed with a government-issued ID, and company registration checked against the CAC. Housing Hub has not verified ownership of this property."
-                    : "Identity confirmed with a government-issued ID. Housing Hub has not verified ownership of this property."}
+                {isTitle
+                    ? "Title documents for this property have been reviewed and the lister's identity confirmed. This is not legal advice or a guarantee of title — please take your own legal search before you transact."
+                    : isBusiness
+                        ? "Identity confirmed with a government-issued ID, and company registration checked against the CAC. Housing Hub has not verified ownership of this property."
+                        : "Identity confirmed with a government-issued ID. Housing Hub has not verified ownership of this property."}
             </p>
         </div>
     );

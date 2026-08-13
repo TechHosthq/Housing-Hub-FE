@@ -85,6 +85,12 @@ export interface PropertyDetail {
      * see VerifiedOwnerBadge for why it is one badge rather than one per check.
      */
     ownerVerificationTier: VerificationTier;
+    /**
+     * Strongest claim for THIS listing — the owner's tier, raised to TitleVerified
+     * when the property's own title has been checked and the badge is enabled
+     * server-side. This is what the badge should render.
+     */
+    listingVerificationTier: VerificationTier;
     /** Owner's display name. Populated on single-property reads. */
     ownerName?: string | null;
     files: PropertyFile[];

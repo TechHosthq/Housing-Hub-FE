@@ -104,7 +104,7 @@ export default function PropertyDetailPage() {
                         propertyId={property.id}
                         listedDate={property.publishedAt ?? property.dateCreated}
                         availability={property.availability}
-                        ownerVerificationTier={property.ownerVerificationTier}
+                        ownerVerificationTier={property.listingVerificationTier}
                         ownerName={property.ownerName}
                     />
                 </div>

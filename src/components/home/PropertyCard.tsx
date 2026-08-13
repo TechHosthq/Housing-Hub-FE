@@ -47,7 +47,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
     // One badge showing the highest tier, never one per check — see
     // VerifiedOwnerBadge. Each tier states its own limit in the tooltip.
     const ownerTier = isApiProperty
-        ? (property as PropertyDetail).ownerVerificationTier
+        ? (property as PropertyDetail).listingVerificationTier
         : VerificationTier.Unverified;
 
     return (
