@@ -152,7 +152,7 @@ const nextConfig: NextConfig = {
  * which is a slow way to discover you have monitoring in name only.
  *
  * Source map upload needs SENTRY_AUTH_TOKEN, SENTRY_ORG and SENTRY_PROJECT at
- * BUILD time (Netlify env vars, not runtime). They are absent locally, so
+ * BUILD time (Vercel env vars, not runtime). They are absent locally, so
  * `silent` keeps `npm run build` from printing warnings about it on every dev
  * build. The maps are hidden from the browser afterwards — uploaded to Sentry,
  * not served to users, so the bundle stays unreadable to anyone poking at it.
