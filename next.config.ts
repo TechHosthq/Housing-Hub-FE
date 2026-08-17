@@ -25,8 +25,31 @@ const toOrigin = (url: string | undefined, fallback: string): string => {
   }
 };
 
+/**
+ * Refuses to build for production without the variables that decide which
+ * environment this bundle talks to.
+ *
+ * These are baked in at build time, so an unset value is not a runtime warning you
+ * can fix later — it is a deployed site permanently wired to the wrong backend. The
+ * previous fallbacks meant a production deploy that forgot them served dev data to
+ * real users and looked entirely healthy doing it.
+ *
+ * Local development keeps the fallbacks; the friction there buys nothing.
+ */
+const requiredInProduction = (name: string, value: string | undefined, devFallback: string): string => {
+  if (value) return value;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(`${name} is not set. Set it on this Vercel environment before building for production.`);
+  }
+  return devFallback;
+};
+
 const API_ORIGIN = toOrigin(
-  process.env.NEXT_PUBLIC_API_BASE_URL,
+  requiredInProduction(
+    'NEXT_PUBLIC_API_BASE_URL',
+    process.env.NEXT_PUBLIC_API_BASE_URL,
+    'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com/dev',
+  ),
   'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com',
 );
 
@@ -49,7 +72,28 @@ const SENTRY_ORIGIN = process.env.NEXT_PUBLIC_SENTRY_DSN
 // SignalR upgrades to a WebSocket against the same host.
 const API_WS_ORIGIN = API_ORIGIN.replace(/^https:/, 'wss:').replace(/^http:/, 'ws:');
 
-const S3_ORIGIN = 'https://housinghub-files-dev.s3.af-south-1.amazonaws.com';
+/**
+ * Origin serving property photos and video.
+ *
+ * Used in two places that must agree: the CSP (`img-src`/`media-src`) and
+ * `images.remotePatterns` below. Getting one right and the other wrong is the
+ * likely mistake, and the two failures look different — a wrong remotePattern
+ * throws a clear next/image error, while a wrong CSP silently refuses the request
+ * and reads as "the images are broken".
+ *
+ * Derived from a single variable so they cannot drift apart.
+ */
+const S3_ORIGIN = toOrigin(
+  requiredInProduction(
+    'NEXT_PUBLIC_S3_ORIGIN',
+    process.env.NEXT_PUBLIC_S3_ORIGIN,
+    'https://housinghub-files-dev.s3.af-south-1.amazonaws.com',
+  ),
+  'https://housinghub-files-dev.s3.af-south-1.amazonaws.com',
+);
+
+/** Host portion only — next/image's remotePatterns wants a hostname, not an origin. */
+const S3_HOSTNAME = new URL(S3_ORIGIN).hostname;
 
 /**
  * Content Security Policy.
@@ -137,8 +181,9 @@ const nextConfig: NextConfig = {
       {
         // Property/profile photos uploaded to S3 (see S3FileStorageService.UploadFileAsync
         // for the exact URL shape: https://{bucket}.s3.{region}.amazonaws.com/{key}).
+        // Shares S3_ORIGIN with the CSP above so the two cannot disagree.
         protocol: 'https',
-        hostname: 'housinghub-files-dev.s3.af-south-1.amazonaws.com',
+        hostname: S3_HOSTNAME,
       },
     ],
   },

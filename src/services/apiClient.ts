@@ -20,9 +20,33 @@ const isProxyEnabled = typeof window !== 'undefined' && process.env.NEXT_PUBLIC_
 /**
  * Absolute API origin. Exported for flows that must bypass the /api/proxy rewrite —
  * e.g. OAuth redirects the browser has to follow itself.
+ *
+ * There is deliberately no fallback in a production build. This used to default to
+ * the dev API Gateway, which meant a production deploy with the variable unset
+ * pointed real users at dev: real sign-ups landing in dev tables, real uploads in
+ * the dev bucket, and nothing anywhere reporting a problem. A build that refuses
+ * to complete is a far better failure than a site that works against the wrong
+ * data.
+ *
+ * `next build` evaluates this, so the error surfaces in CI rather than at runtime.
+ * Locally it still falls back, because requiring the variable to run `npm run dev`
+ * would be friction with no safety benefit.
  */
-export const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_BASE_URL || 'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com/dev';
+const resolveApiBaseUrl = (): string => {
+    const configured = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (configured) return configured;
+
+    if (process.env.NODE_ENV === 'production') {
+        throw new Error(
+            'NEXT_PUBLIC_API_BASE_URL is not set. Set it on this Vercel environment — '
+            + 'refusing to fall back to the dev API in a production build.',
+        );
+    }
+
+    return 'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com/dev';
+};
+
+export const API_BASE_URL = resolveApiBaseUrl();
 
 const baseURL = isProxyEnabled ? '/api/proxy' : API_BASE_URL;
 if (typeof window === 'undefined') {
