@@ -1,23 +1,38 @@
 import { VerificationTier } from '@/types/verification';
 import { ApiResponse, PaginatedResponse } from "./auth";
 
+// Must match backend HousingHub.Model.Enums.PropertyType exactly.
+//
+// These cross the wire as integers, so a disagreement does not fail — it saves
+// the wrong thing. This list previously read House=1, Apartment=2, Guesthouse=3,
+// Flat=4, Duplex=5 against the server's Apartment=1, House=2, Land=3, Duplex=4,
+// Bungalow=5: every listing was stored as a different type than the one chosen,
+// and two of the options named nothing the server had.
 export enum PropertyType {
-    House = 1,
-    Apartment = 2,
-    Guesthouse = 3,
-    Flat = 4,
-    Duplex = 5
+    Apartment = 1,
+    House = 2,
+    Land = 3,
+    Duplex = 4,
+    Bungalow = 5
 }
 
+// Must match backend HousingHub.Model.Enums.PropertyAvailability exactly.
+// Named Rented rather than Occupied to match the server, and UnderOffer was
+// absent here so the state was unreachable from this app.
 export enum AvailabilityStatus {
     Available = 1,
-    Occupied = 2,
-    Sold = 3
+    Rented = 2,
+    Sold = 3,
+    UnderOffer = 4
 }
 
+// Must match backend HousingHub.Model.Enums.PropertyLeaseType exactly.
+// Sale was 2 here and Lease is 2 on the server, so every listing put up for
+// sale was recorded as a lease.
 export enum PropertyLeaseType {
     Rent = 1,
-    Sale = 2
+    Lease = 2,
+    Sale = 3
 }
 
 // Must match backend HousingHub.Model.Enums.PropertyFileType exactly.
