@@ -23,6 +23,7 @@ export default function PersonalInfoForm() {
     const [formData, setFormData] = useState({
         firstName: storeData.firstName || user?.firstName || "",
         lastName: storeData.lastName || user?.lastName || "",
+        phoneNumber: storeData.phoneNumber || user?.phoneNumber || "",
         dateOfBirth: storeData.dateOfBirth || "",
         jobTitle: storeData.jobTitle || "",
         companyName: storeData.companyName || "",
@@ -36,6 +37,7 @@ export default function PersonalInfoForm() {
                 ...prev,
                 firstName: customer.firstName || prev.firstName,
                 lastName: customer.lastName || prev.lastName,
+                phoneNumber: customer.phoneNumber || prev.phoneNumber,
                 dateOfBirth: customer.dateOfBirth ? customer.dateOfBirth.split('T')[0] : prev.dateOfBirth,
                 jobTitle: customer.jobTitle || prev.jobTitle,
                 companyName: customer.companyName || prev.companyName,
@@ -44,9 +46,12 @@ export default function PersonalInfoForm() {
         }
     }, [customerResponse, storeData.firstName]);
 
+    // Phone number is required by the profile endpoint, so gate on it here rather
+    // than letting the request 400 on a field the form used to not even show.
     const isFormValid =
         formData.firstName &&
         formData.lastName &&
+        formData.phoneNumber &&
         formData.dateOfBirth;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -75,7 +80,7 @@ export default function PersonalInfoForm() {
             customerId: user.id,
             firstName: formData.firstName || null,
             lastName: formData.lastName || null,
-            phoneNumber: user.phoneNumber || null,
+            phoneNumber: formData.phoneNumber || null,
             dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : null,
             jobTitle: formData.jobTitle || null,
             companyName: formData.companyName || null,
@@ -134,6 +139,20 @@ export default function PersonalInfoForm() {
                             value={formData.lastName}
                             onChange={handleInputChange}
                             placeholder="Enter last name"
+                            className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#0B2545] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                        />
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="text-[9px] font-bold text-[#666666] dark:text-gray-400 uppercase tracking-wider">
+                            Phone Number<span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="tel"
+                            name="phoneNumber"
+                            value={formData.phoneNumber}
+                            onChange={handleInputChange}
+                            placeholder="e.g. 08012345678"
                             className="w-full px-5 py-3 rounded-xl border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-[#0B2545] transition-colors text-sm placeholder:text-gray-300 dark:placeholder:text-gray-600"
                         />
                     </div>
