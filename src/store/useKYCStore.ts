@@ -4,6 +4,9 @@ import { persist } from 'zustand/middleware';
 interface KYCData {
     firstName: string;
     lastName: string;
+    // Collected here rather than at sign-up because Google sign-in never supplies
+    // one, and the profile endpoint requires it.
+    phoneNumber: string;
     dateOfBirth: string;
     nationalIdNumber: string;
     idType: number;
