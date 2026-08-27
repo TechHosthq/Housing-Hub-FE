@@ -2,6 +2,7 @@ import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
 import InspectionForm from "@/components/property/InspectionForm";
 import { propertyService } from "@/services/propertyService";
+import { PropertyFileType } from "@/types/property";
 import { notFound } from "next/navigation";
 
 export default async function InspectionPage({ params }: { params: Promise<{ id: string }> }) {
@@ -21,7 +22,10 @@ export default async function InspectionPage({ params }: { params: Promise<{ id:
                 title: data.title || "Untitled Property",
                 price: `₦ ${data.price.toLocaleString()}`,
                 location: data.propertyAddress?.city || "Lagos",
-                image: data.files?.[0]?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070",
+                // Must be an image: this goes to next/image, which answers an .mp4 with
+                // 400 INVALID_IMAGE_OPTIMIZE_REQUEST and renders as a broken thumbnail.
+                image: data.files?.find(f => f.type === PropertyFileType.Image)?.fileUrl
+                    || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070",
                 listedDate: data.publishedAt ?? data.dateCreated,
                 availability: data.availability,
             };
