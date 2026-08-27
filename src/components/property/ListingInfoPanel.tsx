@@ -10,13 +10,15 @@ interface ListingInfoPanelProps {
 
 const AVAILABILITY_LABEL: Record<AvailabilityStatus, string> = {
     [AvailabilityStatus.Available]: "Available",
-    [AvailabilityStatus.Occupied]: "Occupied",
+    [AvailabilityStatus.Rented]: "Rented",
+    [AvailabilityStatus.UnderOffer]: "Under offer",
     [AvailabilityStatus.Sold]: "Sold",
 };
 
 const AVAILABILITY_STYLE: Record<AvailabilityStatus, string> = {
     [AvailabilityStatus.Available]: "bg-[#E9F3FF] text-[#0095FF]",
-    [AvailabilityStatus.Occupied]: "bg-amber-50 text-amber-600",
+    [AvailabilityStatus.Rented]: "bg-amber-50 text-amber-600",
+    [AvailabilityStatus.UnderOffer]: "bg-purple-50 text-purple-600",
     [AvailabilityStatus.Sold]: "bg-gray-100 text-gray-500",
 };
 
