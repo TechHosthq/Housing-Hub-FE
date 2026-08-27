@@ -13,7 +13,23 @@ import { useRouter } from "next/navigation";
 import { NIGERIAN_STATES } from "@/lib/nigerianStates";
 import { useToastStore } from "@/store/useToastStore";
 
-const PROPERTY_TYPES = ["House", "Apartment", "Guesthouse", "Flat", "Duplex"];
+// Derived from the enum rather than a parallel array of names. The array version
+// was indexed two different ways in this file — `idx as PropertyType` on click
+// (0-based, so the first chip sent 0, which no enum member has and the API
+// rejected outright) and `PROPERTY_TYPES[propertyType]` for the label (treating
+// a 1-based value as a 0-based index, so the review step named the wrong type).
+// Keying off the enum makes both impossible.
+const PROPERTY_TYPE_OPTIONS: { value: PropertyType; label: string }[] = [
+    { value: PropertyType.Apartment, label: "Apartment" },
+    { value: PropertyType.House, label: "House" },
+    { value: PropertyType.Land, label: "Land" },
+    { value: PropertyType.Duplex, label: "Duplex" },
+    { value: PropertyType.Bungalow, label: "Bungalow" },
+];
+
+const propertyTypeLabel = (value: PropertyType) =>
+    PROPERTY_TYPE_OPTIONS.find(o => o.value === value)?.label ?? "";
+
 const FEATURES = ["Wifi", "Car Pack", "Security Camera", "Swimming Pool", "Gym", "Generator", "Balcony"];
 
 const FEATURES_MAP: Record<string, number> = {
@@ -360,16 +376,16 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                         Property Type
                     </label>
                     <div className="flex flex-wrap gap-3">
-                        {PROPERTY_TYPES.map((type, idx) => (
+                        {PROPERTY_TYPE_OPTIONS.map(({ value, label }) => (
                             <button
-                                key={type}
-                                onClick={() => setPropertyType(idx as PropertyType)}
-                                className={`px-8 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${propertyType === idx
+                                key={value}
+                                onClick={() => setPropertyType(value)}
+                                className={`px-8 py-3.5 rounded-full border-2 font-bold text-[14px] transition-all ${propertyType === value
                                     ? "border-[#0095FF] text-[#0095FF] bg-white dark:bg-gray-900"
                                     : "border-gray-100 dark:border-gray-800 text-gray-400 dark:text-gray-500 hover:border-gray-200"
                                     }`}
                             >
-                                {type}
+                                {label}
                             </button>
                         ))}
                     </div>
@@ -415,7 +431,8 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                             className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100 appearance-none bg-white dark:bg-gray-900 cursor-pointer"
                         >
                             <option value={AvailabilityStatus.Available}>Available</option>
-                            <option value={AvailabilityStatus.Occupied}>Occupied</option>
+                            <option value={AvailabilityStatus.Rented}>Rented</option>
+                            <option value={AvailabilityStatus.UnderOffer}>Under offer</option>
                             <option value={AvailabilityStatus.Sold}>Sold</option>
                         </select>
                         <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" size={20} />
@@ -689,7 +706,7 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                     <div className="space-y-6">
                         <div className="flex justify-between items-start gap-4">
                             <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Property Type</span>
-                            <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{PROPERTY_TYPES[propertyType]}</span>
+                            <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">{propertyTypeLabel(propertyType)}</span>
                         </div>
                         <div className="flex justify-between items-start gap-4">
                             <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Property Title</span>

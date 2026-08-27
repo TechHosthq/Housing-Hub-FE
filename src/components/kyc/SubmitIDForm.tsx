@@ -9,6 +9,20 @@ import { useKYCStore } from "@/store/useKYCStore";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useAuthStore } from "@/store/useAuthStore";
 
+// Same ceiling and reasoning as AddPropertyForm: uploads pass through API Gateway
+// and Lambda, which caps request payloads at 6MB — less once multipart and base64
+// overhead are counted. Over that, API Gateway rejects the request before the
+// function is invoked, so nothing reaches CloudWatch and the browser reports a
+// bare network failure. Checking here turns that into something readable.
+//
+// Note the backend's own DocumentMaxBytes is 15MB and the label here used to
+// claim 8MB. Neither is achievable through this stack; the honest number is this
+// one, until uploads move to direct-to-S3 presigned URLs.
+const MAX_DOCUMENT_BYTES = 4 * 1024 * 1024;
+const ALLOWED_DOCUMENT_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".pdf"];
+
+const formatMegabytes = (bytes: number) => `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
+
 export default function SubmitIDForm() {
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -42,6 +56,21 @@ export default function SubmitIDForm() {
         if (!file) return;
 
         setError("");
+
+        const extension = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+        if (!ALLOWED_DOCUMENT_EXTENSIONS.includes(extension)) {
+            setError(`We can't read ${extension || "that"} files. Please upload a PDF, JPG, PNG or WEBP.`);
+            return;
+        }
+
+        if (file.size > MAX_DOCUMENT_BYTES) {
+            setError(
+                `That file is ${formatMegabytes(file.size)}. Please upload one under ${formatMegabytes(MAX_DOCUMENT_BYTES)} — ` +
+                `try a photo of the document rather than a full scan.`
+            );
+            return;
+        }
+
         try {
             const response = await uploadDocument(file);
 
@@ -58,10 +87,14 @@ export default function SubmitIDForm() {
             setUploadedFileName("");
             setDocRef("");
             setError(response.message || "Could not upload the document. Please try again.");
-        } catch {
+        } catch (err) {
             setUploadedFileName("");
             setDocRef("");
-            setError("Could not upload the document. Please check your connection and try again.");
+            // Logged, not shown. The bare copy below sent us to CloudWatch to find
+            // out that the request had never arrived; the status code belongs in
+            // the console where it can be read.
+            console.error("KYC document upload failed", err);
+            setError("We couldn't upload that document. Please try again in a moment.");
         }
     };
 
@@ -181,7 +214,7 @@ export default function SubmitIDForm() {
                                 <UploadCloud size={24} />
                             </div>
                             <span className="text-xs font-bold text-gray-400 dark:text-gray-500 mt-2">Upload Document</span>
-                            <p className="text-[10px] text-gray-300 mt-1">PDF, JPG or PNG, max 8MB</p>
+                            <p className="text-[10px] text-gray-300 mt-1">PDF, JPG, PNG or WEBP, max 4MB</p>
                         </div>
                     ) : (
                         <div className="bg-[#E9F3FF] rounded-[15px] p-6 flex items-center justify-between border border-[#E9F3FF]">

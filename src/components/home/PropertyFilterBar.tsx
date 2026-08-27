@@ -8,18 +8,18 @@ import { PropertyType } from "@/types/property";
 
 const FILTER_OPTIONS = {
     location: NIGERIAN_STATES,
-    propertyType: ["House", "Apartment", "Guesthouse", "Flat", "Duplex"],
+    propertyType: ["Apartment", "House", "Land", "Duplex", "Bungalow"],
     priceRange: ["Under ₦1M", "₦1M - ₦5M", "₦5M - ₦20M", "₦20M - ₦50M", "₦50M+"],
 };
 
 // The API binds PropertyType as its integer enum. Sending the display name
 // ("House") bound to nothing, so the filter silently returned no results.
 const PROPERTY_TYPE_PARAM: Record<string, PropertyType> = {
-    House: PropertyType.House,
     Apartment: PropertyType.Apartment,
-    Guesthouse: PropertyType.Guesthouse,
-    Flat: PropertyType.Flat,
+    House: PropertyType.House,
+    Land: PropertyType.Land,
     Duplex: PropertyType.Duplex,
+    Bungalow: PropertyType.Bungalow,
 };
 
 const PRICE_RANGE_PARAM: Record<string, { minPrice?: number; maxPrice?: number }> = {

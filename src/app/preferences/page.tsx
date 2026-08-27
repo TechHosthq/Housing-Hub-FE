@@ -7,11 +7,11 @@ import { PropertyType } from "@/types/property";
 import { Loader2, BellRing, Trash2 } from "lucide-react";
 
 const PROPERTY_TYPE_LABELS: Record<PropertyType, string> = {
-    [PropertyType.House]: "House",
     [PropertyType.Apartment]: "Apartment",
-    [PropertyType.Guesthouse]: "Guesthouse",
-    [PropertyType.Flat]: "Flat",
+    [PropertyType.House]: "House",
+    [PropertyType.Land]: "Land",
     [PropertyType.Duplex]: "Duplex",
+    [PropertyType.Bungalow]: "Bungalow",
 };
 
 export default function PreferencesPage() {
