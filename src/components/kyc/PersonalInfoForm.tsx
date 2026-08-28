@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useKYCStore } from "@/store/useKYCStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useCustomer } from "@/hooks/useCustomer";
+import { resolveApiError } from "@/utils/errorResolver";
 
 export default function PersonalInfoForm() {
     const router = useRouter();
@@ -68,12 +69,15 @@ export default function PersonalInfoForm() {
                 updateFormData(formData);
                 router.push("/kyc/submit-id");
             } else {
-                setError(response.message || response.errors?.[0]?.errorMessage || "Failed to save profile");
+                setError(response.message || "We couldn't save those details. Please try again.");
             }
         };
 
+        // resolveApiError rather than reading the body here: `err.message` is axios's
+        // own text ("Request failed with status code 400"), which is what this form
+        // used to show when the API returned a shape without a `message` field.
         const handleError = (err: any) => {
-            setError(err?.response?.data?.message || err?.message || "An unexpected error occurred");
+            setError(resolveApiError(err).join(" "));
         };
 
         updateProfile({
