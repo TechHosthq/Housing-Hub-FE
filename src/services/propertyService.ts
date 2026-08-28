@@ -80,8 +80,12 @@ export const propertyService = {
         return response.data;
     },
 
-    getMyProperties: async (): Promise<ApiResponse<PropertyDetail[]>> => {
-        const response = await apiClient.get<ApiResponse<PropertyDetail[]>>('/api/v1/Property/my');
+    // Paginated, not a bare list. This was typed as PropertyDetail[] and is not:
+    // the endpoint returns BaseResponsePagination<PaginatedResult<PropertyDto>>, so
+    // `data` is { items, totalCount, ... }. The wrong type meant TypeScript assured
+    // callers they had an array; /verification believed it and crashed on .map.
+    getMyProperties: async (): Promise<ApiResponse<PaginatedResponse<PropertyDetail>>> => {
+        const response = await apiClient.get<ApiResponse<PaginatedResponse<PropertyDetail>>>('/api/v1/Property/my');
         return response.data;
     },
 

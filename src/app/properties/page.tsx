@@ -36,17 +36,10 @@ export default function OwnerPropertiesPage() {
 
     if (role === "Customer") return null;
 
-    // Robustly extract properties array supporting both raw lists and paginated structures
-    const rawData = propertiesResponse?.data;
-    const properties = Array.isArray(rawData)
-        ? rawData
-        : (rawData && Array.isArray((rawData as any).items))
-            ? (rawData as any).items
-            : Array.isArray(propertiesResponse)
-                ? propertiesResponse
-                : (propertiesResponse && Array.isArray((propertiesResponse as any).items))
-                    ? (propertiesResponse as any).items
-                    : [];
+    // The endpoint is paginated. This used to be a four-deep chain of Array.isArray
+    // guards with `as any` escapes, which existed because getMyProperties claimed to
+    // return a bare array and did not. With the type corrected, the shape is known.
+    const properties = propertiesResponse?.data?.items ?? [];
 
     // Calculate pagination values
     const totalCount = properties.length;
