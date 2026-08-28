@@ -35,7 +35,7 @@ export default function VerificationHubPage() {
     const [propertyId, setPropertyId] = useState("");
 
     const cases = casesResponse?.data ?? [];
-    const properties = propertiesResponse?.data ?? [];
+    const properties = propertiesResponse?.data?.items ?? [];
 
     const canVerifyBusiness = isBusinessAccount(user?.customerType);
 
