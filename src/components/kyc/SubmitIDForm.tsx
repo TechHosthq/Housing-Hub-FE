@@ -8,6 +8,7 @@ import KYCSuccessModal from "./KYCSuccessModal";
 import { useKYCStore } from "@/store/useKYCStore";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useAuthStore } from "@/store/useAuthStore";
+import { resolveApiError } from "@/utils/errorResolver";
 
 // Same ceiling and reasoning as AddPropertyForm: uploads pass through API Gateway
 // and Lambda, which caps request payloads at 6MB — less once multipart and base64
@@ -122,11 +123,11 @@ export default function SubmitIDForm() {
                         router.push("/dashboard?kyc=submitted");
                     }, 3000);
                 } else {
-                    setError(response.message || response.errors?.[0]?.errorMessage || "Failed to submit KYC");
+                    setError(response.message || "We couldn't submit your details. Please try again.");
                 }
             },
             onError: (err: any) => {
-                setError(err?.response?.data?.message || err?.message || "An unexpected error occurred");
+                setError(resolveApiError(err).join(" "));
             }
         });
     };
