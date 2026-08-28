@@ -36,7 +36,10 @@ export default function DashboardNavbar() {
     const navLinks = [
         // Owners get their dedicated overview (property/inspection stats); customers
         // keep the unified browsing homepage (issue 5b/5c) since they have no such overview.
-        { name: "Dashboard", href: role === "Owner" ? "/dashboard" : "/" },
+        // Both roles have a dashboard. Pointing renters at "/" sent them to the
+        // marketing homepage, so the screen they landed on after signing in was not
+        // the screen this link produced.
+        { name: "Dashboard", href: "/dashboard" },
         ...(role === "Owner" ? [{ name: "Property", href: "/properties" }] : []),
         { name: "Inspection", href: "/inspections" },
         { name: "Message", href: "/messages" },
@@ -46,7 +49,7 @@ export default function DashboardNavbar() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 px-6 md:px-8 py-3.5 flex items-center justify-between shadow-sm border-b border-gray-50">
             <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
                 {/* Logo */}
-                <Link href={role === "Owner" ? "/dashboard" : "/"} className="flex items-center" onClick={() => setIsMenuOpen(false)}>
+                <Link href="/dashboard" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
                     <Image
                         src="/images/logo.svg"
                         alt="Housing Hub Logo"

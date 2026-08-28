@@ -2,14 +2,28 @@
 
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useUserRole } from "@/context/UserRoleContext";
+import { useEffect } from "react";
 
 export default function ListHero() {
     const router = useRouter();
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const { isOwner } = useUserRole();
+
+    // Nothing here applies to a renter, and Get Started used to send them to
+    // /properties/add — a form they cannot submit, on a page they cannot use.
+    // Signed-out visitors still see it: they are exactly who it is written for.
+    const isRenter = isAuthenticated && !isOwner;
+
+    useEffect(() => {
+        if (isRenter) router.replace("/dashboard");
+    }, [isRenter, router]);
 
     const handleGetStarted = () => {
         router.push(isAuthenticated ? "/properties/add" : "/login");
     };
+
+    if (isRenter) return null;
 
     return (
         <section className="relative h-[385px] flex items-center justify-center pt-14 overflow-hidden">

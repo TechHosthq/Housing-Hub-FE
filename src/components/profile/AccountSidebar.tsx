@@ -3,13 +3,18 @@
 import { User, MessageCircle, Settings, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUserRole } from "@/context/UserRoleContext";
 
 export default function AccountSidebar() {
     const pathname = usePathname();
+    const { isOwner } = useUserRole();
 
+    // /verification is business and property-title verification: a renter has no
+    // business to verify and no listing to attach a title to, so the section is
+    // empty for them. Their identity check lives under Profile.
     const menuItems = [
         { label: "Profile Info", icon: User, href: "/profile" },
-        { label: "Verification", icon: ShieldCheck, href: "/verification" },
+        ...(isOwner ? [{ label: "Verification", icon: ShieldCheck, href: "/verification" }] : []),
         { label: "Message", icon: MessageCircle, href: "/messages" },
         { label: "Settings", icon: Settings, href: "/settings" }
     ];
