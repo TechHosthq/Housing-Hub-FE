@@ -20,16 +20,27 @@ export default function Navbar() {
     const clearAuth = useAuthStore((state) => state.clearAuth);
     const { role: roleLabel } = useUserRole();
 
-    const navLinks = [
-        // The public listings live on the homepage; /properties is the owner's
-        // private "my listings" page and requires auth.
-        { name: "Browse Homes", href: "/" },
-        // Customers manage inspections instead of listing properties.
-        isAuthenticated && roleLabel === "Customer"
-            ? { name: "Inspections", href: "/inspections" }
-            : { name: "List Properties", href: "/list-properties" },
-        { name: "FAQ", href: "/faq" },
-    ];
+    // This navbar renders on public routes, including a listing page an owner can
+    // reach straight from a notification. It used to show them the anonymous set —
+    // "Browse Homes", "List Properties" — so following a notification about their
+    // own listing dropped them into what looked like the marketing site, and stayed
+    // that way until they clicked the logo. Signed in, mirror the app shell.
+    const navLinks = isAuthenticated
+        ? [
+            { name: "Dashboard", href: "/dashboard" },
+            ...(roleLabel === "Owner"
+                ? [{ name: "Property", href: "/properties" }]
+                : [{ name: "Browse Homes", href: "/" }]),
+            { name: "Inspections", href: "/inspections" },
+            { name: "FAQ", href: "/faq" },
+        ]
+        : [
+            // The public listings live on the homepage; /properties is the owner's
+            // private "my listings" page and requires auth.
+            { name: "Browse Homes", href: "/" },
+            { name: "List Properties", href: "/list-properties" },
+            { name: "FAQ", href: "/faq" },
+        ];
 
     // Close user dropdown when clicking outside
     useEffect(() => {
@@ -59,7 +70,7 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto flex items-center justify-between w-full">
                 {/* Logo */}
                 <div className="flex items-center">
-                    <Link href={roleLabel === "Owner" ? "/dashboard" : "/"} className="flex items-center" onClick={() => setIsMenuOpen(false)}>
+                    <Link href={isAuthenticated ? "/dashboard" : "/"} className="flex items-center" onClick={() => setIsMenuOpen(false)}>
                         <Image
                             src="/images/logo.svg"
                             alt="Housing Hub Logo"
@@ -117,7 +128,7 @@ export default function Navbar() {
                                         <span className="text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100">Profile</span>
                                     </Link>
                                     <Link
-                                        href={roleLabel === "Owner" ? "/dashboard" : "/"}
+                                        href={isAuthenticated ? "/dashboard" : "/"}
                                         onClick={() => setIsUserMenuOpen(false)}
                                         className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group"
                                     >

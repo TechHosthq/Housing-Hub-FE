@@ -313,8 +313,12 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                         </p>
                     </div>
 
-                    {/* Respond to a proposed reschedule — shown to whichever party needs to act */}
-                    {inspection.status === InspectionStatus.Rescheduled && (
+                    {/* Respond to a proposed reschedule — shown only to the party who
+                        did NOT propose it. Both used to see Accept and Decline for a
+                        date one of them had just suggested, and the server allowed it,
+                        so a proposer could confirm their own new time. */}
+                    {inspection.status === InspectionStatus.Rescheduled
+                        && inspection.rescheduleRequestedById !== currentUser?.id && (
                         <div className="bg-[#F2F7FF] rounded-[22px] border border-[#D9E9FF] p-8">
                             <h3 className="text-[18px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-2">New Date Proposed</h3>
                             <p className="text-[14px] text-[#666666] dark:text-gray-400 font-medium leading-relaxed mb-6">
@@ -365,6 +369,20 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                                     </button>
                                 </div>
                             )}
+                        </div>
+                    )}
+
+                    {/* The proposer's side of the same state. Without this the panel
+                        simply vanished for them, which reads as the request having
+                        been lost rather than as waiting on someone. */}
+                    {inspection.status === InspectionStatus.Rescheduled
+                        && inspection.rescheduleRequestedById === currentUser?.id && (
+                        <div className="bg-[#FFF9EC] rounded-[22px] border border-[#FFE2A8] p-8">
+                            <h3 className="text-[18px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-2">Waiting on a reply</h3>
+                            <p className="text-[14px] text-[#666666] dark:text-gray-400 font-medium leading-relaxed">
+                                You proposed {inspection.rescheduledDate && format(new Date(inspection.rescheduledDate), "MMMM dd, yyyy")} at {formatTimeTo12h(inspection.rescheduledTime || undefined)}.
+                                We&apos;ll let you know as soon as the {role === "Customer" ? "owner" : "customer"} responds.
+                            </p>
                         </div>
                     )}
 
