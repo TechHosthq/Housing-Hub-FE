@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
+import { useUserRole } from "@/context/UserRoleContext";
 import Footer from "@/components/layout/Footer";
 import AccountSidebar from "@/components/profile/AccountSidebar";
 import ProfileForm from "@/components/profile/ProfileForm";
@@ -46,6 +47,8 @@ export default function MyAccountPage() {
     const customer = customerResponse?.data;
     // Derive real KYC state from the same source the dashboard uses, instead of a
     // hardcoded "verified" demo value that disagreed with the dashboard banner.
+    const { isOwner } = useUserRole();
+
     const status: "verified" | "pending" | "none" = customer?.isKycVerified
         ? "verified"
         : customer?.kycSubmittedAt
@@ -55,7 +58,9 @@ export default function MyAccountPage() {
     const banner = {
         verified: {
             title: "KYC Verified",
-            body: "Your identity has been verified. You can now request property inspections.",
+            body: isOwner
+                ? "Your identity has been verified. You can now publish listings."
+                : "Your identity has been verified.",
             icon: <Check size={12} strokeWidth={4} />,
             iconBg: "bg-[#00C853]",
         },
@@ -67,7 +72,12 @@ export default function MyAccountPage() {
         },
         none: {
             title: "Complete your KYC",
-            body: "Verify your identity to request property inspections and list properties.",
+            // Listing is the only thing verification actually gates — the server
+            // refuses to publish without it. Nothing checks it before an inspection
+            // is requested, on either side, so promising that was simply untrue.
+            body: isOwner
+                ? "Verify your identity to publish your listings."
+                : "Verify your identity so owners know who they're dealing with.",
             icon: <ShieldAlert size={12} strokeWidth={3} />,
             iconBg: "bg-[#0095FF]",
         },
