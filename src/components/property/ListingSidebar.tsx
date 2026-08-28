@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useInspection } from "@/hooks/useInspection";
+import { InspectionStatus } from "@/types/inspection";
 import { AvailabilityStatus } from "@/types/property";
 import { VerificationTier } from "@/types/verification";
 import ListingInfoPanel from "./ListingInfoPanel";
@@ -25,6 +27,20 @@ export default function ListingSidebar({
     ownerName,
 }: ListingSidebarProps) {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+    // The server already refuses a second request for the same listing
+    // ("You already have a pending inspection request for this property."), but the
+    // button offered it anyway, so the only way to discover that was to fill the
+    // form in and be rejected. Point them at the one they have instead.
+    const { useMyInspections } = useInspection();
+    const { data: myInspectionsResponse } = useMyInspections(1, 50);
+    const activeInspection = isAuthenticated && propertyId
+        ? (myInspectionsResponse?.data?.items ?? []).find(
+            (i) => i.propertyId === propertyId
+                && (i.status === InspectionStatus.Pending
+                    || i.status === InspectionStatus.Confirmed
+                    || i.status === InspectionStatus.Rescheduled))
+        : undefined;
 
     // Anyone can view a listing, but booking needs an account. Send signed-out
     // visitors to login with a return path so they land back here afterwards.
@@ -58,12 +74,26 @@ export default function ListingSidebar({
             )}
 
             <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-6 shadow-sm">
-                <Link
-                    href={inspectionHref}
-                    className="block w-full text-center bg-primary-dark hover:bg-primary-dark/90 text-white py-3.5 rounded-full text-[12px] font-bold transition-all shadow-md"
-                >
-                    {isAuthenticated ? "Request Inspection" : "Sign in to Request Inspection"}
-                </Link>
+                {activeInspection ? (
+                    <>
+                        <Link
+                            href={`/inspections/${activeInspection.id}`}
+                            className="block w-full text-center bg-primary-dark hover:bg-primary-dark/90 text-white py-3.5 rounded-full text-[12px] font-bold transition-all shadow-md"
+                        >
+                            View Your Inspection
+                        </Link>
+                        <p className="mt-3 text-center text-[11px] font-medium text-gray-400 dark:text-gray-500">
+                            You already have an inspection on this listing.
+                        </p>
+                    </>
+                ) : (
+                    <Link
+                        href={inspectionHref}
+                        className="block w-full text-center bg-primary-dark hover:bg-primary-dark/90 text-white py-3.5 rounded-full text-[12px] font-bold transition-all shadow-md"
+                    >
+                        {isAuthenticated ? "Request Inspection" : "Sign in to Request Inspection"}
+                    </Link>
+                )}
             </div>
         </div>
     );

@@ -29,6 +29,8 @@ export interface Inspection {
     rescheduledDate: string | null;
     rescheduledTime: string | null;
     rescheduleNote: string | null;
+    /** Who proposed the pending reschedule. The *other* party is the one who answers it. */
+    rescheduleRequestedById: string | null;
     propertyImageUrl?: string | null;
     propertyOwnerId?: string | null;
     customerName?: string | null;
