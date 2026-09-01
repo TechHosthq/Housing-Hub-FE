@@ -27,10 +27,8 @@ export default function Navbar() {
     // that way until they clicked the logo. Signed in, mirror the app shell.
     const navLinks = isAuthenticated
         ? [
-            { name: "Dashboard", href: "/dashboard" },
-            ...(roleLabel === "Owner"
-                ? [{ name: "Property", href: "/properties" }]
-                : [{ name: "Browse Homes", href: "/" }]),
+            { name: "Dashboard", href: roleLabel === "Owner" ? "/dashboard" : "/" },
+            ...(roleLabel === "Owner" ? [{ name: "Property", href: "/properties" }] : []),
             { name: "Inspections", href: "/inspections" },
             { name: "FAQ", href: "/faq" },
         ]
@@ -70,7 +68,7 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto flex items-center justify-between w-full">
                 {/* Logo */}
                 <div className="flex items-center">
-                    <Link href={isAuthenticated ? "/dashboard" : "/"} className="flex items-center" onClick={() => setIsMenuOpen(false)}>
+                    <Link href={roleLabel === "Owner" ? "/dashboard" : "/"} className="flex items-center" onClick={() => setIsMenuOpen(false)}>
                         <Image
                             src="/images/logo.svg"
                             alt="Housing Hub Logo"
