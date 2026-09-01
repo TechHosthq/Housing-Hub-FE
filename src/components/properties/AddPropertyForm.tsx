@@ -107,6 +107,12 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
     const [state, setState] = useState("Lagos");
     const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
+    // Held as strings, not numbers, because "" has to mean "not stated" and stay
+    // distinguishable from 0 all the way to the API — a renter reads "0 Bedrooms"
+    // as a claim, and it would be one nobody made.
+    const [bedrooms, setBedrooms] = useState("");
+    const [bathrooms, setBathrooms] = useState("");
+
     // Success Modal State
     const [isPublishedModalOpen, setIsPublishedModalOpen] = useState(false);
     const [duplicateWarning, setDuplicateWarning] = useState<{ title: string; address: string } | null>(null);
@@ -162,6 +168,8 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
         setAvailability(p.availability);
         setListingType(p.propertyLeaseType);
         setPrice(String(p.price));
+        setBedrooms(p.bedrooms != null ? String(p.bedrooms) : "");
+        setBathrooms(p.bathrooms != null ? String(p.bathrooms) : "");
         const [first, ...rest] = (p.contactPersonName || "").split(" ");
         setFirstName(first || "");
         setLastName(rest.join(" "));
@@ -199,6 +207,51 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
         firstName.trim() !== "" &&
         lastName.trim() !== "" &&
         phone.trim() !== "";
+
+    // Land has no rooms to count, so the inputs are hidden for it — and the values
+    // are dropped on submit rather than merely hidden, so switching the type to Land
+    // after typing a number cannot leave a stale count on the listing.
+    const hasRoomCounts = propertyType !== PropertyType.Land;
+
+    const roomCountForSubmit = (value: string): number | null => {
+        if (!hasRoomCounts) return null;
+        const trimmed = value.trim();
+        if (trimmed === "") return null;
+        const parsed = Number(trimmed);
+        return Number.isInteger(parsed) && parsed >= 0 && parsed <= 50 ? parsed : null;
+    };
+
+    const roomCountInput = (
+        label: string,
+        value: string,
+        setValue: (next: string) => void,
+        placeholder: string
+    ) => (
+        <div>
+            <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
+                {label}
+            </label>
+            <input
+                // type="text" with a numeric keypad, not type="number": a controlled
+                // number input reports intermediate states like "3." and "3e" as an
+                // empty string, so a rejected keystroke would silently clear the box.
+                type="text"
+                inputMode="numeric"
+                value={value}
+                // Digits only, and bounded to what the API accepts, so a typo cannot be
+                // saved and then shown to renters as fact.
+                onChange={(e) => {
+                    const next = e.target.value;
+                    if (next === "") { setValue(""); return; }
+                    if (!/^\d{1,2}$/.test(next)) return;
+                    if (Number(next) > 50) return;
+                    setValue(next);
+                }}
+                placeholder={placeholder}
+                className="w-full px-6 py-4 rounded-xl border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#0095FF] font-medium text-[#1A1A1A] dark:text-gray-100 placeholder:text-gray-300 dark:placeholder:text-gray-600"
+            />
+        </div>
+    );
 
     const toggleFeature = (feature: string) => {
         setSelectedFeatures(prev =>
@@ -278,6 +331,8 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
             state,
             country: "Nigeria",
             postalCode: "100001",
+            bedrooms: roomCountForSubmit(bedrooms),
+            bathrooms: roomCountForSubmit(bathrooms),
             files: images,
             publish,
             confirmDuplicate
@@ -347,6 +402,11 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                 contactPersonName: `${firstName} ${lastName}`,
                 contactPersonEmail: email,
                 contactPersonPhoneNumber: phone,
+                // null leaves the stored count alone rather than clearing it — the API
+                // treats every field on an update as a patch. The field is labelled
+                // accordingly in edit mode so a cleared box is not a silent no-op.
+                bedrooms: roomCountForSubmit(bedrooms),
+                bathrooms: roomCountForSubmit(bathrooms),
                 propertyAddress: {
                     place: address,
                     city,
@@ -397,6 +457,26 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                         ))}
                     </div>
                 </div>
+
+                {/*
+                    Optional on purpose. An owner who does not know the count, or does
+                    not want to state one, leaves these blank and the listing simply
+                    says nothing — which is what every listing created before this
+                    field existed does. Hidden entirely for Land.
+                */}
+                {hasRoomCounts && (
+                    <div>
+                        <div className="grid grid-cols-2 gap-6">
+                            {roomCountInput("Bedrooms", bedrooms, setBedrooms, "e.g. 3")}
+                            {roomCountInput("Bathrooms", bathrooms, setBathrooms, "e.g. 2")}
+                        </div>
+                        <p className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 mt-3">
+                            {isEditMode
+                                ? "Optional. Leave blank to keep the counts already saved."
+                                : "Optional. Leave blank if you would rather not state a count."}
+                        </p>
+                    </div>
+                )}
 
                 <div>
                     <label className="block text-[12px] font-black text-[#1A1A1A] dark:text-gray-100 uppercase tracking-wider mb-4">
@@ -723,6 +803,17 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                             <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest block">Description</span>
                             <p className="text-[13px] font-bold text-[#1A1A1A] dark:text-gray-100 leading-relaxed">{description}</p>
                         </div>
+                        {hasRoomCounts && (bedrooms.trim() !== "" || bathrooms.trim() !== "") && (
+                            <div className="flex justify-between items-start gap-4">
+                                <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Rooms</span>
+                                <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 text-right">
+                                    {[
+                                        bedrooms.trim() !== "" ? `${bedrooms} bed` : null,
+                                        bathrooms.trim() !== "" ? `${bathrooms} bath` : null,
+                                    ].filter(Boolean).join(" · ")}
+                                </span>
+                            </div>
+                        )}
                         <div className="flex justify-between items-start gap-4">
                             <span className="text-[12px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Address</span>
                             <span className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 text-right">{address}, {city}, {state}</span>

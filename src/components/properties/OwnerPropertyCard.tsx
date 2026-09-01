@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { MoreVertical, MapPin, Eye, Clock, Loader2, Play } from "lucide-react";
+import { MoreVertical, MapPin, Eye, Clock, Loader2, Play, Bed, ShowerHead } from "lucide-react";
 import DeleteListingModal from "./DeleteListingModal";
 import PropertyDeletedModal from "./PropertyDeletedModal";
 import { PropertyDetail, PropertyFileType } from "@/types/property";
@@ -164,6 +164,25 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                     <MapPin size={16} className="text-gray-400 dark:text-gray-500" />
                     <span className="text-[14px] font-bold">{location}</span>
                 </div>
+
+                {/* Shown only where the owner stated a count, so a listing that is still
+                    missing one is visibly missing it rather than reading as zero. */}
+                {(property.bedrooms != null || property.bathrooms != null) && (
+                    <div className="flex items-center gap-4 text-gray-500 dark:text-gray-500">
+                        {property.bedrooms != null && (
+                            <span className="flex items-center gap-1.5 text-[13px] font-bold">
+                                <Bed size={15} className="text-gray-400 dark:text-gray-500" />
+                                {property.bedrooms}
+                            </span>
+                        )}
+                        {property.bathrooms != null && (
+                            <span className="flex items-center gap-1.5 text-[13px] font-bold">
+                                <ShowerHead size={15} className="text-gray-400 dark:text-gray-500" />
+                                {property.bathrooms}
+                            </span>
+                        )}
+                    </div>
+                )}
 
                 <div className="pt-4 mt-auto border-t border-gray-100 dark:border-gray-800 flex items-center gap-3">
                     {/* Views Stats */}

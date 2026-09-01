@@ -44,6 +44,11 @@ export const propertyService = {
         formData.append('PropertyAddress.State', data.state);
         formData.append('PropertyAddress.Country', data.country);
         formData.append('PropertyAddress.PostalCode', data.postalCode);
+
+        // Appended only when stated. An empty form field would bind to 0, and "0
+        // bedrooms" is a different claim from "not stated" — see PropertyDetail.
+        if (data.bedrooms != null) formData.append('Bedrooms', String(data.bedrooms));
+        if (data.bathrooms != null) formData.append('Bathrooms', String(data.bathrooms));
         
         data.files.forEach((file) => {
             formData.append('Files', file);

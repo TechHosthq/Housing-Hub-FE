@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Bed, Bath, ShowerHead, MapPin, Play } from "lucide-react";
+import { Bed, ShowerHead, MapPin, Play } from "lucide-react";
 import { Property } from "@/types";
 import { PropertyDetail, PropertyFileType } from "@/types/property";
 import Link from "next/link";
@@ -31,15 +31,18 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         ? (coverFile?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070")
         : (property as Property).image;
 
-    // Real listings have no bedroom or bathroom count: the Property entity has no
-    // such field — PropertyQueryService still carries a commented-out filter noting
-    // it "requires Bedrooms field on Property entity when added".
+    // Room counts come from the listing itself, and null means the owner never stated
+    // one — every listing created before Property.Bedrooms existed reads as null.
     //
-    // This used to fill the gap with Math.random(), so every card showed a renter an
-    // invented figure that changed on each render. Showing nothing is worse-looking
-    // and honest; inventing it is neither. Restore these once the field exists.
-    const bedrooms = isApiProperty ? null : (property as Property).bedrooms;
-    const bathrooms = isApiProperty ? null : (property as Property).bathrooms;
+    // Null renders nothing rather than "0 Bedrooms", which would be a claim nobody
+    // made. This block once filled the gap with Math.random() instead, so every card
+    // showed a renter an invented figure that changed on each render.
+    const bedrooms = isApiProperty
+        ? (property as PropertyDetail).bedrooms ?? null
+        : (property as Property).bedrooms;
+    const bathrooms = isApiProperty
+        ? (property as PropertyDetail).bathrooms ?? null
+        : (property as Property).bathrooms;
 
     // Mock properties keep their own static tag in the image overlay.
     const showBadge = isApiProperty ? false : !!(property as Property).tag;
@@ -116,13 +119,13 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                         {bedrooms !== null && (
                             <div className="flex items-center gap-2">
                                 <Bed size={18} className="text-gray-400 dark:text-gray-500" />
-                                <span className="text-[13px] font-medium text-gray-600 dark:text-gray-400">{bedrooms} Bedrooms</span>
+                                <span className="text-[13px] font-medium text-gray-600 dark:text-gray-400">{bedrooms} {bedrooms === 1 ? "Bedroom" : "Bedrooms"}</span>
                             </div>
                         )}
                         {bathrooms !== null && (
                             <div className="flex items-center gap-2">
                                 <ShowerHead size={18} className="text-gray-400 dark:text-gray-500" />
-                                <span className="text-[13px] font-medium text-gray-600 dark:text-gray-400">{bathrooms} Bathrooms</span>
+                                <span className="text-[13px] font-medium text-gray-600 dark:text-gray-400">{bathrooms} {bathrooms === 1 ? "Bathroom" : "Bathrooms"}</span>
                             </div>
                         )}
                     </div>
