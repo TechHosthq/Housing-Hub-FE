@@ -42,7 +42,7 @@ export default function KYCSuccessModal({ isOpen, onClose }: KYCSuccessModalProp
                 </h2>
 
                 <p className="text-[11px] text-[#666666] dark:text-gray-400 leading-relaxed max-w-[240px]">
-                    Your KYC verification is being reviewed by our admin team. This usually takes 24-48 hours. You'll receive a notification once approved
+                    Your KYC verification is being reviewed by our admin team. This usually takes 24-48 hours. You&apos;ll receive a notification once approved
                 </p>
             </div>
         </div>

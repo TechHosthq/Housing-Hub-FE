@@ -83,7 +83,7 @@ export default function DashboardClient() {
                         <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <h2 className="text-[20px] font-medium text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                                 {searchQuery ? (
-                                    <>Showing result for <span className="text-[#0095FF] font-black">"{searchQuery}"</span></>
+                                    <>Showing result for <span className="text-[#0095FF] font-black">&ldquo;{searchQuery}&rdquo;</span></>
                                 ) : (
                                     "Showing filtered results"
                                 )}

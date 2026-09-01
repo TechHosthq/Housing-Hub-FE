@@ -68,7 +68,7 @@ export default function RegisterForm() {
                     <div className="p-3 text-xs text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg text-center">
                         {(() => {
                             // Handle both: raw response rejection (isSuccessful:false) and HTTP error
-                            const err = registerError as any;
+                            const err = registerError as { data?: unknown } | null;
                             const messages = resolveApiError(
                                 err?.data ? { response: err } : err
                             );

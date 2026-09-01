@@ -12,6 +12,7 @@ import { useCustomer } from "@/hooks/useCustomer";
 import { useRouter } from "next/navigation";
 import { NIGERIAN_STATES } from "@/lib/nigerianStates";
 import { useToastStore } from "@/store/useToastStore";
+import { resolveApiError } from "@/utils/errorResolver";
 
 // Derived from the enum rather than a parallel array of names. The array version
 // was indexed two different ways in this file — `idx as PropertyType` on click
@@ -296,8 +297,11 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                     router.push("/properties");
                 }
             },
-            onError: (error: any) => {
-                showError(error?.response?.data?.message || "Failed to save property. Please check your inputs.");
+            onError: (error: unknown) => {
+                // resolveApiError rather than reaching into the body: it handles the
+                // envelope, ProblemDetails and a missing body alike, and never
+                // surfaces axios's own text.
+                showError(resolveApiError(error));
             }
         });
     };
@@ -362,8 +366,11 @@ export default function AddPropertyForm({ editPropertyId }: AddPropertyFormProps
                     finishUp();
                 }
             },
-            onError: (error: any) => {
-                showError(error?.response?.data?.message || "Failed to update property. Please check your inputs.");
+            onError: (error: unknown) => {
+                // resolveApiError rather than reaching into the body: it handles the
+                // envelope, ProblemDetails and a missing body alike, and never
+                // surfaces axios's own text.
+                showError(resolveApiError(error));
             }
         });
     };

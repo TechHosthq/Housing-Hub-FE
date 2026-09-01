@@ -31,8 +31,15 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         ? (coverFile?.fileUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070")
         : (property as Property).image;
 
-    const bedrooms = isApiProperty ? (Math.floor(Math.random() * 3) + 2) : (property as Property).bedrooms;
-    const bathrooms = isApiProperty ? (Math.floor(Math.random() * 2) + 1) : (property as Property).bathrooms;
+    // Real listings have no bedroom or bathroom count: the Property entity has no
+    // such field — PropertyQueryService still carries a commented-out filter noting
+    // it "requires Bedrooms field on Property entity when added".
+    //
+    // This used to fill the gap with Math.random(), so every card showed a renter an
+    // invented figure that changed on each render. Showing nothing is worse-looking
+    // and honest; inventing it is neither. Restore these once the field exists.
+    const bedrooms = isApiProperty ? null : (property as Property).bedrooms;
+    const bathrooms = isApiProperty ? null : (property as Property).bathrooms;
 
     // Mock properties keep their own static tag in the image overlay.
     const showBadge = isApiProperty ? false : !!(property as Property).tag;
@@ -104,16 +111,22 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                     <span className="truncate">{location}</span>
                 </div>
 
-                <div className="mt-auto flex items-center gap-4 pt-6 border-t border-gray-100 dark:border-gray-800">
-                    <div className="flex items-center gap-2">
-                        <Bed size={18} className="text-gray-400 dark:text-gray-500" />
-                        <span className="text-[13px] font-medium text-gray-600 dark:text-gray-400">{bedrooms} Bedrooms</span>
+                {(bedrooms !== null || bathrooms !== null) && (
+                    <div className="mt-auto flex items-center gap-4 pt-6 border-t border-gray-100 dark:border-gray-800">
+                        {bedrooms !== null && (
+                            <div className="flex items-center gap-2">
+                                <Bed size={18} className="text-gray-400 dark:text-gray-500" />
+                                <span className="text-[13px] font-medium text-gray-600 dark:text-gray-400">{bedrooms} Bedrooms</span>
+                            </div>
+                        )}
+                        {bathrooms !== null && (
+                            <div className="flex items-center gap-2">
+                                <ShowerHead size={18} className="text-gray-400 dark:text-gray-500" />
+                                <span className="text-[13px] font-medium text-gray-600 dark:text-gray-400">{bathrooms} Bathrooms</span>
+                            </div>
+                        )}
                     </div>
-                    <div className="flex items-center gap-2">
-                        <ShowerHead size={18} className="text-gray-400 dark:text-gray-500" />
-                        <span className="text-[13px] font-medium text-gray-600 dark:text-gray-400">{bathrooms} Bathrooms</span>
-                    </div>
-                </div>
+                )}
             </div>
         </Link>
     );

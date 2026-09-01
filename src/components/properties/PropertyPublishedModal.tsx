@@ -42,7 +42,7 @@ export default function PropertyPublishedModal({ isOpen, onClose }: PropertyPubl
 
                     <p className="text-[16px] font-bold text-gray-400 dark:text-gray-500 leading-relaxed max-w-[380px] mb-4">
                         Your property has been submitted and will be verified against your KYC.
-                        Once approved by our admin team, it will go live. If rejected, you'll
+                        Once approved by our admin team, it will go live. If rejected, you&apos;ll
                         receive feedback and can update it.
                     </p>
 

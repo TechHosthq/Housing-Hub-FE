@@ -64,7 +64,7 @@ export default function PersonalInfoForm() {
         if (!user?.id) return;
         setError("");
 
-        const handleSuccess = (response: any) => {
+        const handleSuccess = (response: { isSuccessful: boolean; message?: string | null }) => {
             if (response.isSuccessful) {
                 updateFormData(formData);
                 router.push("/kyc/submit-id");
@@ -76,7 +76,7 @@ export default function PersonalInfoForm() {
         // resolveApiError rather than reading the body here: `err.message` is axios's
         // own text ("Request failed with status code 400"), which is what this form
         // used to show when the API returned a shape without a `message` field.
-        const handleError = (err: any) => {
+        const handleError = (err: unknown) => {
             setError(resolveApiError(err).join(" "));
         };
 
