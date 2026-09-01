@@ -1,4 +1,5 @@
 import { CustomerType } from '@/types/auth';
+import { canManageProperties } from '@/context/UserRoleContext';
 
 /**
  * Accounts created through Google start as CustomerType.Unset — they have no
@@ -17,5 +18,10 @@ export const needsAccountTypeSelection = (customerType?: number | null): boolean
 export const postAuthRoute = (customerType?: number | null, redirect?: string | null): string => {
     if (needsAccountTypeSelection(customerType)) return '/onboarding/account-type';
     if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) return redirect;
-    return '/dashboard';
+
+    // Must match the "Dashboard" link in the navbars. These disagreed: signing in
+    // landed everyone on /dashboard while the link sent renters to "/", so the first
+    // screen after login was one they could not get back to. Owners manage listings
+    // on /dashboard; a renter's home is the main page with the search hero.
+    return canManageProperties(customerType) ? '/dashboard' : '/';
 };
