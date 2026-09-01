@@ -10,6 +10,7 @@ import Footer from "@/components/layout/Footer";
 import AccountSidebar from "@/components/profile/AccountSidebar";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useVerification } from "@/hooks/useVerification";
+import { VerificationTier } from "@/types/verification";
 import { useProperty } from "@/hooks/useProperty";
 import { isBusinessAccount } from "@/lib/verificationCatalogue";
 import { useToastStore } from "@/store/useToastStore";
@@ -35,7 +36,20 @@ export default function VerificationHubPage() {
     const [propertyId, setPropertyId] = useState("");
 
     const cases = casesResponse?.data ?? [];
-    const properties = propertiesResponse?.data?.items ?? [];
+    const allProperties = propertiesResponse?.data?.items ?? [];
+
+    // A listing that already holds a title tier has nothing left to verify, and one
+    // with a case in flight would just produce a second case for the same property.
+    // Both were offered in the picker regardless.
+    const propertyIdsWithOpenCase = new Set(
+        cases.filter((c) => c.subjectType === VerificationSubjectType.Property && isOpen(c))
+             .map((c) => c.subjectId),
+    );
+    const properties = allProperties.filter(
+        (p) => p.listingVerificationTier < VerificationTier.TitleVerified
+            && !propertyIdsWithOpenCase.has(p.id),
+    );
+    const hiddenPropertyCount = allProperties.length - properties.length;
 
     const canVerifyBusiness = isBusinessAccount(user?.customerType);
 
@@ -110,19 +124,21 @@ export default function VerificationHubPage() {
                                 </div>
                             )}
 
-                            <div className="rounded-[20px] border border-[#F2F2F2] dark:border-gray-800 p-6">
-                                <Home className="text-[#0095FF] mb-3" size={22} />
-                                <h2 className="text-[15px] font-black text-[#1A1A1A] dark:text-gray-100 mb-1">
+                            <div className="rounded-[20px] border border-[#F2F2F2] dark:border-gray-800 p-8 md:p-10">
+                                <Home className="text-[#0095FF] mb-4" size={30} />
+                                <h2 className="text-[19px] font-black text-[#1A1A1A] dark:text-gray-100 mb-2">
                                     Verify a property
                                 </h2>
-                                <p className="text-[12px] leading-relaxed text-gray-400 dark:text-gray-500 mb-4">
+                                <p className="text-[13px] leading-relaxed text-gray-400 dark:text-gray-500 mb-6">
                                     Title documents for one of your listings. Verification applies to
                                     the property, so each one is checked separately.
                                 </p>
 
                                 {properties.length === 0 ? (
-                                    <p className="text-[12px] font-semibold text-gray-400">
-                                        You have no listings yet.
+                                    <p className="text-[13px] font-semibold text-gray-400">
+                                        {allProperties.length === 0
+                                            ? "You have no listings yet."
+                                            : "Every listing you have is either verified or already has a request in progress."}
                                     </p>
                                 ) : (
                                     <div className="flex flex-wrap items-center gap-2">
@@ -175,7 +191,9 @@ export default function VerificationHubPage() {
                                     >
                                         <div className="min-w-0">
                                             <p className="text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100">
-                                                {SUBJECT_TYPE_LABELS[item.subjectType]} verification
+                                                {item.subjectLabel
+                                                    ? `${item.subjectLabel} — ${SUBJECT_TYPE_LABELS[item.subjectType].toLowerCase()} verification`
+                                                    : `${SUBJECT_TYPE_LABELS[item.subjectType]} verification`}
                                             </p>
                                             <p className="mt-0.5 text-[12px] text-gray-400 dark:text-gray-500">
                                                 {item.documentCount} document{item.documentCount === 1 ? "" : "s"}
