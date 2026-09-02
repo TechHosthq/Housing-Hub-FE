@@ -28,6 +28,10 @@ export enum PaymentStatus {
      * them so would be wrong in the direction that loses trust.
      */
     Flagged = 5,
+    /** A refund has been asked of the provider and not yet confirmed. */
+    RefundPending = 6,
+    /** The provider confirmed the money went back. */
+    Refunded = 7,
 }
 
 export const PAYMENT_STATUS_LABELS: Record<number, string> = {
@@ -36,6 +40,8 @@ export const PAYMENT_STATUS_LABELS: Record<number, string> = {
     [PaymentStatus.Failed]: 'Failed',
     [PaymentStatus.Abandoned]: 'Not completed',
     [PaymentStatus.Flagged]: 'Needs checking',
+    [PaymentStatus.RefundPending]: 'Refund on its way',
+    [PaymentStatus.Refunded]: 'Refunded',
 };
 
 export const PAYMENT_PURPOSE_LABELS: Record<number, string> = {
@@ -62,6 +68,15 @@ export interface Payment {
     /** Where to send the payer. Null once the attempt is no longer payable. */
     authorisationUrl: string | null;
 }
+
+/**
+ * Wording for what a payment bought.
+ *
+ * A payer's receipt should never show an enum name, and should never show a
+ * number they have to interpret.
+ */
+export const describePaymentPurpose = (purpose: PaymentPurpose): string =>
+    PAYMENT_PURPOSE_LABELS[purpose] ?? 'Verification';
 
 export interface PaymentQuote {
     purpose: PaymentPurpose;
