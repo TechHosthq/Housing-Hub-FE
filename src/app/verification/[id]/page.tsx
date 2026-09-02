@@ -8,6 +8,7 @@ import {
     ArrowLeft, Check, Clock, ExternalLink, Loader2, ShieldCheck, Trash2, Upload, XCircle,
 } from "lucide-react";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
+import VerificationCheckout from "@/components/verification/VerificationCheckout";
 import Footer from "@/components/layout/Footer";
 import { useVerification } from "@/hooks/useVerification";
 import verificationService from "@/services/verificationService";
@@ -278,16 +279,21 @@ export default function VerificationCasePage({ params }: { params: Promise<{ id:
                             email you and post a notification here when there&apos;s a decision.
                         </p>
 
-                        <div className="flex flex-wrap items-center gap-3">
-                            <button
-                                type="button"
-                                onClick={handleSubmit}
-                                disabled={!canSubmit || isSubmittingCase}
-                                className="rounded-full bg-[#0B2545] px-6 py-3 text-[13px] font-bold text-white hover:bg-[#071A33] disabled:opacity-40"
-                            >
-                                {isSubmittingCase ? "Submitting…" : "Submit for review"}
-                            </button>
+                        {/*
+                            The primary action, which is "pay" or "submit" depending on what
+                            the server says this case needs. Deliberately not decided here:
+                            the quote reports whether charging is on and whether this case is
+                            already paid for, so one code path serves a free environment and
+                            a paid one.
+                        */}
+                        <VerificationCheckout
+                            caseId={id}
+                            canSubmit={canSubmit}
+                            onSubmit={handleSubmit}
+                            isSubmitting={isSubmittingCase}
+                        />
 
+                        <div className="mt-5 flex flex-wrap items-center gap-3">
                             {isConfirmingCancel ? (
                                 <>
                                     <button
