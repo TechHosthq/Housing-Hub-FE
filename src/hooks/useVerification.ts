@@ -43,6 +43,13 @@ export const useVerification = () => {
         },
     });
 
+    const cancelCaseMutation = useMutation({
+        mutationFn: (caseId: string) => verificationService.cancelCase(caseId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['verification-cases'] });
+        },
+    });
+
     const submitCaseMutation = useMutation({
         mutationFn: (caseId: string) => verificationService.submitCase(caseId),
         onSuccess: (_, caseId) => {
@@ -60,6 +67,8 @@ export const useVerification = () => {
         isAddingDocument: addDocumentMutation.isPending,
         removeDocument: removeDocumentMutation.mutate,
         isRemovingDocument: removeDocumentMutation.isPending,
+        cancelCase: cancelCaseMutation.mutateAsync,
+        isCancellingCase: cancelCaseMutation.isPending,
         submitCase: submitCaseMutation.mutateAsync,
         isSubmittingCase: submitCaseMutation.isPending,
     };

@@ -54,7 +54,7 @@ export default function LoginForm() {
                     <div className="p-3 text-xs text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg text-center">
                         {(() => {
                             // Handle both: raw response rejection (isSuccessful:false) and HTTP error
-                            const err = loginError as any;
+                            const err = loginError as { data?: unknown } | null;
                             const messages = resolveApiError(
                                 err?.data ? { response: err } : err
                             );
@@ -127,7 +127,7 @@ export default function LoginForm() {
 
                     <div className="text-center pt-2">
                         <p className="text-xs text-gray-600 dark:text-gray-400">
-                            Don't have an Account? <Link href="/register" className="text-[#3b82f6] hover:underline">Sign up</Link>
+                            Don&apos;t have an Account? <Link href="/register" className="text-[#3b82f6] hover:underline">Sign up</Link>
                         </p>
                     </div>
                 </div>

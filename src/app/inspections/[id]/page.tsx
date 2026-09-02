@@ -258,7 +258,7 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
 
                 <div className="max-w-4xl space-y-4">
                     {/* Status Banner - Only for Customers */}
-                    {role === "Customer" && <StatusBanner status={inspection.status as any} />}
+                    {role === "Customer" && <StatusBanner status={inspection.status} />}
 
                     {/* Property Header Card */}
                     <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 px-6 py-6 flex items-center gap-6">

@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
 import {
@@ -30,10 +31,12 @@ export default function VerificationCasePage({ params }: { params: Promise<{ id:
     const {
         useMyCase, addDocument, isAddingDocument,
         removeDocument, submitCase, isSubmittingCase,
+        cancelCase, isCancellingCase,
     } = useVerification();
 
     const { data: response, isLoading } = useMyCase(id);
 
+    const router = useRouter();
     const [openPrompt, setOpenPrompt] = useState<VerificationDocumentType | null>(null);
     const [openingDocumentId, setOpeningDocumentId] = useState<string | null>(null);
 
@@ -43,6 +46,19 @@ export default function VerificationCasePage({ params }: { params: Promise<{ id:
     const missing = detail?.missingRequiredDocuments ?? [];
 
     const isDraft = verificationCase?.status === VerificationCaseStatus.Draft;
+    const [isConfirmingCancel, setIsConfirmingCancel] = useState(false);
+
+    // Cancelling deletes the uploaded documents, so it asks first. Two clicks rather
+    // than a modal: this is a draft nobody has reviewed, not a destructive action on
+    // anything a decision rests on.
+    const handleCancel = async () => {
+        try {
+            await cancelCase(id);
+            router.push("/verification");
+        } catch {
+            setIsConfirmingCancel(false);
+        }
+    };
     const canSubmit = isDraft && missing.length === 0 && documents.length > 0;
 
     const prompts = verificationCase
@@ -262,14 +278,51 @@ export default function VerificationCasePage({ params }: { params: Promise<{ id:
                             email you and post a notification here when there&apos;s a decision.
                         </p>
 
-                        <button
-                            type="button"
-                            onClick={handleSubmit}
-                            disabled={!canSubmit || isSubmittingCase}
-                            className="rounded-full bg-[#0B2545] px-6 py-3 text-[13px] font-bold text-white hover:bg-[#071A33] disabled:opacity-40"
-                        >
-                            {isSubmittingCase ? "Submitting…" : "Submit for review"}
-                        </button>
+                        <div className="flex flex-wrap items-center gap-3">
+                            <button
+                                type="button"
+                                onClick={handleSubmit}
+                                disabled={!canSubmit || isSubmittingCase}
+                                className="rounded-full bg-[#0B2545] px-6 py-3 text-[13px] font-bold text-white hover:bg-[#071A33] disabled:opacity-40"
+                            >
+                                {isSubmittingCase ? "Submitting…" : "Submit for review"}
+                            </button>
+
+                            {isConfirmingCancel ? (
+                                <>
+                                    <button
+                                        type="button"
+                                        onClick={handleCancel}
+                                        disabled={isCancellingCase}
+                                        className="rounded-full border-[2px] border-[#FF3B30] px-6 py-3 text-[13px] font-bold text-[#FF3B30] hover:bg-red-50 disabled:opacity-40"
+                                    >
+                                        {isCancellingCase ? "Cancelling…" : "Yes, cancel and delete"}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsConfirmingCancel(false)}
+                                        className="text-[12px] font-semibold text-gray-400 hover:text-gray-600"
+                                    >
+                                        Keep it
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={() => setIsConfirmingCancel(true)}
+                                    className="text-[12px] font-semibold text-gray-400 underline hover:text-[#FF3B30]"
+                                >
+                                    Cancel this request
+                                </button>
+                            )}
+                        </div>
+
+                        {isConfirmingCancel && (
+                            <p className="mt-3 text-[12px] font-medium text-[#FF3B30]">
+                                This deletes the documents you have uploaded. You can start a new
+                                request afterwards.
+                            </p>
+                        )}
                     </div>
                 )}
             </div>

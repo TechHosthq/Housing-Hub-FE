@@ -5,7 +5,7 @@ export const formatTimeTo24h = (time: string): string => {
     if (!time) return "12:00:00";
     
     const [timePart, period] = time.split(" ");
-    let [hours, minutes] = timePart.split(":");
+    const [hours, minutes] = timePart.split(":");
     let h = parseInt(hours);
     
     if (period === "PM" && h < 12) h += 12;

@@ -78,6 +78,12 @@ const verificationService = {
     },
 
     /** Hands the case to review. Documents can no longer be changed afterwards. */
+    /** Draft only — the API refuses once the case has been submitted. */
+    cancelCase: async (caseId: string): Promise<ApiResponse<boolean>> => {
+        const response = await apiClient.delete(`/api/v1/Verification/cases/${caseId}`);
+        return response.data;
+    },
+
     submitCase: async (caseId: string): Promise<ApiResponse<VerificationCase>> => {
         const response = await apiClient.put(`/api/v1/Verification/cases/${caseId}/submit`);
         return response.data;
