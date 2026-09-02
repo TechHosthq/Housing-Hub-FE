@@ -86,14 +86,14 @@ export default function PrivacyPage() {
                             </p>
                             <ul className="list-disc pl-5 space-y-2">
                                 <li>Access, update, or delete your personal information through your Account Settings.</li>
-                                <li>Opt-out of promotional communications by clicking the "unsubscribe" link in our emails.</li>
+                                <li>Opt-out of promotional communications by clicking the &ldquo;unsubscribe&rdquo; link in our emails.</li>
                                 <li>Request a copy of the personal data we hold about you.</li>
                                 <li>Disable cookies through your browser settings, though this may affect the functionality of our platform.</li>
                             </ul>
 
                             <h3 className="text-[18px] font-bold text-[#1A1A1A] dark:text-gray-100 mt-6">6. Changes to This Privacy Policy</h3>
                             <p>
-                                We may update our Privacy Policy periodically to reflect changes in our practices or relevant laws. We will notify you of any material changes by posting the new policy on this page and updating the "Last Updated" date. We encourage you to review this policy periodically.
+                                We may update our Privacy Policy periodically to reflect changes in our practices or relevant laws. We will notify you of any material changes by posting the new policy on this page and updating the &ldquo;Last Updated&rdquo; date. We encourage you to review this policy periodically.
                             </p>
 
                             <h3 className="text-[18px] font-bold text-[#1A1A1A] dark:text-gray-100 mt-6">7. Contact Us</h3>

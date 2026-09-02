@@ -31,8 +31,9 @@ export default function DashboardClient() {
     const maxPrice = searchParams.get("maxPrice");
     const city = searchParams.get("city") || undefined;
     const state = searchParams.get("state") || undefined;
+    const bedrooms = searchParams.get("bedrooms");
     const isKycSubmitted = kycStatus === "submitted";
-    const hasFilters = Boolean(searchQuery || propertyType || minPrice || maxPrice || city || state);
+    const hasFilters = Boolean(searchQuery || propertyType || minPrice || maxPrice || city || state || bedrooms);
 
     const handleSaveSearch = () => {
         createPreference({
@@ -54,6 +55,7 @@ export default function DashboardClient() {
         maxPrice: maxPrice ? Number(maxPrice) : undefined,
         city,
         state,
+        bedrooms: bedrooms ? Number(bedrooms) : undefined,
     });
 
     const searchResults = searchResponse?.data?.items || [];
@@ -83,12 +85,12 @@ export default function DashboardClient() {
                         <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <h2 className="text-[20px] font-medium text-[#1A1A1A] dark:text-gray-100 font-montserrat">
                                 {searchQuery ? (
-                                    <>Showing result for <span className="text-[#0095FF] font-black">"{searchQuery}"</span></>
+                                    <>Showing result for <span className="text-[#0095FF] font-black">&ldquo;{searchQuery}&rdquo;</span></>
                                 ) : (
                                     "Showing filtered results"
                                 )}
                             </h2>
-                            {isAuthenticated && (propertyType || minPrice || maxPrice || city || state) && (
+                            {isAuthenticated && (propertyType || minPrice || maxPrice || city || state || bedrooms) && (
                                 <button
                                     onClick={handleSaveSearch}
                                     disabled={isCreatingPreference || searchSaved}
@@ -99,6 +101,18 @@ export default function DashboardClient() {
                                 </button>
                             )}
                         </div>
+                        {/*
+                            Alert preferences carry property type, price, city, state and
+                            features — there is no bedroom field on PropertyAlertPreference.
+                            Saying so beats silently dropping the one criterion the renter
+                            most likely cares about and then mailing them 1-bedroom flats.
+                        */}
+                        {isAuthenticated && bedrooms && (
+                            <p className="mb-6 text-[12px] font-semibold text-gray-400 dark:text-gray-500">
+                                Alerts don&apos;t cover bedroom count yet — a saved search will notify you
+                                about matching listings with any number of bedrooms.
+                            </p>
+                        )}
                         {searchResults.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                                 {searchResults.map((property) => (

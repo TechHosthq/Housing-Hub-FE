@@ -6,10 +6,16 @@ import { useRouter } from "next/navigation";
 import { NIGERIAN_STATES } from "@/lib/nigerianStates";
 import { PropertyType } from "@/types/property";
 
+// Exact counts, deliberately not "3+". The API matches the bedroom count exactly —
+// a search for a 3-bedroom flat is not satisfied by a 6-bedroom one at nearly double
+// the rent — so offering a range here would describe something the server does not do.
+const BEDROOM_OPTIONS = ["1 Bedroom", "2 Bedrooms", "3 Bedrooms", "4 Bedrooms", "5 Bedrooms", "6 Bedrooms"];
+
 const FILTER_OPTIONS = {
     location: NIGERIAN_STATES,
     propertyType: ["Apartment", "House", "Land", "Duplex", "Bungalow"],
     priceRange: ["Under ₦1M", "₦1M - ₦5M", "₦5M - ₦20M", "₦20M - ₦50M", "₦50M+"],
+    bedrooms: BEDROOM_OPTIONS,
 };
 
 // The API binds PropertyType as its integer enum. Sending the display name
@@ -30,6 +36,10 @@ const PRICE_RANGE_PARAM: Record<string, { minPrice?: number; maxPrice?: number }
     "₦50M+": { minPrice: 50_000_000 },
 };
 
+const BEDROOM_PARAM: Record<string, number> = Object.fromEntries(
+    BEDROOM_OPTIONS.map((label, index) => [label, index + 1])
+);
+
 // Shared by the homepage hero and the dashboard — selecting a dropdown option
 // navigates immediately to /dashboard with the matching filter params (no
 // separate search button), so anonymous and signed-in users get the exact
@@ -41,6 +51,7 @@ export default function PropertyFilterBar() {
         location: "",
         propertyType: "",
         priceRange: "",
+        bedrooms: "",
     });
 
     // Free-text query. The dashboard already reads ?q= and renders a results view,
@@ -82,6 +93,9 @@ export default function PropertyFilterBar() {
         if (price?.maxPrice != null) params.set('maxPrice', String(price.maxPrice));
 
         if (updated.location) params.set('state', updated.location);
+
+        const bedroomsValue = BEDROOM_PARAM[updated.bedrooms];
+        if (bedroomsValue) params.set('bedrooms', String(bedroomsValue));
 
         const query = params.toString();
         router.push(query ? `/dashboard?${query}` : '/dashboard');
@@ -155,11 +169,12 @@ export default function PropertyFilterBar() {
 
             {/* Mobile: 3-row list of filters */}
             <div className="flex flex-col md:hidden divide-y divide-gray-100 rounded-2xl border border-gray-100 mb-3">
-                {(['location', 'propertyType', 'priceRange'] as const).map((key) => {
+                {(['location', 'propertyType', 'priceRange', 'bedrooms'] as const).map((key) => {
                     const labels: Record<string, string> = {
                         location: 'Location',
                         propertyType: 'Property Type',
                         priceRange: 'Price Range',
+                        bedrooms: 'Bedrooms',
                     };
                     return (
                         <div key={key} className="relative">
@@ -210,6 +225,8 @@ export default function PropertyFilterBar() {
                     {renderDropdown('propertyType', 'Property Type')}
                     <div className="w-[1px] h-10 bg-gray-200 dark:bg-gray-700 mx-1 flex-shrink-0"></div>
                     {renderDropdown('priceRange', 'Price Range')}
+                    <div className="w-[1px] h-10 bg-gray-200 dark:bg-gray-700 mx-1 flex-shrink-0"></div>
+                    {renderDropdown('bedrooms', 'Bedrooms')}
                     <div className="w-[1px] h-10 bg-gray-200 dark:bg-gray-700 mx-1 flex-shrink-0"></div>
                     <input
                         type="search"

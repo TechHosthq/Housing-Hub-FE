@@ -34,6 +34,14 @@ export default function OwnerPropertiesPage() {
         }
     }, [role, router]);
 
+    // Every hook must run before this. A conditional early return above a
+    // useEffect changes hook order between renders, which React cannot recover
+    // from — and `role` genuinely changes, since it derives from the auth store.
+    const totalCountForReset = propertiesResponse?.data?.items?.length ?? 0;
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [totalCountForReset]);
+
     if (role === "Customer") return null;
 
     // The endpoint is paginated. This used to be a four-deep chain of Array.isArray
@@ -44,11 +52,6 @@ export default function OwnerPropertiesPage() {
     // Calculate pagination values
     const totalCount = properties.length;
     const totalPages = Math.ceil(totalCount / pageSize) || 1;
-
-    // Reset to page 1 if the properties list size changes
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [totalCount]);
 
     // Slice properties for current page
     const startIndex = (currentPage - 1) * pageSize;
@@ -78,7 +81,7 @@ export default function OwnerPropertiesPage() {
                 ) : (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-                            {paginatedProperties.map((property: any) => (
+                            {paginatedProperties.map((property) => (
                                 <OwnerPropertyCard key={property.id} property={property} />
                             ))}
                         </div>

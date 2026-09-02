@@ -27,7 +27,7 @@ export default function SettingsForm() {
         { label: "Delete Account", type: "button", id: "delete-account", isDanger: true }
     ];
 
-    const handleItemClick = (item: any) => {
+    const handleItemClick = (item: { id?: string; type: string; href?: string }) => {
         if (item.id === "delete-account") {
             setIsDeleteModalOpen(true);
         } else if (item.id === "reset-password") {

@@ -126,7 +126,7 @@ export default function SubmitIDForm() {
                     setError(response.message || "We couldn't submit your details. Please try again.");
                 }
             },
-            onError: (err: any) => {
+            onError: (err: unknown) => {
                 setError(resolveApiError(err).join(" "));
             }
         });
@@ -183,7 +183,7 @@ export default function SubmitIDForm() {
                             <option value="1">National Identity Number (NIN)</option>
                             <option value="2">Government Issued ID Card</option>
                             <option value="3">International Passport</option>
-                            <option value="4">Driver's License</option>
+                            <option value="4">Driver&apos;s License</option>
                         </select>
                         <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none" size={16} />
                     </div>

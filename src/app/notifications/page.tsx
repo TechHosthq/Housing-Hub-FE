@@ -6,10 +6,11 @@ import Footer from "@/components/layout/Footer";
 import { useNotification } from "@/hooks/useNotification";
 import { Notification, NotificationType } from "@/types/notification";
 import { Bell, Check, Loader2, Info, Calendar, XCircle, MessageCircle, BellRing } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { format } from "date-fns";
 import NotificationDetailModal from "@/components/notifications/NotificationDetailModal";
 
-const notificationIcons: Record<number, any> = {
+const notificationIcons: Record<number, LucideIcon> = {
     [NotificationType.InspectionScheduled]: Calendar,
     [NotificationType.InspectionConfirmed]: Check,
     [NotificationType.InspectionDeclined]: XCircle,

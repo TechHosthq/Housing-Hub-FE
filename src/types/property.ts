@@ -74,6 +74,16 @@ export interface PropertyDetail {
     availability: AvailabilityStatus;
     propertyLeaseType: PropertyLeaseType;
     features: number;
+    /**
+     * Bedroom count, or null when the lister did not state one.
+     *
+     * Null is not zero. Land has no bedrooms; a listing created before the field
+     * existed simply never said, and every one of those reads as null. Render
+     * nothing for null — a "0 Bedrooms" line is a claim nobody made.
+     */
+    bedrooms: number | null;
+    /** Bathroom count, or null when the lister did not state one. Same rule as bedrooms. */
+    bathrooms: number | null;
     contactPersonName: string | null;
     contactPersonEmail: string | null;
     contactPersonPhoneNumber: string | null;
@@ -138,6 +148,9 @@ export interface CreatePropertyRequest {
     state: string;
     country: string;
     postalCode: string;
+    /** Omit rather than sending 0 when the owner did not state a count. */
+    bedrooms?: number | null;
+    bathrooms?: number | null;
     files: File[];
     /** true = publish immediately, false = save as draft. Defaults to publish. */
     publish?: boolean;
@@ -168,6 +181,9 @@ export interface UpdatePropertyRequest {
     contactPersonName: string | null;
     contactPersonEmail: string | null;
     contactPersonPhoneNumber: string | null;
+    /** Null means "not supplied by this edit" — the stored count is left alone. */
+    bedrooms?: number | null;
+    bathrooms?: number | null;
     propertyAddress: {
         place: string | null;
         city: string | null;
@@ -188,6 +204,8 @@ export interface PropertyQueryParams {
     maxPrice?: number;
     city?: string;
     state?: string;
+    bedrooms?: number;
+    bathrooms?: number;
 }
 
 export type PropertyResponse = ApiResponse<PropertyDetail>;

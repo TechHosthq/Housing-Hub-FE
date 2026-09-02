@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, MapPin, ChevronDown, Loader2 } from "lucide-react";
+import { Check, MapPin, ChevronDown, Loader2, Bed, ShowerHead } from "lucide-react";
 import { useProperty } from "@/hooks/useProperty";
 import { decodePropertyFeatures } from "@/lib/propertyFeatures";
 
@@ -13,11 +13,23 @@ interface PropertyInfoProps {
         description?: string;
         /** Bitmask from the API — see lib/propertyFeatures. */
         features?: number;
+        /** Null when the owner never stated a count — render nothing, not zero. */
+        bedrooms?: number | null;
+        bathrooms?: number | null;
     };
 }
 
 export default function PropertyInfo({ propertyId, property }: PropertyInfoProps) {
     const amenities = decodePropertyFeatures(property.features);
+
+    const roomCounts = [
+        property.bedrooms != null
+            ? { key: "bedrooms", Icon: Bed, label: `${property.bedrooms} ${property.bedrooms === 1 ? "Bedroom" : "Bedrooms"}` }
+            : null,
+        property.bathrooms != null
+            ? { key: "bathrooms", Icon: ShowerHead, label: `${property.bathrooms} ${property.bathrooms === 1 ? "Bathroom" : "Bathrooms"}` }
+            : null,
+    ].filter((entry): entry is { key: string; Icon: typeof Bed; label: string } => entry !== null);
     const { usePropertyAddress } = useProperty();
     const { data: addressResponse, isLoading } = usePropertyAddress(propertyId);
     
@@ -50,6 +62,26 @@ export default function PropertyInfo({ propertyId, property }: PropertyInfoProps
                     <span className="text-[20px] font-black text-[#0095FF] font-montserrat">{property.price}/yr</span>
                 </div>
             </div>
+
+            {/*
+                Bedroom and bathroom counts, when the owner stated them. This section
+                and the amenity chips below it used to be one hardcoded list that
+                rendered "4 Bedrooms" and "3 Bathrooms" on every listing regardless of
+                the property, alongside amenities it did not have.
+            */}
+            {roomCounts.length > 0 && (
+                <div className="flex flex-wrap gap-2.5">
+                    {roomCounts.map(({ key, Icon, label }) => (
+                        <div
+                            key={key}
+                            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white dark:bg-gray-900 border border-[#F2F2F2] dark:border-gray-800 shadow-sm"
+                        >
+                            <Icon size={14} className="text-[#0095FF]" />
+                            <span className="text-[10px] font-bold text-[#333333] dark:text-gray-300">{label}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
 
             {/* Amenities Cards */}
             {/*

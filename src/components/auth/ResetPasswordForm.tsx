@@ -86,7 +86,7 @@ export default function ResetPasswordForm() {
                                 placeholder=""
                             />
                             <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-2 leading-relaxed">
-                                Enter your email address and we'll send you a link to reset your password.
+                                Enter your email address and we&apos;ll send you a link to reset your password.
                             </p>
                         </div>
 

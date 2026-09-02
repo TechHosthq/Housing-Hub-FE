@@ -58,7 +58,7 @@ export default function PreferencesPage() {
                                 <BellRing size={40} />
                             </div>
                             <p className="text-gray-400 dark:text-gray-500 font-bold max-w-sm">
-                                No saved searches yet. Search for properties on your dashboard and tap "Get Alerts For This Search" to save one.
+                                No saved searches yet. Search for properties on your dashboard and tap &ldquo;Get Alerts For This Search&rdquo; to save one.
                             </p>
                         </div>
                     ) : (

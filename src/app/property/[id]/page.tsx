@@ -68,7 +68,11 @@ export default function PropertyDetailPage() {
         price: property.price ? `₦ ${property.price.toLocaleString()}` : "Price upon request",
         location: property.propertyAddress?.city || "Lagos",
         description: property.description || "",
-        features: property.features
+        features: property.features,
+        // Null means the owner never stated a count; PropertyInfo renders nothing for
+        // it rather than "0 bedrooms".
+        bedrooms: property.bedrooms,
+        bathrooms: property.bathrooms,
     };
 
     return (
