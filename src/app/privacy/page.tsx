@@ -3,6 +3,7 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import AccountSidebar from "@/components/profile/AccountSidebar";
+import { OPERATOR, operatorLegalName } from "@/lib/operator";
 
 export default function PrivacyPage() {
     return (
@@ -39,6 +40,19 @@ export default function PrivacyPage() {
                             </p>
                             <p>
                                 At <strong>Housing Hub</strong>, protecting your privacy and the confidentiality of your personal and financial information is fundamental to the way we do business. This detailed Privacy Policy explains how we collect, use, share, and protect your information when you interact with our platform, whether as a property owner, renter, or site visitor.
+                            </p>
+                            {/*
+                                Names the controller. Under the Nigeria Data Protection Act a
+                                policy has to say which legal person decides how your data is
+                                used — "Housing Hub" is a product name and cannot be written to,
+                                asked for a copy of your data, or held to any of this.
+                            */}
+                            <p>
+                                Housing Hub is a product of <strong>{operatorLegalName()}</strong>, a
+                                company registered in Nigeria, which is the data controller
+                                responsible for your information under the Nigeria Data Protection
+                                Act 2023.
+                                {OPERATOR.registeredAddress ? ` Registered address: ${OPERATOR.registeredAddress}.` : ""}
                             </p>
                             
                             <h3 className="text-[18px] font-bold text-[#1A1A1A] dark:text-gray-100 mt-6">1. Information We Collect</h3>

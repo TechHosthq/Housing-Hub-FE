@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { OPERATOR, operatorLegalName } from "@/lib/operator";
 
 export const metadata = {
     title: "Terms of Service | Housing Hub",
@@ -14,13 +15,18 @@ export const metadata = {
  * so this uses the public Navbar/Footer rather than the account sidebar the privacy
  * page uses.
  *
- * The content deliberately does not claim Housing Hub processes payments, holds
- * funds, or guarantees any listing — none of which is true today. Section 6 in
- * particular exists because a verification badge is a representation users rely on,
+ * Every claim here has to stay true of what the platform actually does. It used to
+ * say Housing Hub was not a payment processor and that any request to pay us should
+ * be treated as fraudulent — correct when it was written, and exactly backwards once
+ * verification fees went live. The distinction it now draws is the real one: we
+ * charge for our own services and we never touch rent, deposits or purchase money.
+ *
+ * The verification section exists because a badge is a representation users rely on,
  * and overstating it creates liability.
  */
+
 export default function TermsPage() {
-    const lastUpdated = "10 August 2026";
+    const lastUpdated = "2 September 2026";
 
     return (
         <main className="min-h-screen bg-white dark:bg-gray-900">
@@ -42,6 +48,14 @@ export default function TermsPage() {
                             not use Housing Hub.
                         </p>
                         <p>
+                            Housing Hub is a product of {operatorLegalName()}, a company registered
+                            in Nigeria. Where these terms say &ldquo;we&rdquo; or &ldquo;us&rdquo;,
+                            they mean {OPERATOR.name}, and the agreement is with that company.
+                            {OPERATOR.registeredAddress
+                                ? ` Registered address: ${OPERATOR.registeredAddress}.`
+                                : ""}
+                        </p>
+                        <p>
                             Housing Hub is operated from Lagos, Nigeria, and these terms are
                             governed by Nigerian law.
                         </p>
@@ -54,15 +68,56 @@ export default function TermsPage() {
                             find those properties and book inspections.
                         </p>
                         <p>
-                            <strong>Housing Hub is not an estate agent, a party to any tenancy or
-                            sale, and not a payment processor.</strong> We do not currently process
-                            payments or hold funds. Any rent, deposit, agency fee or purchase price
-                            is agreed and paid directly between you and the other party. Treat any
-                            request to pay Housing Hub itself as fraudulent and report it.
+                            <strong>Housing Hub is not an estate agent and is not a party to any
+                            tenancy or sale.</strong> Any rent, deposit, agency fee or purchase price
+                            is agreed and paid directly between you and the other party.{" "}
+                            <strong>We never hold, receive or transmit that money, and we never act
+                            as an escrow.</strong>
+                        </p>
+                        <p>
+                            We do charge for some of our own services &mdash; verification, for
+                            example. Those fees are described in section 3, are paid on this website,
+                            and are entirely separate from anything you pay a landlord, agent or
+                            seller.
+                        </p>
+                        <p>
+                            <strong>We will never ask you to pay rent, a deposit or a purchase price
+                            to Housing Hub</strong>, and we will never ask for any payment by email,
+                            phone call, WhatsApp or bank transfer. If someone asks you to, it is not
+                            us &mdash; please report it.
                         </p>
                     </Section>
 
-                    <Section title="3. Your account">
+                    <Section title="3. Fees and refunds">
+                        <p>
+                            Some services on Housing Hub are paid for. Where a fee applies, the
+                            amount is shown in full before you pay, on this website, and you are
+                            never charged anything you have not seen first.
+                        </p>
+                        <p>
+                            Identity verification is charged <strong>once</strong>. It is included in
+                            the first paid verification you need, and never charged again &mdash; any
+                            later verification costs only the price of that verification.
+                        </p>
+                        <p>
+                            <strong>Verification fees pay for the review itself, not for a
+                            particular outcome.</strong> They are not refundable once we have started
+                            reviewing, including where we are unable to approve your documents.
+                            Please check what you have attached before paying.
+                        </p>
+                        <p>
+                            If we charge you in error, or something goes wrong on our side, we will
+                            refund you. Refunds go back to the card or account you paid from; your
+                            bank decides when the money appears on your statement, which is usually a
+                            few working days.
+                        </p>
+                        <p>
+                            Payments are processed by a licensed third-party payment provider. We do
+                            not see or store your card details.
+                        </p>
+                    </Section>
+
+                    <Section title="4. Your account">
                         <p>
                             You must be at least 18 and provide accurate information. You are
                             responsible for keeping your login credentials secure and for activity
@@ -74,7 +129,7 @@ export default function TermsPage() {
                         </p>
                     </Section>
 
-                    <Section title="4. Listing a property">
+                    <Section title="5. Listing a property">
                         <p>If you list a property, you confirm that:</p>
                         <ul className="list-disc pl-5 space-y-2">
                             <li>
@@ -102,7 +157,7 @@ export default function TermsPage() {
                         </p>
                     </Section>
 
-                    <Section title="5. Inspections">
+                    <Section title="6. Inspections">
                         <p>
                             Booking an inspection creates an arrangement between you and the
                             property owner or agent, not with Housing Hub. Attend on time, bring
@@ -115,7 +170,7 @@ export default function TermsPage() {
                         </p>
                     </Section>
 
-                    <Section title="6. Verification and what it means">
+                    <Section title="7. Verification and what it means">
                         <p>
                             Housing Hub carries out identity checks on users and reviews documents
                             supplied by owners, agents and developers. Where those checks pass, a
@@ -132,7 +187,7 @@ export default function TermsPage() {
                         </p>
                     </Section>
 
-                    <Section title="7. Acceptable use">
+                    <Section title="8. Acceptable use">
                         <p>You agree not to:</p>
                         <ul className="list-disc pl-5 space-y-2">
                             <li>post false, misleading or fraudulent listings;</li>
@@ -152,7 +207,7 @@ export default function TermsPage() {
                         </ul>
                     </Section>
 
-                    <Section title="8. Content you provide">
+                    <Section title="9. Content you provide">
                         <p>
                             You keep ownership of the photographs, descriptions and other content
                             you upload. You grant Housing Hub a non-exclusive, royalty-free licence
@@ -162,7 +217,7 @@ export default function TermsPage() {
                         </p>
                     </Section>
 
-                    <Section title="9. Availability">
+                    <Section title="10. Availability">
                         <p>
                             We work to keep Housing Hub available, but we do not promise
                             uninterrupted service. We may change, suspend or withdraw features,
@@ -170,7 +225,7 @@ export default function TermsPage() {
                         </p>
                     </Section>
 
-                    <Section title="10. Liability">
+                    <Section title="11. Liability">
                         <p>
                             Housing Hub is not a party to transactions between users and is not
                             liable for the conduct of any user, the condition or title of any
@@ -183,7 +238,7 @@ export default function TermsPage() {
                         </p>
                     </Section>
 
-                    <Section title="11. Changes to these terms">
+                    <Section title="12. Changes to these terms">
                         <p>
                             We may update these terms. Where a change is material we will notify
                             you by email or in the app before it takes effect. Continuing to use
@@ -191,7 +246,7 @@ export default function TermsPage() {
                         </p>
                     </Section>
 
-                    <Section title="12. Contact">
+                    <Section title="13. Contact">
                         <p>
                             Questions about these terms, or to report a listing or user, contact us
                             at{" "}

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import paymentService from '@/services/paymentService';
+import { useAuthStore } from '@/store/useAuthStore';
 import { PaymentStatus } from '@/types/payment';
 
 /**
@@ -25,11 +26,17 @@ const SETTLEMENT_POLL_TIMEOUT_MS = 120_000;
 export const usePayment = () => {
     const queryClient = useQueryClient();
 
+    // Every endpoint here needs a session. Without this guard the account sidebar
+    // asks for a signed-out visitor's payments on the public privacy page, which
+    // 401s and sets the axios interceptor off attempting a token refresh — noise at
+    // best, and a refresh racing a real sign-in at worst.
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
     /** What a verification case costs. */
     const useVerificationQuote = (caseId: string | null) => useQuery({
         queryKey: ['payment-quote', caseId],
         queryFn: () => paymentService.quoteVerificationCase(caseId!),
-        enabled: !!caseId,
+        enabled: !!caseId && isAuthenticated,
     });
 
     /**
@@ -41,7 +48,7 @@ export const usePayment = () => {
     const usePaymentByReference = (reference: string | null) => useQuery({
         queryKey: ['payment', reference],
         queryFn: () => paymentService.getByReference(reference!),
-        enabled: !!reference,
+        enabled: !!reference && isAuthenticated,
         refetchInterval: (query) => {
             const status = query.state.data?.data?.status;
 
@@ -62,6 +69,7 @@ export const usePayment = () => {
     const useMyPayments = () => useQuery({
         queryKey: ['payments'],
         queryFn: () => paymentService.getMine(),
+        enabled: isAuthenticated,
     });
 
     const initialiseMutation = useMutation({
