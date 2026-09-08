@@ -161,17 +161,27 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
-  async rewrites() {
-    if (process.env.NEXT_PUBLIC_ENABLE_PROXY !== 'true') {
-      return [];
-    }
-    return [
-      {
-        source: '/api/proxy/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL}/:path*`,
-      },
-    ];
-  },
+  /*
+   * There is deliberately no /api/proxy rewrite.
+   *
+   * It used to forward /api/proxy/:path* to NEXT_PUBLIC_API_BASE_URL/:path*, which
+   * made this origin an open, unauthenticated relay into the API for any path and
+   * any method. A pen test found it and reported it as an authentication bypass on
+   * Property CRUD, which is the right way to read it: nothing about a proxy adds
+   * authentication, and the relay let the API be attacked from housinghub.ng rather
+   * than from the attacker's own origin — inheriting this domain's reputation and
+   * sidestepping anything that reasons about where a request came from.
+   *
+   * It also silently broke rate limiting. Every request arrived at the API from a
+   * Vercel address, so the API's per-IP partition saw one client for the entire
+   * internet. Talking to the API directly restores real client addresses.
+   *
+   * It is not needed. The API sets Cors:AllowedOrigins for this origin with
+   * credentials, and the refresh token travels in the request body rather than a
+   * cookie, so there is no same-origin requirement to satisfy. Removed outright
+   * rather than left behind an environment variable, so it cannot be switched back
+   * on without reading this.
+   */
   images: {
     remotePatterns: [
       {
@@ -215,9 +225,18 @@ export default withSentryConfig(nextConfig, {
   sourcemaps: { deleteSourcemapsAfterUpload: true },
   disableLogger: true,
 
-  // Routes browser error reports through our own origin so ad blockers, which
-  // block requests to sentry.io by default, do not silently drop them. This is
-  // also why SENTRY_ORIGIN in the CSP is a belt-and-braces measure rather than
-  // the only thing making reporting work.
-  tunnelRoute: '/monitoring',
+  /*
+   * tunnelRoute is deliberately NOT set.
+   *
+   * It generates a relay whose destination comes from the `dsn` field of the
+   * envelope the client sends. A pen test reported that as server-side request
+   * forgery — it reached arbitrary hosts including the AWS instance metadata
+   * endpoint — and as an open relay into any Sentry project, unmetered and
+   * unauthenticated, from this domain.
+   *
+   * src/app/monitoring/route.ts serves the same path instead: same purpose (ad
+   * blockers drop requests to sentry.io, so reports go through our own origin),
+   * but the destination is computed from our own DSN and nothing in the request can
+   * influence it. The client is pointed at it by `tunnel` in the Sentry options.
+   */
 });
