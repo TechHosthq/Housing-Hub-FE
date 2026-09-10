@@ -214,3 +214,16 @@ export const sharedOptions = {
   denyUrls: DENY_URLS,
   beforeSend,
 };
+
+/**
+ * Where the browser posts its events.
+ *
+ * Our own origin, because ad blockers drop requests to sentry.io and monitoring
+ * that is silently switched off for a third of users is worse than none. Served by
+ * src/app/monitoring/route.ts, which relays to Sentry with a destination derived
+ * from our own DSN — see that file for why the SDK's generated tunnel was replaced.
+ *
+ * Browser only. On the server and edge runtimes there is no ad blocker to work
+ * around, and pointing them here would have the server post events to itself.
+ */
+export const BROWSER_TUNNEL_PATH = '/monitoring';

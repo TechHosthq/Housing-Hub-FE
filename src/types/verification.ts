@@ -52,6 +52,8 @@ export enum VerificationCaseStatus {
     Rejected = 5,
     Expired = 6,
     EscalatedNameMismatch = 7,
+    /** Abandoned by the submitter while still a draft. A terminal state, not a delete. */
+    Cancelled = 8,
 }
 
 export enum VerificationTier {
@@ -91,6 +93,7 @@ export const CASE_STATUS_LABELS: Record<number, string> = {
     [VerificationCaseStatus.Rejected]: "Rejected",
     [VerificationCaseStatus.Expired]: "Expired",
     [VerificationCaseStatus.EscalatedNameMismatch]: "Escalated — name mismatch",
+    [VerificationCaseStatus.Cancelled]: "Cancelled",
 };
 
 export const SUBJECT_TYPE_LABELS: Record<number, string> = {

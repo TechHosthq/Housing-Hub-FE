@@ -44,33 +44,17 @@ const requiredInProduction = (name: string, value: string | undefined, devFallba
   return devFallback;
 };
 
-const API_ORIGIN = toOrigin(
-  requiredInProduction(
-    'NEXT_PUBLIC_API_BASE_URL',
-    process.env.NEXT_PUBLIC_API_BASE_URL,
-    'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com/dev',
-  ),
-  'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com',
-);
-
-/**
- * Sentry's ingest endpoint, derived from the DSN.
- *
- * The CSP is enforcing, so without this every error report is refused by the
- * browser — and the failure is invisible in the worst possible way: monitoring
- * that looks installed, reports nothing, and leaves you believing there are no
- * errors. Derived from the DSN rather than hardcoded because the ingest host
- * encodes the org id and the region (`o123.ingest.de.sentry.io`), which differ
- * per account.
- *
- * Empty string when no DSN is set, and filtered out of the directive below.
+/*
+ * Called for its side effect: refusing to build for production with the API URL
+ * unset. The value itself is no longer needed here — the CSP that used it moved to
+ * middleware — but the guard is the reason this file knows about the variable at
+ * all, and losing it would let a production build ship pointed at dev.
  */
-const SENTRY_ORIGIN = process.env.NEXT_PUBLIC_SENTRY_DSN
-  ? toOrigin(process.env.NEXT_PUBLIC_SENTRY_DSN, '')
-  : '';
-
-// SignalR upgrades to a WebSocket against the same host.
-const API_WS_ORIGIN = API_ORIGIN.replace(/^https:/, 'wss:').replace(/^http:/, 'ws:');
+requiredInProduction(
+  'NEXT_PUBLIC_API_BASE_URL',
+  process.env.NEXT_PUBLIC_API_BASE_URL,
+  'https://pk1wr06fr1.execute-api.af-south-1.amazonaws.com/dev',
+);
 
 /**
  * Origin serving property photos and video.
@@ -95,55 +79,22 @@ const S3_ORIGIN = toOrigin(
 /** Host portion only — next/image's remotePatterns wants a hostname, not an origin. */
 const S3_HOSTNAME = new URL(S3_ORIGIN).hostname;
 
-/**
- * Content Security Policy.
+/*
+ * The Content Security Policy is NOT here.
  *
- * NOW ENFORCING. It shipped Report-Only first so violations could be observed
- * without breaking anything; this switches it on.
+ * It lives in src/middleware.ts, built by src/lib/security/csp.ts, because it now
+ * carries a per-request nonce so that `'unsafe-inline'` could come out of
+ * script-src. A header declared here is static and cannot carry one.
  *
  * SMOKE TEST BEFORE YOU TRUST IT. An enforcing CSP fails closed, and the failure
- * mode is a blank panel or a dead button rather than an error anyone notices in
- * CI. With the console open, walk: sign in with Google, load the homepage and a
- * listing page, play a property video, view the map embed, upload a photo, open
- * messages so SignalR connects. Any `Refused to ...` line in the console is a
- * directive that needs widening.
- *
- * Known weakness: script-src includes 'unsafe-inline'. Next.js emits inline
- * bootstrap scripts, and layout.tsx has an inline script that sets the dark-mode
- * class before first paint to avoid a flash. Removing 'unsafe-inline' requires
- * per-request nonces via middleware, which is worth doing but is its own change.
- * Until then this policy stops content injection from loading external resources,
- * but not from executing inline script it has managed to inject.
+ * mode is a blank panel or a dead button rather than an error anyone notices in CI.
+ * With the console open, walk: sign in with Google, load the homepage and a listing
+ * page, play a property video, view the map embed, upload a photo, open messages so
+ * SignalR connects. Any `Refused to ...` line is a directive that needs widening.
  */
-const contentSecurityPolicy = [
-  "default-src 'self'",
-  // 'unsafe-inline' — see note above. 'unsafe-eval' is needed by the dev overlay only.
-  `script-src 'self' 'unsafe-inline' ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''} https://accounts.google.com`,
-  // Tailwind and next/font inject inline styles.
-  "style-src 'self' 'unsafe-inline'",
-  // next/font/google self-hosts at build time, so no external font origin is needed.
-  "font-src 'self' data:",
-  `img-src 'self' data: blob: https://images.unsplash.com ${S3_ORIGIN}`,
-  // Listings can carry video (.mp4/.avi/.mov), served from the same bucket as the
-  // photos. Without this they fall through to default-src and every video on the
-  // site stops playing — the one break that enforcing this policy would otherwise
-  // have caused. blob: covers the local preview shown before an upload completes.
-  `media-src 'self' blob: ${S3_ORIGIN}`,
-  `connect-src 'self' ${API_ORIGIN} ${API_WS_ORIGIN} https://accounts.google.com ${SENTRY_ORIGIN}`.trim(),
-  // Google Sign-In renders in an iframe; property pages embed a Maps iframe.
-  "frame-src 'self' https://accounts.google.com https://www.google.com",
-  // Clickjacking protection. Also set as X-Frame-Options below for older browsers.
-  "frame-ancestors 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "object-src 'none'",
-  // Next.js loads some chunks through blob: workers depending on the build.
-  "worker-src 'self' blob:",
-  "upgrade-insecure-requests",
-].filter(Boolean).join('; ');
 
 const securityHeaders = [
-  { key: 'Content-Security-Policy', value: contentSecurityPolicy },
+  // Content-Security-Policy is set by middleware — see the note above.
   // Two years, matching the preload list's minimum should you ever submit.
   { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains' },
   { key: 'X-Frame-Options', value: 'DENY' },
@@ -161,17 +112,27 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
-  async rewrites() {
-    if (process.env.NEXT_PUBLIC_ENABLE_PROXY !== 'true') {
-      return [];
-    }
-    return [
-      {
-        source: '/api/proxy/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL}/:path*`,
-      },
-    ];
-  },
+  /*
+   * There is deliberately no /api/proxy rewrite.
+   *
+   * It used to forward /api/proxy/:path* to NEXT_PUBLIC_API_BASE_URL/:path*, which
+   * made this origin an open, unauthenticated relay into the API for any path and
+   * any method. A pen test found it and reported it as an authentication bypass on
+   * Property CRUD, which is the right way to read it: nothing about a proxy adds
+   * authentication, and the relay let the API be attacked from housinghub.ng rather
+   * than from the attacker's own origin — inheriting this domain's reputation and
+   * sidestepping anything that reasons about where a request came from.
+   *
+   * It also silently broke rate limiting. Every request arrived at the API from a
+   * Vercel address, so the API's per-IP partition saw one client for the entire
+   * internet. Talking to the API directly restores real client addresses.
+   *
+   * It is not needed. The API sets Cors:AllowedOrigins for this origin with
+   * credentials, and the refresh token travels in the request body rather than a
+   * cookie, so there is no same-origin requirement to satisfy. Removed outright
+   * rather than left behind an environment variable, so it cannot be switched back
+   * on without reading this.
+   */
   images: {
     remotePatterns: [
       {
@@ -215,9 +176,18 @@ export default withSentryConfig(nextConfig, {
   sourcemaps: { deleteSourcemapsAfterUpload: true },
   disableLogger: true,
 
-  // Routes browser error reports through our own origin so ad blockers, which
-  // block requests to sentry.io by default, do not silently drop them. This is
-  // also why SENTRY_ORIGIN in the CSP is a belt-and-braces measure rather than
-  // the only thing making reporting work.
-  tunnelRoute: '/monitoring',
+  /*
+   * tunnelRoute is deliberately NOT set.
+   *
+   * It generates a relay whose destination comes from the `dsn` field of the
+   * envelope the client sends. A pen test reported that as server-side request
+   * forgery — it reached arbitrary hosts including the AWS instance metadata
+   * endpoint — and as an open relay into any Sentry project, unmetered and
+   * unauthenticated, from this domain.
+   *
+   * src/app/monitoring/route.ts serves the same path instead: same purpose (ad
+   * blockers drop requests to sentry.io, so reports go through our own origin),
+   * but the destination is computed from our own DSN and nothing in the request can
+   * influence it. The client is pointed at it by `tunnel` in the Sentry options.
+   */
 });

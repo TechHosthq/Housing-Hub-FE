@@ -115,9 +115,13 @@ const authService = {
      * Absolute URL for the optional server-side (redirect) Google flow.
      *
      * NOTE: this must be a full-page navigation (window.location.href) — it returns a
-     * 302 to Google's consent screen and cannot be fetched with XHR/axios. It also
-     * bypasses the Next.js /api/proxy rewrite on purpose, since the browser itself
-     * must follow the redirect chain.
+     * 302 to Google's consent screen and cannot be fetched with XHR/axios.
+     *
+     * `returnUrl` is where the API sends the browser once Google has answered, so it
+     * carries the session. The API validates it against its own allowed origins and
+     * refuses anything else — see AuthController.GoogleLogin. Sending this origin is
+     * what a real client does; the check exists because an attacker can call that
+     * endpoint too.
      */
     buildGoogleLoginUrl: (): string => {
         const returnUrl = `${window.location.origin}/auth/google-callback`;
