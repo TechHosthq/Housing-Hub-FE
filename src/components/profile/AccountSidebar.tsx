@@ -1,13 +1,22 @@
 "use client";
 
-import { User, MessageCircle, Settings, ShieldCheck } from "lucide-react";
+import { User, MessageCircle, Settings, ShieldCheck, Receipt } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUserRole } from "@/context/UserRoleContext";
+import { usePayment } from "@/hooks/usePayment";
 
 export default function AccountSidebar() {
     const pathname = usePathname();
     const { isOwner } = useUserRole();
+
+    // Payments is shown to an owner, who can be charged today, and to anyone who
+    // has actually paid something — so a renter who paid once can still find the
+    // receipt, without every renter carrying a section that is permanently empty.
+    // The query key is shared with the payments page, so this costs one request.
+    const { useMyPayments } = usePayment();
+    const { data: paymentsResponse } = useMyPayments();
+    const hasPayments = (paymentsResponse?.data?.length ?? 0) > 0;
 
     // /verification is business and property-title verification: a renter has no
     // business to verify and no listing to attach a title to, so the section is
@@ -15,6 +24,7 @@ export default function AccountSidebar() {
     const menuItems = [
         { label: "Profile Info", icon: User, href: "/profile" },
         ...(isOwner ? [{ label: "Verification", icon: ShieldCheck, href: "/verification" }] : []),
+        ...(isOwner || hasPayments ? [{ label: "Payments", icon: Receipt, href: "/payments" }] : []),
         { label: "Message", icon: MessageCircle, href: "/messages" },
         { label: "Settings", icon: Settings, href: "/settings" }
     ];

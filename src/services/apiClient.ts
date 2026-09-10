@@ -15,11 +15,14 @@ declare module 'axios' {
     }
 }
 
-const isProxyEnabled = typeof window !== 'undefined' && process.env.NEXT_PUBLIC_ENABLE_PROXY === 'true';
-
 /**
- * Absolute API origin. Exported for flows that must bypass the /api/proxy rewrite —
- * e.g. OAuth redirects the browser has to follow itself.
+ * Absolute API origin, and the only thing this client ever talks to.
+ *
+ * Calls used to go through a `/api/proxy` rewrite on this origin. That rewrite was
+ * an open relay into the API — a pen test reported it as an authentication bypass
+ * on Property CRUD — and it collapsed every client into a Vercel address, so the
+ * API's per-IP rate limiting saw one caller for the whole internet. See the note in
+ * next.config.ts.
  *
  * There is deliberately no fallback in a production build. This used to default to
  * the dev API Gateway, which meant a production deploy with the variable unset
@@ -48,10 +51,7 @@ const resolveApiBaseUrl = (): string => {
 
 export const API_BASE_URL = resolveApiBaseUrl();
 
-const baseURL = isProxyEnabled ? '/api/proxy' : API_BASE_URL;
-if (typeof window === 'undefined') {
-    console.log('Server-side API baseURL:', baseURL);
-}
+const baseURL = API_BASE_URL;
 
 const apiClient = axios.create({
     baseURL,
