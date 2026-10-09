@@ -1,13 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import verificationService from '@/services/verificationService';
 import { AddDocumentMetadata, StartCaseRequest } from '@/types/verification';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export const useVerification = () => {
     const queryClient = useQueryClient();
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
+    // Gated, because this hook is now reachable from a public page. An
+    // unauthenticated fetch here 401s and raises an error toast on a listing that a
+    // visitor is entitled to read.
     const useMyCases = () => useQuery({
         queryKey: ['verification-cases'],
         queryFn: () => verificationService.getMyCases(),
+        enabled: isAuthenticated,
     });
 
     const useMyCase = (caseId: string | null) => useQuery({
