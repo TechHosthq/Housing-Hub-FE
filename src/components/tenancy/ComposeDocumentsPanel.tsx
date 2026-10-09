@@ -8,7 +8,7 @@ import { PropertyLeaseType } from "@/types/property";
 import { TenancyDocumentMode, TenancyDocumentPack } from "@/types/tenancy";
 import { formatKobo, koboToNairaInput, nairaToKobo } from "@/utils/money";
 import { resolveApiError } from "@/utils/errorResolver";
-import { DOCUMENT_ACCEPT, DOCUMENT_MODE_COPY, rejectFile } from "./documentPresentation";
+import { DOCUMENT_ACCEPT, DOCUMENT_MODE_COPY, SIGNABLE_ACCEPT, rejectFile } from "./documentPresentation";
 
 interface ComposeDocumentsPanelProps {
     tenancyId: string;
@@ -66,6 +66,7 @@ export default function ComposeDocumentsPanel({ tenancyId, pack, leaseType }: Co
     const [confirmingSend, setConfirmingSend] = useState(false);
 
     const needsFile = mode !== TenancyDocumentMode.Upload;
+    const accept = mode === TenancyDocumentMode.SignInApp ? SIGNABLE_ACCEPT : DOCUMENT_ACCEPT;
 
     const resetForm = () => {
         setName("");
@@ -290,11 +291,11 @@ export default function ComposeDocumentsPanel({ tenancyId, pack, leaseType }: Co
                                 <span className="truncate">{file ? file.name : "Choose a PDF or photo (max 4MB)"}</span>
                                 <input
                                     type="file"
-                                    accept={DOCUMENT_ACCEPT}
+                                    accept={accept}
                                     className="hidden"
                                     onChange={(e) => {
                                         const chosen = e.target.files?.[0] ?? null;
-                                        const problem = chosen ? rejectFile(chosen) : null;
+                                        const problem = chosen ? rejectFile(chosen, accept) : null;
                                         if (problem) {
                                             showError(problem);
                                             e.target.value = "";

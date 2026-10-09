@@ -10,6 +10,7 @@ import { useToastStore } from "@/store/useToastStore";
 import {
     TENANCY_DOCUMENT_STATUS_LABELS,
     TenancyDocument,
+    TenancyDocumentFile,
     TenancyDocumentMode,
     TenancyDocumentPack,
     TenancyDocumentStatus,
@@ -151,6 +152,27 @@ export default function TenantDocumentsPanel({ tenancyId, pack }: TenantDocument
                                 </p>
                             )}
 
+                            {/*
+                                Gated on the file existing rather than on having
+                                signed. The signature is the record and stands without
+                                this; the PDF is a convenience built from it, and
+                                offering a download that isn't there would be worse
+                                than not offering one.
+                            */}
+                            {document.hasSignedPdf && document.status !== TenancyDocumentStatus.Rejected && (
+                                <button
+                                    type="button"
+                                    onClick={() => openDocument(document.id, TenancyDocumentFile.Signed)}
+                                    disabled={openingId === document.id}
+                                    className="mt-2 flex items-center gap-1.5 text-[12px] font-bold text-[#0095FF] hover:text-primary-dark disabled:opacity-40"
+                                >
+                                    {openingId === document.id
+                                        ? <Loader2 size={13} className="animate-spin" />
+                                        : <Download size={13} />}
+                                    Download your signed copy
+                                </button>
+                            )}
+
                             {document.status === TenancyDocumentStatus.Submitted && (
                                 <p className="mt-2 flex items-center gap-1.5 text-[11px] text-gray-400 dark:text-gray-500">
                                     <Clock size={13} />
@@ -162,7 +184,7 @@ export default function TenantDocumentsPanel({ tenancyId, pack }: TenantDocument
                             {document.hasSourceFile && (
                                 <button
                                     type="button"
-                                    onClick={() => openDocument(document.id, false)}
+                                    onClick={() => openDocument(document.id, TenancyDocumentFile.Source)}
                                     disabled={openingId === document.id}
                                     className="mt-3 flex items-center gap-1.5 text-[12px] font-bold text-[#0095FF] hover:text-primary-dark disabled:opacity-40"
                                 >
@@ -190,7 +212,8 @@ export default function TenantDocumentsPanel({ tenancyId, pack }: TenantDocument
                                             your device against this document as proof it was you.
                                         </p>
                                         <p className="text-[11px] text-gray-400">
-                                            Read it first if you haven&apos;t. If the owner sends it
+                                            Read it first if you haven&apos;t. You&apos;ll be able to
+                                            download a stamped copy afterwards. If the owner sends it
                                             back for a correction, your signature is cleared and
                                             you&apos;ll sign the corrected version.
                                         </p>

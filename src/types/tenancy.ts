@@ -93,6 +93,20 @@ export enum TenancyDocumentMode {
 }
 
 /** Must match HousingHub.Model.Enums.TenancyDocumentStatus exactly. */
+/**
+ * Which of a document's files is being asked for.
+ *
+ * Must match HousingHub.Model.Enums.TenancyDocumentFile exactly.
+ */
+export enum TenancyDocumentFile {
+    /** What the owner supplied, to be read or signed. */
+    Source = 1,
+    /** What the tenant uploaded. */
+    Submitted = 2,
+    /** The stamped PDF, made when the tenant signed in the app. */
+    Signed = 3,
+}
+
 export enum TenancyDocumentStatus {
     Requested = 1,
     Submitted = 2,
@@ -125,6 +139,14 @@ export interface TenancyDocument {
     /** Whether the owner attached a file to be signed. Never a storage key — see getDocumentUrl. */
     hasSourceFile: boolean;
     hasSubmittedFile: boolean;
+    /**
+     * Whether there is a stamped PDF to download.
+     *
+     * Not the same as being signed. The signature is the record; this is a
+     * convenience built from it and can be absent on a perfectly valid signature —
+     * so gate the download button on this and everything else on `signedAt`.
+     */
+    hasSignedPdf: boolean;
     submittedAt: string | null;
     reviewedAt: string | null;
     rejectionReason: string | null;

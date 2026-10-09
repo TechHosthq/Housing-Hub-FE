@@ -3,6 +3,7 @@ import { ApiResponse } from '@/types/auth';
 import {
     TenanciesResponse,
     TenancyCandidatesResponse,
+    TenancyDocumentFile,
     TenancyDocumentMode,
     TenancyDocumentPackResponse,
     TenancyDocumentResponse,
@@ -170,11 +171,11 @@ const tenancyService = {
      * stored in state or put in a query key.
      */
     getDocumentUrl: async (
-        tenancyId: string, documentId: string, submitted: boolean,
+        tenancyId: string, documentId: string, file: TenancyDocumentFile,
     ): Promise<ApiResponse<string>> => {
         const response = await apiClient.get(
             `/api/v1/Tenancy/${tenancyId}/documents/${documentId}/url`,
-            { params: { submitted } },
+            { params: { file } },
         );
         return response.data;
     },

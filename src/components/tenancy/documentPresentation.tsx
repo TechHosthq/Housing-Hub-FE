@@ -8,11 +8,18 @@ import { TenancyDocumentMode, TenancyDocumentStatus } from "@/types/tenancy";
 export const DOCUMENT_ACCEPT = ".pdf,.jpg,.jpeg,.png,.webp";
 export const DOCUMENT_MAX_BYTES = 4 * 1024 * 1024;
 
+/**
+ * Narrower than the rest, because a document signed in the app comes back out as a
+ * stamped PDF and only these can be carried into one. The server refuses the others
+ * at compose time; this stops the owner picking one in the first place.
+ */
+export const SIGNABLE_ACCEPT = ".pdf,.jpg,.jpeg,.png";
+
 /** The reason a file is unusable, or null when it is fine. */
-export const rejectFile = (file: File): string | null => {
+export const rejectFile = (file: File, accept: string = DOCUMENT_ACCEPT): string | null => {
     const extension = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
 
-    if (!DOCUMENT_ACCEPT.split(",").includes(extension)) {
+    if (!accept.split(",").includes(extension)) {
         return "That file type isn't accepted. Use a PDF or a photo.";
     }
 
@@ -36,7 +43,7 @@ export const DOCUMENT_MODE_COPY: Record<number, { label: string; blurb: string }
     },
     [TenancyDocumentMode.SignInApp]: {
         label: "Sign here",
-        blurb: "Read it and sign in the app. We record the time and your device.",
+        blurb: "Read it and sign in the app. You get back a stamped PDF with the signature on it.",
     },
     [TenancyDocumentMode.SignOffline]: {
         label: "Print, sign, upload",

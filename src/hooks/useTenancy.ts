@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import tenancyService from '@/services/tenancyService';
 import { useAuthStore } from '@/store/useAuthStore';
-import { TenancyFeeInput } from '@/types/tenancy';
+import { TenancyDocumentFile, TenancyFeeInput } from '@/types/tenancy';
 
 export const useTenancy = () => {
     const queryClient = useQueryClient();
@@ -136,8 +136,8 @@ export const useTenancy = () => {
      * query key would keep a readable URL to somebody's tenancy agreement in memory
      * long after it stopped working. Call it on click, use it, drop it.
      */
-    const fetchDocumentUrl = (tenancyId: string, documentId: string, submitted: boolean) =>
-        tenancyService.getDocumentUrl(tenancyId, documentId, submitted);
+    const fetchDocumentUrl = (tenancyId: string, documentId: string, file: TenancyDocumentFile) =>
+        tenancyService.getDocumentUrl(tenancyId, documentId, file);
 
     return {
         useCandidates,

@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
-import { CheckCircle2, Eye, Loader2, PenLine } from "lucide-react";
+import { CheckCircle2, Download, Eye, Loader2, PenLine } from "lucide-react";
 import { useTenancy } from "@/hooks/useTenancy";
 import { useToastStore } from "@/store/useToastStore";
 import {
     TENANCY_DOCUMENT_STATUS_LABELS,
     TenancyDocument,
+    TenancyDocumentFile,
     TenancyDocumentPack,
     TenancyDocumentStatus,
 } from "@/types/tenancy";
@@ -142,7 +143,7 @@ export default function ReviewDocumentsPanel({ tenancyId, pack }: ReviewDocument
                             {document.hasSourceFile && (
                                 <button
                                     type="button"
-                                    onClick={() => openDocument(document.id, false)}
+                                    onClick={() => openDocument(document.id, TenancyDocumentFile.Source)}
                                     disabled={openingId === document.id}
                                     className="flex items-center gap-1.5 text-[12px] font-bold text-[#0095FF] hover:text-primary-dark disabled:opacity-40"
                                 >
@@ -156,7 +157,7 @@ export default function ReviewDocumentsPanel({ tenancyId, pack }: ReviewDocument
                             {document.hasSubmittedFile && (
                                 <button
                                     type="button"
-                                    onClick={() => openDocument(document.id, true)}
+                                    onClick={() => openDocument(document.id, TenancyDocumentFile.Submitted)}
                                     disabled={openingId === document.id}
                                     className="flex items-center gap-1.5 text-[12px] font-bold text-[#0095FF] hover:text-primary-dark disabled:opacity-40"
                                 >
@@ -164,6 +165,25 @@ export default function ReviewDocumentsPanel({ tenancyId, pack }: ReviewDocument
                                         ? <Loader2 size={13} className="animate-spin" />
                                         : <Eye size={13} />}
                                     What they sent
+                                </button>
+                            )}
+
+                            {/*
+                                The stamped copy, with the signature on its face and
+                                the certificate behind it. This is the one to keep —
+                                the others are what each side put in.
+                            */}
+                            {document.hasSignedPdf && (
+                                <button
+                                    type="button"
+                                    onClick={() => openDocument(document.id, TenancyDocumentFile.Signed)}
+                                    disabled={openingId === document.id}
+                                    className="flex items-center gap-1.5 text-[12px] font-bold text-[#0095FF] hover:text-primary-dark disabled:opacity-40"
+                                >
+                                    {openingId === document.id
+                                        ? <Loader2 size={13} className="animate-spin" />
+                                        : <Download size={13} />}
+                                    Signed copy
                                 </button>
                             )}
                         </div>

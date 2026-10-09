@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTenancy } from "@/hooks/useTenancy";
+import { TenancyDocumentFile } from "@/types/tenancy";
 import { useToastStore } from "@/store/useToastStore";
 import { resolveApiError } from "@/utils/errorResolver";
 
@@ -20,13 +21,13 @@ export function useOpenDocument(tenancyId: string) {
     const { showError } = useToastStore();
     const [openingId, setOpeningId] = useState<string | null>(null);
 
-    const openDocument = async (documentId: string, submitted: boolean) => {
+    const openDocument = async (documentId: string, file: TenancyDocumentFile) => {
         const tab = window.open("", "_blank");
         if (tab) tab.opener = null;
 
         setOpeningId(documentId);
         try {
-            const result = await fetchDocumentUrl(tenancyId, documentId, submitted);
+            const result = await fetchDocumentUrl(tenancyId, documentId, file);
 
             if (result.isSuccessful && result.data) {
                 if (tab) tab.location.href = result.data;
