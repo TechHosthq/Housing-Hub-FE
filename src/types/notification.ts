@@ -10,6 +10,18 @@ export enum NotificationType {
     InspectionCancelled = 4,
     NewMessage = 5,
     PropertyMatch = 6,
+    VerificationApproved = 7,
+    VerificationRejected = 8,
+    VerificationExpired = 9,
+    VerificationExpiringSoon = 10,
+    TenancyCandidateSelected = 11,
+    TenancyWithdrawn = 12,
+    TenancyDeclinedByCandidate = 13,
+    TenancyDocumentsRequested = 14,
+    TenancyDocumentSubmitted = 15,
+    TenancyDocumentAccepted = 16,
+    TenancyDocumentRejected = 17,
+    TenancyDocumentsComplete = 18,
 }
 
 export interface Notification {
@@ -22,6 +34,14 @@ export interface Notification {
     message: string | null;
     isRead: boolean;
     propertyId: string | null;
+    /**
+     * Set on tenancy notifications.
+     *
+     * Its own field rather than inspectionId, which is what these used to be filed
+     * under on the server. A tenancy id in a field called inspectionId reads as an
+     * inspection to everything downstream.
+     */
+    tenancyId: string | null;
 }
 
 export interface NotificationQueryParams {

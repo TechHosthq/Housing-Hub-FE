@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
-import { CircleAlert, Loader2, ShieldCheck, UserCheck, Users } from "lucide-react";
+import Link from "next/link";
+import { CircleAlert, FileSignature, Loader2, ShieldCheck, UserCheck, Users } from "lucide-react";
 import { useTenancy } from "@/hooks/useTenancy";
 import { useToastStore } from "@/store/useToastStore";
 import {
     TENANCY_STATUS_LABELS,
     Tenancy,
     TenancyCandidate,
+    TenancyStatus,
     isTenancyLive,
 } from "@/types/tenancy";
 import { formatKobo } from "@/utils/money";
@@ -117,6 +119,21 @@ export default function ChooseTenantPanel({ propertyId }: ChooseTenantPanelProps
                     won&apos;t change it — this is what the agreement and the payment will be
                     based on.
                 </p>
+
+                {/*
+                    The way on. Everything after choosing somebody — the documents,
+                    the fees, the payment — happens on the tenancy, and this card is
+                    where an owner lands expecting to find it.
+                */}
+                <Link
+                    href={`/tenancies/${live.id}`}
+                    className="mt-6 flex w-fit items-center gap-2 rounded-full bg-[#0B2545] px-6 py-3 text-[13px] font-bold text-white hover:bg-[#071A33]"
+                >
+                    <FileSignature size={14} />
+                    {live.status === TenancyStatus.CandidateSelected
+                        ? "Set up the paperwork"
+                        : "Open the paperwork"}
+                </Link>
 
                 <div className="mt-6 border-t border-gray-100 pt-6 dark:border-gray-800">
                     {confirmingWithdraw ? (

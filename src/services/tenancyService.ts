@@ -1,7 +1,13 @@
 import apiClient from './apiClient';
+import { ApiResponse } from '@/types/auth';
 import {
     TenanciesResponse,
     TenancyCandidatesResponse,
+    TenancyDocumentMode,
+    TenancyDocumentPackResponse,
+    TenancyDocumentResponse,
+    TenancyFeeInput,
+    TenancyFeesResponse,
     TenancyResponse,
 } from '@/types/tenancy';
 
@@ -56,6 +62,120 @@ const tenancyService = {
 
     getById: async (tenancyId: string): Promise<TenancyResponse> => {
         const response = await apiClient.get(`/api/v1/Tenancy/${tenancyId}`);
+        return response.data;
+    },
+
+    // ── Documents and fees ───────────────────────────────────────
+
+    /** Everything asked for, every fee and the total. Either party. */
+    getDocumentPack: async (tenancyId: string): Promise<TenancyDocumentPackResponse> => {
+        const response = await apiClient.get(`/api/v1/Tenancy/${tenancyId}/documents`);
+        return response.data;
+    },
+
+    /**
+     * Adds one document to a request the owner is still composing.
+     *
+     * Multipart because a document the tenant signs arrives with the file attached.
+     * An upload-mode document carries no file and the server refuses one rather than
+     * ignoring it, so this only appends `File` when there is one.
+     */
+    addDocument: async (
+        tenancyId: string,
+        document: {
+            name: string;
+            mode: TenancyDocumentMode;
+            isAgreement: boolean;
+            instructions?: string | null;
+        },
+        file?: File | null,
+    ): Promise<TenancyDocumentResponse> => {
+        const formData = new FormData();
+        formData.append('Name', document.name);
+        formData.append('Mode', String(document.mode));
+        formData.append('IsAgreement', String(document.isAgreement));
+        if (document.instructions) formData.append('Instructions', document.instructions);
+        if (file) formData.append('File', file);
+
+        const response = await apiClient.post(
+            `/api/v1/Tenancy/${tenancyId}/documents`,
+            formData,
+            { headers: { 'Content-Type': 'multipart/form-data' } },
+        );
+        return response.data;
+    },
+
+    removeDocument: async (tenancyId: string, documentId: string): Promise<ApiResponse<boolean>> => {
+        const response = await apiClient.delete(`/api/v1/Tenancy/${tenancyId}/documents/${documentId}`);
+        return response.data;
+    },
+
+    /** Replaces the fee list wholesale — the server holds no partial update. */
+    setFees: async (tenancyId: string, fees: TenancyFeeInput[]): Promise<TenancyFeesResponse> => {
+        const response = await apiClient.put(`/api/v1/Tenancy/${tenancyId}/fees`, { fees });
+        return response.data;
+    },
+
+    /** Sends the whole request. Once only, and nothing can be changed afterwards. */
+    sendDocuments: async (tenancyId: string): Promise<TenancyDocumentPackResponse> => {
+        const response = await apiClient.post(`/api/v1/Tenancy/${tenancyId}/documents/send`);
+        return response.data;
+    },
+
+    /** The tenant returns a file — their own document, or a signed scan. */
+    submitDocument: async (
+        tenancyId: string, documentId: string, file: File,
+    ): Promise<TenancyDocumentResponse> => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await apiClient.post(
+            `/api/v1/Tenancy/${tenancyId}/documents/${documentId}/submit`,
+            formData,
+            { headers: { 'Content-Type': 'multipart/form-data' } },
+        );
+        return response.data;
+    },
+
+    /**
+     * The tenant signs in the app.
+     *
+     * Sends no body. The address and user agent that make up the audit trail are
+     * read from the request by the server — a signer supplying their own would be
+     * attesting to whatever they liked.
+     */
+    signDocument: async (tenancyId: string, documentId: string): Promise<TenancyDocumentResponse> => {
+        const response = await apiClient.post(
+            `/api/v1/Tenancy/${tenancyId}/documents/${documentId}/sign`,
+        );
+        return response.data;
+    },
+
+    /** The owner accepts a document, or sends it back with a reason. */
+    reviewDocument: async (
+        tenancyId: string, documentId: string, accept: boolean, rejectionReason?: string | null,
+    ): Promise<TenancyDocumentResponse> => {
+        const response = await apiClient.put(
+            `/api/v1/Tenancy/${tenancyId}/documents/${documentId}/review`,
+            { accept, rejectionReason: rejectionReason ?? null },
+        );
+        return response.data;
+    },
+
+    /**
+     * A short-lived link to a document's file.
+     *
+     * Treat the URL as a credential rather than an address: anybody holding it can
+     * read the document until it expires. Fetched on click and discarded — never
+     * stored in state or put in a query key.
+     */
+    getDocumentUrl: async (
+        tenancyId: string, documentId: string, submitted: boolean,
+    ): Promise<ApiResponse<string>> => {
+        const response = await apiClient.get(
+            `/api/v1/Tenancy/${tenancyId}/documents/${documentId}/url`,
+            { params: { submitted } },
+        );
         return response.data;
     },
 };

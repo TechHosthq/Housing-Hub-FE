@@ -21,3 +21,25 @@ export const formatKobo = (kobo: number): string => {
         maximumFractionDigits: 2,
     })}`;
 };
+
+/**
+ * Naira typed by a person to whole kobo.
+ *
+ * Multiplying a float by 100 is the trap here: 2500.15 * 100 is 250014.99999…,
+ * which truncates to a kobo less than the person typed. Rounding closes that, and
+ * every amount on the wire stays an integer.
+ *
+ * Returns null for anything that is not a non-negative number, so a caller has to
+ * decide what an unparseable field means rather than silently sending zero.
+ */
+export const nairaToKobo = (naira: string | number): number | null => {
+    const value = typeof naira === 'number' ? naira : Number(naira.replace(/,/g, '').trim());
+
+    if (!Number.isFinite(value) || value < 0) return null;
+
+    return Math.round(value * 100);
+};
+
+/** Kobo to a plain editable naira string, e.g. 250015 → "2500.15". No symbol, no separators. */
+export const koboToNairaInput = (kobo: number): string =>
+    (kobo % 100 === 0 ? kobo / 100 : (kobo / 100).toFixed(2)).toString();
