@@ -34,6 +34,13 @@ export interface Inspection {
     propertyImageUrl?: string | null;
     propertyOwnerId?: string | null;
     customerName?: string | null;
+    /**
+     * Where the viewer is based — city and state, never the street.
+     *
+     * Set only on the single-inspection read, not on lists. Null when they have not
+     * given an address, which is why nothing renders rather than "Unknown".
+     */
+    customerLocation?: string | null;
     propertyOwnerName?: string | null;
     handedOffAt?: string | null;
     assignedStaffId?: string | null;
