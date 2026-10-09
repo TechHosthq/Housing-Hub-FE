@@ -123,6 +123,12 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                             <Link href={`/inspections`} className="block w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 Inspection Details
                             </Link>
+                            <Link
+                                href={`/properties/${property.id}/tenancy`}
+                                className="block w-full text-left px-6 py-3 text-[14px] font-bold text-[#1A1A1A] dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                            >
+                                Choose a Tenant
+                            </Link>
                             <button
                                 onClick={() => {
                                     setIsMenuOpen(false);

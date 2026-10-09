@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Calendar, Clock, Loader2 } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Loader2, MapPin, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { use, useState, useEffect } from "react";
@@ -53,6 +53,8 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
     const [isRejectingReschedule, setIsRejectingReschedule] = useState(false);
 
     const inspection = inspectionResponse?.data;
+    const isOwnerOfThisProperty = !!inspection?.propertyOwnerId
+        && inspection.propertyOwnerId === currentUser?.id;
 
     const handleConfirmAccept = () => {
         if (!inspection || !currentUser?.id) return;
@@ -279,6 +281,33 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                             </p>
                         </div>
                     </div>
+
+                    {/*
+                        Who is coming. Shown to the owner only, and decided by who owns
+                        this property rather than by account type — somebody who lets one
+                        flat and rents another is an ordinary case, and the question here
+                        is which side of *this* inspection they are on.
+                    */}
+                    {isOwnerOfThisProperty && (
+                        <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-6 flex items-center gap-5">
+                            <div className="w-12 h-12 rounded-full bg-[#E5F4FF] flex items-center justify-center text-[#0095FF] flex-shrink-0">
+                                <User size={20} />
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-[16px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-0.5">
+                                    {inspection.customerName?.trim() || "Housing Hub user"}
+                                </p>
+                                {/* Nothing at all when they haven't given one — an
+                                    "Unknown location" line is a claim nobody made. */}
+                                {inspection.customerLocation && (
+                                    <p className="text-[14px] text-[#A3A3A3] font-bold flex items-center gap-1.5">
+                                        <MapPin size={14} />
+                                        {inspection.customerLocation}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Info Cards Row */}
                     <div className="grid grid-cols-2 gap-4">
