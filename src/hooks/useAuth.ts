@@ -87,9 +87,11 @@ export const useAuth = () => {
         forgotPasswordSuccess: forgotPasswordMutation.isSuccess,
         forgotPasswordMessage: forgotPasswordMutation.data?.message ?? null,
 
-        resetPassword: resetPasswordMutation.mutate,
+        // mutateAsync, not mutate: the form decides what the response meant. The API
+        // answers a dead link with 200 and isSuccessful:false, so `isSuccess` is true
+        // for a reset that did not happen.
+        resetPassword: resetPasswordMutation.mutateAsync,
         isResettingPassword: resetPasswordMutation.isPending,
-        resetPasswordSuccess: resetPasswordMutation.isSuccess,
 
         changePassword: changePasswordMutation.mutate,
         isChangingPassword: changePasswordMutation.isPending,

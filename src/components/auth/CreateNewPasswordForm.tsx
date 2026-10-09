@@ -6,11 +6,12 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ResetSuccessModal from "./ResetSuccessModal";
 import { useAuth } from "@/hooks/useAuth";
+import { resolveMutationError } from "@/utils/errorResolver";
 
 export default function CreateNewPasswordForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { resetPassword, isResettingPassword, resetPasswordSuccess } = useAuth();
+    const { resetPassword, isResettingPassword } = useAuth();
     
     const emailFromUrl = searchParams.get("email");
     const tokenFromUrl = searchParams.get("token");
@@ -32,39 +33,55 @@ export default function CreateNewPasswordForm() {
         if (tokenFromUrl) setToken(tokenFromUrl);
     }, [emailFromUrl, tokenFromUrl]);
 
-    useEffect(() => {
-        if (resetPasswordSuccess) {
-            setShowModal(true);
-            setTimeout(() => {
-                router.push("/login");
-            }, 3000);
-        }
-    }, [resetPasswordSuccess, router]);
-
-    const handleSubmit = (e: React.FormEvent) => {
+    /**
+     * Reads the response rather than trusting the HTTP status.
+     *
+     * The API answers a dead link with 200 and `isSuccessful: false`, so the
+     * mutation's own `isSuccess` is true for a reset that did not happen. This form
+     * used to show the success modal and send the user to the sign-in page off that
+     * flag; it only ever looked right because the axios interceptor rejects that
+     * shape before the flag is set — a side effect, not a decision this screen made.
+     */
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
 
         if (formData.newPassword !== formData.confirmPassword) {
-            setError("Passwords do not match");
+            setError("Those passwords don't match.");
             return;
         }
 
         if (!email) {
-            setError("Email address is required");
+            setError("We need the email address you asked to reset.");
             return;
         }
 
         if (!token) {
-            setError("Reset token is required");
+            setError("This link is missing the part that identifies your request. Open the link from your email again, or ask for a new one.");
             return;
         }
 
-        resetPassword({
-            email,
-            token,
-            newPassword: formData.newPassword
-        });
+        try {
+            const result = await resetPassword({
+                email,
+                token,
+                newPassword: formData.newPassword,
+            });
+
+            if (result.isSuccessful) {
+                setShowModal(true);
+                setTimeout(() => router.push("/login"), 3000);
+                return;
+            }
+
+            setError(result.message || "We couldn't reset your password. Please try again.");
+        } catch (failure) {
+            // The server's message names the actual obstacle — the link is spent,
+            // expired, or superseded by a newer one — and every one of those tells
+            // the person what to do next. Replacing it with something generic would
+            // leave them clicking the same dead link.
+            setError(resolveMutationError(failure).join(" "));
+        }
     };
 
     const hasUrlParams = !!emailFromUrl && !!tokenFromUrl;
@@ -87,7 +104,8 @@ export default function CreateNewPasswordForm() {
                     </h1>
                     {!hasUrlParams && (
                         <p className="text-[10px] text-gray-400 dark:text-gray-500">
-                            Please paste the Email and Reset Token from your email link.
+                            Open this page from the link in your email. If you can&apos;t,
+                            fill in the details below.
                         </p>
                     )}
                 </div>
@@ -117,14 +135,14 @@ export default function CreateNewPasswordForm() {
                     {/* Manual Token Input if not in URL */}
                     {!tokenFromUrl && (
                         <div className="space-y-1">
-                            <label className="text-[9px] font-semibold text-[#666666] dark:text-gray-400">Reset Token</label>
+                            <label className="text-[9px] font-semibold text-[#666666] dark:text-gray-400">Code from your email link</label>
                             <input
                                 type="text"
                                 required
                                 value={token}
                                 onChange={(e) => setToken(e.target.value)}
                                 className="w-full px-5 py-3 rounded-full border border-[#E5E5E5] dark:border-gray-800 focus:outline-none focus:border-primary-dark transition-colors text-sm font-mono"
-                                placeholder="Paste your reset token"
+                                placeholder="The long code after token= in the link"
                             />
                         </div>
                     )}
