@@ -8,7 +8,14 @@ export enum InspectionStatus {
     Declined = 2,
     Rescheduled = 3,
     Completed = 4,
-    Cancelled = 5
+    Cancelled = 5,
+    /**
+     * We asked the renter whether the viewing happened and never heard back.
+     *
+     * Not the same as cancelled — cancelled means somebody decided. Terminal: to
+     * go ahead after this, book again.
+     */
+    Expired = 6
 }
 
 export interface Inspection {
@@ -41,6 +48,15 @@ export interface Inspection {
      * given an address, which is why nothing renders rather than "Unknown".
      */
     customerLocation?: string | null;
+    /** When the renter confirmed the viewing happened. */
+    completedAt?: string | null;
+    /**
+     * What the renter said about the viewing, if anything.
+     *
+     * Shown to both sides. It is the only written account of what happened, and an
+     * owner deciding whether to put them forward should read it.
+     */
+    completionComment?: string | null;
     propertyOwnerName?: string | null;
     handedOffAt?: string | null;
     assignedStaffId?: string | null;

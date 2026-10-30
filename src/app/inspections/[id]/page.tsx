@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
 import StatusBanner from "@/components/inspections/StatusBanner";
+import MarkInspectionDonePanel from "@/components/inspections/MarkInspectionDonePanel";
 import InspectionTimeline from "@/components/inspections/InspectionTimeline";
 import SuccessModal from "@/components/common/SuccessModal";
 import { useUserRole } from "@/context/UserRoleContext";
@@ -55,6 +56,12 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
     const inspection = inspectionResponse?.data;
     const isOwnerOfThisProperty = !!inspection?.propertyOwnerId
         && inspection.propertyOwnerId === currentUser?.id;
+
+    // Compared by day rather than by the minute, matching the server. Owners let
+    // people in early and the stored time carries no timezone, so being strict
+    // about the hour would refuse renters who are telling the truth.
+    const hasSlotPassed = !!inspection?.scheduledDate
+        && new Date(inspection.scheduledDate).setHours(0, 0, 0, 0) <= new Date().setHours(0, 0, 0, 0);
 
     const handleConfirmAccept = () => {
         if (!inspection || !currentUser?.id) return;
@@ -333,6 +340,35 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                             </div>
                         </div>
                     </div>
+
+                    {/*
+                        Only the renter, only on a confirmed viewing, and only once the
+                        day has come — the API enforces all three and refuses the owner
+                        outright, because a completed viewing is what qualifies somebody
+                        to be chosen as a tenant.
+                    */}
+                    {!isOwnerOfThisProperty
+                        && inspection.status === InspectionStatus.Confirmed
+                        && hasSlotPassed && (
+                        <MarkInspectionDonePanel inspectionId={inspection.id} />
+                    )}
+
+                    {/*
+                        The only written account of the viewing, so it goes to both
+                        sides. "The gate was locked and I saw it from outside" changes
+                        what completed means, and an owner about to put somebody forward
+                        should read it.
+                    */}
+                    {inspection.completionComment && (
+                        <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8">
+                            <h3 className="text-[18px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3">
+                                {isOwnerOfThisProperty ? "What they said about the viewing" : "What you said"}
+                            </h3>
+                            <p className="text-[14px] text-[#666666] dark:text-gray-400 font-medium leading-relaxed">
+                                {inspection.completionComment}
+                            </p>
+                        </div>
+                    )}
 
                     {/* Note Card */}
                     <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8">

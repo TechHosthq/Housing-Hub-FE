@@ -18,6 +18,8 @@ const statusStyles: Record<InspectionStatus, string> = {
     [InspectionStatus.Cancelled]: "bg-[#FFF2F2] text-[#FF3B30] border-[#FFD9D9]",
     [InspectionStatus.Declined]: "bg-[#FFF2F2] text-[#FF3B30] border-[#FFD9D9]",
     [InspectionStatus.Rescheduled]: "bg-[#F2F7FF] text-[#0095FF] border-[#D9E9FF]",
+    // Grey, not red. Nobody refused anything — the question just went unanswered.
+    [InspectionStatus.Expired]: "bg-[#F4F4F4] text-[#8A8A8A] border-[#E5E5E5]",
 };
 
 const statusLabels: Record<InspectionStatus, string> = {
@@ -27,6 +29,7 @@ const statusLabels: Record<InspectionStatus, string> = {
     [InspectionStatus.Cancelled]: "Cancelled",
     [InspectionStatus.Declined]: "Declined",
     [InspectionStatus.Rescheduled]: "Reschedule Requested",
+    [InspectionStatus.Expired]: "Closed",
 };
 
 export default function InspectionListCard({ inspection }: InspectionListCardProps) {
