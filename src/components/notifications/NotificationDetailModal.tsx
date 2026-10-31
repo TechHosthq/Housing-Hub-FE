@@ -60,6 +60,21 @@ export default function NotificationDetailModal({ isOpen, onClose, notification 
                         >
                             Open the tenancy
                         </Link>
+                    ) : notification.inspectionId ? (
+                        /*
+                            Every inspection notification used to arrive with nothing
+                            to click: the modal only linked on tenancyId or propertyId,
+                            and the inspection ones set neither. Being told a viewing
+                            was confirmed and having no way through to it is the dead
+                            end this closes.
+                        */
+                        <Link
+                            href={`/inspections/${notification.inspectionId}`}
+                            onClick={onClose}
+                            className="inline-flex mt-6 px-6 py-3 rounded-full bg-primary-dark text-white text-[14px] font-bold hover:opacity-90 transition-opacity"
+                        >
+                            View Inspection
+                        </Link>
                     ) : notification.propertyId && (
                         <Link
                             href={`/property/${notification.propertyId}`}

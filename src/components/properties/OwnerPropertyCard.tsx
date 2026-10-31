@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { MoreVertical, MapPin, Eye, Clock, Loader2, Play, Bed, ShowerHead } from "lucide-react";
+import { MoreVertical, MapPin, Eye, Clock, Loader2, Play, Bed, ShowerHead, Users } from "lucide-react";
 import DeleteListingModal from "./DeleteListingModal";
 import PropertyDeletedModal from "./PropertyDeletedModal";
 import { PropertyDetail, PropertyFileType } from "@/types/property";
@@ -188,6 +188,23 @@ export default function OwnerPropertyCard({ property }: OwnerPropertyCardProps) 
                             </span>
                         )}
                     </div>
+                )}
+
+                {/*
+                    Out of the three-dot menu, because nobody finds it there. Shown
+                    only once somebody has actually booked a viewing — a listing with
+                    no requests has nobody to choose from, and offering the choice
+                    anyway sends the owner to an empty screen.
+                */}
+                {requests > 0 && (
+                    <Link
+                        href={`/properties/${property.id}/tenancy`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex w-fit items-center gap-2 rounded-full bg-[#0B2545] px-5 py-2.5 text-[12px] font-bold text-white transition-colors hover:bg-[#071A33]"
+                    >
+                        <Users size={14} />
+                        Choose a tenant
+                    </Link>
                 )}
 
                 <div className="pt-4 mt-auto border-t border-gray-100 dark:border-gray-800 flex items-center gap-3">
