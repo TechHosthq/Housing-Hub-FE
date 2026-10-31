@@ -42,6 +42,11 @@ export default function DashboardNavbar() {
         { name: "Dashboard", href: role === "Owner" ? "/dashboard" : "/" },
         ...(role === "Owner" ? [{ name: "Property", href: "/properties" }] : []),
         { name: "Inspection", href: "/inspections" },
+        // Sits with the transactional flow — a tenancy is what an inspection leads
+        // to — and ahead of Message, which stays last. Not gated on having one:
+        // a tab that appears and disappears is worse in a navbar than an empty
+        // page, and the page says plainly why it is empty.
+        { name: "Tenancy", href: "/tenancies" },
         { name: "Message", href: "/messages" },
     ];
 
