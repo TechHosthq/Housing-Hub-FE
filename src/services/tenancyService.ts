@@ -1,5 +1,6 @@
 import apiClient from './apiClient';
 import { ApiResponse } from '@/types/auth';
+import { PaymentResponse } from '@/types/payment';
 import {
     TenanciesResponse,
     TenancyCandidatesResponse,
@@ -9,6 +10,7 @@ import {
     TenancyDocumentResponse,
     TenancyFeeInput,
     TenancyFeesResponse,
+    TenancyPaymentQuoteResponse,
     TenancyResponse,
 } from '@/types/tenancy';
 
@@ -63,6 +65,26 @@ const tenancyService = {
 
     getById: async (tenancyId: string): Promise<TenancyResponse> => {
         const response = await apiClient.get(`/api/v1/Tenancy/${tenancyId}`);
+        return response.data;
+    },
+
+    // ── Paying for it ────────────────────────────────────────────
+
+    /** What it will cost, itemised. Either party may read it. */
+    getPaymentQuote: async (tenancyId: string): Promise<TenancyPaymentQuoteResponse> => {
+        const response = await apiClient.get(`/api/v1/Tenancy/${tenancyId}/payment/quote`);
+        return response.data;
+    },
+
+    /**
+     * Starts the payment and returns where to send the tenant.
+     *
+     * The callback is where the gateway returns them afterwards. The server drops
+     * it unless it points at one of our own front ends — unchecked it is an open
+     * redirect at the moment somebody is expecting a receipt.
+     */
+    startPayment: async (tenancyId: string, callbackUrl: string | null): Promise<PaymentResponse> => {
+        const response = await apiClient.post(`/api/v1/Tenancy/${tenancyId}/payment`, { callbackUrl });
         return response.data;
     },
 
