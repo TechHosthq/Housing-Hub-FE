@@ -83,6 +83,24 @@ export const useTenancy = () => {
         onSuccess: () => invalidate(),
     });
 
+    const usePaymentQuote = (tenancyId: string | null) => useQuery({
+        queryKey: ['tenancy-payment-quote', tenancyId],
+        queryFn: () => tenancyService.getPaymentQuote(tenancyId!),
+        enabled: !!tenancyId && isAuthenticated,
+    });
+
+    const startPaymentMutation = useMutation({
+        mutationFn: ({ tenancyId, callbackUrl }: { tenancyId: string; callbackUrl: string | null }) =>
+            tenancyService.startPayment(tenancyId, callbackUrl),
+        // The tenancy moves to awaiting-payment as soon as a charge is in flight,
+        // and the quote's isAlreadyPaid is the server's answer, not ours.
+        onSuccess: (_, { tenancyId }) => {
+            queryClient.invalidateQueries({ queryKey: ['tenancy-payment-quote', tenancyId] });
+            queryClient.invalidateQueries({ queryKey: ['tenancy', tenancyId] });
+            queryClient.invalidateQueries({ queryKey: ['tenancies'] });
+        },
+    });
+
     const addDocumentMutation = useMutation({
         mutationFn: ({ tenancyId, document, file }: {
             tenancyId: string;
@@ -144,7 +162,10 @@ export const useTenancy = () => {
         useMyTenancies,
         useTenancyDetail,
         useDocumentPack,
+        usePaymentQuote,
         fetchDocumentUrl,
+        startPayment: startPaymentMutation.mutateAsync,
+        isStartingPayment: startPaymentMutation.isPending,
         addDocument: addDocumentMutation.mutateAsync,
         isAddingDocument: addDocumentMutation.isPending,
         removeDocument: removeDocumentMutation.mutateAsync,

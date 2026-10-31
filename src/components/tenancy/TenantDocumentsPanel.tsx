@@ -104,8 +104,7 @@ export default function TenantDocumentsPanel({ tenancyId, pack }: TenantDocument
                     <div className="mt-5 flex items-start gap-3 rounded-2xl bg-emerald-50 p-4 dark:bg-emerald-950/30">
                         <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-emerald-600" />
                         <p className="text-[12px] leading-relaxed text-emerald-800 dark:text-emerald-300">
-                            Everything&apos;s accepted. Paying is the last step — we&apos;ll open
-                            it here once it&apos;s ready.
+                            Everything&apos;s accepted. Paying is the last step — it&apos;s below.
                         </p>
                     </div>
                 )}

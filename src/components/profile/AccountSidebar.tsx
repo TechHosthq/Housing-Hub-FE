@@ -1,6 +1,6 @@
 "use client";
 
-import { User, MessageCircle, Settings, ShieldCheck, Receipt } from "lucide-react";
+import { User, MessageCircle, Settings, ShieldCheck, Receipt, Landmark } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUserRole } from "@/context/UserRoleContext";
@@ -25,6 +25,10 @@ export default function AccountSidebar() {
         { label: "Profile Info", icon: User, href: "/profile" },
         ...(isOwner ? [{ label: "Verification", icon: ShieldCheck, href: "/verification" }] : []),
         ...(isOwner || hasPayments ? [{ label: "Payments", icon: Receipt, href: "/payments" }] : []),
+        // Owners only: a renter has no property to be paid for. Always shown to
+        // them rather than gated on having set one — an owner who has not is
+        // exactly the one who needs to find this.
+        ...(isOwner ? [{ label: "Get Paid", icon: Landmark, href: "/payout" }] : []),
         { label: "Message", icon: MessageCircle, href: "/messages" },
         { label: "Settings", icon: Settings, href: "/settings" }
     ];

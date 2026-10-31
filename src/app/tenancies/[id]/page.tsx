@@ -9,6 +9,7 @@ import Footer from "@/components/layout/Footer";
 import ComposeDocumentsPanel from "@/components/tenancy/ComposeDocumentsPanel";
 import ReviewDocumentsPanel from "@/components/tenancy/ReviewDocumentsPanel";
 import TenantDocumentsPanel from "@/components/tenancy/TenantDocumentsPanel";
+import TenancyCheckoutPanel from "@/components/tenancy/TenancyCheckoutPanel";
 import { useTenancy } from "@/hooks/useTenancy";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useToastStore } from "@/store/useToastStore";
@@ -161,7 +162,21 @@ export default function TenancyDetailPage({ params }: { params: Promise<{ id: st
                                         </p>
                                     </div>
                                 ) : (
-                                    <TenantDocumentsPanel tenancyId={id} pack={pack} />
+                                    <>
+                                        <TenantDocumentsPanel tenancyId={id} pack={pack} />
+
+                                        {/*
+                                            Shown from the moment the documents are
+                                            agreed. Before that the panel says why it
+                                            cannot be paid, which is more use than it
+                                            not being there.
+                                        */}
+                                        {tenancy.status !== TenancyStatus.DocumentsRequested && (
+                                            <div className="mt-6">
+                                                <TenancyCheckoutPanel tenancyId={id} />
+                                            </div>
+                                        )}
+                                    </>
                                 )}
 
                                 {/*

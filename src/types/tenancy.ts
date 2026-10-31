@@ -191,3 +191,29 @@ export interface TenancyFeeInput {
 export type TenancyDocumentPackResponse = ApiResponse<TenancyDocumentPack>;
 export type TenancyDocumentResponse = ApiResponse<TenancyDocument>;
 export type TenancyFeesResponse = ApiResponse<TenancyFee[]>;
+
+/** What the tenant is asked to pay, itemised. Every line is shown before charging. */
+export interface TenancyPaymentQuote {
+    tenancyId: string;
+    tenancyStatus: TenancyStatus;
+    rentKobo: number;
+    ownerFeesKobo: number;
+    /** Ours, and named as ours. A tenant who finds it on a bank statement disputes it. */
+    commissionKobo: number;
+    processingFeeKobo: number;
+    totalKobo: number;
+    currency: string;
+    /** False until every document has been accepted. */
+    isPayable: boolean;
+    isAlreadyPaid: boolean;
+    /**
+     * False when the owner hasn't said where to be paid.
+     *
+     * Surfaced rather than hidden behind a failure: the tenant has done nothing
+     * wrong and can do nothing about it, so the screen names who is holding it up.
+     */
+    ownerCanBePaid: boolean;
+    fees: TenancyFee[];
+}
+
+export type TenancyPaymentQuoteResponse = ApiResponse<TenancyPaymentQuote>;
