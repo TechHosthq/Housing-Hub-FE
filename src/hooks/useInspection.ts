@@ -51,6 +51,20 @@ export const useInspection = () => {
         }
     });
 
+    const completeMutation = useMutation({
+        mutationFn: ({ id, comment }: { id: string; comment: string | null }) =>
+            inspectionService.completeInspection(id, comment),
+        // Also invalidates the tenancy candidates: a completed viewing is exactly
+        // what puts this renter on the owner's list, and the server decides that.
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['inspection', variables.id] });
+            queryClient.invalidateQueries({ queryKey: ['my-inspections'] });
+            queryClient.invalidateQueries({ queryKey: ['owner-inspections'] });
+            queryClient.invalidateQueries({ queryKey: ['property-inspections'] });
+            queryClient.invalidateQueries({ queryKey: ['tenancy-candidates'] });
+        }
+    });
+
     const rescheduleMutation = useMutation({
         mutationFn: ({ id, data }: { id: string, data: RescheduleInspectionRequest }) => 
             inspectionService.rescheduleInspection(id, data),
@@ -88,6 +102,11 @@ export const useInspection = () => {
         isCreatingInspection: createInspectionMutation.isPending,
         respondToInspection: respondToInspectionMutation.mutate,
         isResponding: respondToInspectionMutation.isPending,
+
+        // mutateAsync: the form reads the response, since the API answers a refusal
+        // with 200 and isSuccessful:false.
+        completeInspection: completeMutation.mutateAsync,
+        isCompleting: completeMutation.isPending,
         reschedule: rescheduleMutation.mutate,
         isRescheduling: rescheduleMutation.isPending,
         respondToReschedule: respondToRescheduleMutation.mutate,
