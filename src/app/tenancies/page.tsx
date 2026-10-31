@@ -2,23 +2,26 @@
 
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
-import AccountSidebar from "@/components/profile/AccountSidebar";
 import TenancyList from "@/components/tenancy/TenancyList";
 
+/**
+ * A top-level section, not an account one.
+ *
+ * It used to sit behind the account sidebar next to Profile and Settings, which
+ * filed the thing you are in the middle of doing under the things you set once.
+ * It now matches Inspections: its own tab, its own page.
+ */
 export default function TenanciesPage() {
     return (
-        <main className="min-h-screen bg-[#FAFAFA] dark:bg-gray-950">
+        <main className="min-h-screen bg-white dark:bg-gray-900">
             <DashboardNavbar />
 
             <div className="max-w-7xl mx-auto px-6 pt-32 pb-20">
                 <h1 className="text-[28px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-8">
-                    My Account
+                    My Tenancies
                 </h1>
 
-                <div className="flex flex-col lg:flex-row gap-8 items-start">
-                    <AccountSidebar />
-                    <TenancyList />
-                </div>
+                <TenancyList />
             </div>
 
             <Footer />

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Calendar, Clock, Loader2, MapPin, User } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Loader2, MapPin, User, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { use, useState, useEffect } from "react";
@@ -367,6 +367,32 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                             <p className="text-[14px] text-[#666666] dark:text-gray-400 font-medium leading-relaxed">
                                 {inspection.completionComment}
                             </p>
+                        </div>
+                    )}
+
+                    {/*
+                        The owner's way forward, on the screen where they learn the
+                        viewing happened. Until this existed the only route to the
+                        candidate list was a three-dot menu on a property card, which
+                        is not where anybody looks after being told somebody viewed
+                        their flat.
+                    */}
+                    {isOwnerOfThisProperty && inspection.status === InspectionStatus.Completed && (
+                        <div className="bg-[#F2F7FF] rounded-[22px] border border-[#D9E9FF] p-8 dark:border-gray-800 dark:bg-gray-900">
+                            <h3 className="font-montserrat text-[18px] font-black text-[#1A1A1A] dark:text-gray-100">
+                                {inspection.customerName?.trim() || "This renter"} viewed your property
+                            </h3>
+                            <p className="mt-2 text-[14px] font-medium leading-relaxed text-[#666666] dark:text-gray-400">
+                                You can put them forward for it, alongside anyone else who has
+                                viewed it. Nothing is binding until you both agree the paperwork.
+                            </p>
+                            <Link
+                                href={`/properties/${inspection.propertyId}/tenancy`}
+                                className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary-dark px-7 py-3.5 text-[14px] font-bold text-white transition-opacity hover:opacity-90"
+                            >
+                                <Users size={16} />
+                                See everyone who viewed this property
+                            </Link>
                         </div>
                     )}
 

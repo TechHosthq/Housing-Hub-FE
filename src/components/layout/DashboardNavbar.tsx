@@ -8,6 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 import UserDropdown from "./UserDropdown";
 import { useUserRole } from "@/context/UserRoleContext";
 import { useNotification } from "@/hooks/useNotification";
+import { useTenancy } from "@/hooks/useTenancy";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export default function DashboardNavbar() {
@@ -23,6 +24,13 @@ export default function DashboardNavbar() {
     const { useUnreadCount } = useNotification();
     const { data: unreadCountResponse } = useUnreadCount();
     const unreadCount = unreadCountResponse?.data || 0;
+
+    // Shares the ['tenancies'] key with the tenancies page, so this is one request
+    // for the session rather than one per navigation. Gated on being signed in
+    // inside the hook — this navbar renders for visitors too.
+    const { useMyTenancies } = useTenancy();
+    const { data: tenanciesResponse } = useMyTenancies();
+    const hasTenancies = (tenanciesResponse?.data?.length ?? 0) > 0;
 
     const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
@@ -42,6 +50,12 @@ export default function DashboardNavbar() {
         { name: "Dashboard", href: role === "Owner" ? "/dashboard" : "/" },
         ...(role === "Owner" ? [{ name: "Property", href: "/properties" }] : []),
         { name: "Inspection", href: "/inspections" },
+        // Shown to whoever is party to one, from either side — a renter has a
+        // tenancy as surely as the owner letting it, and letting one place while
+        // renting another is ordinary here. Appears only once there is one: an
+        // empty tab is a dead end, and nobody has a tenancy until somebody picks
+        // them. Sits ahead of Message, which stays last.
+        ...(hasTenancies ? [{ name: "Tenancy", href: "/tenancies" }] : []),
         { name: "Message", href: "/messages" },
     ];
 
