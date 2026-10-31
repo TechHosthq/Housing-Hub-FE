@@ -10,8 +10,14 @@
  * showing a placeholder to users.
  */
 export const OPERATOR = {
-    /** Registered company name. */
-    name: "Techhost",
+    /**
+     * Registered company name.
+     *
+     * Title case rather than the capitals on the certificate: CAC prints every
+     * name that way as a formatting convention, and ALL CAPS in a sentence reads
+     * as shouting on a page meant to sound measured.
+     */
+    name: "Techhost Technologies Limited",
 
     /** CAC registration number. Rendered with an "RC " prefix, so it is digits only. */
     registrationNumber: "1935335",
@@ -26,7 +32,7 @@ export const OPERATOR = {
         "The Philippi Centre, Oluwalogbon House, Plot A Obafemi Awolowo Way, Alausa, Ikeja, Lagos",
 } as const;
 
-/** "Techhost (RC 1234567)", or just "Techhost" until the number is known. */
+/** "Techhost Technologies Limited (RC 1935335)", or just the name without a number. */
 export const operatorLegalName = (): string =>
     OPERATOR.registrationNumber
         ? `${OPERATOR.name} (RC ${OPERATOR.registrationNumber})`
