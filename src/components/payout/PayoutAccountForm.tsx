@@ -112,7 +112,8 @@ export default function PayoutAccountForm() {
                 */}
                 <p className="mt-1 text-[12px] leading-relaxed text-gray-400 dark:text-gray-500">
                     It has to be an account in your own name — we check with the bank. Rent
-                    goes straight from your tenant to here; we never hold it.
+                    goes straight from your tenant to here; we never hold it. Check the
+                    account first if you want to see the name before you save it.
                 </p>
 
                 <div className="mt-6 space-y-4">
@@ -192,21 +193,23 @@ export default function PayoutAccountForm() {
                         </button>
 
                         {/*
-                            Only offered once the bank has confirmed the name is
-                            theirs. The server refuses anything else regardless —
-                            this just stops the owner finding out the hard way.
+                            Always available, not gated on having checked first.
+                            Checking is a courtesy — it shows the name before the
+                            owner commits — but requiring it costs a second account
+                            lookup on every save, and the provider meters those.
+                            Saving verifies independently regardless: the two are
+                            separate requests, and only this one creates somewhere
+                            money can reach.
                         */}
-                        {resolved?.matches && (
-                            <button
-                                type="button"
-                                onClick={save}
-                                disabled={isSaving}
-                                className="flex items-center gap-2 rounded-full bg-primary-dark px-6 py-3 text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
-                            >
-                                {isSaving && <Loader2 size={14} className="animate-spin" />}
-                                Save this account
-                            </button>
-                        )}
+                        <button
+                            type="button"
+                            onClick={save}
+                            disabled={!canCheck || isSaving || resolved?.matches === false}
+                            className="flex items-center gap-2 rounded-full bg-primary-dark px-6 py-3 text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+                        >
+                            {isSaving && <Loader2 size={14} className="animate-spin" />}
+                            Save this account
+                        </button>
                     </div>
                 </div>
             </div>
