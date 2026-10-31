@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { CircleAlert, CreditCard, Loader2, Lock } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTenancy } from "@/hooks/useTenancy";
+import { usePayment } from "@/hooks/usePayment";
 import { TenancyStatus } from "@/types/tenancy";
 import { formatKobo } from "@/utils/money";
 import { resolveMutationError } from "@/utils/errorResolver";
@@ -22,12 +24,44 @@ interface TenancyCheckoutPanelProps {
  * total.
  */
 export default function TenancyCheckoutPanel({ tenancyId }: TenancyCheckoutPanelProps) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     const { usePaymentQuote, startPayment, isStartingPayment } = useTenancy();
     const { data: quoteResponse, isLoading } = usePaymentQuote(tenancyId);
+    const { reconcilePayment, isReconciling } = usePayment();
 
     const [error, setError] = useState("");
 
     const quote = quoteResponse?.data;
+
+    // Paystack appends `reference` and `trxref` to the callback URL itself.
+    const reference = searchParams.get("reference") ?? searchParams.get("trxref");
+    const reconciled = useRef<string | null>(null);
+
+    /**
+     * Checks with the gateway the moment the tenant lands back here.
+     *
+     * The browser is routinely ahead of the webhook, and somebody who has just paid
+     * should not be looking at a page that says they have not — the obvious thing
+     * to do about that is pay again. Settling here goes through the same path the
+     * webhook uses, so whichever arrives second changes nothing.
+     */
+    useEffect(() => {
+        if (!reference || reconciled.current === reference) return;
+        reconciled.current = reference;
+
+        void reconcilePayment(reference)
+            .catch(() => {
+                // Swallowed. The webhook is still coming, the quote below already
+                // says where things stand, and an error about a payment that may
+                // well have succeeded is worse than silence.
+            })
+            .finally(() => {
+                // Drop the reference so a refresh does not read as a fresh return.
+                router.replace(`/tenancies/${tenancyId}`, { scroll: false });
+            });
+    }, [reference, reconcilePayment, router, tenancyId]);
 
     const pay = async () => {
         setError("");
@@ -53,10 +87,13 @@ export default function TenancyCheckoutPanel({ tenancyId }: TenancyCheckoutPanel
         }
     };
 
-    if (isLoading) {
+    if (isLoading || isReconciling) {
         return (
-            <div className="flex items-center justify-center rounded-[22px] border border-[#F2F2F2] bg-white py-16 dark:border-gray-800 dark:bg-gray-900">
+            <div className="flex flex-col items-center justify-center gap-3 rounded-[22px] border border-[#F2F2F2] bg-white py-16 dark:border-gray-800 dark:bg-gray-900">
                 <Loader2 className="animate-spin text-[#0095FF]" size={24} />
+                {isReconciling && (
+                    <p className="text-[12px] text-gray-400">Checking your payment…</p>
+                )}
             </div>
         );
     }
