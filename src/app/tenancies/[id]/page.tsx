@@ -8,6 +8,7 @@ import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
 import ComposeDocumentsPanel from "@/components/tenancy/ComposeDocumentsPanel";
 import ReviewDocumentsPanel from "@/components/tenancy/ReviewDocumentsPanel";
+import OwnerPaymentPanel from "@/components/tenancy/OwnerPaymentPanel";
 import TenantDocumentsPanel from "@/components/tenancy/TenantDocumentsPanel";
 import TenancyCheckoutPanel from "@/components/tenancy/TenancyCheckoutPanel";
 import { useTenancy } from "@/hooks/useTenancy";
@@ -136,6 +137,17 @@ export default function TenancyDetailPage({ params }: { params: Promise<{ id: st
                                     />
                                 ) : (
                                     <ReviewDocumentsPanel tenancyId={id} pack={pack} />
+                                )}
+
+                                {/*
+                                    Shown once the paperwork is settled, which is the
+                                    point money becomes the only outstanding thing.
+                                */}
+                                {pack.isComplete && (
+                                    <OwnerPaymentPanel
+                                        tenancyId={id}
+                                        tenancyStatus={tenancy.status}
+                                    />
                                 )}
 
                                 <p className="mt-6 text-[12px] text-gray-400 dark:text-gray-500">
