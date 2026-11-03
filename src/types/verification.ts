@@ -56,6 +56,18 @@ export enum VerificationCaseStatus {
     Cancelled = 8,
 }
 
+/**
+ * Whether a case is still live — in a drawer somewhere, or on a reviewer's desk.
+ *
+ * Shared rather than redefined per screen. Two copies of this predicate is how one
+ * screen offers to start a verification that another screen is already showing as
+ * in progress.
+ */
+export const isCaseOpen = (item: { status: VerificationCaseStatus }): boolean =>
+    item.status === VerificationCaseStatus.Draft
+    || item.status === VerificationCaseStatus.Submitted
+    || item.status === VerificationCaseStatus.UnderReview;
+
 export enum VerificationTier {
     Unverified = 0,
     IdentityVerified = 1,

@@ -17,8 +17,20 @@ npm run lint
 npx tsc --noEmit # typecheck alone; faster than a build when iterating
 ```
 
-There is no test suite. `tsc --noEmit` and a real build are the verification
-available — use both before claiming something works.
+```bash
+npm test         # vitest, once
+npm run test:watch
+```
+
+`tsc --noEmit`, `npm test` and a real build are the verification available — use
+all three before claiming something works.
+
+The suite is deliberately weighted at the seam with the API rather than at the
+paintwork: money conversion, the two shapes an error arrives in, the enum values
+that must match the server's, and the handful of components whose job is to decide
+something from a response. Both bugs that reached a user in the payment work were
+a screen reading a field nobody had wired up, and no server test could have caught
+either — the server was right both times.
 
 ---
 

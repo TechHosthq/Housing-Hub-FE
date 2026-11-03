@@ -47,9 +47,38 @@ export default function NotificationDetailModal({ isOpen, onClose, notification 
                     <p className="text-[15px] text-[#666666] dark:text-gray-400 font-medium leading-relaxed whitespace-pre-wrap">
                         {notification.message}
                     </p>
-                    {notification.propertyId && (
+                    {/*
+                        A tenancy notification is the one with something to do attached
+                        — documents to complete, a signature to give — so it takes
+                        precedence over the listing link when both are set.
+                    */}
+                    {notification.tenancyId ? (
+                        <Link
+                            href={`/tenancies/${notification.tenancyId}`}
+                            onClick={onClose}
+                            className="inline-flex mt-6 px-6 py-3 rounded-full bg-primary-dark text-white text-[14px] font-bold hover:opacity-90 transition-opacity"
+                        >
+                            Open the tenancy
+                        </Link>
+                    ) : notification.inspectionId ? (
+                        /*
+                            Every inspection notification used to arrive with nothing
+                            to click: the modal only linked on tenancyId or propertyId,
+                            and the inspection ones set neither. Being told a viewing
+                            was confirmed and having no way through to it is the dead
+                            end this closes.
+                        */
+                        <Link
+                            href={`/inspections/${notification.inspectionId}`}
+                            onClick={onClose}
+                            className="inline-flex mt-6 px-6 py-3 rounded-full bg-primary-dark text-white text-[14px] font-bold hover:opacity-90 transition-opacity"
+                        >
+                            View Inspection
+                        </Link>
+                    ) : notification.propertyId && (
                         <Link
                             href={`/property/${notification.propertyId}`}
+                            onClick={onClose}
                             className="inline-flex mt-6 px-6 py-3 rounded-full bg-primary-dark text-white text-[14px] font-bold hover:opacity-90 transition-opacity"
                         >
                             View Property

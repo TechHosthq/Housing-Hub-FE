@@ -24,10 +24,10 @@ const statusConfigs: Record<InspectionStatus, { title: string; message: string; 
         textColor: "text-[#666666] dark:text-gray-400"
     },
     [InspectionStatus.Completed]: {
-        title: "Awaiting Feedback",
-        message: "Your inspection visit is complete. Please add your feedback to finalize.",
-        bgColor: "bg-[#F2F2F2]",
-        borderColor: "border-[#E5E5E5] dark:border-gray-800",
+        title: "Viewing confirmed",
+        message: "You've told us this viewing went ahead and the owner has been let know. They can now put you forward for the property if they want to.",
+        bgColor: "bg-[#E9F3FF]",
+        borderColor: "border-[#0095FF]",
         titleColor: "text-[#1A1A1A] dark:text-gray-100",
         textColor: "text-[#666666] dark:text-gray-400"
     },
@@ -52,6 +52,15 @@ const statusConfigs: Record<InspectionStatus, { title: string; message: string; 
         message: "A new time has been proposed for this inspection.",
         bgColor: "bg-[#F2F7FF]",
         borderColor: "border-[#0095FF]",
+        titleColor: "text-[#1A1A1A] dark:text-gray-100",
+        textColor: "text-[#666666] dark:text-gray-400"
+    },
+    // Says what happened and what to do, without blaming anybody for it.
+    [InspectionStatus.Expired]: {
+        title: "This viewing was closed",
+        message: "We asked whether it went ahead and didn't hear back, so we've closed it. You can book another viewing whenever you like.",
+        bgColor: "bg-[#F4F4F4]",
+        borderColor: "border-[#D4D4D4]",
         titleColor: "text-[#1A1A1A] dark:text-gray-100",
         textColor: "text-[#666666] dark:text-gray-400"
     }

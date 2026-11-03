@@ -49,8 +49,11 @@ const authService = {
         return response.data;
     },
 
+    // skipErrorToast: the form renders the failure inline, next to the fields it
+    // concerns. A toast that disappears is the wrong place for "this link is dead,
+    // here is what to do about it".
     resetPassword: async (data: ResetPasswordRequest): Promise<ResetPasswordResponse> => {
-        const response = await apiClient.post('/api/v1/Auth/reset-password', data);
+        const response = await apiClient.post('/api/v1/Auth/reset-password', data, { skipErrorToast: true });
         return response.data;
     },
 

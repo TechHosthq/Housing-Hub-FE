@@ -52,6 +52,20 @@ const paymentService = {
      * the server, which only reports Paid once the provider's signed webhook has
      * settled it.
      */
+    /**
+     * Asks the server to check with the gateway, for the moment a payer returns.
+     *
+     * The browser is often ahead of the webhook. Without this a tenant who has just
+     * paid lands on a page saying they have not, and the obvious response to that
+     * is to pay again.
+     */
+    reconcile: async (reference: string): Promise<PaymentResponse> => {
+        const response = await apiClient.post(`/api/v1/Payment/${reference}/reconcile`, null, {
+            skipErrorToast: true,
+        });
+        return response.data;
+    },
+
     getByReference: async (reference: string): Promise<PaymentResponse> => {
         const response = await apiClient.get(`/api/v1/Payment/${reference}`);
         return response.data;

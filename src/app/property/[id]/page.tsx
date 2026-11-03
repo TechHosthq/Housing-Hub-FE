@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useProperty } from "@/hooks/useProperty";
 import { useAuthStore } from "@/store/useAuthStore";
+import VerifyPropertyPanel from "@/components/property/VerifyPropertyPanel";
 import { use } from "react";
 import { PropertyFile, PropertyFileType } from "@/types/property";
 
@@ -62,6 +63,8 @@ export default function PropertyDetailPage() {
             propertyId: property.id,
         }];
 
+    const isOwner = !!currentUser && currentUser.id === property.ownerId;
+
     // Map PropertyDetail to PropertyInfo expected format
     const displayProperty = {
         title: property.title || "Untitled Property",
@@ -94,8 +97,21 @@ export default function PropertyDetailPage() {
                         <PropertyDetailHeader
                             propertyId={property.id}
                             propertyTitle={displayProperty.title}
-                            isOwner={!!currentUser && currentUser.id === property.ownerId}
+                            isOwner={isOwner}
                         />
+
+                        {/*
+                            Mounted only for the owner, not merely hidden from everyone
+                            else. It reads the caller's own verification cases, and this
+                            page is public — rendering it for a visitor would fire an
+                            authenticated request on a page anyone can open.
+                        */}
+                        {isOwner && (
+                            <VerifyPropertyPanel
+                                propertyId={property.id}
+                                verificationTier={property.listingVerificationTier}
+                            />
+                        )}
 
                         <div className="space-y-10">
                             <PropertyGallery files={galleryFiles} />

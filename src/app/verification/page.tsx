@@ -17,9 +17,9 @@ import { useToastStore } from "@/store/useToastStore";
 import {
     CASE_STATUS_LABELS,
     SUBJECT_TYPE_LABELS,
-    VerificationCase,
     VerificationCaseStatus,
     VerificationSubjectType,
+    isCaseOpen,
 } from "@/types/verification";
 
 export default function VerificationHubPage() {
@@ -42,7 +42,7 @@ export default function VerificationHubPage() {
     // with a case in flight would just produce a second case for the same property.
     // Both were offered in the picker regardless.
     const propertyIdsWithOpenCase = new Set(
-        cases.filter((c) => c.subjectType === VerificationSubjectType.Property && isOpen(c))
+        cases.filter((c) => c.subjectType === VerificationSubjectType.Property && isCaseOpen(c))
              .map((c) => c.subjectId),
     );
     const properties = allProperties.filter(
@@ -56,7 +56,7 @@ export default function VerificationHubPage() {
     // One open business case at a time. Offering "start" again when a draft already
     // exists reads as if the first one was lost.
     const openBusinessCase = cases.find(
-        (c) => c.subjectType === VerificationSubjectType.Business && isOpen(c),
+        (c) => c.subjectType === VerificationSubjectType.Business && isCaseOpen(c),
     );
 
     const begin = async (subjectType: VerificationSubjectType, subjectId?: string) => {
@@ -213,12 +213,6 @@ export default function VerificationHubPage() {
             <Footer />
         </main>
     );
-}
-
-function isOpen(item: VerificationCase): boolean {
-    return item.status === VerificationCaseStatus.Draft
-        || item.status === VerificationCaseStatus.Submitted
-        || item.status === VerificationCaseStatus.UnderReview;
 }
 
 /**

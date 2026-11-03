@@ -84,7 +84,21 @@ export const usePayment = () => {
         },
     });
 
+    const reconcileMutation = useMutation({
+        mutationFn: (reference: string) => paymentService.reconcile(reference),
+        // Settling pays for something: the tenancy becomes active, so its quote and
+        // the lists that show its status are all stale.
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['tenancy-payment-quote'] });
+            queryClient.invalidateQueries({ queryKey: ['tenancies'] });
+            queryClient.invalidateQueries({ queryKey: ['tenancy'] });
+            queryClient.invalidateQueries({ queryKey: ['my-payments'] });
+        },
+    });
+
     return {
+        reconcilePayment: reconcileMutation.mutateAsync,
+        isReconciling: reconcileMutation.isPending,
         useVerificationQuote,
         usePaymentByReference,
         useMyPayments,

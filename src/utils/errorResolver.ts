@@ -93,3 +93,27 @@ export const resolveApiError = (error: unknown): string[] => {
 
   return [FALLBACK];
 };
+
+/**
+ * The same, for whatever a TanStack mutation hands back on failure.
+ *
+ * Two different shapes reach a mutation's catch, and the difference is easy to get
+ * wrong at each call site:
+ *
+ *  - A real transport failure, where axios throws and the body sits at
+ *    `error.response.data` — what `resolveApiError` already expects.
+ *  - A 200 carrying `isSuccessful: false`, which the response interceptor rejects
+ *    with the **axios response itself**, so the body is at `error.data` and there
+ *    is no `response` wrapper at all.
+ *
+ * Forms were sniffing for that second shape inline, which means every new form is
+ * one missed check away from showing "Something went wrong" over a perfectly good
+ * server message. Normalise once, here.
+ */
+export const resolveMutationError = (error: unknown): string[] => {
+  const rejected = error as { data?: unknown } | null | undefined;
+
+  return rejected && typeof rejected === 'object' && 'data' in rejected
+    ? resolveApiError({ response: rejected })
+    : resolveApiError(error);
+};

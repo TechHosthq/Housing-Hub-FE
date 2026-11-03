@@ -50,6 +50,17 @@ const inspectionService = {
         return response.data;
     },
 
+    /**
+     * The renter confirms the viewing went ahead.
+     *
+     * The renter only — the API refuses the owner, because a completed viewing is
+     * what qualifies somebody to be chosen as a tenant.
+     */
+    completeInspection: async (id: string, comment: string | null): Promise<InspectionResponse> => {
+        const response = await apiClient.put(`/api/v1/Inspection/${id}/complete`, { comment });
+        return response.data;
+    },
+
     rescheduleInspection: async (id: string, data: RescheduleInspectionRequest): Promise<InspectionResponse> => {
         const response = await apiClient.put(`/api/v1/Inspection/${id}/reschedule`, data);
         return response.data;

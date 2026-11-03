@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Calendar, Clock, Loader2 } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Loader2, MapPin, User, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { use, useState, useEffect } from "react";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
 import StatusBanner from "@/components/inspections/StatusBanner";
+import MarkInspectionDonePanel from "@/components/inspections/MarkInspectionDonePanel";
 import InspectionTimeline from "@/components/inspections/InspectionTimeline";
 import SuccessModal from "@/components/common/SuccessModal";
 import { useUserRole } from "@/context/UserRoleContext";
@@ -53,6 +54,14 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
     const [isRejectingReschedule, setIsRejectingReschedule] = useState(false);
 
     const inspection = inspectionResponse?.data;
+    const isOwnerOfThisProperty = !!inspection?.propertyOwnerId
+        && inspection.propertyOwnerId === currentUser?.id;
+
+    // Compared by day rather than by the minute, matching the server. Owners let
+    // people in early and the stored time carries no timezone, so being strict
+    // about the hour would refuse renters who are telling the truth.
+    const hasSlotPassed = !!inspection?.scheduledDate
+        && new Date(inspection.scheduledDate).setHours(0, 0, 0, 0) <= new Date().setHours(0, 0, 0, 0);
 
     const handleConfirmAccept = () => {
         if (!inspection || !currentUser?.id) return;
@@ -280,6 +289,33 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                         </div>
                     </div>
 
+                    {/*
+                        Who is coming. Shown to the owner only, and decided by who owns
+                        this property rather than by account type — somebody who lets one
+                        flat and rents another is an ordinary case, and the question here
+                        is which side of *this* inspection they are on.
+                    */}
+                    {isOwnerOfThisProperty && (
+                        <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-6 flex items-center gap-5">
+                            <div className="w-12 h-12 rounded-full bg-[#E5F4FF] flex items-center justify-center text-[#0095FF] flex-shrink-0">
+                                <User size={20} />
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-[16px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-0.5">
+                                    {inspection.customerName?.trim() || "Housing Hub user"}
+                                </p>
+                                {/* Nothing at all when they haven't given one — an
+                                    "Unknown location" line is a claim nobody made. */}
+                                {inspection.customerLocation && (
+                                    <p className="text-[14px] text-[#A3A3A3] font-bold flex items-center gap-1.5">
+                                        <MapPin size={14} />
+                                        {inspection.customerLocation}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Info Cards Row */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-6 flex items-center gap-5">
@@ -304,6 +340,61 @@ export default function InspectionDetailPage({ params }: { params: Promise<{ id:
                             </div>
                         </div>
                     </div>
+
+                    {/*
+                        Only the renter, only on a confirmed viewing, and only once the
+                        day has come — the API enforces all three and refuses the owner
+                        outright, because a completed viewing is what qualifies somebody
+                        to be chosen as a tenant.
+                    */}
+                    {!isOwnerOfThisProperty
+                        && inspection.status === InspectionStatus.Confirmed
+                        && hasSlotPassed && (
+                        <MarkInspectionDonePanel inspectionId={inspection.id} />
+                    )}
+
+                    {/*
+                        The only written account of the viewing, so it goes to both
+                        sides. "The gate was locked and I saw it from outside" changes
+                        what completed means, and an owner about to put somebody forward
+                        should read it.
+                    */}
+                    {inspection.completionComment && (
+                        <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8">
+                            <h3 className="text-[18px] font-black text-[#1A1A1A] dark:text-gray-100 font-montserrat mb-3">
+                                {isOwnerOfThisProperty ? "What they said about the viewing" : "What you said"}
+                            </h3>
+                            <p className="text-[14px] text-[#666666] dark:text-gray-400 font-medium leading-relaxed">
+                                {inspection.completionComment}
+                            </p>
+                        </div>
+                    )}
+
+                    {/*
+                        The owner's way forward, on the screen where they learn the
+                        viewing happened. Until this existed the only route to the
+                        candidate list was a three-dot menu on a property card, which
+                        is not where anybody looks after being told somebody viewed
+                        their flat.
+                    */}
+                    {isOwnerOfThisProperty && inspection.status === InspectionStatus.Completed && (
+                        <div className="bg-[#F2F7FF] rounded-[22px] border border-[#D9E9FF] p-8 dark:border-gray-800 dark:bg-gray-900">
+                            <h3 className="font-montserrat text-[18px] font-black text-[#1A1A1A] dark:text-gray-100">
+                                {inspection.customerName?.trim() || "This renter"} viewed your property
+                            </h3>
+                            <p className="mt-2 text-[14px] font-medium leading-relaxed text-[#666666] dark:text-gray-400">
+                                You can put them forward for it, alongside anyone else who has
+                                viewed it. Nothing is binding until you both agree the paperwork.
+                            </p>
+                            <Link
+                                href={`/properties/${inspection.propertyId}/tenancy`}
+                                className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary-dark px-7 py-3.5 text-[14px] font-bold text-white transition-opacity hover:opacity-90"
+                            >
+                                <Users size={16} />
+                                See everyone who viewed this property
+                            </Link>
+                        </div>
+                    )}
 
                     {/* Note Card */}
                     <div className="bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-8">

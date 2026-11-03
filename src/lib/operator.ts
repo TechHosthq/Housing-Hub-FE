@@ -6,22 +6,33 @@
  * somebody can actually write to — so both pages read this rather than each
  * describing the company in their own words and drifting apart.
  *
- * **TODO before beta: fill in `registrationNumber` and `registeredAddress`.**
- * Both render only when set, so an incomplete entry omits the sentence rather than
- * showing a placeholder to users. A published agreement should carry them.
+ * Both fields render only when set, so clearing one omits its sentence rather than
+ * showing a placeholder to users.
  */
 export const OPERATOR = {
-    /** Registered company name. */
-    name: "Techhost",
+    /**
+     * Registered company name.
+     *
+     * Title case rather than the capitals on the certificate: CAC prints every
+     * name that way as a formatting convention, and ALL CAPS in a sentence reads
+     * as shouting on a page meant to sound measured.
+     */
+    name: "Techhost Technologies Limited",
 
-    /** CAC registration number, e.g. "1234567". Empty until confirmed. */
-    registrationNumber: "",
+    /** CAC registration number. Rendered with an "RC " prefix, so it is digits only. */
+    registrationNumber: "1935335",
 
-    /** Registered address, as filed. Empty until confirmed. */
-    registeredAddress: "",
+    /**
+     * Registered address, as filed with CAC.
+     *
+     * No trailing full stop: both pages append one after this, and two would read
+     * as a typo on a page that is meant to be the careful one.
+     */
+    registeredAddress:
+        "The Philippi Centre, Oluwalogbon House, Plot A Obafemi Awolowo Way, Alausa, Ikeja, Lagos",
 } as const;
 
-/** "Techhost (RC 1234567)", or just "Techhost" until the number is known. */
+/** "Techhost Technologies Limited (RC 1935335)", or just the name without a number. */
 export const operatorLegalName = (): string =>
     OPERATOR.registrationNumber
         ? `${OPERATOR.name} (RC ${OPERATOR.registrationNumber})`

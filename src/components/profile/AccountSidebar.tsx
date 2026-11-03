@@ -1,6 +1,6 @@
 "use client";
 
-import { User, MessageCircle, Settings, ShieldCheck, Receipt } from "lucide-react";
+import { User, MessageCircle, Settings, ShieldCheck, Receipt, Landmark } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUserRole } from "@/context/UserRoleContext";
@@ -25,6 +25,10 @@ export default function AccountSidebar() {
         { label: "Profile Info", icon: User, href: "/profile" },
         ...(isOwner ? [{ label: "Verification", icon: ShieldCheck, href: "/verification" }] : []),
         ...(isOwner || hasPayments ? [{ label: "Payments", icon: Receipt, href: "/payments" }] : []),
+        // Owners only: a renter has no property to be paid for. Always shown to
+        // them rather than gated on having set one — an owner who has not is
+        // exactly the one who needs to find this.
+        ...(isOwner ? [{ label: "Get Paid", icon: Landmark, href: "/payout" }] : []),
         { label: "Message", icon: MessageCircle, href: "/messages" },
         { label: "Settings", icon: Settings, href: "/settings" }
     ];
@@ -33,10 +37,10 @@ export default function AccountSidebar() {
         <div className="w-[280px] bg-white dark:bg-gray-900 rounded-[22px] border border-[#F2F2F2] dark:border-gray-800 p-6 h-fit h-fit shadow-sm">
             <div className="flex flex-col gap-2">
                 {menuItems.map((item) => {
-                    // Exact match everywhere except verification, which has child
-                    // routes (/verification/{caseId}) that should keep the section lit.
+                    // Exact match except verification, which has child routes
+                    // (/verification/{caseId}) that should keep the section lit.
                     const isActive = item.href === "/verification"
-                        ? pathname.startsWith("/verification")
+                        ? pathname.startsWith(item.href)
                         : pathname === item.href;
                     return (
                         <Link
