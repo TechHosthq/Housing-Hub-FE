@@ -33,7 +33,20 @@ export const formatKobo = (kobo: number): string => {
  * decide what an unparseable field means rather than silently sending zero.
  */
 export const nairaToKobo = (naira: string | number): number | null => {
-    const value = typeof naira === 'number' ? naira : Number(naira.replace(/,/g, '').trim());
+    let value: number;
+
+    if (typeof naira === 'number') {
+        value = naira;
+    } else {
+        const cleaned = naira.replace(/,/g, '').trim();
+
+        // Checked before Number(), which answers 0 for both an empty string and a
+        // run of spaces — so an untouched amount field would price a fee at nothing
+        // rather than being rejected, which is the one thing this is meant to stop.
+        if (cleaned === '') return null;
+
+        value = Number(cleaned);
+    }
 
     if (!Number.isFinite(value) || value < 0) return null;
 
